@@ -345,7 +345,7 @@ PGP ID.")
     (if recipients
 	(setq args (append args
 			   (apply 'append (mapcar 
-					   '(lambda (x) (list "-r" x)) 
+					   '(lambda (x) (list "-r" (concat "\"" x "\""))) 
 					   recipients)))))
 
     (message "pgpe %s" (mapconcat 'identity args " "))
@@ -378,7 +378,7 @@ PGP ID.")
 	  t)))))
 
 (defun mc-pgp50-decrypt-parser (proc oldbuf start end newbuf passwd)
-  (setenv "PGPPASSFD" 0)
+  (setenv "PGPPASSFD" "0")
   (set-buffer newbuf)
   (goto-char (point-max))
   (progn
@@ -651,7 +651,7 @@ PGP ID.")
     results))
 
 (defun mc-pgp50-sign-parser (proc oldbuf start end newbuf passwd)
-  (setenv "PGPPASSFD" 0)
+  (setenv "PGPPASSFD" "0")
   (set-buffer newbuf)
   (goto-char (point-max))
   (progn
