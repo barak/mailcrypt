@@ -12,14 +12,14 @@ exec_prefix = @exec_prefix@
 datadir = $(prefix)/share
 
 # Where to put the .el and .elc files
-lispdir=$(datadir)/emacs/site-lisp
+lispdir = $(datadir)/emacs/site-lisp
 
 # Where to put the Info files
-infodir=$(prefix)/info
-INFOFILES  = mailcrypt.info mailcrypt.info-1 mailcrypt.info-2
+infodir = @infodir@
+INFOFILES = mailcrypt.info mailcrypt.info-1 mailcrypt.info-2
 
 # Where to put the helper scripts
-bindir=$(prefix)/bin
+bindir = $(prefix)/bin
 
 # Installation command
 INSTALL = @INSTALL@
@@ -74,13 +74,16 @@ install: all installdirs install-info $(bindir)
 installdirs: mkinstalldirs
 	$(srcdir)/mkinstalldirs $(lispdir) $(infodir) $(bindir)
 
+# If your install-info doesn't know how to look inside the .info file for the
+# menu entry to add, try adding
+#   --entry="* Mailcrypt: (mailcrypt).       An Emacs/PGP interface"
+# to the arguments.
+
 install-info: info
 	cd $(srcdir) && for file in $(INFOFILES); do\
 	  $(INSTALL_DATA) $$file $(infodir)/$$file; \
 	done
-	-$(INSTALL_INFO) --info-dir=$(infodir) \
-	--entry="* Mailcrypt: (mailcrypt).       An Emacs/PGP interface" \
-	mailcrypt.info
+	-$(INSTALL_INFO) --info-dir=$(infodir) mailcrypt.info
 
 uninstall:
 	-cd $(lispdir) && rm -f $(SOURCES) $(OBJECTS)
@@ -103,7 +106,7 @@ mailcrypt.dvi: mailcrypt.texi
 ps: mailcrypt.ps
 
 mailcrypt.ps: mailcrypt.dvi
-	$(DVIPS) $(srcdir)/mailcrypt.dvi
+	$(DVIPS) -f $(srcdir)/mailcrypt.dvi >$@
 
 html: mailcrypt_toc.html
 
