@@ -74,7 +74,8 @@
 (defvar mc-gpg-alternate-keyring nil
   "*Public keyring to use instead of default.")
 (defvar mc-gpg-comment
-   (format "Processed by Mailcrypt %s and Gnu Privacy Guard <http://www.gnupg.org/>" mc-version)
+   (format "Processed by Mailcrypt %s <http://mailcrypt.sourceforge.net/>"
+	   mc-version)
   "*Comment field to appear in ASCII armor output.  If nil, let GPG use its 
 default.")
 (defconst mc-gpg-msg-begin-line "^-----BEGIN PGP MESSAGE-----\r?$"
@@ -89,11 +90,11 @@ default.")
   "Text for start of GPG public key.")
 (defconst mc-gpg-key-end-line "^-----END PGP PUBLIC KEY BLOCK-----\r?$"
   "Text for end of GPG public key.")
-(defconst mc-gpg-extra-args nil
+(defvar mc-gpg-extra-args nil
   "Extra arguments to pass to all invocations of gpg. Used during debugging to
 set --homedir, to use special test keys instead of the developer's normal
 keyring.")
-(defconst mc-gpg-debug-buffer nil
+(defvar mc-gpg-debug-buffer nil
   "A buffer for debugging messages. If nil, no debugging messages are logged.
 BEWARE! Sensitive data (including your passphrase) is put here. Set this with:
  (setq mc-gpg-debug-buffer (get-buffer-create \"mc debug\"))")
