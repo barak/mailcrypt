@@ -39,12 +39,10 @@ SOURCES = mailcrypt.el mc-toplev.el mc-pgp.el mc-remail.el \
 OBJECTS = mailcrypt.elc mc-toplev.elc mc-pgp.elc mc-remail.elc \
 	mc-pgp2.elc mc-pgp5.elc expect.elc mc-setversion.elc
 
-SCRIPTS = pgps.sh pgpe.sh pgpv.sh mc-pgpk
-
 DISTFILES = $(SOURCES) ANNOUNCE ChangeLog INSTALL LCD-entry Makefile.in \
 	NEWS ONEWS README configure configure.in install-sh load-path.hack \
 	mailcrypt.info mailcrypt.dvi mailcrypt.texi mkinstalldirs \
-	texi2html.ext $(SCRIPTS)
+	texi2html.ext
 
 SHELL = /bin/sh
 #.PHONY: all clean dist distclean dvi html info install \
@@ -61,9 +59,6 @@ all: $(OBJECTS)
 install: all installdirs $(infodir)/mailcrypt $(bindir)
 	for f in $(SOURCES); do \
 	  $(INSTALL_DATA) $(srcdir)/$$f $(lispdir); \
-	done;
-	for f in $(SCRIPTS); do \
-	  $(INSTALL) $(srcdir)/$$f $(bindir); \
 	done;
 	for f in $(OBJECTS); do \
 	  $(INSTALL_DATA) $$f $(lispdir); \
@@ -85,7 +80,6 @@ $(infodir)/mailcrypt: mailcrypt.info
 
 uninstall:
 	-cd $(lispdir) && rm -f $(SOURCES) $(OBJECTS)
-	-cd $(bindir) && rm -f $(SCRIPTS)
 	-rm -f $(infodir)/mailcrypt
 
 info: mailcrypt.info

@@ -43,6 +43,7 @@
   (beg end passwd program args parser &optional buffer)
   (let ((obuf (current-buffer))
 	(process-connection-type nil)
+	(shell-file-name "/bin/sh")
 	mybuf result rgn proc results)
     (unwind-protect
 	(progn
@@ -52,7 +53,8 @@
 	  (set-buffer obuf)
 	  (buffer-disable-undo mybuf)
 	  (setq proc
-		(apply 'start-process "*PGP*" mybuf program args))
+		(apply 'start-process-shell-command "*PGP*" mybuf program 
+		       "2>&1" args))
 	  (if passwd
 	      (or mc-passwd-timeout (mc-deactivate-passwd t)))
 

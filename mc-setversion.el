@@ -28,16 +28,18 @@ Possible values of VERSION are 2.6 and 5.0."
   (if (null version)
       (progn
 	(setq called-interactively t)
-	(setq version (read-string "Select PGP version: "))))
+	(setq version 
+	      (completing-read "Select PGP version: " '(("2.6" 1) ("5.0" 2)))
+	      )))
 
   (if (string-equal version "5.0")
       (progn
 	(setq mc-pgp-version-five t)
-	(setq mc-pgp-path-encrypt "pgpe.sh")
-	(setq mc-pgp-path-decrypt "pgpv.sh")
-	(setq mc-pgp-path-sign    "pgps.sh")
-	(setq mc-pgp-path-verify  "pgpv.sh")
-	(setq mc-pgp-path-getkeys "mc-pgpk")
+	(setq mc-pgp-path-encrypt "pgpe")
+	(setq mc-pgp-path-decrypt "pgpv")
+	(setq mc-pgp-path-sign    "pgps")
+	(setq mc-pgp-path-verify  "pgpv")
+	(setq mc-pgp-path-getkeys "pgpk")
 	(setq mc-pgp-key-cache nil)
 
 	;; Arguments to PGP for various actions.

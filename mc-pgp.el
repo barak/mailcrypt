@@ -100,10 +100,13 @@ PGP ID.")
 	  (keyring (if (not mc-pgp-version-five)
 		       (concat (mc-get-pgp-keydir) "secring")))
 	  (result (cdr-safe (assoc str mc-pgp-key-cache)))
-	  (key-regexp
-	   "^\\(pub\\|sec\\)\\s +[^/]+/\\(\\S *\\)\\s +\\S +\\s +\\(.*\\)$")
+	  (key-regexp 
+	   (if mc-pgp-version-five
+	       "^sec\\S *\\s +\\w+\\s +\\(\\w+\\)\\s +"
+	     "^\\(pub\\|sec\\)\\s +[^/]+/\\(\\S *\\)\\s +\\S +\\s +\\(.*\\)$"))
+	  (userid-regexp "^uid\\s +\\(.*\\)$")
 	  (obuf (current-buffer))
-	  buffer)
+	  buffer keyid)
       (if (null result)
 	  (unwind-protect
 	      (progn
@@ -116,16 +119,33 @@ PGP ID.")
 		(set-buffer buffer)
 		(goto-char (point-min))
 		(if (re-search-forward key-regexp nil t)
-		    (progn
-		      (setq result
-			    (cons (buffer-substring-no-properties
-				   (match-beginning 3) (match-end 3))
-				  (concat
-				   "0x"
-				   (buffer-substring-no-properties
-				    (match-beginning 2) (match-end 2)))))
-		      (setq mc-pgp-key-cache (cons (cons str result)
-						   mc-pgp-key-cache)))))
+		    (if mc-pgp-version-five
+			;; for pgp5, we just found the keyid line. Remember
+			;; the keyid and continue searching forward for the
+			;; userid
+			(progn
+			  (setq keyid (buffer-substring-no-properties
+				       (match-beginning 1) (match-end 1)))
+			  (if (re-search-forward userid-regexp nil t)
+			      (progn
+				(setq result (cons 
+					      (buffer-substring-no-properties
+					       (match-beginning 1)
+					       (match-end 1))
+					      keyid))
+				(setq mc-pgp-key-cache (cons (cons str result)
+							     mc-pgp-key-cache))
+				)))
+		      (progn
+			(setq result
+			      (cons (buffer-substring-no-properties
+				     (match-beginning 3) (match-end 3))
+				    (concat
+				     "0x"
+				     (buffer-substring-no-properties
+				      (match-beginning 2) (match-end 2)))))
+			(setq mc-pgp-key-cache (cons (cons str result)
+						     mc-pgp-key-cache))))))
 	    (if buffer (kill-buffer buffer))
 	    (set-buffer obuf)))
       (if (null result)
@@ -197,10 +217,15 @@ PGP ID.")
     (if (and recipients mc-encrypt-for-me)
 	(setq recipients (cons (cdr key) recipients)))
 
-    (if recipients (setq args (append recipients args)))
-    (if (and recipients mc-pgp-version-five)
-	(setq args (cons "-r" args)))
-    
+    (if recipients
+	(setq args (append args
+			   (if mc-pgp-version-five
+			       (apply 'append (mapcar 
+					       '(lambda (x) (list "-r" x)) 
+					       recipients))
+			     recipients))))
+
+    (message "%s" (mapconcat 'identity args " "))
     (message "%s" msg)
     (setq result (mc-process-region start end passwd mc-pgp-path-encrypt args
 				    'mc-pgp-encrypt-parser buffer))
