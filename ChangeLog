@@ -1,3 +1,7 @@
+2003-07-15  Brian Warner  <warner@lothar.com>
+
+	* tests/remailer/fakemix.sh: oops, add script used by unit tests
+
 2003-07-14  Brian Warner  <warner@lothar.com>
 
 	* tests/remailer/Makefile.in, tests/remailer/test-remailer3.el:
