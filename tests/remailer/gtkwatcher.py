@@ -43,6 +43,9 @@ class WatcherGUI:
         self.src_age_label.set_sensitive(0)
         self.dst_popup = xml.get_widget("dst_popup")
         xml.get_widget("dest_message_options1").set_sensitive(0)
+        self.dst_sent_label = xml.get_widget("dst_sent_label")
+        self.dst_sent_label.set_sensitive(0)
+
         xml.signal_connect('do_dst_flush', self.do_dst_flush)
         xml.signal_connect('do_dst_original', self.do_dst_original)
         
@@ -147,6 +150,17 @@ class WatcherGUI:
     def do_dst_popup(self, widget, event):
         if event.button != 3:
             return
+        model, iter = self.dst_sel.get_selected()
+        label = self.dst_sent_label.get_child()
+        if iter:
+            m = model.get_value(iter, 2)
+            # this tends to be old
+            # XXX: fix by selecting new row first
+            txtime = self.watcher.txtime(m.msgid)
+            sent = time.strftime("%H:%M   %d %b %Y", time.localtime(txtime))
+            label.set_text("Sent[%d]: %s" % (m.msgid, sent))
+        else:
+            label.set_text("Sent: unknown")
         self.dst_popup.popup(None, None, None, event.button, event.time)
 
     def do_dst_flush(self, menuitem):
@@ -188,7 +202,7 @@ class WatcherGUI:
         src.clear()
         for msg, txtime in self.watcher.outstanding():
             #elapsed = time_string(int(time.time()) - txtime)
-            sent = time.strftime("%H:%M   %d %b %Y", time.gmtime(txtime))
+            sent = time.strftime("%H:%M   %d %b %Y", time.localtime(txtime))
             iter = src.append()
             src.set(iter,
                     0, msg.msgid,
