@@ -339,7 +339,15 @@ stripping initial and trailing whitespace."
 ;	  (princ tmp))))))
 
 ;; In case I ever decide to do this right.
-(defconst mc-field-name-regexp "^\\([^:]+\\)")
+;; LRB - Thanks Pat! This helped a lot in updating mixmaster support.
+;; mc-field-name-regexp now catches precisely those email headers 
+;; which are RFC-822 compliant.
+(defconst mc-field-name-regexp 
+  (concat 
+   "^[" 
+   (char-to-string 33) "-" (char-to-string 57)
+   (char-to-string 59) "-" (char-to-string 126)
+   "]*:"))
 (defconst mc-field-body-regexp "\\(.*\\(\n[ \t].*\\)*\n\\)")
 
 (defun mc-get-fields (&optional matching bounds nuke)
