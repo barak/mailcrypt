@@ -17,12 +17,15 @@ then
 Hint: Try setting BASENAME environment variable or fixing your PATH.)
 fi
 
-AC_CHECK_PROGS(EMACS, emacs xemacs)
-if test "$EMACS x" = " x"
+if test -n "$EMACS" && test "$EMACS" = "t"
 then
-  AC_MSG_ERROR(Cannot find emacs in your path.
-Hint: Try setting EMACS environment variable or fixing your PATH.)
+    unset EMACS
 fi
+
+AC_CHECK_PROGS(EMACS, emacs xemacs,dnl
+  AC_MSG_ERROR('Cannot find emacs in your path.
+Hint: Try setting EMACS environment variable or fixing your PATH.'))
+
 RESULT=`$BASENAME $EMACS`
 if test "$RESULT" = xemacs
 then
