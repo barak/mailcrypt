@@ -43,7 +43,14 @@
   (autoload 'gnus-summary-edit-article-done "gnus-sum")
 
   ;; MH-E
-  (condition-case nil (require 'mh-e) (error nil)))
+  (condition-case nil (require 'mh-e) (error nil))
+
+  ;; Mew
+  (condition-case nil (require 'mew) (error nil))
+  (autoload 'mew-summary-display "mew-summary")
+  (autoload 'mew-buffer-message "mew")
+
+)
 
 (eval-and-compile
   (condition-case nil (require 'mailalias) (error nil)))
@@ -697,6 +704,59 @@ Exact behavior depends on current major mode."
 ;;  mew-draft-mode
 ;;   (add-hook 'mew-draft-mode-hook 'mc-install-write-mode)
 
+(defun mc-mew-summary-decrypt-message()
+  "*Decrypt the current message"
+  (interactive)
+  (if (not (eq major-mode 'mew-summary-mode))
+      (error
+       "mc-mew-summary-decrypt-message called in inappropriate buffer"))
+  (save-excursion
+    (mew-summary-display t)
+    (set-buffer (mew-buffer-message))
+    (mc-decrypt)
+))
+
+(defun mc-mew-summary-verify-signature()
+  "*Verify the signature in the current message."
+  (interactive)
+  (if (not (eq major-mode 'mew-summary-mode))
+      (error
+       "mc-mew-summary-verify-signature called in inappropriate buffer"))
+  (save-excursion
+    (mew-summary-display t)
+    (set-buffer (mew-buffer-message))
+    (mc-verify)
+))
+
+(defun mc-mew-summary-snarf-keys()
+  "*Add keys from the current message to the public keyring."
+  (interactive)
+  (if (not (eq major-mode 'mew-summary-mode))
+      (error
+       "mc-mew-summary-snarf-keys called in inappropriate buffer"))
+  (save-excursion
+    (mew-summary-display t)
+    (set-buffer (mew-buffer-message))
+    (mc-snarf)
+))
+
+(defun mc-mew-decrypt-message ()
+  "*Decrypt the contents of this message."
+  ;; This is a hack to deal with the fact that mew-message buffers are
+  ;; generally read-only. For now, there is no option to replace the
+  ;; encrypted message in-place; it simply disappears when you move to a
+  ;; different message.
+  (interactive)
+  (let ((read-only buffer-read-only))
+    (unwind-protect
+        (progn
+          (save-excursion
+            (setq buffer-read-only nil)
+            (mc-decrypt-message)
+            ))
+      (setq buffer-read-only read-only)
+      )
+))
 
 ;;}}}
 
