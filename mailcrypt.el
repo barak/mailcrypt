@@ -1,4 +1,4 @@
-;; mailcrypt.el v3.5b1, mail encryption with PGP
+;; mailcrypt.el v3.5b4, mail encryption with PGP
 ;; Copyright (C) 1995  Jin Choi <jin@atype.com>
 ;;                     Patrick LoPresti <patl@lcs.mit.edu>
 ;;           (C) 1998  Len Budney <lbudney@pobox.com>

@@ -118,8 +118,8 @@ for the end user.  (Note: *please* send me suggestions and patches
 to <mailto:lbudney@pobox.com> if you have improvements or fixes you
 would make!)
 
-To use Mailcrypt 3.5b1, you must include two lines like the following in
-your .emacs file:
+To use Mailcrypt 3.5b1 and higher, you must include two lines like the
+following in your .emacs file:
 
 	(autoload 'mc-setversion "mailcrypt" "Select PGP version" t)
 	(mc-setversion "5.0") ;; Alternately, "2.6"

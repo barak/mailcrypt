@@ -1,4 +1,4 @@
-Mailcrypt version 3.5b1 is now available.
+Mailcrypt version 3.5b4 is now available.
 
 Mailcrypt is an Emacs Lisp package which provides a simple interface
 to message encryption with PGP.  (You do use Emacs to handle your mail
