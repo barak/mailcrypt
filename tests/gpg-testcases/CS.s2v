@@ -1,0 +1,20 @@
+(
+(crypttext . "
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+This is a plaintext message
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.0.7 (GNU/Linux)
+
+iD8DBQE8/tDbWaeRgFnMaM4RApEGAJ4zyhCLltlVQn6Bw1YSOJeNkesXkQCcDVGv
+q3zQKq6J8ptTKr4RG2U/IKo=
+=2vi1
+-----END PGP SIGNATURE-----
+")
+(error . nil)
+(name . "CS.s2v")
+(plaintext . "This is a plaintext message
+")
+(signature_status . "Good signature from 'trusted <trusted@test>' TRUST_MARGINAL made 2002-06-06")
+)

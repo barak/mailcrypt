@@ -1,0 +1,17 @@
+(
+(crypttext . "
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1.0.7 (GNU/Linux)
+
+owGbwMvMwCQYuXxiQ+SZjHOMp5WSGGz+XbgdkpFZrABEiQoFOYmZeSWpFSUKuanF
+xYnpqVwd9sysYEUwXYJMH5cyzA+XvlX14tT995fFVp9+LpzK9fX3zIMM8/3T4+Ra
+2L6cZ+Be/T/lqOE9O0aWmwA=
+=cgcp
+-----END PGP MESSAGE-----
+")
+(error . nil)
+(name . "S.s2v")
+(plaintext . "This is a plaintext message
+")
+(signature_status . "Good signature from 'trusted <trusted@test>' TRUST_MARGINAL made 2002-06-06")
+)

@@ -1,0 +1,23 @@
+(
+(crypttext . "
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1.0.7 (GNU/Linux)
+
+hM4DabbdIAUf0qsQAwDRffq1fZyJX4a+dl8LRKFmeGB7L4uPcSKhajjPF6/U618S
+95Ljim6Tvat08AYb3kLV08dFOpa8/5L/axvLUdZ8hDsXrdbRqPq0UPN8ikNqXAsv
+3VsJtQFc8b06pw46sN4C/immZj0gGeSPWJTNUfa8QCk5m2RUSgI4E+jPhIh6elCU
+QM9xZNiyEtZjB1M84xQYKoS/MYfAafdNkVndMM5zKPMMKyszfIoBBmtDKitc8oIQ
+AZcYkhCpdAU6CkZxFDTCltKaAb/YnvmZX+mNrGAzfhGfA79P+7Cjt8i4UTd9Wlli
+e7rrxMM1k/sJiRNXsRhFmW2z6VRNrwL5bHOufwiPTL84MBsT5vYalAgpTzXx/GXQ
+LLcFReKxbl6cXK82hnRpZZ3IAWZn1KAAuGapDK83DfAh8YmUDwwuqo8BUgyY73q7
+xw2pqST6epvpRxKB3phmf2KTkbYfWa7OgfviJA==
+=Bl+i
+-----END PGP MESSAGE-----
+")
+(encryption_id . "unknown <unknown@test>")
+(error . "This message is not addressed to you")
+(name . "ES.e4.s1v")
+(passphrase . "unknown")
+(plaintext . nil)
+(signature_status . nil)
+)

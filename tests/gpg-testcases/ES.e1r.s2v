@@ -1,0 +1,24 @@
+(
+(crypttext . "
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1.0.7 (GNU/Linux)
+
+hM4DV7wu3TSGTqsQAv0Wd+d1ewGBn2j+iAF0ehb9kjUfVmnyfQsZxspDv6RkCZpZ
+y6CzbboMEA6ks3VfTR7YDf0Vz0eqJ/9HYQWYbICicJGLCrRUa9FFLdE926N6XuXA
+/pZGZ4vDQYo+kzxMLYIC/jj9jrJgOhF71kwb5I1gMDQKtAwYveHqdu4hdBMyIyex
+3kh50eM26iN2vrLChZsBDuQa+NDvBsyi2kCed2nzk4tfHQSC5SlUVKKlNWpYZQ0D
+F1kcGHNOMeqOJPDG0Vo8DtKaAX3Xc+zxq31AhypBuyzxPc981OgbCdAxWhGtyQlB
+5a+9YjXLIYaljuJSWUs/8zgSTG6KFaejvzmYpCwBrUMDtw1HHiaTJ404tRPtinwE
+ziSmDlFk2qLM1p4nnTyc2HGiYpIhNRL045JtPULUy6r8lBWuJfi7dyIJmcGDAGb3
+CriUMdvq1RL9O8bTLN7ZgPJiwJx/er0CjJTfnA==
+=GDOz
+-----END PGP MESSAGE-----
+")
+(encryption_id . "owner1 <owner1@test>")
+(error . nil)
+(name . "ES.e1r.s2v")
+(passphrase . "owner1")
+(plaintext . "This is a plaintext message
+")
+(signature_status . "Good signature from 'trusted <trusted@test>' TRUST_MARGINAL made 2002-06-06")
+)

@@ -1,0 +1,17 @@
+(
+(crypttext . "
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1.0.7 (GNU/Linux)
+
+owGbwMvMwCQoUvrr3e8Z1q2Mp5WSGGz+XbgdkpFZrABEiQoFOYmZeSWpFSUKuanF
+xYnpqVwd9sysYEUwXYJMH5cyzDMxFpj/7Cnzlnnn9x8P+qkf7Nmp08ww3118NXv4
+RYnAlT/WL1xyR6P60iyuHAA=
+=vUek
+-----END PGP MESSAGE-----
+")
+(error . nil)
+(name . "S.s3v")
+(plaintext . "This is a plaintext message
+")
+(signature_status . "Good signature from 'untrusted <untrusted@test>' TRUST_UNDEFINED made 2002-06-06")
+)

@@ -1,0 +1,24 @@
+(
+(crypttext . "
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1.0.7 (GNU/Linux)
+
+hM4DV7wu3TSGTqsQAv0aMx3yqrjVIKOeJV7YrUzysgDY7CktjaCwHR8XqCzOjy9c
+6wz1T8xRJsJvX5IDDje+RNwhVF+2sxohIkRQt9lfH8dh+Nu02dImDYz4oHbVZ9db
+jTrwsfRpqRDtUoD2KqYC/iNZx0+Wir8qDA8MqPz/rnQQ2dXTagT0dOgXySNAUVrh
+vA2w9OXJGjYZnUn01VnRQqxD44aCV7HWjXJY9Bi5ct1bvQ3KwW6KUa9peokR499Q
+Xn3vsXjLpkALCJf7f0wUq9KZAa7J/fT2ij7IPtJfFjJPvnKfWOKAdtNuxuZlIyB/
+d9uxdL3l+Legsm6Wd1aum3JzKiKw7KpjPZX7ULN/lbH9VqrWFaOolyFqc0MwQ5it
+UL+WqV8FzH/yrzfq1Ze9TO/87qKVeA9j6k/9XfN0JSXRHyKVbWtQudLAZNwJWrgE
+4YBRX3rmyC45JBKWlHhavNVQKjbznoxUJ1Dh
+=pPNt
+-----END PGP MESSAGE-----
+")
+(encryption_id . "owner1 <owner1@test>")
+(error . nil)
+(name . "ES.e1r.s4")
+(passphrase . "owner1")
+(plaintext . "This is a plaintext message
+")
+(signature_status . "cannot check signature from keyid 0B58870439C19548")
+)
