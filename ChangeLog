@@ -1,3 +1,7 @@
+2002-06-11  Brian Warner  <warner@lothar.com>
+
+	* mc-toplev.el: start planning Mew functions
+
 2002-06-10  Brian Warner  <warner@lothar.com>
 
 	* mailcrypt.el (mc-version): bump to "3.5.6+" while we're
