@@ -1,5 +1,15 @@
 2002-07-23  Brian Warner  <warner@lothar.com>
 
+	* mailcrypt.texi (Remailer Quick Start): Suggest
+	rlist@mixmaster.shinn.net too, point to mc-levien-file-name
+	docstring for details of the file format. Thanks to Jari Aalto for
+	the suggestion.
+
+	* mc-remail.el (mc-levien-file-name): Update docstring to suggest
+	'filter rlist@noisebox.remailer.org' to get the list, rather than
+	the defunct publius.net site. Suggest rlist@mixmaster.shinn.net
+	too.
+
 	* mailcrypt.el (mc-temp-directory): Use (temp-directory),
 	temporary-file-directory, or "/tmp/", as available. Fixes error
 	when used from XEmacs21. Thanks to Peter Galbraith for the catch
