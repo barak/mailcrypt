@@ -1,7 +1,8 @@
-;; mailcrypt.el v3.5.5, mail encryption with PGP
+;; mailcrypt.el v3.5.6, mail encryption with PGP
 ;; Copyright (C) 1995  Jin Choi <jin@atype.com>
 ;;                     Patrick LoPresti <patl@lcs.mit.edu>
 ;;           (C) 1998  Len Budney <lbudney@pobox.com>
+;;           (C) 2001  Brian Warner <warner@lothar.com>
 ;; Any comments or suggestions welcome.
 ;; Inspired by pgp.el, by Gray Watson <gray@antaire.com>.
 
@@ -203,7 +204,7 @@
 ;;}}}
 
 ;;{{{ User variables.
-(defconst mc-version "3.5.5")
+(defconst mc-version "3.5.6")
 (defvar mc-temp-directory "/tmp"
   "*Default temp directory to be used by Mailcrypt.")
 (defvar mc-default-scheme 'mc-scheme-pgp "*Default encryption scheme to use.")
