@@ -706,6 +706,12 @@ message (using @kbd{C-x m}, for example) addressed to yourself.  Type
 on its name.  The buffer will be rewritten for anonymous mailing through
 that remailer.
 
+Note that you can only select a single remailer when you rewrite the
+message. To send the message through multiple hops, either rewrite the
+message multiple times, or define a @emph{chain} of remailers that can
+be referred to like a single remailer. Remailer chains are described
+in the next section.
+
 The remailer list and keyrings can also be obtained via HTTP.
 @file{http://anon.efga.org/Remailers/Settings} and
 @file{http://mixmaster.shinn.net/stats/settings/index.html} have lists
