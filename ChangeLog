@@ -1,3 +1,9 @@
+2001-11-21  Brian Warner  <warner@lothar.com>
+
+	* mailcrypt.el (mc-temp-directory): use temporary-file-directory
+	instead of hardwired "/tmp". Might help NT. Thanks to Jason Rumney
+	and RMS for the fix.
+
 2001-11-19  Brian Warner  <warner@lothar.com>
 
 	* mailcrypt.texi: add @dircategory "Emacs" section entry. Only
