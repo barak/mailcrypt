@@ -22,6 +22,7 @@
 ;;{{{ Load some required packages
 (require 'mailcrypt)
 (require 'mail-utils)
+(require 'rfc822)
 
 (eval-when-compile
   ;; RMAIL
@@ -56,7 +57,7 @@
   ;; assuming they were possibly extracted from the headers of a reply,
   ;; returns a list of the address components.
   (mapcar 'mc-strip-address
-	  (mc-split "\\([ \t\n]*,[ \t\n]*\\)+" str)))
+	  (rfc822-addresses str)))
 
 (defun mc-find-headers-end ()
   (save-excursion
