@@ -4,9 +4,24 @@ if __name__ == '__main__':
     import pygtk
     pygtk.require("2.0")
 
-import time
+import time, cPickle
 import gobject, gtk, gtk.glade
 from watcher import Watcher
+
+def time_string(latency):
+    latency = int(latency)
+    hours = latency / 3600
+    latency -= hours * 3600
+    minutes = latency / 60
+    latency -= minutes * 60
+    seconds = latency
+    latency = ''
+    if hours:
+        latency = '%dh' % hours
+    if hours or minutes:
+        latency = latency + '%dm' % minutes
+    latency = latency + '%ds' % seconds
+    return latency
 
 class WatcherGUI:
     def __init__(self, watcher):
@@ -62,19 +77,6 @@ class WatcherGUI:
         # mainquit asserts, because we aren't actually in a mainloop
         #gtk.mainquit()
         
-    def time_string(self, latency):
-        hours = latency / 3600
-        latency -= hours * 3600
-        minutes = latency / 60
-        latency -= minutes * 60
-        seconds = latency
-        latency = ''
-        if hours:
-            latency = '%dh' % hours
-        if hours or minutes:
-            latency = latency + '%dm' % minutes
-        latency = latency + '%ds' % seconds
-        return latency
     def update_text(self, text):
         buf = self.text.get_buffer()
         buf.set_text(text)
@@ -116,8 +118,8 @@ class WatcherGUI:
         src = self.src_model
         src.clear()
         for msg, txtime in self.watcher.outstanding():
-            #elapsed = self.time_string(int(time.time()) - txtime)
-            sent = time.strftime("%H:%M   %d %b %Y",time.gmtime(txtime))
+            #elapsed = time_string(int(time.time()) - txtime)
+            sent = time.strftime("%H:%M   %d %b %Y", time.gmtime(txtime))
             iter = src.append()
             src.set(iter,
                     0, msg.msgid,
@@ -133,7 +135,7 @@ class WatcherGUI:
             iter = dst.append()
             dst.set(iter,
                     0, msg.msgid,
-                    1, self.time_string(latency),
+                    1, time_string(latency),
                     2, msg)
             #rl.set_row_data(row, msgid)
             #rl.set_selectable(row, 0)
@@ -149,20 +151,66 @@ class GtkWatcher(Watcher):
         self.gui = None
         Watcher.stop(self)
 
-        
-def main():
+def makeWatcher():
     from gtkwatcher import GtkWatcher
-    from watcher import DirWatcher
+    from watcher import DirWatcher, NewsWatcher
+    import sys, getopt
     w = GtkWatcher()
-    sdir = DirWatcher("sdir")
-    w.addSource(sdir)
-    ddir = DirWatcher("ddir")
-    w.addDest(ddir)
+    # --source sdir [--dest ddir]... --nntp host:port:user:pass [--group a]..
+    opts, args = getopt.getopt(sys.argv[1:], '',
+                               ['source=', 'dest=',
+                                'nntp=', 'group=', 'tag='])
+    nntp = None
+    groups = []
+    tag = None
+    for key, value in opts:
+        if key == "--source":
+            print "adding source maildir '%s'" % value
+            w.addSource(DirWatcher(value))
+        if key == "--dest":
+            print "adding dest maildir '%s'" % value
+            w.addDest(DirWatcher(value))
+        if key == "--nntp":
+            nntp = value
+        if key == "--group":
+            groups.append(value)
+        if key == "--tag":
+            tag = value
+    if groups and not nntp:
+        raise "Must have --nntp server specified to use --group"
+    if tag and not nntp:
+        raise "Must have --nntp set to use message filtering tag"
+    if nntp and not groups:
+        raise "Gave NNTP server but no groups to poll: what's the point?"
+    if nntp:
+        # parse server spec
+        fields = nntp.split(':')
+        fields.extend([None] * (4 - len(fields)))
+        host, port, user, passwd = fields
+        if port:
+            port = int(port)
+        nw = NewsWatcher(host, groups,
+                         user, passwd, port, tag)
+        w.addDest(nw)
+    return w
+
+def main():
+    try:
+        f = open("watcher.pickle", "r")
+        w = cPickle.load(f)
+        f.close()
+    except:
+        print "unable to load pickle"
+        w = makeWatcher()
     print "running"
     w.start()
     while not w.gui.done:
         gtk.mainiteration()
     print "done"
     w.stop()
+    # save pickle of seen messages
+    f = open("watcher.pickle", "w")
+    cPickle.dump(w, f, 1)
+    f.close()
     
 if __name__ == '__main__': main()
