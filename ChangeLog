@@ -1,5 +1,8 @@
 2001-11-19  Brian Warner  <warner@lothar.com>
 
+	* mailcrypt.texi: add @dircategory "Emacs" section entry. Only
+	really useful for texinfo's 'install-info'.
+
 	* Makefile.in (install-info): Attempt portability between
 	texinfo's 'install-info' and debian's, by removing everything
 	except --info-dir from the invocation of install-info, and
