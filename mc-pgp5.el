@@ -115,7 +115,7 @@
 	    (expect-cond
 
 	     ;; OPTION 1:  Here comes the message!
-	     ("Opening file \"stdout\" type text.\n"
+	     ("Opening file \"stdout\" type .*\.\n"
 
 	      ;; Record this point!
 	      (setq rgn (point))
