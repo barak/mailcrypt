@@ -1,3 +1,13 @@
+1999-03-05  Leonard R. Budney  <lbudney@pobox.com>
+
+	* mc-gpg.el: Patched GPG-signing code to work correctly with
+	GPG-0.9.3. Thanks to Brian Warner.
+
+1999-03-04  Leonard R. Budney  <lbudney@pobox.com>
+
+	* mc-pgp5.el: Added key-fetching to PGP 5 using the hkp
+	protocol. Thanks Paul Koning!
+
 1999-02-27  Leonard R. Budney  <lbudney@pobox.com>
 
 	* mc-toplev.el: Fixed a bug in rmail support, which always

@@ -1,7 +1,7 @@
 This is Info file mailcrypt.info, produced by Makeinfo version 1.68
 from the input file ./mailcrypt.texi.
 
-   This documentation describes Mailcrypt version 3.5.2.  This
+   This documentation describes Mailcrypt version 3.5.3.  This
 documentation was last updated on August 29, 1998.
 
    Copyright 1995 Patrick J. LoPresti Copyright 1998 Leonard R. Budney
@@ -70,7 +70,7 @@ resulting in output which looks something like this:
 
      ----- BEGIN PGP FOOBAR -----
      Version: 2.6.3
-     Comment: Processed by Mailcrypt 3.5.2, an Emacs/PGP interface
+     Comment: Processed by Mailcrypt 3.5.3, an Emacs/PGP interface
      
      ...
      ----- END PGP FOOBAR -----

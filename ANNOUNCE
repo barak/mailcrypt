@@ -1,4 +1,4 @@
-  Mailcrypt 3.5.2 is Available for Download
+  Mailcrypt 3.5.3 is Available for Download
 
 
   1.  Introduction
@@ -8,7 +8,7 @@
   to message encryption with PGP (you do use Emacs to handle your mail
   and news, right?). Mailcrypt version 3.5b1 and higher have been
   extended to handle both PGP 2.6.x and PGP 5.x.  Versions 3.5 and
-  higher, including 3.5.2, also support encryption with GnuPG. Thanks
+  higher, including 3.5.3, also support encryption with GnuPG. Thanks
   to Brian Warner.
 
 
@@ -16,19 +16,20 @@
 
   2.1. New Features/Enhancements
 
-   We have key fetching for PGP 5.0! Okay, it uses finger and HTTP
-   only so far, but it's a very good start.
+   We have key fetching for PGP 5.0! Paul Koning has added support for
+   the Horowitz Key Protocol! PGP 5 keyservers can now be queried. If
+   no bugs are exposed in this release, then Mailcrypt's PGP5 support
+   can be considered feature-complete.
 
    Improved compatibility for XEmacs users! We've fixed up several
    gotchas which prevented version 3.5.1 from working "out of the box"
    with XEmacs. Cross your fingers...it should be just fine now.
 
-   Added key fetching for PGP 5.0 using finger or HTTP, but not hkp
-   yet. Fixed a bug which dumped GNUS users into the wrong buffer
-   after verifying a signature. Fixed a compatibility bug between
-   XEmacs and FSF Emacs in mc-setversion. Fixed a bug in mh-e support
-   so that users can view decrypted messages without saving
-   them. Several minor bugfixes.
+   Fixed a minor compatibility bug with GPG support and GPG verson
+   0.9.3. Fixed a bug which dumped GNUS users into the wrong buffer after
+   verifying a signature. Fixed a compatibility bug between XEmacs and FSF
+   Emacs in mc-setversion. Fixed a bug in mh-e support so that users can
+   view decrypted messages without saving them. Several minor bugfixes.
 
 
   2.2.	Stable Features for PGP 5.0 and GnuPG
@@ -53,8 +54,6 @@
 
   2.4.	Still To Do
 
-  o  Add hkp URLS and "pgpk -a" to key fetching support for PGP 5.x.
-
   o  Restore functionality on Windows 95/98/NT. If tiny-pgp can do it,
      we can too!
 
@@ -65,7 +64,7 @@
 
   3.  Downloading Mailcrypt
 
-  The Official Mailcrypt version 3.5.2 can be downloaded at:
+  The Official Mailcrypt version 3.5.3 can be downloaded at:
 
   <http://www.pobox.com/~lbudney/linux/software/mailcrypt.html>
 

@@ -1,3 +1,10 @@
+Noteworthy changes in Mailcrypt version 3.5.3:
+
+ * Added support for the Horowitz Key Protocol. PGP5 key fetching is
+   feature-complete.
+
+ * Fixed a minor compatibility bug between GPG 0.9.3 and Mailcrypt.
+
 Noteworthy changes in Mailcrypt version 3.5.2:
 
  * Added key fetching for PGP 5.0. Uses finger or HTTP, but not hkp yet.
