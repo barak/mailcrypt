@@ -71,6 +71,9 @@
 (defvar mc-gpg-path "gpg" "*The GPG executable.")
 (defvar mc-gpg-display-snarf-output nil
   "*If t, pop up the GPG output window when snarfing keys.")
+(defvar mc-gpg-always-fetch 'never
+  "*If t, always fetch missing keys. If 'never, never fetch. If nil,
+ask the user.")
 (defvar mc-gpg-alternate-keyring nil
   "*Public keyring to use instead of default.")
 (defvar mc-gpg-comment
@@ -915,7 +918,7 @@ GPG ID.")
 	  ;; key is nil if CONVENTIONAL, (string . hexid) otherwise
 	  (setq passwd
 		(if key
-		    (mc-activate-passwd (car key)
+		    (mc-activate-passwd (cdr key)
 					(format 
 					 "GPG passphrase for %s (%s): "
 					 (car key) (cdr key)))
@@ -1000,7 +1003,7 @@ GPG ID.")
     (setq key (mc-gpg-lookup-key (or id mc-gpg-user-id) 'sign))
     (setq passwd
 	  (mc-activate-passwd
-	   (car key)
+	   (cdr key)
 	   (format "GPG passphrase for %s (%s): " (car key) (cdr key))))
     (setq args
 	  (list
