@@ -153,7 +153,7 @@ PGP ID.")
 	    (re-search-backward "^-----END PGP.*-----\n" nil t)
 	    (setq end (match-end 0))
 	    (set-buffer obuf)
-	    (cons t (cons start end)))))))
+	    (list t (cons start end)))))))
 
 (defun mc-pgp50-process-region 
   (beg end passwd program args parser &optional buffer)
