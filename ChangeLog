@@ -1,3 +1,13 @@
+2002-07-07  Brian Warner  <warner@lothar.com>
+
+	* NEWS: finalized 3.5.7 change section
+
+	* mailcrypt.el (mc-version): bumped to 3.5.7
+
+	* mailcrypt.texi (VERSION): bumped to 3.5.7
+
+	* README.dev: Add my checklist for making a release.
+
 2002-06-12  Brian Warner  <warner@lothar.com>
 
 	* NEWS: summarize changes since 3.5.6
