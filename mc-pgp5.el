@@ -170,8 +170,6 @@ PGP ID.")
 	  (setq proc
 		(apply 'start-process-shell-command "*PGP*" mybuf program 
 		       "2>&1" args))
-	  (if passwd
-	      (or mc-passwd-timeout (mc-deactivate-passwd t)))
 
 	  ;; Now hand the process to the parser, which returns the exit
 	  ;; status of the dead process and the limits of the region
@@ -389,6 +387,7 @@ PGP ID.")
 	(with-expect proc
 	  (message "Sending passphrase...")
 	  (expect-send (concat passwd "\n"))
+	  (or mc-passwd-timeout (mc-deactivate-passwd t))
 	  (expect "No files specified.  Using stdin."
 	    (message "Passphrase sent.  Decrypting...")
 	    (set-buffer oldbuf)
