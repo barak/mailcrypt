@@ -1,4 +1,4 @@
-  Mailcrypt 3.5b5 is Available for Download
+  Mailcrypt 3.5b6 is Available for Download
 
 
   1.  Introduction
@@ -14,15 +14,15 @@
 
   2.1.	New Features in This Release
 
-
-  Major rewrite of Emacs lisp code. Support for PGP 2.6.x has been
-  restored to its orignal condition, hopefully adding to its stability.
-  The original "schemes" mechanism is now in use for PGP 5.x, which
-  should facilitate adding of GPG and other schemes in the future.
-  Documentation and installation have been cleaned up a great deal.
+  Sign/encrypt in one step.  Mailcrypt now ignores revoked keys in the
+  user's keyring.  Email-header-detection is now RFC822 compliant and
+  won't choke on headers containing colons.  Signature verification
+  works for usenet postings in GNUS even with gnus-hide-pgp
+  activated.  The "Processed by Mailcrypt" self-promotion comment is
+  back for both versions of PGP.  Configuration scripts are smarter,
+  and many other bugs have been fixed.
 
   2.2.	Features for PGP 2.6.x (stable)
-
 
   Encryption, decryption, signing, adding keys, extracting keys,
   passphrase caching with timeout, multiple secret key (identity)
@@ -35,8 +35,6 @@
 
   o  Add key snarfing support for PGP 5.x.
 
-  o  Enable signing/encrypting in one step.
-
   o  Add GPG support.
 
   o  Restore functionality on Windows 95/98/NT. If tiny-pgp can do it,
@@ -45,7 +43,7 @@
   3.  Downloading Mailcrypt
 
 
-  The Official Mailcrypt version 3.5b5 can be downloaded at:
+  The Official Mailcrypt version 3.5b6 can be downloaded at:
 
   <http://www.pobox.com/~lbudney/linux/software/mailcrypt.html>
 

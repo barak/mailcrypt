@@ -1,48 +1,109 @@
+Sat Aug 29 13:30:54 1998  Leonard R. Budney  <lbudney@pobox.com>
+
+	* mailcrypt.info-2, mailcrypt.texi, mailcrypt.info-1,
+	mailcrypt.info, mailcrypt.dvi, Makefile.in, configure,
+	configure.in: Updated Mailcrypt documentation--still a long way to
+	go.  Also fixed up the installation of info files, so the new
+	documentation will install correctly.
+
+	* configure.in, configure: Fixed a bug in the configure script
+	which got confused when emacs (or Xemacs) are referred to by their
+	full pathname.  Thanks to Sergio Antoy.
+
+Fri Aug 28 02:23:05 1998  Leonard R. Budney  <lbudney@pobox.com>
+
+	* mailcrypt.el, mc-pgp.el, mc-pgp5.el: Moved definition of
+	mc-pgp-always-sign into mailcrypt.el so that it applies to all
+	encryption schemes at once.  Also fixed a bug which prevented
+	deactivation of an incorrect passphrase when signing and
+	encrypting in one step.
+
+	* mailcrypt.el, mc-pgp.el, mc-pgp5.el: Fixed a bug in the RFC-822
+	regular expression for mail headers.  Also enhanced PGP keyid
+	lookup to ignore revoked keys in both PGP 2 and PGP 5.  Thanks to
+	Dean Bullock for spotting this bug.
+
+Thu Aug 27 22:09:44 1998  Leonard R. Budney  <lbudney@pobox.com>
+
+	* mailcrypt.el: Modified mc-field-name-regexp to match on exactly
+	those email headers which are RFC-822 compliant.
+
+	* mailcrypt.el: Changed mc-field-name-regexp so that fields with
+	":" in their bodies work correctly.  This permits addresses like
+	"null:" and like "post: alt.test" when using mixmaster remailers.
+	Note however that the latter should also be generated seamlessly
+	by mailcrypt when posting in the usual way.
+
+	* mc-toplev.el: Updated Gnus support to look in
+	gnus-original-article-buffer rather than in gnus-article-buffer
+	for PGP stuff.  Gnus has been changed to actually delete PGP stuff
+	when using gnus-article-hide-pgp, and this patch permits
+	verification of signatures even when hidden.  Thanks to Dave Love.
+
+Wed Aug 26 00:32:28 1998  Leonard R. Budney  <lbudney@pobox.com>
+
+	* mc-pgp5.el: Changed mc-pgp50-always-sign back to
+	mc-pgp-always-sign.  As a result, encrypting for remailers does
+	not prompt repeatedly "Sign the message?"  As a side effect,
+	"always sign" really means always; for every coding scheme.
+
+	* mc-pgp5.el: Fixed a stupid typo introduced in the previous
+	revision.
+
+Tue Aug 25 12:13:48 1998  Leonard R. Budney  <lbudney@pobox.com>
+
+	* mc-pgp5.el: Enabled signing and encrypting in one step.  Thanks
+	to Fabien Coelho.
+
+	* mc-pgp5.el: Added public key insertion for PGP 5.0, and fixed
+	the annoying lack of newlines at the and of PGP messages.  Thanks
+	to Sergio Antoy.
+
+	* mc-pgp5.el: Added Mailcrypt comment to signed messages in PGP
+	5.0.
+
 Sun Aug 23 23:41:17 1998  Leonard R. Budney  <lbudney@pobox.com>
 
-	* mc-pgp5.el, mc-setversion.el, mc-toplev.el, Attic/mc-pgp2.el, Makefile.in, mailcrypt.el, mc-pgp.el, INSTALL:
-	Completed a major rewrite.  Basic elisp code is unchanged, and
-	overall functionality is unchanged.  However, I restored the
-	original mailcrypt files to their prior condition (almost), and
-	implemented PGP 5 support through the "scheme" mechanism
-	originally provided by Pat and Jin.  Though there are pros and
-	cons to both their approach and mine, I would rather stick with
-	theirs.  Now GPG support can be added fairly simply!
+	* mc-pgp5.el, mc-setversion.el, mc-toplev.el, Attic/mc-pgp2.el,
+	Makefile.in, mailcrypt.el, mc-pgp.el, INSTALL: Completed a major
+	rewrite.  Basic elisp code is unchanged, and overall functionality
+	is unchanged.  However, I restored the original mailcrypt files to
+	their prior condition (almost), and implemented PGP 5 support
+	through the "scheme" mechanism originally provided by Pat and Jin.
+	Though there are pros and cons to both their approach and mine, I
+	would rather stick with theirs.  Now GPG support can be added
+	fairly simply!
 
 Wed Aug 19 22:24:50 1998  Leonard R. Budney  <lbudney@pobox.com>
 
-	* INSTALL:
-	Changed setup info for .emacs file to load "mc-setversion" rather
-	than autoloading it.  After all, it's silly to "autoload"
-	something and then immediately call it!  Thanks to Aaron Gross and
-	David Maslen.
+	* INSTALL: Changed setup info for .emacs file to load
+	"mc-setversion" rather than autoloading it.  After all, it's silly
+	to "autoload" something and then immediately call it!  Thanks to
+	Aaron Gross and David Maslen.
 
 	* configure: Generated updated configure script.
 
-	* configure.in, INSTALL:
-	Tweaked the EMACSFLAGS for Xemacs to work for both Xemacs 19.x and
-	20.x.  Fixed up the INSTALL file to document these slight
-	differences.
+	* configure.in, INSTALL: Tweaked the EMACSFLAGS for Xemacs to work
+	for both Xemacs 19.x and 20.x.  Fixed up the INSTALL file to
+	document these slight differences.
 
 Tue Aug 18 12:23:13 1998  Leonard R. Budney  <lbudney@pobox.com>
 
-	* configure.in, configure, Makefile.in:
-	Added "--vanilla" flag for Xemacs compiling, and modified the
-	"configure" script to abort if emacs or Xemacs are not found.
-	Also, changed the override to use the environment variable "EMACS"
-	instead of the totally ridiculous "EMACS19".  Thanks to Amir
-	J. Katz.
+	* configure.in, configure, Makefile.in: Added "--vanilla" flag for
+	Xemacs compiling, and modified the "configure" script to abort if
+	emacs or Xemacs are not found.  Also, changed the override to use
+	the environment variable "EMACS" instead of the totally ridiculous
+	"EMACS19".  Thanks to Amir J. Katz.
 
 Wed Jul 29 01:13:04 1998  Leonard R. Budney  <lbudney@pobox.com>
 
-	* Attic/timer.el, FSF-timer.el, Makefile.in, configure, configure.in:
-	Moved "timer.el" to a file of another name, to prevent
-	inadvertantly including it when the timer package is already
-	installed.
+	* Attic/timer.el, FSF-timer.el, Makefile.in, configure,
+	configure.in: Moved "timer.el" to a file of another name, to
+	prevent inadvertantly including it when the timer package is
+	already installed.
 
-	* Attic/timer.el:
-	Used a different version of timer.el which doesn't BREAK mailcrypt
-	for NON xemacs users.
+	* Attic/timer.el: Used a different version of timer.el which
+	doesn't BREAK mailcrypt for NON xemacs users.
 
 Sun Jul 26 11:40:01 1998  Leonard R. Budney  <lbudney@pobox.com>
 
@@ -52,49 +113,67 @@ Fri Jul 24 20:30:04 1998  Leonard R. Budney  <lbudney@pobox.com>
 
 	* ANNOUNCE, NEWS: Updated announcement and news files.
 
-	* ChangeLog, ChangeLog.old:
-	Moved Jin and Pat's ChangeLog data into ChangeLog.old for the sake
-	of history.  The Changelog file will be automatically generated
-	from my sources from now on.
+	* ChangeLog, ChangeLog.old: Moved Jin and Pat's ChangeLog data
+	into ChangeLog.old for the sake of history.  The Changelog file
+	will be automatically generated from my sources from now on.
 
-	* ONEWS, ChangeLog, NEWS:
-	Updated news and changelog files for the anticipated flurry of
-	development and bug fixes.
+	* ONEWS, ChangeLog, NEWS: Updated news and changelog files for the
+	anticipated flurry of development and bug fixes.
 
 Thu Jul 23 02:37:55 1998  Leonard R. Budney  <lbudney@pobox.com>
 
-	* INSTALL, README:
-	Updated documentation for Xemacs users, and deleted some (old, and
-	apparently obsolete) pointers from the README file.
+	* INSTALL, README: Updated documentation for Xemacs users, and
+	deleted some (old, and apparently obsolete) pointers from the
+	README file.
 
-	* Attic/timer.el, configure.in, Makefile.in, configure:
-	Added timer.el to the Mailcrypt distribution, so that Mailcrypt
-	should work correctly for Xemacs users.  The configure script
-	simply checks whether timer.el is in the user's load path, and
-	includes timer.el in the list of files to compile and install if
-	it isn't.
+	* Attic/timer.el, configure.in, Makefile.in, configure: Added
+	timer.el to the Mailcrypt distribution, so that Mailcrypt should
+	work correctly for Xemacs users.  The configure script simply
+	checks whether timer.el is in the user's load path, and includes
+	timer.el in the list of files to compile and install if it isn't.
 
 Wed Jul 22 02:20:49 1998  Leonard R. Budney  <lbudney@pobox.com>
 
-	* mc-pgp5.el:
-	Modified mc-pgp5-sign-parser to behave correctly when signing 8bit
-	data.  In that case, the PGP delimiter reads "END PGP MESSAGE"
-	rather than "END PGP SIGNATURE".  Thanks to Greg Steuck.
+	* mc-pgp5.el: Modified mc-pgp5-sign-parser to behave correctly
+	when signing 8bit data.  In that case, the PGP delimiter reads
+	"END PGP MESSAGE" rather than "END PGP SIGNATURE".  Thanks to Greg
+	Steuck.
 
 Tue Jul 21 12:25:18 1998  Leonard R. Budney  <lbudney@pobox.com>
 
-	* load-path.hack, Makefile.in:
-	Made Makefile more conformant to GNU standards, and eliminated
-	annoying warning about Emacs versions other than 19.*.  Thanks to
-	Tony Silva.
+	* load-path.hack, Makefile.in: Made Makefile more conformant to
+	GNU standards, and eliminated annoying warning about Emacs
+	versions other than 19.*.  Thanks to Tony Silva.
 
-	* mailcrypt.el, mailcrypt.info:
-	Updated version number in elisp code.
+	* mailcrypt.el, mailcrypt.info: Updated version number in elisp
+	code.
 
-	* Attic/pgpv.sh, Attic/pgpe.sh, Attic/pgps.sh, mc-setversion.el, Attic/mc-pgpk, mc-pgp5.el, mc-pgp.el, Makefile.in:
-	Removed dependency on shell scripts and perl scripts.  Added
-	completion to mc-setversion.  Thanks to Brian Warner.
+	* Attic/pgpv.sh, Attic/pgpe.sh, Attic/pgps.sh, mc-setversion.el,
+	Attic/mc-pgpk, mc-pgp5.el, mc-pgp.el, Makefile.in: Removed
+	dependency on shell scripts and perl scripts.  Added completion to
+	mc-setversion.  Thanks to Brian Warner.
 
-	* mc-pgp5.el, INSTALL:
-	Corrected initialization instructions and fixed regular expression
-	to permit handling of emails in Svenska.  Thanks to Jonas Linde.
+	* mc-pgp5.el, INSTALL: Corrected initialization instructions and
+	fixed regular expression to permit handling of emails in Svenska.
+	Thanks to Jonas Linde.
+
+	* Attic/mc-pgpk, Attic/pgpe.sh, Attic/pgps.sh, Attic/pgpv.sh,
+	mailcrypt.dvi, mailcrypt.texi, mkinstalldirs, texi2html.ext:
+	Initial revision
+
+	* Attic/mc-pgpk, Attic/pgpe.sh, Attic/pgps.sh, Attic/pgpv.sh,
+	mailcrypt.dvi, mailcrypt.texi, mkinstalldirs, texi2html.ext:
+	Initial revision.
+
+	* ANNOUNCE, Attic/mc-pgp2.el, ChangeLog, INSTALL, LCD-entry,
+	Makefile.in, NEWS, ONEWS, README, configure, configure.in,
+	expect.el, install-sh, load-path.hack, mailcrypt.el,
+	mailcrypt.info, mc-pgp.el, mc-pgp5.el, mc-remail.el,
+	mc-setversion.el, mc-toplev.el: Initial revision
+
+	* ANNOUNCE, Attic/mc-pgp2.el, ChangeLog, INSTALL, LCD-entry,
+	Makefile.in, NEWS, ONEWS, README, configure, configure.in,
+	expect.el, install-sh, load-path.hack, mailcrypt.el,
+	mailcrypt.info, mc-pgp.el, mc-pgp5.el, mc-remail.el,
+	mc-setversion.el, mc-toplev.el: Initial revision.
+
