@@ -1,37 +1,63 @@
-Mailcrypt version 3.5b4 is now available.
+  Mailcrypt 3.5b5 is Available for Download
 
-Mailcrypt is an Emacs Lisp package which provides a simple interface
-to message encryption with PGP (you do use Emacs to handle your mail
-and news, right?).  Mailcrypt version 3.5b1 and higher have been extended
-to handle both PGP 2.6.* and PGP 5.*.
 
-PGP 5 Features: Toggle between PGP 2 and 5, sign, encrypt, decrypt,
-verify messages and files.
+  1.  Introduction
 
-PGP 2 Features: Encryption, decryption, signing, adding keys, extracting
-keys, passphrase caching with timeout, multiple secret key (identity)
-support, a simple but flexible interface to Cypherpunk remailers
-(including chaining, response blocks, pseudonyms, and Mixmaster
-support), and an automatic keyserver interface via HTTP.
 
-*We* think it's the best interface to these functions anywhere, but
-then again, we're biased.
+  Mailcrypt is an Emacs Lisp package which provides a simple interface
+  to message encryption with PGP (you do use Emacs to handle your mail
+  and news, right?). Mailcrypt version 3.5b1 and higher have been
+  extended to handle both PGP 2.6.x and PGP 5.x.
 
-The NEWS file is appended to this message.
+  2.  Features
 
-Obtain it from the new Mailcrypt home page at:
 
-	http://www.pobox.com/~lbudney/linux/software/mailcrypt.html
+  2.1.	New Features in This Release
 
-Of course, Pat and Jin's original mailcrypt are still available 
-at either of:
 
-	http://cag-www.lcs.mit.edu/mailcrypt/
-	ftp://cag.lcs.mit.edu/pub/patl/
+  Major rewrite of Emacs lisp code. Support for PGP 2.6.x has been
+  restored to its orignal condition, hopefully adding to its stability.
+  The original "schemes" mechanism is now in use for PGP 5.x, which
+  should facilitate adding of GPG and other schemes in the future.
+  Documentation and installation have been cleaned up a great deal.
 
-Enjoy!
+  2.2.	Features for PGP 2.6.x (stable)
 
- - Patrick J. LoPresti (patl@lcs.mit.edu)
- - Jin S. Choi (jin@atype.com)
- - Len Budney (lbudney@pobox.com)
 
+  Encryption, decryption, signing, adding keys, extracting keys,
+  passphrase caching with timeout, multiple secret key (identity)
+  support, a simple but flexible interface to Cypherpunk remailers
+  (including chaining, response blocks, pseudonyms, and Mixmaster
+  support), and an automatic keyserver interface via HTTP.
+
+  2.3.	Still To Do
+
+
+  o  Add key snarfing support for PGP 5.x.
+
+  o  Enable signing/encrypting in one step.
+
+  o  Add GPG support.
+
+  o  Restore functionality on Windows 95/98/NT. If tiny-pgp can do it,
+     we can too!
+
+  3.  Downloading Mailcrypt
+
+
+  The Official Mailcrypt version 3.5b5 can be downloaded at:
+
+  <http://www.pobox.com/~lbudney/linux/software/mailcrypt.html>
+
+  Since receiving the blessing of the original authors, this is now
+  the official Mailcrypt site.
+
+  Of course, Mailcrypt 3.4 can still be downloaded at the (just as
+  official) Mailcrypt sites: 
+
+  <http://cag-www.lcs.mit.edu/mailcrypt/>
+  and
+  <ftp://cag.lcs.mit.edu/pub/patl/>
+
+  Enjoy!
+	- Len Budney <lbudney@pobox.com>
