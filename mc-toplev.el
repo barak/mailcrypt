@@ -749,11 +749,10 @@ Exact behavior depends on current major mode."
   (interactive)
   (let ((read-only buffer-read-only))
     (unwind-protect
-        (progn
-          (save-excursion
-            (setq buffer-read-only nil)
-            (mc-decrypt-message)
-            ))
+        (save-excursion
+          (setq buffer-read-only nil)
+          (mc-decrypt-message)
+          )
       (setq buffer-read-only read-only)
       )
 ))
