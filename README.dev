@@ -1,0 +1,39 @@
+Developers' Notes:
+
+I've added the beginnings of a unit test framework to MailCrypt. The only
+thing tested so far is GPG decryption. The armored keyrings and test cases
+are packaged as part of the distribution tarball, where a 'make check' can
+unpack them and then use them to run the tests. There are two keyrings: a
+full set (used to create the test cases), and an 'exported' set which has
+some of the secret keys removed (to test what happens when you try to
+decrypt a message that isn't addressed to you).
+
+To build MailCrypt from CVS:
+
+You will need GNU autoconf. The following sequence will create the
+distribution tarball.
+
+   autoconf
+   ./configure
+   make dist
+
+To rebuild the unit test keyrings and test cases:
+
+You will need the Python GnuPGInterface module, available at
+<http://sourceforge.net/projects/py-gnupg/>. It is used to automate the
+creation of the test messages. After installing it, do the following to
+create the keys:
+
+ ./configure
+ cd tests/gpg-keys
+  make new-rings
+   (now manually sign the appropriate keys following the hints emitted by
+    the script.. this part hasn't been automated yet)
+  make exported
+  make pack
+   (creates allrings.txt, the armored keyring file. This file is checked into
+    CVS)
+ cd ..
+ make gpg-testcases
+  (this unpacks allrings.txt, then runs a program which creates the GPG test
+   cases in gpg-testcases/* . These test cases are also checked into CVS)
