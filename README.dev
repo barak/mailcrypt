@@ -65,5 +65,6 @@ Making a new release. This is my checklist for making a new official release.
   announce on sourceforge news
   announce on mailcrypt-announce
   update http://mailcrypt.sourceforge.net
-
+   (update 'site' module, login to mailcrypt.sourceforge.net,
+    go to /home/groups/m/ma/mailcrypt/htdocs/ and do a cvs update)
   upload to sunsite?
