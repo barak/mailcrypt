@@ -1,3 +1,8 @@
+2002-07-25  Brian Warner  <warner@lothar.com>
+
+	* Makefile.in (DISTFILES): Add COPYING, a copy of the GPL. Can't
+	believe we were missing that. Oops.
+
 2002-07-23  Brian Warner  <warner@lothar.com>
 
 	* mailcrypt.texi (Remailer Quick Start): Suggest
