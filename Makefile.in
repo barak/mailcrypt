@@ -61,6 +61,9 @@ SHELL = /bin/sh
 
 all: $(OBJECTS)
 
+check: $(OBJECTS)
+	$(MAKE) -C tests check
+
 install: all installdirs install-info $(bindir)
 	for f in $(SOURCES); do \
 	  $(INSTALL_DATA) $(srcdir)/$$f $(lispdir); \
