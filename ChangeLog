@@ -1,3 +1,32 @@
+2003-07-14  Brian Warner  <warner@lothar.com>
+
+	* mailcrypt.texi (Types of Remailers): Document remailer-schemes,
+	how to use new mixmaster/mixminion clients.
+	(Credits): Note Len and Brian's contributions, add SourceForge
+	pointer.
+
+	* mc-toplev.el (mc-remail): Add remailer-schemes
+
+	* mc-remail.el (mc-remailer-scheme-type1): change old remailer
+	code to support remailer-schemes.
+	(mc-remailer-encrypt-for-chain): now verbose mode (pause between
+	encryption layers) is achieved with 'C-uC-u' (two prefix args
+	instead of just one)
+
+	* mailcrypt.el (mc-default-remailer-scheme): new remailer support.
+	Changed [C-c / r] to invoke 'mc-remail', which is then mapped into
+	a remailer-scheme-specific function
+
+	* mc-remail2.el: added support for mixminion and new mixmaster clients
+
+	* mc-setversion.el: remove mc-default-scheme, as it is defined in
+	mailcrypt.el
+
+	* mailcrypt.el (mc-schemes): Add "pgp65" to the schemes list, so
+	mc-setversion can tab-complete on it.
+	(mc-version): bump version to "3.5.8+" while we're in between
+	releases, to avoid confusion with the real "3.5.8" release.
+
 2003-06-13  Brian Warner  <warner@lothar.com>
 
 	* mc-pgp6.el: actually add the file. How embarrassing. Thanks to
