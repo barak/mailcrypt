@@ -68,10 +68,11 @@ Making a new release. This is my checklist for making a new official release.
   update .lsm file
 
   upload .tar.gz, .sig, release notes, changelog to sourceforge download area
-  announce on sourceforge news
-  announce on mailcrypt-announce
   update http://mailcrypt.sourceforge.net
    (update 'site' module, login to mailcrypt.sourceforge.net,
     go to /home/groups/m/ma/mailcrypt/htdocs/ and do a cvs update)
+  announce on sourceforge news
+  announce on mailcrypt-announce@lists.sourceforge.net
+  announce on freshmeat
   upload to sunsite? (now ibiblio.org)
 
