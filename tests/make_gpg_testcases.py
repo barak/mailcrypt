@@ -203,7 +203,23 @@ class E_Case(TestCase):
         self.encrypted_fields(recip)
     def make_crypttext(self):
         self.d['crypttext'] = "\n" + encrypt(self.recip, self.plaintext)
-        
+
+class Latin1_E_Case(E_Case):
+    # encrypt a message that contains ISO-Latin-1 characters
+    def make_plaintext(self):
+        return """
+Usted tiene que mostrar esta evidencia escrita a un oficial de policía cuando
+éste lo solicite así como a otro conductor o dueño do propiedad después de un
+accidente vial."""
+
+class EE_Case(E_Case):
+    # encrypt to multiple recipients, some unknown
+    def make_crypttext(self):
+        self.d['crypttext'] = "\n" + \
+                              encryptor.encrypt_string(self.plaintext,
+                                                       ["unknown",
+                                                        "other",
+                                                        self.recip])
 class ES_Case(TestCase):
     def __init__(self, filename, recip, signer):
         TestCase.__init__(self, filename)
@@ -232,6 +248,13 @@ class CS_Case(TestCase):
     def make_crypttext(self):
         self.d['crypttext'] = "\n" + clearsign(self.signer, self.plaintext)
 
+class Latin1_CS_Case(CS_Case):
+    def make_plaintext(self):
+        return """
+Usted tiene que mostrar esta evidencia escrita a un oficial de policía cuando
+éste lo solicite así como a otro conductor o dueño do propiedad después de un
+accidente vial."""
+    
 class SYM_Case(TestCase):
     def __init__(self, filename, passphrase):
         TestCase.__init__(self, filename)
@@ -261,6 +284,9 @@ def make_cases():
     CS_Case("CS.s2v", "trusted").process(d)
     CS_Case("CS.s3v", "untrusted").process(d)
     CS_Case("CS.s4", "unknown").process(d)
+    Latin1_CS_Case("CS.latin1.s1v", "owner1").process(d)
+    Latin1_E_Case("E.latin1.e1r", "owner1").process(d)
+    EE_Case("E.e1re3re4r", "owner1").process(d)
 
 # get keyids
 id = {}
