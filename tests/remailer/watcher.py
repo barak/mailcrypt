@@ -1,6 +1,6 @@
 #! /usr/bin/python
 
-import os, os.path, stat
+import os, os.path, stat, time, string
 
 # This program watches a pair of maildir-style directories. A message is
 # placed in the 'source' maildir when the user runs an elisp function just
@@ -64,7 +64,45 @@ class DirWatcher:
         print
     def msgids(self):
         return self.ids.keys()
-                                               
+
+from nntplib import NNTP
+
+class NewsWatcher:
+    def __init__(self, server, groups, user=None, pw=None, port=None):
+        self.groups = groups
+        self.n = NNTP(server, port=port, user=user, password=pw,
+                      readermode=1)
+        self.last = {}
+        self.files = {}
+        self.ids = {}
+        # only look for messages that appear after we start. Usenet is big.
+        for g in groups:
+            resp, count, first, last, name = self.n.group(g)
+            self.last[g] = int(last)
+    def poll(self):
+        for g in self.groups:
+            resp, count, first, last, name = self.n.group(g)
+            for num in range(self.last[g]+1, int(last)+1):
+                resp, num, id, lines = self.n.article("%d" % num)
+                # find the msgid
+                m = {}
+                msgid = None
+                key = "MailcryptRemailerMessageId="
+                for line in lines:
+                    where = line.find(key)
+                    if where != -1:
+                        where = where + len(key)
+                        msgid = line[where:]
+                if msgid != None:
+                    m['msgid'] = msgid
+                    m['data'] = string.join(lines, "\n")
+                    m['time'] = time.time()
+                    self.files[g,num] = m
+                    self.ids[msgid] = (g,num)
+            self.last[g] = int(last)
+    def msgids(self):
+        return self.ids.keys()
+        
 class Watcher:
     def __init__(self, source, dest):
         self.source = DirWatcher(source)
@@ -104,6 +142,11 @@ class Watcher:
         received.sort(lambda x,y: cmp(x[0], y[0]))
         return received
 
+class Watcher2(Watcher):
+    def __init__(self, sourcedir, server, groups, port=None):
+        self.source = DirWatcher(sourcedir)
+        self.dest = NewsWatcher(server, groups, port=port)
+        
 def test1():
     w = Watcher("sdir", "ddir")
     print "polling"
@@ -125,6 +168,18 @@ def test2():
         print "complete:", w.received()
         time.sleep(5)
 
+def test3():
+    w = Watcher2("sdir", "luther", ["lothar.mail.debian.devel"], port=8119)
+    print "polling"
+    import time
+    while 1:
+        w.poll()
+        print "outstanding:", w.outstanding()
+        print "complete:", w.received()
+        print w.dest.last
+        print w.dest.msgids()
+        time.sleep(5)
+
 if __name__ == '__main__':
-    test2()
+    test3()
     
