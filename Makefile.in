@@ -44,10 +44,10 @@ OBJECTS = @EXTRA_OBJS@ \
 	mailcrypt.elc mc-toplev.elc mc-pgp.elc mc-remail.elc \
 	mc-pgp5.elc mc-gpg.elc expect.elc mc-setversion.elc
 
-DISTFILES = $(SOURCES) ANNOUNCE ChangeLog INSTALL LCD-entry Makefile.in \
-	NEWS ONEWS README configure configure.in install-sh load-path.hack \
-	mailcrypt.texi mkinstalldirs texi2html.ext FSF-timer.el \
-	$(INFOFILES) mailcrypt.dvi README.gpg
+DISTFILES = $(SOURCES) ANNOUNCE ChangeLog ChangeLog.1 INSTALL LCD-entry \
+	Makefile.in NEWS ONEWS README configure configure.in install-sh \
+	load-path.hack mailcrypt.texi mkinstalldirs texi2html.ext \
+	FSF-timer.el $(INFOFILES) mailcrypt.dvi README.gpg
 
 SHELL = /bin/sh
 #.PHONY: all clean dist distclean dvi html info install \
