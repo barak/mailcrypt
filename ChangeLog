@@ -3,6 +3,7 @@
 	* mailcrypt.info: Removed the generated .info files from the CVS
 	archive. They should be built from .texi before distributions, but
 	not tracked in CVS.
+	* mailcrypt.dvi: Ditto.
 
 	* ChangeLog: add file-local variable to make date strings consistent.
 
