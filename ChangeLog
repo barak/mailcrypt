@@ -8,6 +8,10 @@
 	media) in my .emacs and somehow it took months for me to realize
 	that it didn't actually work.
 
+	* mc-gpg.el (mc-gpg-lookup-key): Use UTF-8 when asking user for a
+	passphrase (if UTF-8 is available), patch adapted from Debian
+	version, thanks to Francesco Potorti.
+
 2001-09-18  Brian Warner  <warner@lothar.com>
 
 	* mc-toplev.el (autoloads): added gnus-summary autoloads, patch
