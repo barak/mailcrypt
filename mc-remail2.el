@@ -35,6 +35,7 @@
   "*The mixmaster-2.9 executable. This uses a different API than the old
 mix-2.0.3 'mixmaster' binary. If you use the old one, set mc-mixmaster-path
 instead.")
+(defvar mc-mixmaster29-ask t)
 
 (defun mc-mixmaster-send (recipients start end &optional verbose)
   "Send the message in the current buffer via mixmaster. The buffer itself
@@ -66,11 +67,12 @@ instead.")
 
     (setq command (format "%s %s" mc-mixmaster29-path args))
 
-    (unless (y-or-n-p (format (concat
-                               "About to feed message through '%s'\n"
-                               "Really send this message? ")
-                              command))
-      (error "Remailing aborted. See documentation for details."))
+    (if mc-mixmaster29-ask
+        (unless (y-or-n-p (format (concat
+                                   "About to feed message through '%s'\n"
+                                   "Really send this message? ")
+                                  command))
+          (error "Remailing aborted. See documentation for details.")))
 
     (goto-char start)
 
@@ -105,6 +107,7 @@ instead.")
 
 (defvar mc-mixminion-path "mixminion"
   "*The mixminion script")
+(defvar mc-mixminion-ask t)
 
 (defun mc-mixminion-send (recipients start end &optional verbose)
   "Send the message in the current buffer via mixminion. The buffer itself
@@ -132,11 +135,12 @@ instead.")
     (setq command (format "%s %s" mc-mixminion-path args))
     ;; formats weirdly, but good enough for now
 
-    (unless (y-or-n-p (format (concat
-                               "About to feed message through '%s'\n"
-                               "Really send this message? ")
-                              command))
-      (error "Remailing aborted. See documentation for details."))
+    (if mc-mixminion-ask
+        (unless (y-or-n-p (format (concat
+                                   "About to feed message through '%s'\n"
+                                   "Really send this message? ")
+                                  command))
+          (error "Remailing aborted. See documentation for details.")))
 
     (goto-char start)
 

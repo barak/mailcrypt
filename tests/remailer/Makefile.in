@@ -24,6 +24,7 @@ have-py-gnupg.stamp:
 
 check: $(GPG_KEYS) have-py-gnupg.stamp
 	$(EMACS) -q --no-site-file -batch -l test-remailer.el -f run-all-tests
+	$(EMACS) -q --no-site-file -batch -l test-remailer3.el -f run-all-tests
 
 onetest: $(GPG_KEYS) have-py-gnupg.stamp
 	$(EMACS) -q --no-site-file -batch -l test-remailer.el -f run-one-test

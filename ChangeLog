@@ -1,5 +1,9 @@
 2003-07-14  Brian Warner  <warner@lothar.com>
 
+	* tests/remailer/Makefile.in, tests/remailer/test-remailer3.el:
+	unit tests for new remailer code
+	* mc-remail2.el (mc-mixminion-ask): hook to make tests simpler
+
 	* mailcrypt.texi (Types of Remailers): Document remailer-schemes,
 	how to use new mixmaster/mixminion clients.
 	(Credits): Note Len and Brian's contributions, add SourceForge
