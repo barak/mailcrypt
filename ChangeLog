@@ -1,3 +1,14 @@
+2002-06-10  Brian Warner  <warner@lothar.com>
+
+	* tests/*: Added the start of a unit test framework. Currently only
+	tests GPG decryption. See README.dev for more details.
+	* mailcrypt.el (mc-message-sigstatus): Added function to emit status
+	messages, is redefined by the test harness to compare output status
+	against expected values.
+	* mc-gpg.el: Use mc-message-sigstatus instead of raw message().
+	* README.dev: added notes on how to build from CVS, how to create
+	test cases.
+
 2001-11-21  Brian Warner  <warner@lothar.com>
 
 	* mailcrypt.el (mc-temp-directory): use temporary-file-directory
