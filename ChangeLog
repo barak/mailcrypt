@@ -1,3 +1,8 @@
+2003-06-13  Brian Warner  <warner@lothar.com>
+
+	* mc-pgp6.el: actually add the file. How embarrassing. Thanks to
+	"nega" for the catch.
+
 2003-05-23  Brian Warner  <warner@lothar.com>
 
 	* Makefile.in: remove 'bindir' now that helper scripts are long-gone
