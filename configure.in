@@ -56,4 +56,4 @@ else
   AC_SUBST(EXTRA_OBJS)
 fi
 
-AC_OUTPUT(Makefile tests/Makefile)
+AC_OUTPUT(Makefile tests/Makefile tests/remailer/Makefile)
