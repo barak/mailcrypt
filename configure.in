@@ -55,4 +55,4 @@ else
   AC_SUBST(EXTRA_OBJS)
 fi
 
-AC_OUTPUT(Makefile gpgwrap.pl)
+AC_OUTPUT(Makefile)

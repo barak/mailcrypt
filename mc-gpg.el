@@ -37,6 +37,10 @@
 ; #mc-gpg-snarf-keys (one, multiple, old, corrupt)
 ; key fetching (is there a GPG key server yet?)
 ; clean up use of buffers, kill off old tmp buffers
+; in verify-region, print date of signature too
+;  maybe have bad-signature message print keyid/date? (no, sig is invalid,
+;   anything other than its invalidity is misleading)
+; make messages shorter (get it all to fit in echo area)
 
 ; enhancements I'd like to add
 ;  trustdb status reporting during encryption/decryption: show the best trust
@@ -58,11 +62,12 @@
 ; mode, it fails, even if we give --yes. Worse yet, if we encrypt to multiple
 ; recipients, the untrusted ones get dropped withou flagging an error (stderr
 ; does get a message, but it doesn't indicate which keys had a problem)
+
 (defvar mc-gpg-user-id (user-login-name)
   "*GPG ID of your default identity.")
 (defvar mc-gpg-always-sign nil 
   "*If t, always sign encrypted GPG messages, or never sign if 'never.")
-(defvar mc-gpg-path "gpgwrap.pl" "*The GPG executable.")
+(defvar mc-gpg-path "gpg" "*The GPG executable.")
 (defvar mc-gpg-display-snarf-output nil
   "*If t, pop up the GPG output window when snarfing keys.")
 (defvar mc-gpg-alternate-keyring nil
@@ -78,7 +83,7 @@ default.")
   "Text for end of GPG message delimiter.")
 (defconst mc-gpg-signed-begin-line "-----BEGIN PGP SIGNED MESSAGE-----"
   "Text for start of GPG signed messages.")
-(defconst mc-gpg-signed-end-line "-----END PGP SIGNATURE-----"
+(defconst mc-gpg-signed-end-line "-----END PGP SIGNATURE-----\n?"
   "Text for end of GPG signed messages.")
 (defconst mc-gpg-key-begin-line "^-----BEGIN PGP PUBLIC KEY BLOCK-----\r?$"
   "Text for start of GPG public key.")
@@ -166,6 +171,8 @@ keyring.")
 	  (set-buffer obuf)
 	  (buffer-disable-undo mybuf)
 
+	  (if passwd
+	      (setq args (append '("--passphrase-fd" "0") args)))
 	  (setq args (append (list (concat "2>" stderr-tempfilename)) args))
 	  (setq args (append (list (concat "3>" status-tempfilename)) args))
 	  (setq args (append '("--status-fd" "3") args))
@@ -351,7 +358,7 @@ GPG ID.")
        recipients start end id sign))
     
     (setq args (list 
-		"--batch" "--armor" "--textmode"
+		"--batch" "--armor" "--textmode" "--always-trust"
 		(if recipients "--encrypt" "--store")
 		))
     (setq action (if recipients "Encrypting" "Armoring"))
@@ -371,8 +378,7 @@ GPG ID.")
 		 (cdr key)
 		 (format "GPG passphrase for %s (%s): " (car key) (cdr key))))
 	  (setq args
-		(append (list "--passphrase-fd" "0" 
-			      "--local-user" (concat "\"" (car key) "\"")
+		(append (list "--local-user" (concat "\"" (car key) "\"")
 			      "--sign" 
 			      )
 			args))
@@ -431,7 +437,7 @@ GPG ID.")
 ;  encrypted to our key, sig from known key, passphrase ok:
 ;   <message>
 ;   gpg: Signature made Thu Aug  6 16:35:13 1998 using DSA key ID C63B6750
-;   [GNUPG:] GOODSIG
+;   [GNUPG:] GOODSIG C63B6750 Brian Warner (temporary ...
 ;   gpg: Good signature from "Brian Warner (temporary GPG key) <warner@lothar.com>"
 ;   [GNUPG:] TRUST_ULTIMATE
 ;   rc == 0
@@ -500,6 +506,9 @@ GPG ID.")
 ; code in -decrypt-region will worry about reporting other status information
 ; like signatures
 
+; FIXME: if the process dies (say, gpg can't be found), this replaces the
+; region with void. Bad, parser, bad.
+
 (defun mc-gpg-decrypt-parser (stdoutbuf stderrbuf statusbuf rc)
   (let (keyid sigtype symmetric sigid sigdate sigtrust)
     (set-buffer statusbuf)
@@ -507,7 +516,7 @@ GPG ID.")
     (if (re-search-forward "NEED_PASSPHRASE \\(\\S +\\)$" nil t)
 	(setq keyid (concat "0x" (match-string 1))))
     (goto-char (point-min))
-    (if (re-search-forward "\\(\\S +SIG\\)$" nil t)
+    (if (re-search-forward "\\(\\S +SIG\\)" nil t)
 	(setq sigtype (match-string 1)))
     (goto-char (point-min))
     (if (re-search-forward "\\(TRUST_\\S +\\)$" nil t)
@@ -611,8 +620,6 @@ GPG ID.")
 		  (mc-activate-passwd 
 		   id "GPG passphrase for conventional decryption: ")))))
     (setq args '("--batch"))
-    (if passwd
-	(setq args (append args '("--passphrase-fd" "0"))))
     (if mc-gpg-alternate-keyring
 	(setq args (append args (list "--keyring" mc-gpg-alternate-keyring))))
     (setq args (append args '("--decrypt"))) ; this wants to be last
@@ -682,7 +689,7 @@ GPG ID.")
 	   (format "GPG passphrase for %s (%s): " (car key) (cdr key))))
     (setq args
 	  (list
-	   "--passphrase-fd" "0" "--batch" "--armor"
+	   "--batch" "--armor"
 	   "--local-user" (concat "\"" (cdr key) "\"")
 	   (if unclear "--sign" "--clearsign")
 	   ))
@@ -746,7 +753,7 @@ GPG ID.")
 	(status (let (msg)
 		  (set-buffer statusbuf)
 		  (goto-char (point-min))
-		  (while (re-search-forward "^\\[GNUPG:\\]\\s +\\(\\S +\\)$"
+		  (while (re-search-forward "^\\[GNUPG:\\]\\s +\\(\\S +\\)"
 					    nil t)
 		    (setq msg (append msg (list (match-string 1)))))
 		  (mapconcat 'identity msg " ")))
