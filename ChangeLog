@@ -1,3 +1,8 @@
+2003-05-19  Brian Warner  <warner@lothar.com>
+
+	* mailcrypt.el (mc-modes-alist): Add support for the Wanderlust
+	mail mode. Thanks to Fumitoshi UKAI for the patch.
+
 2002-12-01  Brian Warner  <warner@lothar.com>
 
 	* tests/remailer/gtkwatcher.glade

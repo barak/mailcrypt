@@ -285,7 +285,12 @@ If 'never, always use a viewer instead of replacing.")
     (mh-letter-mode (encrypt . mc-encrypt-message)
 		    (sign . mc-sign-message))
     (news-reply-mode (encrypt . mc-encrypt-message)
-		     (sign . mc-sign-message)))
+		     (sign . mc-sign-message))
+    ;; wanderlust: http://www.gohome.org/wl/
+    ;; or perhaps http://www.lab3.kuis.kyoto-u.ac.jp/~tsumura/emacs/wl.html
+    (wl-draft-mode (encrypt . mc-encrypt-message)
+                   (sign . mc-sign-message))
+    )
 
   "Association list (indexed by major mode) of association lists
 (indexed by operation) of functions to call for each major mode.")
