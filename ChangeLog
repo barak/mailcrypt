@@ -1,3 +1,29 @@
+2002-09-24  Brian Warner  <warner@lothar.com>
+
+	* tests/test-gpg.el (run-all-tests): add SE case (symmetric
+	encryption) now that a test case is created for it.
+
+	* tests/make_gpg_testcases.py (TestCase): factor out common code,
+	use subclasses for encrypt vs. sign+encrypt vs. sign etc.
+	(TestCase.encrypted_fields): put keyid in 'encryption_id' field
+	instead of name, to match change in mc-gpg.el
+
+	* mc-gpg.el (mc-gpg-always-fetch): Add missing defvar. Fixes
+	free-variable warning during byte-compiling. Default value is
+	'never, unlike pgp2 and pgp5, because mc-gpg-fetch-key is
+	unimplemented.
+	(mc-gpg-decrypt-region,mc-gpg-sign-region): Use keyid as index for
+	mc-activate-passwd, not key name. Thanks to Alexander Zangerl for
+	the catch. This is especially helpful for folks who use multiple
+	keys with the same name but with different passphrases: the wrong
+	cached passphrase would be used for the second key.
+
+	* tests/test-gpg.el: clear mc-gpg-always-fetch to prevent
+	keyfetching. Some of the test cases use intentionally-unavailable
+	keys to verify error cases; don't ask the user about trying to
+	fetch the missing ones. Also reformat debug output a bit.
+
+
 2002-07-30  Brian Warner  <warner@lothar.com>
 
 	* tests/remailer/gtkwatcher.py: display message when row is selected,
