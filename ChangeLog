@@ -1,3 +1,15 @@
+2002-09-26  Brian Warner  <warner@lothar.com>
+
+	* mailcrypt: Release mailcrypt 3.5.8
+
+	* mailcrypt.texi (VERSION): bumped to 3.5.8
+
+	* mailcrypt.el (mc-version): bumped to 3.5.8
+
+	* ANNOUNCE: update for 3.5.8
+
+	* NEWS: final updates for 3.5.8
+
 2002-09-24  Brian Warner  <warner@lothar.com>
 
 	* tests/remailer/Makefile.in (have-py-gnupg.stamp): check for
