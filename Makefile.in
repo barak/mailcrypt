@@ -126,6 +126,7 @@ clean:
 distclean: clean
 	-rm -f *~ *.tar.gz
 	rm -f Makefile config.status config.cache config.log timer.el
+	rm -f gpgwrap.pl
 
 ${srcdir}/configure: configure.in
 	cd ${srcdir} && autoconf
