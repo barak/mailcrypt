@@ -1,3 +1,23 @@
+Noteworthy changes in Mailcrypt version 3.5.6+:
+
+ * Integration with the Mew mail client: added hooks to use in Mew summary,
+   draft, and message buffers. Note that Mew handles PGP-MIME (RFC3156,
+   "multipart/encrypted") messages by itself; this is just for traditional
+   armored "in-line" encryption.
+
+ * Gnus updates, now usable in summary buffer
+
+ * Less noteworthy changes:
+
+ ** Added a unit test framework. GnuPG decryption now has test coverage.
+
+ ** GnuPG updates
+
+ ** MH fix to handle latest versions of mh-e that use read-only message buffers
+
+ ** Don't use hardwired /tmp directory, might fix some problems on NT.
+
+
 Noteworthy changes in Mailcrypt version 3.5.6:
 
  * Fix to work with GnuPG-1.0.5.
