@@ -23,7 +23,7 @@
 
 @set TITLE Mailcrypt
 @set VERSION 3.5.8
-@set UPDATED August 29, 1998
+@set UPDATED November 30, 2003
 
 @ifinfo
 
@@ -1355,10 +1355,10 @@ leave your terminal unattended.
 @node Key Fetching, Miscellaneous Configuration, Passphrase Cache, Top
 @chapter Key Fetching
 
-@findex mc-pgp-fetch-key
+@findex mc-fetch-key
 @kindex C-c / k
 Mailcrypt knows how to fetch PGP public keys from the key servers
-(@pxref{Key Servers}).  The function @code{mc-pgp-fetch-key} is bound by
+(@pxref{Key Servers}).  The function @code{mc-fetch-key} is bound by
 default to @kbd{C-c / k} in both @code{mc-read-mode} and
 @code{mc-write-mode}.  Additionally, @code{mc-encrypt},
 @code{mc-decrypt}, and @code{mc-verify} will offer to call this function
@@ -1517,8 +1517,9 @@ patient.  (At least it beats the tar out of the Email interface.)
 @section GnuPG Fetch
 
 GnuPG happens to have a built-in HKP keyserver interface which is
-completely independent from MailCrypt's own key fetching support.  If
-your @file{.gnupg/options} file includes a line like:
+completely independent from MailCrypt's own key fetching support. If
+your @file{.gnupg/gpg.conf} (@file{.gnupg/options} for older versions)
+file includes a line like:
 
 @samp{keyserver wwwkeys.pgp.net}
 
@@ -1532,6 +1533,31 @@ You can also tell GPG to explicitly request a key (by hex keyid) with
 @samp{--recv-keys}, or to send your own key with @samp{--send-keys}.
 Check the GnuPG manual for details.
 
+It is also possible to fetch keys with @code{mc-fetch-key}, although
+its behaviour is a bit different from the one described in the pgp
+section, if @code{mc-default-scheme} is set to
+@code{'mc-scheme-gpg}. When called interactively, it will prompt for
+a key ID to fetch from a keyserver. You can either set the server to
+query with
+
+@lisp
+;; Key server at DFN (Germany)
+;; You should choose another one in your region.
+(setq mc-gpg-keyserver "blackhole.pca.dfn.de")
+@end lisp
+
+in your @file{.emacs} file or let GPG use its default defined in its
+configuration file. Every string that can be passed to the gpg
+@samp{--keyserver} option is allowed for @code{mc-gpg-keyserver}. At
+the moment it is @emph{not}
+possible to pass a search string to the function. Please use the
+@samp{--search-key} command option if you have a newer version of
+gpg. Maybe someday we will write a frontend for this.
+
+If you want to finger a key from a server use the
+@code{mc-gpg-fetch-from-finger} function. It expects an input of the
+form @samp{USER@@HOST}. The variable @code{mc-gpg-finger-timeout}
+defines the timeout in seconds for the operation.
 
 @node Miscellaneous Configuration, Tips, Key Fetching, Top
 @chapter Miscellaneous Configuration
@@ -1630,7 +1656,7 @@ following code in your @file{.emacs} file:
 (define-key mc-read-mode-map "\C-c\C-md" 'mc-decrypt)
 (define-key mc-read-mode-map "\C-c\C-mv" 'mc-verify)
 (define-key mc-read-mode-map "\C-c\C-ma" 'mc-snarf)
-(define-key mc-read-mode-map "\C-c\C-mk" 'mc-pgp-fetch-key)
+(define-key mc-read-mode-map "\C-c\C-mk" 'mc-fetch-key)
 @end lisp
 
 For more information on Emacs key bindings, see @ref{Key Bindings, ,
