@@ -1,5 +1,9 @@
 2003-07-25  Brian Warner  <warner@lothar.com>
 
+	* mc-toplev.el (mc-gnus-decrypt-message): use
+	gnus-article-edit-done to replace the decrypted message, as it
+	updates some of the headers. patch from Ivan Boldyrev, SF#646005.
+
 	* NEWS: summarize recent changes
 
 	* mc-gpg.el (mc-gpg-process-region): Set the gpg-stdout buffer
