@@ -39,8 +39,8 @@
   (condition-case nil (require 'gnus) (error nil))
   (autoload 'gnus-summary-select-article "gnus-sum")
   (autoload 'gnus-summary-edit-article "gnus-sum")
-  (autoload 'gnus-summary-edit-article-postpone "gnus-sum")
-  (autoload 'gnus-summary-edit-article-done "gnus-sum")
+  (autoload 'gnus-article-edit-exit "gnus-art")
+  (autoload 'gnus-article-edit-done "gnus-art")
 
   ;; MH-E
   (condition-case nil (require 'mh-e) (error nil))
@@ -716,15 +716,15 @@ Exact behavior depends on current major mode."
       (save-restriction
 	(widen)
 	(cond ((not (car (mc-decrypt-message)))
-	       (gnus-summary-edit-article-postpone))
+	       (gnus-article-edit-exit))
 	      ((and (not (gnus-group-read-only-p))
 		    (not (eq mc-always-replace 'never))
 		    (or mc-always-replace
 			(y-or-n-p
 			 "Replace encrypted message on disk? ")))
-	       (gnus-summary-edit-article-done))
+	       (gnus-article-edit-done))
 	      (t
-	       (gnus-summary-edit-article-postpone)))))))
+	       (gnus-article-edit-exit)))))))
 
 ;;}}}		
 ;;{{{ MH
