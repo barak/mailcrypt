@@ -3,6 +3,8 @@ AC_INIT(mailcrypt.el)
 
 AC_PROG_INSTALL()
 
+AC_PATH_PROG(PERL, perl)
+
 AC_PATH_PROG(INSTALL_INFO, install-info)
 if test "$INSTALL_INFO x" = " x"
 then
@@ -53,4 +55,4 @@ else
   AC_SUBST(EXTRA_OBJS)
 fi
 
-AC_OUTPUT(Makefile)
+AC_OUTPUT(Makefile gpgwrap.pl)

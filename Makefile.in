@@ -47,7 +47,7 @@ OBJECTS = @EXTRA_OBJS@ \
 DISTFILES = $(SOURCES) ANNOUNCE ChangeLog INSTALL LCD-entry Makefile.in \
 	NEWS ONEWS README configure configure.in install-sh load-path.hack \
 	mailcrypt.texi mkinstalldirs texi2html.ext FSF-timer.el \
-	$(INFOFILES) mailcrypt.dvi
+	$(INFOFILES) mailcrypt.dvi gpgwrap.pl.in
 
 SHELL = /bin/sh
 #.PHONY: all clean dist distclean dvi html info install \
@@ -68,6 +68,7 @@ install: all installdirs install-info $(bindir)
 	for f in $(OBJECTS); do \
 	  $(INSTALL_DATA) $$f $(lispdir); \
 	done;
+	$(INSTALL) $(srcdir)/gpgwrap.pl $(bindir);
 
 # Make sure all installation directories actually exist
 # by making them if necessary.

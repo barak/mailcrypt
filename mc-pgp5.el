@@ -277,6 +277,14 @@ PGP ID.")
 	    (delete-process proc)
 	    (setq results '("One or more public keys are missing" nil)))
 
+	   ;; OPTION 3a:  There are bad keys in the keyring.  This is
+	   ;; an odd variant of 3, for example when using a key from
+	   ;; the "Cyber-Knights Termplar," which generates 8K keys.
+	   ("\nNo valid keys found"
+	    (interrupt-process proc)
+	    (delete-process proc)
+	    (setq results '("One or more public keys are missing" nil)))
+
 	   ;; OPTION 4:  The program exits.
 	   (exit
 	    (setq results (list 
