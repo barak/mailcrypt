@@ -14,13 +14,14 @@
 
   2.1.	New Features in This Release
 
-  Sign/encrypt in one step.  Mailcrypt now ignores revoked keys in the
+  Sign/encrypt in one step is enabled for PGP 5.  Insertion of public
+  keys now works for PGP 5.  Mailcrypt now ignores revoked keys in the
   user's keyring.  Email-header-detection is now RFC822 compliant and
   won't choke on headers containing colons.  Signature verification
-  works for usenet postings in GNUS even with gnus-hide-pgp
-  activated.  The "Processed by Mailcrypt" self-promotion comment is
-  back for both versions of PGP.  Configuration scripts are smarter,
-  and many other bugs have been fixed.
+  works for usenet postings in GNUS even with gnus-hide-pgp activated.
+  The "Processed by Mailcrypt" self-promotion comment is back for both
+  versions of PGP.  Configuration scripts are smarter, and many other
+  bugs have been fixed.  Remailer support has been tested for PGP 5.
 
   2.2.	Features for PGP 2.6.x (stable)
 
