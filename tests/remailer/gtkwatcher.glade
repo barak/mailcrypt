@@ -273,7 +273,7 @@
   </child>
 
   <child>
-    <widget class="GtkMenuItem" id="src_age_label">
+    <widget class="GtkMenuItem" id="src_age_item">
       <property name="visible">True</property>
       <property name="label" translatable="yes">Age: unknown</property>
       <property name="use_underline">True</property>
@@ -287,7 +287,7 @@
   </child>
 
   <child>
-    <widget class="GtkMenuItem" id="abandon_message1">
+    <widget class="GtkMenuItem" id="src_abandon_item">
       <property name="visible">True</property>
       <property name="label" translatable="yes">Abandon Message</property>
       <property name="use_underline">True</property>
@@ -307,7 +307,7 @@
   </child>
 
   <child>
-    <widget class="GtkMenuItem" id="dst_sent_label">
+    <widget class="GtkMenuItem" id="dst_sent_item">
       <property name="visible">True</property>
       <property name="label" translatable="yes">Sent: unknown</property>
       <property name="use_underline">True</property>
@@ -321,7 +321,7 @@
   </child>
 
   <child>
-    <widget class="GtkMenuItem" id="see_original1">
+    <widget class="GtkMenuItem" id="dst_original_item">
       <property name="visible">True</property>
       <property name="label" translatable="yes">See Original</property>
       <property name="use_underline">True</property>
@@ -330,7 +330,7 @@
   </child>
 
   <child>
-    <widget class="GtkMenuItem" id="flush_message1">
+    <widget class="GtkMenuItem" id="dst_flush_item">
       <property name="visible">True</property>
       <property name="label" translatable="yes">Flush Message</property>
       <property name="use_underline">True</property>

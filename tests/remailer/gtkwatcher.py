@@ -34,21 +34,31 @@ class WatcherGUI:
         
         xml = gtk.glade.XML('gtkwatcher.glade')
         self.xml = xml
+
+        # main menu
         xml.signal_connect('do_poll', self.do_poll)
         xml.signal_connect('do_exit', self.do_quit)
+
+        # source panel
         self.src_popup = xml.get_widget("src_popup")
         xml.signal_connect('do_src_abandon', self.do_src_abandon)
         xml.get_widget("source_message_options1").set_sensitive(0)
-        self.src_age_label = xml.get_widget("src_age_label")
-        self.src_age_label.set_sensitive(0)
+        self.src_age_item = xml.get_widget("src_age_item")
+        self.src_age_item.set_sensitive(0)
+        self.src_abandon_item = xml.get_widget("src_abandon_item")
+
+        # dest panel
         self.dst_popup = xml.get_widget("dst_popup")
         xml.get_widget("dest_message_options1").set_sensitive(0)
-        self.dst_sent_label = xml.get_widget("dst_sent_label")
-        self.dst_sent_label.set_sensitive(0)
-
+        self.dst_sent_item = xml.get_widget("dst_sent_item")
+        self.dst_sent_item.set_sensitive(0)
+        self.dst_original_item = xml.get_widget("dst_original_item")
+        self.dst_flush_item = xml.get_widget("dst_flush_item")
+        
         xml.signal_connect('do_dst_flush', self.do_dst_flush)
         xml.signal_connect('do_dst_original', self.do_dst_original)
-        
+
+        # panel contents
         self.src_model = gtk.ListStore(gobject.TYPE_STRING,
                                        gobject.TYPE_STRING,
                                        gobject.TYPE_PYOBJECT)
@@ -121,19 +131,26 @@ class WatcherGUI:
         # becomes reselected
         self.dst_sel.unselect_all()
 
-    def do_src_popup(self, widget, event):
+    def do_src_popup(self, view, event):
         if event.button != 3:
             return
-        model, iter = self.src_sel.get_selected()
-        label = self.src_age_label.get_child()
-        if iter:
-            m = model.get_value(iter, 2)
-            # this tends to be old
-            # XXX: fix by selecting new row first
+        pathset = view.get_path_at_pos(event.x, event.y)
+        if pathset:
+            path, viewcol, cell_x, cell_y = pathset
+            iter = self.src_model.get_iter(path)
+            m = self.src_model.get_value(iter, 2)
             age = self.watcher.age(m.msgid)
+            label = self.src_age_item.get_child()
             label.set_text("Age[%d]: %s" % (m.msgid, time_string(age)))
+            label = self.src_abandon_item.get_child()
+            label.set_text("Abandon Message [%d]" % m.msgid)
+            self.src_abandon_item.set_sensitive(1)
         else:
-            label.set_text("Age: unknown")
+            label = self.src_age_item.get_child()
+            label.set_text("Age: --")
+            label = self.src_abandon_item.get_child()
+            label.set_text("Abandon Message")
+            self.src_abandon_item.set_sensitive(0)
         self.src_popup.popup(None, None, None, event.button, event.time)
 
     def do_src_abandon(self, menuitem):
@@ -147,20 +164,33 @@ class WatcherGUI:
         self.watcher.abandon(m.msgid)
         self.do_update()
 
-    def do_dst_popup(self, widget, event):
+    def do_dst_popup(self, view, event):
         if event.button != 3:
             return
-        model, iter = self.dst_sel.get_selected()
-        label = self.dst_sent_label.get_child()
-        if iter:
-            m = model.get_value(iter, 2)
-            # this tends to be old
-            # XXX: fix by selecting new row first
+        pathset = view.get_path_at_pos(event.x, event.y)
+        if pathset:
+            path, viewcol, cell_x, cell_y = pathset
+            iter = self.dst_model.get_iter(path)
+            m = self.dst_model.get_value(iter, 2)
             txtime = self.watcher.txtime(m.msgid)
             sent = time.strftime("%H:%M   %d %b %Y", time.localtime(txtime))
+            label = self.dst_sent_item.get_child()
             label.set_text("Sent[%d]: %s" % (m.msgid, sent))
+            self.dst_original_item.set_sensitive(1)
+            label = self.dst_original_item.get_child()
+            label.set_text("See Original [%d]" % m.msgid)
+            self.dst_flush_item.set_sensitive(1)
+            label = self.dst_flush_item.get_child()
+            label.set_text("Flush Message [%d]" % m.msgid)
         else:
-            label.set_text("Sent: unknown")
+            label = self.dst_sent_item.get_child()
+            label.set_text("Sent: --")
+            self.dst_original_item.set_sensitive(0)
+            label = self.dst_original_item.get_child()
+            label.set_text("See Original")
+            self.dst_flush_item.set_sensitive(0)
+            label = self.dst_flush_item.get_child()
+            label.set_text("Flush Message")
         self.dst_popup.popup(None, None, None, event.button, event.time)
 
     def do_dst_flush(self, menuitem):
@@ -239,10 +269,19 @@ def makeWatcher():
     from watcher import DirWatcher, NewsWatcher
     import sys, getopt
     w = GtkWatcher()
-    # --source sdir [--dest ddir]... --nntp host:port:user:pass [--group a]..
-    opts, args = getopt.getopt(sys.argv[1:], '',
-                               ['source=', 'dest=',
-                                'nntp=', 'group=', 'tag='])
+    usage = """
+    gtkwatcher.py
+      --source sdir
+      [--dest ddir]...
+      --nntp host:port:user:pass [--group a]..
+    """
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], '',
+                                   ['source=', 'dest=',
+                                    'nntp=', 'group=', 'tag='])
+    except getopt.GetoptError:
+        print usage
+        sys.exit(-1)
     nntp = None
     groups = []
     tag = None
