@@ -342,7 +342,11 @@ GPG ID.")
 		      (setq args (append mc-gpg-extra-args args)))
 		  (mc-gpg-debug-print 
 		   (format "lookup: args are %s" args))
-		  (apply 'call-process mc-gpg-path nil buffer nil args)
+		  (let ((coding-system-for-read 
+			 (if (and (fboundp 'coding-system-p)
+				  (coding-system-p 'utf-8))
+			     'utf-8 nil)))
+		    (apply 'call-process mc-gpg-path nil buffer nil args))
 		  (set-buffer buffer)
 		  (goto-char (point-min))
 		  (if (re-search-forward key-regexp nil t)
