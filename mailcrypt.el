@@ -204,7 +204,7 @@
 ;;}}}
 
 ;;{{{ User variables.
-(defconst mc-version "3.5.6+")
+(defconst mc-version "3.5.7")
 (defvar mc-temp-directory temporary-file-directory
   "*Default temp directory to be used by Mailcrypt.")
 (defvar mc-default-scheme 'mc-scheme-pgp "*Default encryption scheme to use.")
