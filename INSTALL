@@ -36,7 +36,7 @@ compilation.
 
 In addition, PGP 5.0 support requires the file timer.el, which should
 be included in FSF Emacs, but is NOT included with Xemacs.  This file
-is included with Mailcrypt, and will be installed the timer library
+is included with Mailcrypt, and will be installed if the timer library
 isn't found in the load path.  If you already have timer.el, but it is
 in an unusual place, edit the file `load-path.hack' file accordingly.
 
@@ -48,19 +48,33 @@ By default, `make install' will install the package's files in
 specify an installation prefix other than `/usr/local' by giving
 `configure' the option `--prefix=PATH'.
 
-If your installed copy of Emacs 19 is named something other than
-`emacs' or `xemacs', you will need to tell `make' where to find it so
-that it can correctly byte-compile the Mailcrypt sources.
+If your installed copy of Emacs is named something other than `emacs'
+or `xemacs', you will need to tell `make' where to find it so that it
+can correctly byte-compile the Mailcrypt sources.
 
-For example, to force the use of XEmacs you might do:
+For example, to force the use of XEmacs you might do this:
 
 	./configure
 	make EMACS=xemacs
 	make install
 
+or this (for users of the Bourne shell and derivatives):
+
+	EMACS=xemacs ./configure
+	make
+	make install
+
+or this (for users of *ugh* the C shell and derivatives):
+
+	setenv EMACS xemacs
+	./configure
+	make
+	make install
+
 Also, the `--prefix=PATH' option to `configure' may not be general
 enough to set the paths you want.  If not, you can pass variables to
-the `make' command to control the installation.
+the `make' command to control the installation.  For a complete list
+of tweakable variables, look in the makefile.
 
 For example, to put the Lisp files in `$HOME/elisp' and the Info file
 in `$HOME/info', you would type:
@@ -68,6 +82,13 @@ in `$HOME/info', you would type:
 	./configure
 	make
 	make lispdir=$HOME/elisp infodir=$HOME/info install
+
+If you want to supply special flags to emacs for compiling the
+elisp files, you would type:
+
+	./configure
+	make EMACSFLAGS="-q -no-site-file"
+	make install
 
 FSF Emacs 19.28
 ===============
@@ -132,9 +153,4 @@ add this option to the PGP menu.
 Suggestions/Bug Reports
 =======================
 
-Send all suggestions for fixes, etc to <mailto:lbudney@pobox.com>.  So
-far my efforts to contact the original authors have not been
-successful; if you are one of them then get in touch!  Until I here
-from them I will try to support this new version of mailcrypt.  Afterward,
-who knows...
-
+Send all suggestions for fixes, etc to <mailto:lbudney@pobox.com>.

@@ -6,8 +6,13 @@ AC_PROG_INSTALL()
 AC_CHECK_PROGS(EMACS, emacs xemacs)
 if test "$EMACS" = xemacs
 then
-  EMACSFLAGS="--vanilla"
-  AC_SUBST(EMACSFLAGS)
+  if $EMACS -batch -q --vanilla
+  then
+    EMACSFLAGS="--vanilla"         # We're running Xemacs 20.x or higher
+    AC_SUBST(EMACSFLAGS)
+  else
+    EMACSFLAGS="-q -no-site-file"  # Still running Xemacs 19.x
+  fi
 else if test "$EMACS" = emacs
 then
   EMACSFLAGS=""
