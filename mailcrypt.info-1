@@ -1,5 +1,5 @@
 This is Info file mailcrypt.info, produced by Makeinfo version 1.68
-from the input file ./mailcrypt.texi.
+from the input file mailcrypt.texi.
 
    This documentation describes Mailcrypt version 3.5b6.  This
 documentation was last updated on August 29, 1998.
@@ -251,6 +251,7 @@ Hooking into Gnus
    To hook Mailcrypt into Gnus, use the following lines:
 
      (add-hook 'gnus-summary-mode-hook 'mc-install-read-mode)
+     (add-hook 'message-mode-hook 'mc-install-write-mode)
      (add-hook 'news-reply-mode-hook 'mc-install-write-mode)
 
 
@@ -1155,23 +1156,4 @@ servers instead of the one at MIT, of course.
 
    Note that fetching from a key server can be somewhat slow, so be
 patient.  (At least it beats the tar out of the Email interface.)
-
-
-File: mailcrypt.info,  Node: Miscellaneous Configuration,  Next: Tips,  Prev: Key Fetching,  Up: Top
-
-Miscellaneous Configuration
-***************************
-
-   This chapter documents some additional Mailcrypt configuration
-options which could not be naturally described elsewhere.
-
-* Menu:
-
-* Alternate Keyring::           Specifying a different file to act
-                                  like your public keyring.
-* Comment Field::               Burma
-                                  Shave
-* Mode Line::                   Changing that "MC-w" and "MC-r" stuff
-* Key Bindings::                Which keys cause which actions.
-* Nonstandard Paths::           Useful if your PGP installation is weird.
 
