@@ -471,21 +471,15 @@ If an error occurs, Mailcrypt will display an appropriate diagnostic.
 If you do not have the public key for one of the specified recipients,
 Mailcrypt will offer to try to fetch it for you (@pxref{Key Fetching}).
 
-@vindex mc-pgp-user-id
-The default key for signing is the first one on the secret key ring
-which matches the string @code{mc-pgp-user-id}; this defaults to
-@code{(user-login-name)}.  Note that this differs from PGP's normal
-default, which is to use the first of @emph{all} of the secret keys.  To
-mimic PGP's behavior, set this variable to @code{""}. This variable is
-specific to pgp 2.6.x; @code{mc-pgp50-user-id} and @code{mc-gpg-user-id} are
-the corresponding variables for pgp 5.0 and GnuPG.
+If you want to use a secret key other than your default for signing
+the message, pass a prefix argument to @code{mc-encrypt}. (That is,
+type @kbd{C-u C-c / e}.) Mailcrypt will prompt for a string and will
+sign with the first key on your secret keyring which matches that
+string. It will be assumed that you want to sign the message, so you
+will not be prompted. See the next section, @ref{Signing, , Signing a
+Message} for information about which key is used by default to sign
+the message.
 
-If you want to use a secret key other than your default for signing the
-message, pass a prefix argument to @code{mc-encrypt}.  (That is, type
-@kbd{C-u C-c / e}.)  Mailcrypt will prompt for a string and will sign with
-the first key on your secret keyring which matches that string.  It will
-be assumed that you want to sign the message, so you will not be
-prompted.
 
 @node Signing, Inserting Keys, Encrypting, General Use
 @section Signing a Message
@@ -512,12 +506,35 @@ signature first with the normal Emacs undo command @kbd{C-x u}
 (@pxref{Undo, Emacs Undo, Undoing Changes, emacs, The GNU Emacs
 Manual}).
 
-The variable @code{mc-pgp-user-id} controls which secret key is used for
-signing; it is described in @ref{Encrypting, , Encrypting a Message}.
-To use a different secret key, pass a prefix argument to @code{mc-sign}.
-(That is, type @kbd{C-u C-c / s}.)  Mailcrypt will prompt for a string
-and will sign with the first key on your secret keyring which matches
-that string.
+The variable @code{mc-pgp-user-id} controls which secret key is used
+for signing. To use a different secret key, pass a prefix argument to
+@code{mc-sign}. (That is, type @kbd{C-u C-c / s}.) Mailcrypt will
+prompt for a string and will sign with the first key on your secret
+keyring which matches that string.
+
+
+@vindex mc-pgp-user-id
+The default key for signing is the first one on the secret key ring
+which matches the string @code{mc-pgp-user-id}; this defaults to
+@code{(user-login-name)}.  Note that this differs from PGP's normal
+default, which is to use the first of @emph{all} of the secret keys.  To
+mimic PGP's behavior, set this variable to @code{""}. This variable is
+specific to pgp 2.6.x; @code{mc-pgp50-user-id} and @code{mc-gpg-user-id} are
+the corresponding variables for pgp 5.0 and GnuPG.
+
+If you have multiple secret keys with the same name (perhaps you
+generate a new key every few years, but keep the expired keys on your
+secret key ring so you can decrypt old messages), you may want to use
+a hex keyid in @code{mc-gpg-user-id} or equivalent. A simple name will
+cause mailcrypt to use the first matching secret key, which may not be
+the most recent one. Using a hex keyid will force the encryption
+program to use that exact secret key for signing. Put something like
+the following in your @file{.emacs}:
+
+@lisp
+(setq mc-gpg-user-id "0x03A5E108")
+@end lisp
+
 
 @node Inserting Keys, Decrypting, Signing, General Use
 @section Inserting a Public Key Block

@@ -1,3 +1,9 @@
+2003-05-20  Brian Warner  <warner@lothar.com>
+
+	* mailcrypt.texi (Signing): Move documentation of mc-pgp-user-id
+	variables to the 'Signing a Message' section. Explain use of hex
+	keyids to deal with multiple identically-named keys.
+
 2003-05-19  Brian Warner  <warner@lothar.com>
 
 	* mailcrypt.el (mc-modes-alist): Add support for the Wanderlust
