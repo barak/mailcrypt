@@ -1,3 +1,10 @@
+2002-07-23  Brian Warner  <warner@lothar.com>
+
+	* mailcrypt.el (mc-temp-directory): Use (temp-directory),
+	temporary-file-directory, or "/tmp/", as available. Fixes error
+	when used from XEmacs21. Thanks to Peter Galbraith for the catch
+	and the patch.
+
 2002-07-08  Brian Warner  <warner@lothar.com>
 
 	* mailcrypt: Release mailcrypt 3.5.7
