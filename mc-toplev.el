@@ -682,4 +682,22 @@ Exact behavior depends on current major mode."
 
 ;;}}}
 
+;;{{{ mew
+;; decrypt, verify, snarf, encrypt, sign
+;; in summary mode, decrypt/verify/snarf must switch to correct buffer first
+;; in correct buffer, generic functions are probably sufficient.
+;;  mew doesn't have any labels to be added (though I really wish it did)
+;;  could have a "replace encrypted with decrypted" hook for decrypt
+
+;; autoloads:
+;;  mew-message-mode
+;;   (add-hook 'mew-message-mode-hook 'mc-install-read-mode)
+;;  mew-summary-mode
+;;   (add-hook 'mew-summary-mode-hook 'mc-install-read-mode)
+;;  mew-draft-mode
+;;   (add-hook 'mew-draft-mode-hook 'mc-install-write-mode)
+
+
+;;}}}
+
 ;;}}}
