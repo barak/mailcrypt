@@ -20,7 +20,7 @@
 ;;}}}
 
 (defvar mc-default-scheme 'mc-scheme-pgp
-  "*Set the default encryption scheme for Malicrypt to use. Defaults
+  "*Set the default encryption scheme for Mailcrypt to use. Defaults
 to pgp 2.6 for backward compatibility.")
 
 (defun mc-setversion (&optional version)
