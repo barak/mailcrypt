@@ -1,20 +1,20 @@
 (
 (crypttext . "
 -----BEGIN PGP MESSAGE-----
-Version: GnuPG v1.0.7 (GNU/Linux)
+Version: GnuPG v1.2.0 (GNU/Linux)
 
-hM4Dx24S4PfiwlAQAwCHo0+mISzs6tOqM+fecbcKAiOl13i0SgrsQ+vBnz3b1rWI
-9Kmz6RN2cnrWMEjFxBagGfVD0iBqhYXQXQgcj8a2hJbgpptYBSsTs7TBl4pqcqfj
-T8Mcq5ZASYRVgfR0QP4C/RzXbgMfXyvjT5RlsOZSCGpMLMEvWJpFjrPBZZxf0YE8
-SLFdf+Uj/4EY+H8ABFqh1Jca0aqzTUmuCM/yr1kGctrjup4ms43uvHDfTG86n761
-Oj53IwaLuI3+/GTdoW/PxdKaAQmuVwIc2/rJUzoMeKgDOpo0dwpT/iJ1IbNahPsZ
-J9STKJxT9I0/l5ylqO5W8wsWIr+fgPBg++BxcirFdLF96sskUv4+1440K5c/tsoc
-hY91hTyX3dhxNGDXi0cxYLsxcHz8Ats/nZZOa9bVRuP98atMTHCSlK+Oit4xzoBB
-Sl636kXOfVnB2xpTZQ6+JPQSdqzwa7FWMW1DSw==
-=us9z
+hM4Dx24S4PfiwlAQAwCAWiAVkflMqygD/+GI6y4Gufgf3TJfVvxIgAjKSgsDd65T
+wbXS3HFBNW/QgzMDz8beYLNEWaENZ8H2gGdb+PK/AJXFJclrFCt7Dfnip+628VFz
+bcN0U2t7uvp0Sm2wWpsC/RW6ZRN6A6LuBbMKrSUzthjWOV5AQkKvqvdbzQ+TDvyr
+yYAN6M8j5Dr167iYCqxJW29ODqCIjnWsv9vFtx4oF8/qT6nVIOYdmXGMfLtPDmaC
+XjrQG6zC1oCid2zxjUF9x9KfASYirow7L8lDPS/WSeoaCAq2wNy4jHMKB3NLDDgb
+7u6HG004/dEpbPHvXmQMM89PCSu7ecx2bsP+Qosxl7lAHGDSk8OvFnH5zw++A2Rz
+//4IfF9jQlWmBNKp2a9UaJMDisdPHEGy8ISkl7V4CcgulycZJsmQgsAgZ6OaMRFr
+vj4VySPVOrKMI0Q/Q/9pw036vojQmbACwmVCMWwzK2Po
+=xv3R
 -----END PGP MESSAGE-----
 ")
-(encryption_id . "other <other@test>")
+(encryption_id . "0x8D5D85F6729C0B44")
 (error . "This message is not addressed to you")
 (name . "ES.e3.s1v")
 (passphrase . "other")

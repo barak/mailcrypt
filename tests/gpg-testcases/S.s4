@@ -1,12 +1,12 @@
 (
 (crypttext . "
 -----BEGIN PGP MESSAGE-----
-Version: GnuPG v1.0.7 (GNU/Linux)
+Version: GnuPG v1.2.0 (GNU/Linux)
 
-owGbwMvMwCTIHdHOYnlwqgfjaaUkBpt/F26HZGQWKwBRokJBTmJmXklqRYlCbmpx
-cWJ6KleHPTMrWBFMlyDTx6UMC+a4CMrLtgh23btY8idC7FnTgrzNLxlmswrz2yZy
-PnzKPfHCQqZg/1y2rdX9AA==
-=6tjb
+owGbwMvMwCTIHdHOYnlwqgfjaaUkBtuJzGohGZnFCkCUqFCQk5iZV5JaUaKQm1pc
+nJieytVhz8wKVgTTJcj05yvD/JSoU8EOrn2ZnF7fbLK/6lyUOr1tIcM8fYfJidy7
+crLPTAl/bj39S3OG1hEeAA==
+=z/NU
 -----END PGP MESSAGE-----
 ")
 (error . nil)

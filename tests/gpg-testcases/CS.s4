@@ -5,11 +5,11 @@ Hash: SHA1
 
 This is a plaintext message
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.0.7 (GNU/Linux)
+Version: GnuPG v1.2.0 (GNU/Linux)
 
-iD8DBQE8/tDcC1iHBDnBlUgRAuFzAJ9D2JgZYULO+2erh+WwYV7TWWRrUQCfeSQQ
-IX/uYNP6sMH0rmBJHnmKWvM=
-=UC/6
+iD8DBQE9kQMnC1iHBDnBlUgRAmDGAJ94HHa1/0LB0OBcd+tz0CsrsewpLgCeN36B
+HNUSElOp2euiXIU5fBuN2HM=
+=HBWU
 -----END PGP SIGNATURE-----
 ")
 (error . nil)

@@ -1,24 +1,24 @@
 (
 (crypttext . "
 -----BEGIN PGP MESSAGE-----
-Version: GnuPG v1.0.7 (GNU/Linux)
+Version: GnuPG v1.2.0 (GNU/Linux)
 
-hM4DV7wu3TSGTqsQAvwJELJWCY7ILuM3haWPemGBK6pED3hA3LQre8Eh0Zsm0Gcb
-6VrLG43nj7Gpql9+83v0iNgARncdL6AT2WDpE0xMX+nhypw4mW0Oq4sVJv6tTgGv
-icR38fwAm4IJuP9hjpIC/ipu1W4Oys3bEHbBD8zwkxf2vmdECVgzI0h6F4By3Bxg
-O6Wm9XsZTGC028iEOLzFPMrjx+w3IoTboA0iKhRIs1TMU3WuwXuJXH37hRlYuSbz
-xvk6OV4PjnrWwTqpJLA4otKZAZTYg1Qo7PdORSe1t2PnqZa91KdMnrKs92zcNEJn
-lSVIyfQbhG0fRGRw3j4CTH//UuwxXanZa4B8aB3wLkFvCOweR4mjlOQKV5PVD90F
-xYRymLRVoLBHsUMlsEouMC7SVo9IglAKFMIOEhOCBt6CSbVwTsV9NxylYgx8YoNj
-RYwpKKZFv/f+iDBT0EJAE56C1lpF4rjegUvk
-=Dwcy
+hM4DV7wu3TSGTqsQAwCFZ6N8tykb8wxmuRXG3FbQlJgysauNrjomE7ATsUe2g+VG
+ZCWVQk9XKMk7cLpo32rNhm5xssHQVAiNjO9TVBM8FpdieAgCEKEyPKfL3wqY89Cg
+wjPKaSEpWe4u/Ba2y1QC/A5bB66GYC0I0++OY9ot6nrO/c7X1LMU9uZyw/lLDan9
+JRcarIFZlH2NxgjIgiWdgcEqiHANsqrw2PZWkJdyPQgKNtyW9OsPMkYsWSBPxNT0
+tshq78jwTlYcvat/fQORO9KfAYT6Q0kWvFcXmeGC6iwpepATMjxGsf30YbTjej5M
+FejtSOPedfWajNIoQZmMar16IiSCeeipWYaA0lszZDL4LHQyFiAXvdowPvHLpGdO
+d2TGhRZIJZK0SAmK4Nb3O0CieewIsiaAchfKQUBsu+lTUsn70A8fxqZoBRkrJKRX
+YLFB9J5YQsxty73samgJ4ya3/Ll6PPtbhlNFXm0RlwdK
+=gm6J
 -----END PGP MESSAGE-----
 ")
-(encryption_id . "owner1 <owner1@test>")
+(encryption_id . "0xC8B20C2FB481403E")
 (error . nil)
 (name . "ES.e1r.s1v")
 (passphrase . "owner1")
 (plaintext . "This is a plaintext message
 ")
-(signature_status . "Good signature from 'owner1 <owner1@test>' TRUST_ULTIMATE made 2002-06-06")
+(signature_status . "Good signature from 'owner1 <owner1@test>' TRUST_ULTIMATE made 2002-09-25")
 )

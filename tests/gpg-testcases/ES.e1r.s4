@@ -1,20 +1,20 @@
 (
 (crypttext . "
 -----BEGIN PGP MESSAGE-----
-Version: GnuPG v1.0.7 (GNU/Linux)
+Version: GnuPG v1.2.0 (GNU/Linux)
 
-hM4DV7wu3TSGTqsQAv0aMx3yqrjVIKOeJV7YrUzysgDY7CktjaCwHR8XqCzOjy9c
-6wz1T8xRJsJvX5IDDje+RNwhVF+2sxohIkRQt9lfH8dh+Nu02dImDYz4oHbVZ9db
-jTrwsfRpqRDtUoD2KqYC/iNZx0+Wir8qDA8MqPz/rnQQ2dXTagT0dOgXySNAUVrh
-vA2w9OXJGjYZnUn01VnRQqxD44aCV7HWjXJY9Bi5ct1bvQ3KwW6KUa9peokR499Q
-Xn3vsXjLpkALCJf7f0wUq9KZAa7J/fT2ij7IPtJfFjJPvnKfWOKAdtNuxuZlIyB/
-d9uxdL3l+Legsm6Wd1aum3JzKiKw7KpjPZX7ULN/lbH9VqrWFaOolyFqc0MwQ5it
-UL+WqV8FzH/yrzfq1Ze9TO/87qKVeA9j6k/9XfN0JSXRHyKVbWtQudLAZNwJWrgE
-4YBRX3rmyC45JBKWlHhavNVQKjbznoxUJ1Dh
-=pPNt
+hM4DV7wu3TSGTqsQAwCKiLTeq9LMdeSnf603qJFXyTHHbtUCjGS3w3g/EnA9Kb9B
+Qc+dP1XeLVljImDI49XFlUbtekkONiWuZGQwGwnle38BNsE0JooEBEc4IzIh0I3X
+qTkkrMrDE+ij62aQb5QC/26H17tZNlAqm4Xxm+nk03diR95/bT4HtuDolLtWPbTF
+ukBsJj+mek+1A4zoW8xsxTR4wRL2wQWBp1K6GRWtvKvtlzFbgFcs5qqharMzzdxq
+nSy8tXD+1I2PGdEk4FNqwdKfAX5MC+W8CSGISIjBLnTdlsmmhOx8e7em343dZzI1
+c2A5SJor3aB2zGl6/VbWvUo+bvDp/Y3nCNEVW+WxhaQ+9tsQ5JA9nBLPp3EaVxaV
+7vxvH54f1EpVYX0EQVl0ikVWNi7CBOiPTdOAgy+8G80VQT8iCiGRtv9OhM8Ob+6p
+1BCCMcpvAst9/yL2GAKwSnTllwQd1Wf5L/Tyx24d34dz
+=svP3
 -----END PGP MESSAGE-----
 ")
-(encryption_id . "owner1 <owner1@test>")
+(encryption_id . "0xC8B20C2FB481403E")
 (error . nil)
 (name . "ES.e1r.s4")
 (passphrase . "owner1")
