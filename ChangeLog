@@ -1,5 +1,8 @@
 2002-06-10  Brian Warner  <warner@lothar.com>
 
+	* mailcrypt.texi (Hooking into Mew): added blurb about how to glue
+	into Mew, and why you might not want to.
+	
 	* tests/*: Added the start of a unit test framework. Currently only
 	tests GPG decryption. See README.dev for more details.
 	* mailcrypt.el (mc-message-sigstatus): Added function to emit status
