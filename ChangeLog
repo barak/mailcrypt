@@ -1,4 +1,17 @@
+2001-09-25  Brian Warner  <warner@lothar.com>
+
+	* mc-gpg.el (mc-gpg-comment): Remove the GnuPG URL, now that gpg adds
+	its own Version: header.
+	(mc-gpg-extra-args,mc-gpg-debug-buffer): Turn into defvar, because
+	otherwise setq statements in user's .emacs file get overridden. I
+	use this to point to a separate secret keyring (on removeable
+	media) in my .emacs and somehow it took months for me to realize
+	that it didn't actually work.
+
 2001-09-18  Brian Warner  <warner@lothar.com>
+
+	* mc-toplev.el (autoloads): added gnus-summary autoloads, patch
+	from XEmacs version, thanks to Steve Youngs.
 
 	* README.gpg: update GnuPG home page, version numbers.
 
