@@ -11,9 +11,12 @@
 
 ;; Make sure user is
 
-(if (not (string-match "^19\\." emacs-version))
+(if (and
+     (not (string-match "^19\\." emacs-version))
+     (not (string-match "^2[0-9]\\." emacs-version)))
     (message
-     (concat "\nWARNING - Mailcrypt requires version 19 of GNU Emacs.\n"
-	     "Your version is:\n"
-	     (emacs-version)
-	     "\n")))
+     (concat 
+      "\nWARNING - Mailcrypt requires at least version 19 of GNU Emacs.\n"
+      "Your version is:\n"
+      (emacs-version)
+      "\n")))

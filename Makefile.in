@@ -5,7 +5,7 @@ EMACS = @EMACS19@
 
 # Prefix for constructing installation directory paths
 prefix = @prefix@
-exec_prefix = $(prefix)
+exec_prefix = @exec_prefix@
 
 # Shared directory for read-only data files
 datadir = $(prefix)/share
@@ -17,7 +17,7 @@ lispdir=$(datadir)/emacs/site-lisp
 infodir=$(prefix)/info
 
 # Where to put the helper scripts
-bindir=$(prefix)/bin
+bindir=@exec_prefix@/bin
 
 # Installation command
 INSTALL = @INSTALL@
