@@ -48,13 +48,19 @@ GPG_TESTCASES = $(foreach f,CS.s1v CS.s3v E.e1r E.e3 ES.e1r.s1v ES.e1r.s3v \
 		  ES.e3.s1v S.s1v S.s3v CS.s2v CS.s4 E.e2r E.e4 ES.e1r.s2v \
 		  ES.e1r.s4 ES.e4.s1v S.s2v S.s4 SE,tests/gpg-testcases/$(f))
 
-DISTFILES = $(SOURCES) ANNOUNCE COPYING ChangeLog ChangeLog.1 INSTALL	      \
-	LCD-entry Makefile.in NEWS ONEWS README configure configure.in	      \
-	install-sh load-path.hack mailcrypt.texi mkinstalldirs texi2html.ext  \
-	FSF-timer.el $(INFOFILES) mailcrypt.dvi README.gpg tests/Makefile.in  \
+TESTFILES_GPG = tests/Makefile.in					      \
 	tests/make_gpg_testcases.py tests/test-gpg.el tests/gpg-keys/Makefile \
 	tests/gpg-keys/fix-trust.py tests/gpg-keys/make-rings.py	      \
 	tests/gpg-keys/rings.txt $(GPG_TESTCASES)
+TESTFILES_REMAILER = tests/remailer/Makefile.in tests/remailer/rings.txt \
+	tests/remailer/rlist.txt tests/remailer/test-remailer.el	 \
+	tests/remailer/unwind.py
+
+DISTFILES = $(SOURCES) ANNOUNCE COPYING ChangeLog ChangeLog.1 INSTALL	     \
+	LCD-entry Makefile.in NEWS ONEWS README configure configure.in	     \
+	install-sh load-path.hack mailcrypt.texi mkinstalldirs texi2html.ext \
+	FSF-timer.el $(INFOFILES) mailcrypt.dvi README.gpg $(TESTFILES_GPG)  \
+	$(TESTFILES_REMAILER)
 
 SHELL = /bin/sh
 #.PHONY: all clean dist distclean dvi html info install \
@@ -154,6 +160,7 @@ dist: $(DISTFILES)
 	mkdir $$distname; \
 	mkdir $$distname/tests; mkdir $$distname/tests/gpg-keys; \
 	mkdir $$distname/tests/gpg-testcases; \
+	mkdir $$distname/tests/remailer; \
 	for file in $(DISTFILES); do \
 	  ln $$file $$distname/$$file; \
 	done; \
