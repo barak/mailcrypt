@@ -1,5 +1,13 @@
 2002-09-24  Brian Warner  <warner@lothar.com>
 
+	* tests/gpg-testcases/*: regenerate test cases, with the
+	encryption_id fix. Cases happen to be regenerated on a machine
+	with GnuPG-1.2.0 installed.
+
+	* tests/make_gpg_testcases.py (main): don't complain if the
+	testcase directory already exists. Makes it easier to update the
+	testcases in place.
+
 	* tests/test-gpg.el (run-all-tests): add SE case (symmetric
 	encryption) now that a test case is created for it.
 
