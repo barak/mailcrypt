@@ -1,3 +1,8 @@
+1999-11-23  Len Budney <lbudney@pobox.com>
+
+	* WARNINGS: Added list of security warnings. Mailcrypt is only
+	as secure as the way it is used (and coded. Hrmph).
+
 1999-11-22  Len Budney <lbudney@pobox.com>
 
 	* mc-toplev.el: Fixed a bug in mh-rmail support, which dropped
