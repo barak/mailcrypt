@@ -204,7 +204,7 @@
 ;;}}}
 
 ;;{{{ User variables.
-(defconst mc-version "3.5.6")
+(defconst mc-version "3.5.6+")
 (defvar mc-temp-directory temporary-file-directory
   "*Default temp directory to be used by Mailcrypt.")
 (defvar mc-default-scheme 'mc-scheme-pgp "*Default encryption scheme to use.")
@@ -249,6 +249,8 @@ If 'never, always use a viewer instead of replacing.")
     (rmail-summary-mode (decrypt . mc-rmail-summary-decrypt-message)
 			(verify . mc-rmail-summary-verify-signature)
 			(snarf . mc-rmail-summary-snarf-keys))
+    (mew-draft-mode (encrypt . mc-encrypt-message)
+                    (sign . mc-sign-message))
     (vm-mode (decrypt . mc-vm-decrypt-message)
 	     (verify . mc-vm-verify-signature)
 	     (snarf . mc-vm-snarf-keys))
