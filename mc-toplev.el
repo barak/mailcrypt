@@ -37,6 +37,10 @@
 
   ;; GNUS
   (condition-case nil (require 'gnus) (error nil))
+  (autoload 'gnus-summary-select-article "gnus-sum")
+  (autoload 'gnus-summary-edit-article "gnus-sum")
+  (autoload 'gnus-summary-edit-article-postpone "gnus-sum")
+  (autoload 'gnus-summary-edit-article-done "gnus-sum")
 
   ;; MH-E
   (condition-case nil (require 'mh-e) (error nil)))
