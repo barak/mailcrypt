@@ -23,8 +23,6 @@
 
 (defvar mc-pgp50-user-id (user-login-name)
   "*PGP ID of your default identity.")
-(defvar mc-pgp50-always-sign nil 
-  "*If t, always sign encrypted PGP messages, or never sign if 'never.")
 (defvar mc-pgp50-pgpe-path "pgpe" "*The PGP 5.0 'pgpe' executable.")
 (defvar mc-pgp50-pgps-path "pgps" "*The PGP 5.0 'pgps' executable.")
 (defvar mc-pgp50-pgpv-path "pgpv" "*The PGP 5.0 'pgpv' executable.")
@@ -280,7 +278,7 @@ PGP ID.")
   (let ((process-environment process-environment)
 	(buffer (get-buffer-create mc-buffer-name))
 	;; Crock.  Rewrite someday.
-	(mc-pgp50-always-sign mc-pgp50-always-sign)
+	(mc-pgp-always-sign mc-pgp-always-sign)
 	(obuf (current-buffer))
 	action msg args key passwd result pgp-id)
     (setq args (list "+NoBatchInvalidKeys=off" "-fat" "+batchmode=1"))
@@ -292,14 +290,14 @@ PGP ID.")
 	(setq args (append args (list (format "+pubring=%s"
 					      mc-pgp50-alternate-keyring)))))
     (if 
-	(and (not (eq mc-pgp50-always-sign 'never))
+	(and (not (eq mc-pgp-always-sign 'never))
 	     (or 
-	      mc-pgp50-always-sign 
+	      mc-pgp-always-sign 
 	      sign 
 	      (y-or-n-p "Sign the message? ")))
 	     
 	(progn
-	  (setq mc-pgp50-always-sign t)
+	  (setq mc-pgp-always-sign t)
 	  (setq key (mc-pgp50-lookup-key (or id mc-pgp50-user-id)))
 	  (setq passwd
 		(mc-activate-passwd
@@ -309,7 +307,7 @@ PGP ID.")
 		(nconc args (list "-s" "-u" (cdr key))))
 	  (setenv "PGPPASSFD" "0")
 	  (setq msg (format "%s+signing as %s ..." action (car key))))
-      (setq mc-pgp50-always-sign 'never))
+      (setq mc-pgp-always-sign 'never))
 
     (or key
 	(setq key (mc-pgp50-lookup-key mc-pgp50-user-id)))
