@@ -1,3 +1,10 @@
+2001-09-18  Brian Warner  <warner@lothar.com>
+
+	* README.gpg: update GnuPG home page, version numbers.
+
+	* mc-gpg.el (mc-gpg-process-region): Another patch from Pavel Janík:
+	mc-gpg-debug-buffer is not always bound.
+
 2001-06-23  Brian Warner  <warner@lothar.com>
 
 	* mc-setversion.el (mc-default-scheme): Fix typo. Thanks to Pavel
