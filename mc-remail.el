@@ -775,7 +775,8 @@ be passed to this program for rewriting.")
 (defun mc-remailer-encrypt-for-chain (&optional pause)
   "Encrypt message for a remailer chain, prompting for chain to use.
 
-With \\[universal-argument], pause before each encryption."
+With \\[universal-argument] \\[universal-argument], pause before each
+encryption."
   (interactive "P")
   (let ((chains (mc-remailer-make-chains-alist))
 	(buffer (get-buffer-create mc-buffer-name))
@@ -864,3 +865,18 @@ layer of the block before encrypting it."
     buf))
 
 ;;}}}
+
+(defun mc-remailer-type1-send (recipients start end &optional verbose)
+  ;; this function is to provide compatibility with the mc-remailer-scheme
+  ;; scheme. For type1/old-mixmaster we ignore the arguments and let the old
+  ;; functions figure them out on their own. This means
+  ;; (mc-remailer-encrypt) from non-mail buffers will only work with type2/3
+  ;; schemes. type1/old-mixmaster will get upset when it can't find the
+  ;; header-delimiter and thus can't figure out the intended recipients
+
+  (mc-remailer-encrypt-for-chain verbose))
+
+(defun mc-remailer-scheme-type1 ()
+  (list
+   (cons 'encryption-func   'mc-remailer-type1-send)
+))
