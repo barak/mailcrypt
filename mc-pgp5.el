@@ -185,7 +185,7 @@ PGP ID.")
 
 	  ;; Hurm.  FIXME; must get better result codes.
 	  (if (stringp result)
-	      (message result))
+	      (mc-message result))
 
 	    ;; If the parser found something, migrate it to the old
 	    ;; buffer.  In particular, the parser's job is to return
@@ -417,9 +417,7 @@ PGP ID.")
 	      (goto-char (point-max))
 	      (if
 		  (re-search-backward 
-		   (concat 
-		    "\\(Good signature made.*by\\).*\n.*\n"
-		    "\[ \t\]*\\(.*\\)\n")
+		   "\\(Good signature made.*by\\)\\( key:\n\\(\n\\|.\\)*\\)"
 		   nil t)
 		  (progn
 		    (setq rgn (cons rgn (match-beginning 1)))
@@ -578,7 +576,7 @@ PGP ID.")
 		;; Read the success message
 		(goto-char (point-max))
 		(re-search-backward
-		 "\\(Good signature made.*by\\).*\n.*\n\[ \t\]*\\(.*\\)\n" 
+		 "\\(Good signature made.*by\\)\\( key:\n\\(\n\\|.\\)*\\)"
 		 nil t)
 
 		;; Return the good news!
@@ -1032,9 +1030,6 @@ request for the key."
   (let ((methods mc-pgp50-fetch-methods)
 	(process-connection-type nil) key proc buf args)
 
-    ;; Temporarily disabled!  Sorry.
-    (error "Key fetching not yet supported for PGP 5.0")
-
     (if (null id)
 	(setq id (cons (read-string "Fetch key for: ") nil)))
     (while (and (not key) methods)
@@ -1052,18 +1047,14 @@ request for the key."
 	    (if (< (window-height) (/ (frame-height) 2))
 		(enlarge-window (- (/ (frame-height) 2)
 				   (window-height))))
-	    (setq args '("-f" "+verbose=0" "+batchmode"))
-	    (if mc-pgp50-alternate-keyring
-		(setq args
-		      (append args (list (format 
-					  "+pubring=%s"
-					  mc-pgp50-alternate-keyring)))))
-
-	    (setq proc (apply 'start-process "*PGP*" buf mc-pgp50-path args))
+	    (setq args '("-f" "--verbose=0" "--batchmode=1" "--pubring=junk"))
+	    (setq proc (apply 'start-process "*PGP*" buf
+			      mc-pgp50-pgpv-path args))
 	    ;; Because PGPPASSFD might be set
 	    (process-send-string proc "\r\n")
 	    (process-send-string proc key)
 	    (process-send-string proc "\r\n")
+	    (process-send-string proc "n\r\n")
 	    (process-send-eof proc)
 	    (set-buffer buf)
 	    (while (eq 'run (process-status proc))
@@ -1071,9 +1062,15 @@ request for the key."
 	      (goto-char (point-min)))
 	    (if (y-or-n-p "Add this key to keyring? ")
 		(progn
-		  (setq args (append args '("-ka")))
+		  (setq args '("-f" "--verbose=0" "--batchmode=1"))
+		  (if mc-pgp50-alternate-keyring
+		      (setq args
+			    (append args (list (format 
+						"--pubring=%s"
+						mc-pgp50-alternate-keyring)))))
 		  (setq proc
-			(apply 'start-process "*PGP*" buf mc-pgp50-path args))
+			(apply 'start-process "*PGP*" buf
+			       mc-pgp50-pgpv-path args))
 		  ;; Because PGPPASSFD might be set
 		  (process-send-string proc "\r\n")
 		  (process-send-string proc key)

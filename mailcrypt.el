@@ -430,7 +430,9 @@ Email address.  ADDR-LIST may be a single string or a list of strings."
 		     (match-beginning 0) (match-end 0))
 		  (setq retval nil)
 		  default))))
-    (if msg (message "%s" msg))
+    (if msg (if window-system
+		(progn (message nil) (message-box "%s" msg))
+	      (message "%s" msg)))
     retval))
 
 (defun mc-process-region (beg end passwd program args parser &optional buffer)
