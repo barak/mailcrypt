@@ -1,4 +1,4 @@
-;; mc-versions.el, Support for multiple versions of PGP.
+;; mc-setversion.el, Support for multiple versions of PGP.
 ;; Copyright (C) 1998  Len Budney <lbudney@pobox.com>
 
 ;;{{{ Licensing
@@ -21,25 +21,46 @@
 
 (defun mc-setversion (&optional version)
   "Reset path and argument information for the selected version of PGP.
-Possible values of VERSION are 2.6 and 5.0."
+Possible values of VERSION are 2.6, 5.0, and gpg."
   (interactive)
 
-  (let ((called-interactively nil))
   (if (null version)
-      (progn
-	(setq called-interactively t)
+      (let
+	  ((oldversion
+	    (cond
+	     ((eq mc-default-scheme 'mc-scheme-pgp50) "5.0")
+	     ((eq mc-default-scheme 'mc-scheme-pgp) "2.6")
+	     ((eq mc-default-scheme 'mc-scheme-gpg) "gpg")
+	     (t nil))
+	    )
+	   (completion-ignore-case t))
 	(setq version 
 	      (completing-read 
-	       "Select PGP version: " mc-schemes nil t))))
+	       (format "Select PGP version (currently %s): " oldversion)
+	       '(
+		 ("2.6" 1) 
+		 ("5.0" 2)
+		 ("gpg" 3)
+		 ) nil 
+		   t   ; REQUIRE-MATCH
+		   nil ; INITIAL
+		   nil ; HIST
+		   oldversion   ; DEFAULT
+		   ))))
 
-  (if (string-equal version "pgp50")
-      (progn
-	(setq mc-default-scheme 'mc-scheme-pgp50)
-	(message "PGP version set to 5.0."))
-    (if (string-equal version "pgp")
-	(progn
-	  (setq mc-default-scheme 'mc-scheme-pgp)
-	  (message "PGP version set to 2.6."))
-      (if called-interactively
-	  (message "You must specify a version; 5.0 or 2.6"))))
+  (cond
+   ((string-equal version "5.0")
+    (progn
+      (setq mc-default-scheme 'mc-scheme-pgp50)
+      (message "PGP version set to 5.0.")))
+   ((string-equal version "2.6")
+    (progn
+      (setq mc-default-scheme 'mc-scheme-pgp)
+      (message "PGP version set to 2.6.")))
+   ((string-equal version "gpg")
+    (progn
+      (setq mc-default-scheme 'mc-scheme-gpg)
+      (message "PGP version set to GPG.")))
+   (t (error "bad version string")) ; cannot happen
 ))
+

@@ -284,6 +284,7 @@ If 'never, always use a viewer instead of replacing.")
 
 (defvar mc-schemes '(("pgp50" . mc-scheme-pgp50)
 		     ("pgp" . mc-scheme-pgp)
+		     ("gpg" . mc-scheme-gpg)
 		     ))
 
 ;;}}}

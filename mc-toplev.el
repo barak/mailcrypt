@@ -45,6 +45,7 @@
 
 (autoload 'mc-scheme-pgp   "mc-pgp"  nil t)
 (autoload 'mc-scheme-pgp50 "mc-pgp5" nil t)
+(autoload 'mc-scheme-gpg   "mc-gpg"  nil t)
 
 ;;}}}
 
@@ -390,8 +391,8 @@ Exact behavior depends on current major mode."
 	       limits
 	       (mc-message-delimiter-positions
 		(cdr (assoc 'key-begin-line (funcall mc-default-scheme)))
-		(cdr (assoc 'key-end-line (funcall mc-default-scheme))))))
-
+		(cdr (assoc 'key-end-line (funcall mc-default-scheme)))
+		start)))
 	  ; We can't find a message signed in the default scheme.
 	  ; Step through all the schemes we know, trying to identify
 	  ; the applicable one by examining headers.

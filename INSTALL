@@ -154,6 +154,26 @@ The function mc-setversion is interactive, and can be used at any time
 to toggle between PGP versions.  A nice future enhancement would be to
 add this option to the PGP menu.
 
+GPG (Gnu Privacy Guard) Support
+===============================
+
+Starting with Mailcrypt 3.5b7, there is alpha support for gnupg. Almost
+everything available to pgp2 is available, with the notable exception of
+automatic key fetching. There are some serious bugs in the current gpg
+support, and you may have to install a wrapper script (which requires perl5)
+to sign or decrypt any messages. See README.gpg for details.
+
+To use GPG by default, add this to your .emacs file:
+
+	(load-library "mailcrypt")
+	(mc-setversion "gpg")
+
+Most mailcrypt commands will let you set the encryption scheme on the fly:
+use a double prefix argument. For example, to sign a message, use 
+C-u C-u C-c / s, and you will be asked for a scheme and a user id.
+
+The GPG home page is at <http://www.d.shuttle.de/isil/crypt/gnupg.html>. The
+source is available at <ftp://ftp.guug.de/pub/gcrypt/>.
 
 Suggestions/Bug Reports
 =======================

@@ -38,7 +38,7 @@ VPATH = @srcdir@
 
 SOURCES = @EXTRA_SRCS@ \
 	mailcrypt.el mc-toplev.el mc-pgp.el mc-remail.el \
-	mc-pgp5.el expect.el mc-setversion.el
+	mc-pgp5.el mc-gpg.el expect.el mc-setversion.el
 
 OBJECTS = @EXTRA_OBJS@ \
 	mailcrypt.elc mc-toplev.elc mc-pgp.elc mc-remail.elc \
