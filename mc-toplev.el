@@ -574,13 +574,13 @@ Exact behavior depends on current major mode."
 (defun mc-gnus-verify-signature ()
   (interactive)
   (gnus-summary-select-article)
-  (gnus-eval-in-buffer-window gnus-article-buffer
+  (gnus-eval-in-buffer-window gnus-original-article-buffer
     (save-restriction (widen) (mc-verify-signature))))
 
 (defun mc-gnus-snarf-keys ()
   (interactive)
   (gnus-summary-select-article)
-  (gnus-eval-in-buffer-window gnus-article-buffer
+  (gnus-eval-in-buffer-window gnus-original-article-buffer
     (save-restriction (widen) (mc-snarf-keys))))
 
 (defun mc-gnus-decrypt-message ()
