@@ -71,17 +71,16 @@
 (defvar mc-gpg-alternate-keyring nil
   "*Public keyring to use instead of default.")
 (defvar mc-gpg-comment
-;  (format "Processed by Mailcrypt %s, an Emacs/GPG interface" mc-version)
-  nil
+  (format "Processed by Mailcrypt %s and Gnu Privacy Guard <http://www.gnupg.org/>" mc-version)
   "*Comment field to appear in ASCII armor output.  If nil, let GPG use its 
 default.")
-(defconst mc-gpg-msg-begin-line "-----BEGIN PGP MESSAGE-----"
+(defconst mc-gpg-msg-begin-line "^-----BEGIN PGP MESSAGE-----\r?$"
   "Text for start of GPG message delimiter.")
-(defconst mc-gpg-msg-end-line "-----END PGP MESSAGE-----\n?"
+(defconst mc-gpg-msg-end-line "^-----END PGP MESSAGE-----\r?$"
   "Text for end of GPG message delimiter.")
-(defconst mc-gpg-signed-begin-line "-----BEGIN PGP SIGNED MESSAGE-----"
+(defconst mc-gpg-signed-begin-line "^-----BEGIN PGP SIGNED MESSAGE-----\r?$"
   "Text for start of GPG signed messages.")
-(defconst mc-gpg-signed-end-line "-----END PGP SIGNATURE-----\n?"
+(defconst mc-gpg-signed-end-line "^-----END PGP SIGNATURE-----\r?$"
   "Text for end of GPG signed messages.")
 (defconst mc-gpg-key-begin-line "^-----BEGIN PGP PUBLIC KEY BLOCK-----\r?$"
   "Text for start of GPG public key.")

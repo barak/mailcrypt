@@ -33,13 +33,13 @@
   "*Comment field to appear in ASCII armor output.  If nil, let PGP
 use its default.")
 
-(defconst mc-pgp-msg-begin-line "-----BEGIN PGP MESSAGE-----"
+(defconst mc-pgp-msg-begin-line "^-----BEGIN PGP MESSAGE-----\r?$"
   "Text for start of PGP message delimiter.")
-(defconst mc-pgp-msg-end-line "-----END PGP MESSAGE-----\n?"
+(defconst mc-pgp-msg-end-line "^-----END PGP MESSAGE-----\r?$"
   "Text for end of PGP message delimiter.")
-(defconst mc-pgp-signed-begin-line "-----BEGIN PGP SIGNED MESSAGE-----"
+(defconst mc-pgp-signed-begin-line "^-----BEGIN PGP SIGNED MESSAGE-----\r?$"
   "Text for start of PGP signed messages.")
-(defconst mc-pgp-signed-end-line "-----END PGP SIGNATURE-----"
+(defconst mc-pgp-signed-end-line "^-----END PGP SIGNATURE-----\r?$"
   "Text for end of PGP signed messages.")
 (defconst mc-pgp-key-begin-line "^-----BEGIN PGP PUBLIC KEY BLOCK-----\r?$"
   "Text for start of PGP public key.")
