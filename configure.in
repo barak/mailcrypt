@@ -5,4 +5,18 @@ AC_PROG_INSTALL()
 
 AC_CHECK_PROGS(EMACS19, emacs xemacs)
 
+EXTRA_SRCS=""
+EXTRA_OBJS=""
+echo -n checking for timer.el...
+if $EMACS19 -batch -l timer 2>/dev/null
+then
+  echo timer.el
+else
+  echo no.  I will install it for you.
+  EXTRA_SRCS="timer.el"
+  AC_SUBST(EXTRA_SRCS)
+  EXTRA_OBJS="timer.elc"
+  AC_SUBST(EXTRA_OBJS)
+fi
+
 AC_OUTPUT(Makefile)
