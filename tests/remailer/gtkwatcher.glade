@@ -262,4 +262,73 @@
   </child>
 </widget>
 
+<widget class="GtkMenu" id="src_popup">
+
+  <child>
+    <widget class="GtkMenuItem" id="source_message_options1">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">Source Message Options</property>
+      <property name="use_underline">True</property>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="src_age_label">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">Age: unknown</property>
+      <property name="use_underline">True</property>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="separator3">
+      <property name="visible">True</property>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="abandon_message1">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">Abandon Message</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="do_src_abandon" last_modification_time="Sat, 30 Nov 2002 22:07:59 GMT"/>
+    </widget>
+  </child>
+</widget>
+
+<widget class="GtkMenu" id="dst_popup">
+
+  <child>
+    <widget class="GtkMenuItem" id="dest_message_options1">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">Dest Message Options</property>
+      <property name="use_underline">True</property>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="separator4">
+      <property name="visible">True</property>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="see_original1">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">See Original</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="do_dst_original" last_modification_time="Sat, 30 Nov 2002 22:08:39 GMT"/>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="flush_message1">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">Flush Message</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="do_dst_flush" last_modification_time="Sat, 30 Nov 2002 22:08:39 GMT"/>
+    </widget>
+  </child>
+</widget>
+
 </glade-interface>
