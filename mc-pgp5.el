@@ -204,11 +204,16 @@ PGP ID.")
 (defun mc-pgp50-encrypt-parser (proc oldbuf start end newbuf passwd)
   (set-buffer newbuf)
   (goto-char (point-max))
+  (setq results nil)
   (progn
     (unwind-protect
 	(with-expect proc
 	  (message "Encrypting message...")
 	  (set-buffer oldbuf)
+	  (if passwd
+	      (progn
+		(process-send-string proc (concat passwd "\n"))
+		(or mc-passwd-timeout (mc-deactivate-passwd t))))
 	  (process-send-region proc start end)
 	  (set-buffer newbuf)
 	  (process-send-eof proc)
@@ -252,16 +257,16 @@ PGP ID.")
 	   ;; encrypt messages, since the batch mode in PGP5.0 is
 	   ;; broken.  Holler!
 	   ("Enter pass phrase:" 
-	      (interrupt-process proc)
-	      (delete-process proc)
+	    (Interrupt-process proc)
+	    (delete-process proc)
 	    ;; This should never happen.
-	    (setq results '("Cannot sign and encrypt yet." nil)))
+	    (setq results '("Incorrect passphrase." nil)))
 
 	   ;; OPTION 3:  There are keys missing.  Just bug out 
 	   ;; of the whole thing, for now.
 	   ("\nNo encryption keys found for:"
-	      (interrupt-process proc)
-	      (delete-process proc)
+	    (interrupt-process proc)
+	    (delete-process proc)
 	    (setq results '("One or more public keys are missing" nil)))
 
 	   ;; OPTION 4:  The program exits.
@@ -281,8 +286,6 @@ PGP ID.")
     (setq args (list "+NoBatchInvalidKeys=off" "-fat" "+batchmode=1"))
     (setq action (if recipients "Encrypting" "Armoring"))
     (setq msg (format "%s..." action))  ; May get overridden below
-;    (if (and recipients (not mc-pgp50-version-five)) 
-;	(setq args (cons "-e" args)))
     (if mc-pgp50-comment
 	(setq args (cons (format "+comment=\"%s\"" mc-pgp50-comment) args)))
     (if mc-pgp50-alternate-keyring
