@@ -67,4 +67,5 @@ Making a new release. This is my checklist for making a new official release.
   update http://mailcrypt.sourceforge.net
    (update 'site' module, login to mailcrypt.sourceforge.net,
     go to /home/groups/m/ma/mailcrypt/htdocs/ and do a cvs update)
-  upload to sunsite?
+  upload to sunsite? (now ibiblio.org)
+
