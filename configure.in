@@ -3,8 +3,21 @@ AC_INIT(mailcrypt.el)
 
 AC_PROG_INSTALL()
 
+AC_PATH_PROG(BASENAME, basename)
+if test "$BASENAME x" = " x"
+then
+  AC_MSG_ERROR(Cannot find program "basename" on your patch.
+Hint: Try setting BASENAME environment variable or fixing your PATH.)
+fi
+
 AC_CHECK_PROGS(EMACS, emacs xemacs)
-if test "$EMACS" = xemacs
+if test "$EMACS x" = " x"
+then
+  AC_MSG_ERROR(Cannot find emacs in your path.
+Hint: Try setting EMACS environment variable or fixing your PATH.)
+fi
+RESULT=`$BASENAME $EMACS`
+if test "$RESULT" = xemacs
 then
   if $EMACS -batch -q --vanilla
   then
@@ -13,16 +26,12 @@ then
   else
     EMACSFLAGS="-q -no-site-file"  # Still running Xemacs 19.x
   fi
-else if test "$EMACS" = emacs
+else if test "$RESULT" = emacs
 then
   EMACSFLAGS=""
   AC_SUBST(EMACSFLAGS)
-else
-  AC_MSG_ERROR(Cannot find emacs in your path.
-Hint: Try setting EMACS environment variable or fixing your PATH.)
 fi
 fi
-
 EXTRA_SRCS=""
 EXTRA_OBJS=""
 echo -n checking for timer.el...
