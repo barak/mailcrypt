@@ -959,7 +959,8 @@ GPG ID.")
 	 ((atom sig) ;; don't have the signature key
 	  (progn
 	    ;; offer to fetch the key, then what? run again? must we undo 1st?
-	    (message (format "cannot check signature from keyid %s" sig))
+	    (mc-message-sigstatus
+             (format "cannot check signature from keyid %s" sig))
 	    (if (and (not (eq mc-gpg-always-fetch 'never))
 		     (or mc-gpg-always-fetch
 			 (y-or-n-p
@@ -973,15 +974,16 @@ GPG ID.")
 	    ))
 	 ((nth 0 sig) ;; good signature
 	  (progn
-	    (message (mc-gpg-format-sigline 
-		      t (nth 1 sig) (nth 2 sig) (nth 3 sig)))
+	    (mc-message-sigstatus (mc-gpg-format-sigline 
+				   t (nth 1 sig) (nth 2 sig) (nth 3 sig)))
 	    '(t . t)
 	    ))
 	 (t ;; bad signature
 	  (progn
-	    (ding)
-	    (message (mc-gpg-format-sigline 
-		      nil (nth 1 sig) (nth 2 sig) (nth 3 sig)))
+	    (mc-message-sigstatus (mc-gpg-format-sigline 
+				   nil (nth 1 sig) (nth 2 sig) (nth 3 sig))
+				  t ; get their attention
+				  )
 	    '(t . nil)
 	    ))
        )))
