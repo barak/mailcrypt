@@ -1,3 +1,25 @@
+Noteworthy changes in Mailcrypt version 3.6.0(?):
+
+ * GPG stdout buffer is now put into multibyte mode even when emacs is using
+   unibyte mode in general (such as under 'standard-display-european'). This
+   should fix the "inserts \201 before non-ascii characters" bugs
+   (SF#496157, SF#501891, possibly others). A test case was added to catch
+   these bugs in the future.
+
+ * new remailer support for modern mixmaster and mixminion clients, which
+   send the message directly rather than modify the emacs buffer and
+   allowing the user to send the message through their emacs MUA mode.
+
+ ** added "mc-default-remailer-scheme" to choose which remailer method you
+    want to use: type1, mixmaster, or mixminion. [C-c / r] now does a
+    remailer-scheme -specific function. Various MUA modes can behave
+    differently if they wish.
+
+ * Added support for PGP 6.5, generously contributed by Derek Atkins.
+
+ * Added support for the Wanderlust MUA mode.
+
+
 Noteworthy changes in Mailcrypt version 3.5.8:
 
  * mc-remail.el updated to support modern remailers (as defined by MixMaster
