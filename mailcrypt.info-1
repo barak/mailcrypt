@@ -1,5 +1,5 @@
 This is Info file mailcrypt.info, produced by Makeinfo version 1.68
-from the input file ./mailcrypt.texi.
+from the input file mailcrypt.texi.
 
    This documentation describes Mailcrypt version 3.5b7.  This
 documentation was last updated on August 29, 1998.
@@ -177,10 +177,10 @@ follow the instructions in the file `INSTALL'.
 
    Next, decide what version of PGP you are using.  Versions 3.5 and
 higher of Mailcrypt support multiple versions of PGP.  To choose a
-version, add one of the following lines to your `.emacs' file:
+version, add the following lines to your `.emacs' file:
 
-     (mc-setversion "pgp")    ; for PGP 2.6.x
-     (mc-setversion "pgp50")  ; for PGP 5.x
+     (load-library "mailcrypt") ; provides "mc-setversion"
+     (mc-setversion "2.6")    ; for PGP 2.6 (default); also "5.0" and "gpg"
 
    Next, teach your Emacs how and when to load the Mailcrypt functions
 and install the Mailcrypt key bindings.  Almost all Emacs major modes

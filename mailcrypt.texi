@@ -224,11 +224,11 @@ follow the instructions in the file @file{INSTALL}.
 
 Next, decide what version of PGP you are using.  Versions 3.5 and higher
 of Mailcrypt support multiple versions of PGP.  To choose a version,
-add one of the following lines to your @file{.emacs} file:
+add the following lines to your @file{.emacs} file:
 
 @lisp
-(mc-setversion "pgp")    ; for PGP 2.6.x
-(mc-setversion "pgp50")  ; for PGP 5.x
+(load-library "mailcrypt") ; provides "mc-setversion"
+(mc-setversion "2.6")    ; for PGP 2.6 (default); also "5.0" and "gpg"
 @end lisp
 
 Next, teach your Emacs how and when to load the Mailcrypt functions and
