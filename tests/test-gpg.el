@@ -172,18 +172,19 @@
 (defun run-one-test ()
   ; it would be nice to take the test name from argv. see (command-line-args)
   (setq mc-test-verbose t)
-  (mc-test-decrypt-test "ES.e1r.s1v")
+  (mc-test-decrypt-test "SE")
 )
 
 (defun run-all-tests ()
   (let (cases)
         
-    (setq cases (append '("E.e1r" "E.e2r" "E.e3" "E.e4") cases))
-    (setq cases (append '("ES.e1r.s1v" "ES.e1r.s2v" "ES.e1r.s3v" "ES.e1r.s4"
-                          "ES.e3.s1v" "ES.e4.s1v")
-                        cases))
-    (setq cases (append '("S.s1v" "S.s2v" "S.s3v" "S.s4") cases))
-    (setq cases (append '("CS.s1v" "CS.s2v" "CS.s3v" "CS.s4") cases))
+    (setq cases (append cases '("E.e1r" "E.e2r" "E.e3" "E.e4")))
+    (setq cases (append cases '("ES.e1r.s1v" "ES.e1r.s2v" "ES.e1r.s3v"
+                                "ES.e1r.s4" "ES.e3.s1v" "ES.e4.s1v")
+                       ))
+    (setq cases (append cases '("S.s1v" "S.s2v" "S.s3v" "S.s4")))
+    (setq cases (append cases '("CS.s1v" "CS.s2v" "CS.s3v" "CS.s4")))
+    (setq cases (append cases '("SE")))
     (dolist (onecase cases)
       (mc-test-decrypt-test onecase))
 ))
