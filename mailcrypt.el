@@ -49,7 +49,7 @@
 (autoload 'mc-decrypt "mc-toplev" nil t)
 (autoload 'mc-verify "mc-toplev" nil t)
 (autoload 'mc-snarf "mc-toplev" nil t)
-(autoload 'mc-pgp-fetch-key "mc-pgp" nil t)
+(autoload 'mc-fetch-key "mc-toplev" nil t)
 (autoload 'mc-encrypt "mc-toplev" nil t)
 (autoload 'mc-sign "mc-toplev" nil t)
 (autoload 'mc-insert-public-key "mc-toplev" nil t)
@@ -94,7 +94,7 @@
       (define-key mc-read-mode-map "\C-c/d" 'mc-decrypt)
       (define-key mc-read-mode-map "\C-c/v" 'mc-verify)
       (define-key mc-read-mode-map "\C-c/a" 'mc-snarf)
-      (define-key mc-read-mode-map "\C-c/k" 'mc-pgp-fetch-key)))
+      (define-key mc-read-mode-map "\C-c/k" 'mc-fetch-key)))
 
 (or mc-write-mode-map
     (progn
@@ -103,7 +103,7 @@
       (define-key mc-write-mode-map "\C-c/e" 'mc-encrypt)
       (define-key mc-write-mode-map "\C-c/s" 'mc-sign)
       (define-key mc-write-mode-map "\C-c/x" 'mc-insert-public-key)
-      (define-key mc-write-mode-map "\C-c/k" 'mc-pgp-fetch-key)
+      (define-key mc-write-mode-map "\C-c/k" 'mc-fetch-key)
       (define-key mc-write-mode-map "\C-c/r" 'mc-remail)
       (define-key mc-write-mode-map "\C-c/b"
 	'mc-remailer-insert-response-block)
@@ -117,7 +117,7 @@
    ["Decrypt Message" mc-decrypt t]
    ["Verify Signature" mc-verify t]
    ["Snarf Keys" mc-snarf t]
-   ["Fetch Key" mc-pgp-fetch-key t]
+   ["Fetch Key" mc-fetch-key t]
    ["Forget Passphrase(s)" mc-deactivate-passwd t]))
 
 (easy-menu-define
@@ -127,7 +127,7 @@
    ["Encrypt Message" mc-encrypt t]
    ["Sign Message" mc-sign t]
    ["Insert Public Key" mc-insert-public-key t]
-   ["Fetch Key" mc-pgp-fetch-key t]
+   ["Fetch Key" mc-fetch-key t]
    ["Encrypt for Remailer(s)" mc-remail t]
    ["Insert Pseudonym" mc-remailer-insert-pseudonym t]
    ["Insert Response Block" mc-remailer-insert-response-block t]
@@ -157,7 +157,7 @@
 \\[mc-decrypt]\t\tDecrypt an encrypted message
 \\[mc-verify]\t\tVerify signature on a clearsigned message
 \\[mc-snarf]\t\tAdd public key(s) to keyring
-\\[mc-pgp-fetch-key]\t\tFetch a PGP key via finger or HTTP
+\\[mc-fetch-key]\t\tFetch a PGP key via finger or HTTP
 \\[mc-deactivate-passwd]\t\tForget passphrase(s)\n"
   (interactive)
   (setq mc-read-mode
@@ -174,7 +174,7 @@
 \\[mc-encrypt]\t\tEncrypt (and optionally sign) message
 \\[mc-sign]\t\tClearsign message
 \\[mc-insert-public-key]\t\tExtract public key from keyring and insert into message
-\\[mc-pgp-fetch-key]\t\tFetch a PGP key via finger or HTTP
+\\[mc-fetch-key]\t\tFetch a PGP key via finger or HTTP
 \\[mc-remail]\t\tEncrypt message for remailing
 \\[mc-remailer-insert-pseudonym]\t\tInsert a pseudonym (for remailing)
 \\[mc-remailer-insert-response-block]\t\tInsert a response block (for remailing)

@@ -1269,6 +1269,7 @@ GPG ID.")
    (cons 'verification-func 		'mc-gpg-verify-region)
    (cons 'key-insertion-func 		'mc-gpg-insert-public-key)
    (cons 'snarf-func			'mc-gpg-snarf-keys)
+   (cons 'key-fetch-func                'mc-gpg-fetch-key)
    (cons 'msg-begin-line 		mc-gpg-msg-begin-line)
    (cons 'msg-end-line 			mc-gpg-msg-end-line)
    (cons 'signed-begin-line 		mc-gpg-signed-begin-line)
@@ -1283,14 +1284,93 @@ GPG ID.")
   "*If t, always attempt to fetch missing keys, or never fetch if
 'never.")
 
+(defvar mc-gpg-keyserver 'nil
+  "*Keyserver to query for missing keys. If nil let GPG use its default.")
+
+(defvar mc-gpg-finger-timeout 20
+  "*Timeout for a finger try in seconds.")
+
+(defun mc-gpg-fetch-key-parser (stdoutbuf stderrbuf statusbuf rc parserdata)
+  (let (result tmp)
+    (save-excursion
+      (set-buffer statusbuf)
+      (goto-char (point-min))
+      
+      (mc-gpg-debug-print
+       (format "(mc-gpg-fetch-key-parser (stdoutbuf=%s stderrbuf=%s statusbuf=%s rc=%s" stdoutbuf stderrbuf statusbuf rc))
+      
+
+      (if (not (search-forward "[GNUPG:] IMPORT_RES" nil t))
+	  ;; no keys imported
+	  (with-current-buffer stderrbuf
+	    (setq result (list nil (buffer-string) nil)))
+	
+	;; return the names and ids of imported keys
+	(goto-char (point-min))
+	(while (re-search-forward
+		"^\\[GNUPG:\\] +IMPORTED [A-F0-9]* " nil t)
+	  (end-of-line)
+	  (setq tmp (concat tmp
+			    (buffer-substring (match-end 0) (point))
+			    " ")))
+	(if (not tmp)
+	    (setq tmp "was already in keyring"))
+
+	(setq result (list nil t tmp)))
+      )))
+
 (defun mc-gpg-fetch-key (&optional id)
-  "Attempt to fetch a key for addition to GPG keyring.  Interactively,
-prompt for string matching key to fetch.
+  "Fetch a key using the gpg --recv-key method. With this method it is
+only possible to look for key ids!"
+  (interactive)
+  
+  (if (null id)
+      (setq id (read-string "Key-ID: ")))
+  
+  (let ((buffer (get-buffer-create mc-buffer-name))
+	args result)
+    (setq args (list "--recv-keys" id))
+    (if mc-gpg-keyserver
+	(setq args (append (list "--keyserver" mc-gpg-keyserver args))))
 
-This function is not yet implemented. The GPG documentation suggests a simple
-keyserver protocol, but as far as I know it has not yet been implemented
-anywhere."
+    (setq result (mc-gpg-process-region 1 1 nil mc-gpg-path args
+					'mc-gpg-fetch-key-parser buffer))
 
-  (error "Key fetching not yet implemented"))
+    (if (equal (car result) t)
+	(message "Imported key %s: %s" id (cdr result))
+      (error (car result)))
+    ))
+
+(defun mc-gpg-fetch-from-finger (id)
+  "Fetch a key from a finger server. This function takes one argument of the
+form USER@HOST."
+  (interactive "sFetch Key: ")
+  
+  
+  (let (buf connection user host)
+    (unwind-protect
+	(and (string-match "^\\(.+\\)@\\([^@]+\\)$" id)
+	     (progn
+	       (message "Trying to finger %s..." id)
+	       (setq user (substring id
+				     (match-beginning 1) (match-end 1)))
+	       (setq host (substring id
+				     (match-beginning 2) (match-end 2)))
+	       (setq buf (generate-new-buffer " *mailcrypt temp*"))
+	       (condition-case nil
+		   (progn
+		     (setq connection
+			   (open-network-stream "*key fetch*" buf host 79))
+		     (process-send-string connection
+					  (concat "/W " user "\r\n"))
+		     (while
+			 (and (eq 'open (process-status connection))
+			      (accept-process-output connection
+						     mc-gpg-finger-timeout)))
+		     (with-current-buffer buf
+		      (mc-gpg-snarf-keys (point-min) (point-max))))
+		 (error nil)))
+	     (if buf (kill-buffer buf))
+	     (if connection (delete-process connection))))))
 
 ;;}}}

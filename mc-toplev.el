@@ -528,6 +528,17 @@ Exact behavior depends on current major mode."
       (message (format "%d new key%s found" found
 		       (if (eq 1 found) "" "s"))))))
 ;;}}}
+;;{{{ Key fetching
+(defun mc-fetch-key (&optional id)
+  "Fetch key with specified id from a server."
+  (interactive)
+  (if mc-default-scheme
+      (funcall (cdr (assoc 'key-fetch-func (funcall mc-default-scheme)))
+	       id)
+    (error "mc-default-scheme not set")))
+;;}}}
+
+
 ;;}}}
 ;;{{{ Mode specific functions
 
