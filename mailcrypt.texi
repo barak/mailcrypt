@@ -676,22 +676,22 @@ first.  Begin with the following steps:
 @enumerate
 
 @item
-Do @samp{finger rlist@@noisebox.remailer.org > ~/.remailers}. This
+Do @samp{finger rlist@@mixmaster.shinn.net > ~/.remailers}. This
 will create a Levien-format list of remailers in the file
 @file{.remailers} in your home directory (see the variable
 @code{mc-levien-file-name}). Mailcrypt will parse this the first time
-you access a remailer function. @samp{rlist@@mixmaster.shinn.net} is
+you access a remailer function. @samp{rlist@@noisebox.remailer.org} is
 another good place to get this list.
 
 @item
 Look over the @file{.remailers} file and find the ones you want to use.
 
 @item
-Add their PGP public keys to your keyring.  You can @code{finger
-dsskeys@@frogadmin.yi.org} for a list of remailer public keys.  Note
-that Mailcrypt @emph{requires} that you have the public keys of all the
-remailers you want to use, and therefore that the remailers support PGP
-encryption.
+Add their PGP public keys to your keyring. You can @code{finger
+remailer-keys@@mixmaster.shinn.net} for an armored keyring full of
+remailer public keys. Note that Mailcrypt @emph{requires} that you
+have the public keys of all the remailers you want to use, and
+therefore that the remailers support PGP encryption.
 
 @end enumerate
 
@@ -705,6 +705,12 @@ message (using @kbd{C-x m}, for example) addressed to yourself.  Type
 @kbd{C-c / r}.  Choose a remailer; use @kbd{@key{TAB}} to get completion
 on its name.  The buffer will be rewritten for anonymous mailing through
 that remailer.
+
+The remailer list and keyrings can also be obtained via HTTP.
+@file{http://anon.efga.org/Remailers/Settings} and
+@file{http://mixmaster.shinn.net/stats/settings/index.html} have lists
+of URLs from which these can be retrieved.
+
 
 @node Remailer Chains, Response Blocks, Remailer Quick Start, Remailer Support
 @section Remailer Chains
