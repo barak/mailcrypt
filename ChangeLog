@@ -1,3 +1,19 @@
+2002-06-12  Brian Warner  <warner@lothar.com>
+
+	* mailcrypt.el (mc-modes-alist): add mew-summary-mode functions
+
+	* mc-toplev.el (mc-mew-decrypt-message): Add functions to decrypt
+	in Mew message buffers. No replace-with-decrypted functions yet,
+	this is just a hack which flips the read-only flag off while the
+	message is being processed. As a result the decrypted text simply
+	vanishes when you switch to a different message.
+	(mc-mew-summary-decrypt-message)
+	(mc-mew-summary-verify-signature)
+	(mc-mew-summary-snarf-keys): functions to use in mew-summary-mode,
+	which know how to switch to the right message buffer before doing
+	anything on the actual message.
+	(eval-when-compile): add some mew autoloads to shush compile warnings
+
 2002-06-11  Brian Warner  <warner@lothar.com>
 
 	* mc-toplev.el: start planning Mew functions
