@@ -247,7 +247,7 @@ PGP ID.")
 	args key new-key passwd result pgp-id)
     (undo-boundary)
     (setq key (mc-pgp-lookup-key (or id mc-pgp-user-id)))
-    (if (not key) (error "No key available for decrypting."))
+;    (if (not key) (error "No key available for decrypting."))
     (setq
      passwd
      (if key
