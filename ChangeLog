@@ -1,3 +1,15 @@
+2001-05-21  Brian Warner  <warner@lothar.com>
+
+	* ANNOUNCE: Update for Mailcrypt 3.5.6 . Update pointers to
+	sourceforge.net . Remove mention of texinfo bug (I think it's fixed
+	now).
+	* README: Update pointers to sourceforge.net .
+	* NEWS: Update for Mailcrypt 3.5.6 . Include changes in CVS since
+	last release.
+	* mailcrypt.texi: Updated for Mailcrypt 3.5.6. Update pointers to
+	refer to new home at sourceforge.net . Add link to GnuPG home page.
+	* mailcrypt.el (mc-version): Updated for Mailcrypt 3.5.6
+
 2001-05-06  Brian Warner  <warner@lothar.com>
 
 	* mc-gpg.el (mc-gpg-lookup-key): Change key-regexp to tolerate
