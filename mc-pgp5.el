@@ -710,7 +710,7 @@ PGP ID.")
 	      ;; Delete everything preceding the signed data.
 	      (goto-char (point-max))
 	      (re-search-backward 
-	       "-----BEGIN PGP SIGNED MESSAGE-----" nil t)
+	       "-----BEGIN PGP MESSAGE-----" nil t)
 	      (delete-region (point-min) (match-beginning 0))
 	      (setq rgn (point-min))
 
