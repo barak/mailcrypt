@@ -2,10 +2,14 @@
 
 	* tests/remailer/gtkwatcher.glade
 	* tests/remailer/gtkwatcher.py: add popup menus for message actions
+	(WatcherGUI.do_update): show send time in local timezone, not GMT
+        add send time to Received Messages popup
+
 	* tests/remailer/watcher.py: add ability to flush old messages,
 	abandon them, query for age of outstanding ones. Make all msgids
 	integers. Fix use of default NNTP port.
 	(NewsWatcher.poll): Handle missing messages
+	(Watcher.txtime): code to get send time of a message
 
 2002-11-29  Brian Warner  <warner@lothar.com>
 
