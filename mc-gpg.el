@@ -272,7 +272,8 @@ The value returned is the value of the last form in BODY."
       (delete-file stderr-tempfilename)
       (delete-file status-tempfilename)
       ;; kill off temporary buffers unless we're debugging
-      (if (not mc-gpg-debug-buffer)
+      (if (or (not (boundp 'mc-gpg-debug-buffer))
+	      (not mc-gpg-debug-buffer))
 	  (progn
 	    (if (get-buffer " *mailcrypt stdout temp")
 		(kill-buffer " *mailcrypt stdout temp"))
@@ -405,7 +406,12 @@ GPG ID.")
 	  )
       )
 
-    ; if we're supposed to encrypt for the user too, we need to know their key
+    ; if we're supposed to encrypt for the user too, we need their key
+    ;; FIXME: we only need their public key, not the secret one. Some users
+    ;; (the author included) keep their secret keys offline unless needed
+    ;; (but the public ones are still available).. the --list-secret-keys
+    ;; done by mc-gpg-lookup-key will fail in this situation. Change
+    ;; mc-gpg-lookup-key to have a way to look for public keys too.
     (if (and recipients mc-encrypt-for-me)
 	(setq recipients (cons (cdr (or key
 					(setq key (mc-gpg-lookup-key 
