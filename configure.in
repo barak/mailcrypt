@@ -3,12 +3,25 @@ AC_INIT(mailcrypt.el)
 
 AC_PROG_INSTALL()
 
-AC_CHECK_PROGS(EMACS19, emacs xemacs)
+AC_CHECK_PROGS(EMACS, emacs xemacs)
+if test "$EMACS" = xemacs
+then
+  EMACSFLAGS="--vanilla"
+  AC_SUBST(EMACSFLAGS)
+else if test "$EMACS" = emacs
+then
+  EMACSFLAGS=""
+  AC_SUBST(EMACSFLAGS)
+else
+  AC_MSG_ERROR(Cannot find emacs in your path.
+Hint: Try setting EMACS environment variable or fixing your PATH.)
+fi
+fi
 
 EXTRA_SRCS=""
 EXTRA_OBJS=""
 echo -n checking for timer.el...
-if $EMACS19 -batch -l timer 2>/dev/null
+if $EMACS -batch -l timer 2>/dev/null
 then
   echo timer.el
 else
@@ -17,7 +30,6 @@ else
   AC_SUBST(EXTRA_SRCS)
   EXTRA_OBJS="timer.elc"
   AC_SUBST(EXTRA_OBJS)
-  cp FSF-timer.el timer.el
 fi
 
 AC_OUTPUT(Makefile)

@@ -605,38 +605,51 @@ do
 set dummy $ac_prog; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
 echo "configure:608: checking for $ac_word" >&5
-if eval "test \"`echo '$''{'ac_cv_prog_EMACS19'+set}'`\" = set"; then
+if eval "test \"`echo '$''{'ac_cv_prog_EMACS'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
-  if test -n "$EMACS19"; then
-  ac_cv_prog_EMACS19="$EMACS19" # Let the user override the test.
+  if test -n "$EMACS"; then
+  ac_cv_prog_EMACS="$EMACS" # Let the user override the test.
 else
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
   for ac_dir in $PATH; do
     test -z "$ac_dir" && ac_dir=.
     if test -f $ac_dir/$ac_word; then
-      ac_cv_prog_EMACS19="$ac_prog"
+      ac_cv_prog_EMACS="$ac_prog"
       break
     fi
   done
   IFS="$ac_save_ifs"
 fi
 fi
-EMACS19="$ac_cv_prog_EMACS19"
-if test -n "$EMACS19"; then
-  echo "$ac_t""$EMACS19" 1>&6
+EMACS="$ac_cv_prog_EMACS"
+if test -n "$EMACS"; then
+  echo "$ac_t""$EMACS" 1>&6
 else
   echo "$ac_t""no" 1>&6
 fi
 
-test -n "$EMACS19" && break
+test -n "$EMACS" && break
 done
 
+if test "$EMACS" = xemacs
+then
+  EMACSFLAGS="--vanilla"
+  
+else if test "$EMACS" = emacs
+then
+  EMACSFLAGS=""
+  
+else
+  { echo "configure: error: Cannot find emacs in your path.
+Hint: Try setting EMACS environment variable or fixing your PATH." 1>&2; exit 1; }
+fi
+fi
 
 EXTRA_SRCS=""
 EXTRA_OBJS=""
 echo -n checking for timer.el...
-if $EMACS19 -batch -l timer 2>/dev/null
+if $EMACS -batch -l timer 2>/dev/null
 then
   echo timer.el
 else
@@ -645,7 +658,6 @@ else
   
   EXTRA_OBJS="timer.elc"
   
-  cp FSF-timer.el timer.el
 fi
 
 trap '' 1 2 15
@@ -793,7 +805,8 @@ s%@infodir@%$infodir%g
 s%@mandir@%$mandir%g
 s%@INSTALL_PROGRAM@%$INSTALL_PROGRAM%g
 s%@INSTALL_DATA@%$INSTALL_DATA%g
-s%@EMACS19@%$EMACS19%g
+s%@EMACS@%$EMACS%g
+s%@EMACSFLAGS@%$EMACSFLAGS%g
 s%@EXTRA_SRCS@%$EXTRA_SRCS%g
 s%@EXTRA_OBJS@%$EXTRA_OBJS%g
 

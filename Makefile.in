@@ -1,7 +1,8 @@
 ## This is a -*- makefile -*-
 
 # What the Emacs 19 binary is called on your system
-EMACS = @EMACS19@
+EMACS = @EMACS@
+EMACSFLAGS = @EMACSFLAGS@
 
 # Prefix for constructing installation directory paths
 prefix = @prefix@
@@ -53,7 +54,7 @@ SHELL = /bin/sh
 .SUFFIXES: .elc .el
 
 .el.elc:
-	$(EMACS) -batch -l $(srcdir)/load-path.hack \
+	$(EMACS) -batch $(EMACSFLAGS) -l $(srcdir)/load-path.hack \
 	  -f batch-byte-compile $<
 
 all: $(OBJECTS)
@@ -89,6 +90,9 @@ info: mailcrypt.info
 mailcrypt.info: mailcrypt.texi
 	$(MAKEINFO) $(srcdir)/mailcrypt.texi
 
+timer.el: FSF-timer.el
+	cp FSF-timer.el timer.el
+
 dvi: mailcrypt.dvi
 
 mailcrypt.dvi: mailcrypt.texi
@@ -115,7 +119,7 @@ clean:
 
 distclean: clean
 	-rm -f *~ *.tar.gz
-	rm -f Makefile config.status config.cache config.log
+	rm -f Makefile config.status config.cache config.log timer.el
 
 ${srcdir}/configure: configure.in
 	cd ${srcdir} && autoconf
