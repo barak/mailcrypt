@@ -60,7 +60,7 @@ use its default.")
   "No encryption keys found for: \\(.+\\)$"
   "Regular expression matching a PGP missing-key messsage")
 (defconst mc-pgp50-key-expected-re
-  "Signature by unknown keyid: \\(\\S +\\)$")
+  "Signature by unknown keyid: \\(.+\\)$")
 
 (defvar mc-pgp50-key-cache nil
   "Association list mapping PGP IDs to canonical \"keys\".  A \"key\"
@@ -179,14 +179,14 @@ PGP ID.")
 	  ;; containing the PGP results.
 	  (setq results (funcall parser proc obuf beg end mybuf passwd))
 	  (setq result  (car results))
-	  (setq rgn     (cdr results))
+	  (setq rgn     (cadr results))
 
 	  ;; Hack to force a status_notify() in Emacs 19.29
 	  (set-buffer mybuf)
 
 	  ;; Hurm.  FIXME; must get better result codes.
 	  (if (stringp result)
-	      (error "%s exited with message: '%s'" program result)
+	      (message result)
 
 	    ;; If the parser found something, migrate it to the old
 	    ;; buffer.  In particular, the parser's job is to return
@@ -200,14 +200,16 @@ PGP ID.")
 		  (insert-buffer-substring mybuf (car rgn) (cdr rgn))
 		  (set-buffer mybuf)
 		  (delete-region (car rgn) (cdr rgn)))))
+
 	  ;; Return nil on failure and exit code on success
-	  (if rgn result))
+	  (if rgn result nil))
+
       ;; Cleanup even on nonlocal exit
       (if (and proc (eq 'run (process-status proc)))
 	  (interrupt-process proc))
       (set-buffer obuf)
       (or buffer (null mybuf) (kill-buffer mybuf))
-      )))
+      rgn)))
 
 ;;; }
 
@@ -261,7 +263,7 @@ PGP ID.")
 	    ;; Return the exit status, with the region
 	    ;; limits!
 	    (setq rgn (cons rgn (point-max)))
-	    (setq results (cons result rgn)))
+	    (setq results (list result rgn)))
 
 	   ;; OPTION 2:  The passphrase is no good.
 	   ("Enter pass phrase:" 
@@ -405,8 +407,8 @@ PGP ID.")
 	      (goto-char (point-max))
 	      (if
 		  (re-search-backward 
-		   "\n\nGood signature made.*by key:\n" nil t)
-		  (setq rgn (cons rgn (match-beginning 0)))
+		   ".*\(Good signature made.*by key:\)" nil t)
+		  (setq rgn (cons rgn (match-beginning 1)))
 
 		;; Note that we don't check for a BAD signature.  The
 		;; effect is that the "BAD signature" message is
@@ -417,7 +419,7 @@ PGP ID.")
 
 	      ;; Return the exit status, with the region
 	      ;; limits!
-	      (setq results (cons result rgn)))
+	      (setq results (list result rgn)))
 			
 	     ;; OPTION 2:  Awww...bad passphrase!
 	     ("Enter pass phrase:" 
@@ -536,7 +538,6 @@ PGP ID.")
     (unwind-protect
 	(with-expect proc
 	  (expect "No files specified.  Using stdin."
-	    (message "Password sent.  Signing...")
 	    (set-buffer oldbuf)
 	    (process-send-region proc start end)
 	    (set-buffer newbuf)
@@ -565,8 +566,8 @@ PGP ID.")
 	      (setq results 
 		    '("Signature is *NOT* valid!  You've been had!" nil)))
 
-	     ;; OPTION 2.5:  We don't have the right public key!
-	     ("\nSignature by unknown keyid: 0x.*\n"
+	     ;; OPTION 2a:  We don't have the right public key!
+	     ("\n.*Signature by unknown keyid: 0x.*\n"
 
 	      ;; Catch the exit status.
 	      (delete-process proc)
@@ -574,6 +575,16 @@ PGP ID.")
 	      ;; Return the good news!
 	      (setq results 
 		    '("You don't have this person's public key!" nil)))
+
+	     ;; OPTION 2b:  The message is not signed w/PGP 5.0
+	     ("\n.*Opening file ./dev/null. type .*\n"
+
+	      ;; Catch the exit status.
+	      (delete-process proc)
+
+	      ;; Return the good news!
+	      (setq results 
+		    '("Not a PGP 5.0 signed message!" nil)))
 
 	     ;; OPTION 3:  Awww...This isn't clearsigned, it's encrypted!
 	     ("Enter pass phrase:" 
@@ -640,7 +651,7 @@ PGP ID.")
 	      ;; Return the exit status, with the region
 	      ;; limits!
 	      (setq rgn (cons rgn (point-max)))
-	      (setq results (cons result rgn)))
+	      (setq results (list result rgn)))
 			
 
 	     ;; OPTION 1.a:  The data is now signed, but is 8bit data.
@@ -672,7 +683,7 @@ PGP ID.")
 	      ;; Return the exit status, with the region
 	      ;; limits!
 	      (setq rgn (cons rgn (point-max)))
-	      (setq results (cons result rgn)))
+	      (setq results (list result rgn)))
 			
 
 	     ;; OPTION 2:  Awww...bad passphrase!
@@ -740,7 +751,7 @@ PGP ID.")
 	     (not no-fetch)
 	     (re-search-forward mc-pgp50-key-expected-re nil t)
 	     (setq pgp-id
-		   (concat "0x" (buffer-substring-no-properties
+		   (concat "" (buffer-substring-no-properties
 				 (match-beginning 1)
 				 (match-end 1))))
 	     (not (eq mc-pgp50-always-fetch 'never))
@@ -790,7 +801,7 @@ PGP ID.")
     ;; workaround: write key to a tempfile, then feed tempfile to pgpk -a
     (setq tempfile 
 	  (make-temp-name (expand-file-name "mailcrypt-pgp50-snarffile-"
-					    temporary-file-directory)))
+					    mc-temp-directory)))
     (write-region start end tempfile)
     (setq args (list "+verbose=1" "+batchmode=1" "+language=en" "-a" tempfile))
     (if mc-pgp50-alternate-keyring
@@ -963,6 +974,10 @@ request for the key."
   (interactive)
   (let ((methods mc-pgp50-fetch-methods)
 	(process-connection-type nil) key proc buf args)
+
+    ;; Temporarily disabled!  Sorry.
+    (error "Key fetching not yet supported for PGP 5.0")
+
     (if (null id)
 	(setq id (cons (read-string "Fetch key for: ") nil)))
     (while (and (not key) methods)

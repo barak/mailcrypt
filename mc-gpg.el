@@ -58,7 +58,6 @@
 ; mode, it fails, even if we give --yes. Worse yet, if we encrypt to multiple
 ; recipients, the untrusted ones get dropped withou flagging an error (stderr
 ; does get a message, but it doesn't indicate which keys had a problem)
-(defvar mc-gpg-temp-directory "/tmp")
 (defvar mc-gpg-user-id (user-login-name)
   "*GPG ID of your default identity.")
 (defvar mc-gpg-always-sign nil 
@@ -154,10 +153,10 @@ keyring.")
        beg end passwd program args parser bufferdummy))
     (setq stderr-tempfilename 
 	  (make-temp-name (expand-file-name "mailcrypt-gpg-stderr-"
-					    mc-gpg-temp-directory)))
+					    mc-temp-directory)))
     (setq status-tempfilename 
 	  (make-temp-name (expand-file-name "mailcrypt-gpg-status-"
-					    mc-gpg-temp-directory)))
+					    mc-temp-directory)))
     (unwind-protect
 	(progn
 	  ;; get output places ready

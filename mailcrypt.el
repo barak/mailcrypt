@@ -203,6 +203,8 @@
 
 ;;{{{ User variables.
 (defconst mc-version "3.5b6")
+(defvar mc-temp-directory "/tmp"
+  "*Default temp directory to be used by Mailcrypt.")
 (defvar mc-default-scheme 'mc-scheme-pgp "*Default encryption scheme to use.")
 (defvar mc-passwd-timeout 60
   "*Time to deactivate password in seconds after a use.
