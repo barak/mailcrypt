@@ -1,4 +1,10 @@
+2002-07-08  Brian Warner  <warner@lothar.com>
+
+	* mailcrypt: Release mailcrypt 3.5.7
+
 2002-07-07  Brian Warner  <warner@lothar.com>
+
+	* ANNOUNCE: update for 3.5.7
 
 	* NEWS: finalized 3.5.7 change section
 
