@@ -19,10 +19,7 @@ distribution tarball.
 
 To rebuild the unit test keyrings and test cases:
 
-You will need the Python GnuPGInterface module, available at
-<http://sourceforge.net/projects/py-gnupg/>. It is used to automate the
-creation of the test messages. After installing it, do the following to
-create the keys:
+Do the following to create the keys:
 
  ./configure
  cd tests/gpg-keys
@@ -33,10 +30,19 @@ create the keys:
   make pack
    (creates allrings.txt, the armored keyring file. This file is checked into
     CVS)
- cd ..
+ cd ../..
+
+The test cases are regenerated as part of the development anytime the keys
+are changed or the testcase generator script is modified. To rebuild them,
+you will need the Python GnuPGInterface module, available at
+<http://sourceforge.net/projects/py-gnupg/>. After installing it, do the
+following:
+
+ cd tests
  make gpg-testcases
   (this unpacks allrings.txt, then runs a program which creates the GPG test
    cases in gpg-testcases/* . These test cases are also checked into CVS)
+ cd ..
 
 
 Making a new release. This is my checklist for making a new official release.
