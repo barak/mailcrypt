@@ -1,4 +1,4 @@
-  Mailcrypt 3.5b7 is Available for Download
+  Mailcrypt 3.5.1 is Available for Download
 
 
   1.  Introduction
@@ -7,25 +7,32 @@
   Mailcrypt is an Emacs Lisp package which provides a simple interface
   to message encryption with PGP (you do use Emacs to handle your mail
   and news, right?). Mailcrypt version 3.5b1 and higher have been
-  extended to handle both PGP 2.6.x and PGP 5.x.  Starting with Beta 7
-  Mailcrypt also supports encryption with GnuPG.
+  extended to handle both PGP 2.6.x and PGP 5.x.  Versions 3.5b7 and
+  higher, including 3.5.1, also support encryption with GnuPG. Thanks
+  to Brian Warner.
 
 
   2.  Features
 
+  2.1. New Features/Enhancements
 
-  2.1.	New Features in This Release
+  Cleaned up PGP 5.0 code, reducing compiler warnings. Cleaned up
+  Makefile and configuration support. Eliminated Perl wrapper for
+  GPG support. Fixed a bug which prevented signing 8-bit text.
+  Fixed a compatability bug with mh-e. Continued updating of
+  documentation. Various bug fixes.
 
-  Support for GnuPG encryption has been added.  Key snarfing
-  functionality for PGP 5.0 is working correctly now.  Messages from
-  PGP 5.0 operations now resemble more closely the messages generated
-  for version 2.6.  Encryption works correctly, even when the secret
-  keyring is not available (a requested feature for paranoid types ;-).
-  Further updated documentation for support under various mail packages.
-  Lots of bug fixes.
+  2.2.	Stable Features for PGP 5.0 and GnuPG
+
+  Support for GnuPG encryption.  Key snarfing functionality for PGP
+  5.0.  Messages from PGP 5.0 operations now resemble more closely the
+  messages generated for version 2.6.  Encryption works correctly,
+  even when the secret keyring is not available (a requested feature
+  for paranoid types ;-).  Further updated documentation for support
+  under various mail packages.
 
 
-  2.2.	Features for PGP 2.6.x (stable)
+  2.3.	Features for PGP 2.6.x (stable)
 
   Encryption, decryption, signing, adding keys, extracting keys,
   passphrase caching with timeout, multiple secret key (identity)
@@ -34,7 +41,7 @@
   support), and an automatic keyserver interface via HTTP.
 
 
-  2.3.	Still To Do
+  2.4.	Still To Do
 
   o  Add key fetching support for PGP 5.x.
 
@@ -44,7 +51,7 @@
 
   3.  Downloading Mailcrypt
 
-  The Official Mailcrypt version 3.5b6 can be downloaded at:
+  The Official Mailcrypt version 3.5.1 can be downloaded at:
 
   <http://www.pobox.com/~lbudney/linux/software/mailcrypt.html>
 
@@ -58,5 +65,5 @@
   and
   <ftp://cag.lcs.mit.edu/pub/patl/>
 
-  Enjoy!
+  Share and Enjoy!
 	- Len Budney <lbudney@pobox.com>

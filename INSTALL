@@ -108,6 +108,20 @@ like the following:
 This is the *only* special action required to install Mailcrypt for
 FSF Emacs 19.28.
 
+XEmacs 20.x
+===========
+
+When running recent versions of XEmacs, the "completing-read" function
+appears to have changed, breaking mc-setversion. If that happens, edit
+mc-setversion.el, deleting the line marked with "-":
+
+		   t   ; REQUIRE-MATCH
+		   nil ; INITIAL
+		   nil ; HIST
+-		   oldversion   ; DEFAULT
+		   ))))
+
+
 XEmacs 19.12
 ============
 
