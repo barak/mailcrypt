@@ -45,8 +45,9 @@ Possible values of VERSION are 2.6, 5.0, and gpg."
 		   t   ; REQUIRE-MATCH
 		   nil ; INITIAL
 		   nil ; HIST
-		   oldversion   ; DEFAULT
-		   ))))
+		       ))
+	(if (equal (length version) 0)
+	    (setq version oldversion))))
 
   (cond
    ((string-equal version "5.0")

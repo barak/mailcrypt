@@ -120,20 +120,6 @@ Don't use the following, which worked for older emacsen:
      (add-hook 'rmail-mode-hook 'mc-install-read-mode)
 
 
-XEmacs 20.x
-===========
-
-When running recent versions of XEmacs, the "completing-read" function
-appears to have changed, breaking mc-setversion. If that happens, edit
-mc-setversion.el, deleting the line marked with "-":
-
-		   t   ; REQUIRE-MATCH
-		   nil ; INITIAL
-		   nil ; HIST
--		   oldversion   ; DEFAULT
-		   ))))
-
-
 XEmacs 19.12
 ============
 
