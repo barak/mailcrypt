@@ -218,6 +218,12 @@ Hooking into Rmail
      (add-hook 'rmail-mode-hook 'mc-install-read-mode)
      (add-hook 'rmail-summary-mode-hook 'mc-install-read-mode)
 
+   Using Emacs version 20.3 or higher, you should use the following
+lines instead:
+
+     (add-hook 'rmail-show-message-hook 'mc-install-read-mode)
+     (add-hook 'rmail-summary-mode-hook 'mc-install-read-mode)
+
 
 File: mailcrypt.info,  Node: Hooking into VM,  Next: Hooking into MH-E,  Prev: Hooking into Rmail,  Up: Installation
 

@@ -268,6 +268,14 @@ To hook Mailcrypt into Rmail, use the following lines:
 (add-hook 'rmail-summary-mode-hook 'mc-install-read-mode)
 @end lisp
 
+Using Emacs version 20.3 or higher, you should use the following
+lines instead:
+
+@lisp
+(add-hook 'rmail-show-message-hook 'mc-install-read-mode)
+(add-hook 'rmail-summary-mode-hook 'mc-install-read-mode)
+@end lisp
+
 @node Hooking into VM, Hooking into MH-E, Hooking into Rmail, Installation
 @subsection Hooking into VM
 
