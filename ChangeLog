@@ -1,5 +1,9 @@
 2001-05-21  Brian Warner  <warner@lothar.com>
 
+	* mailcrypt: Release mailcrypt-3.5.6
+
+2001-05-21  Brian Warner  <warner@lothar.com>
+
 	* ANNOUNCE: Update for Mailcrypt 3.5.6 . Update pointers to
 	sourceforge.net . Remove mention of texinfo bug (I think it's fixed
 	now).
