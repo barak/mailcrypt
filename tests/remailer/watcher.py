@@ -8,7 +8,7 @@ import gtk
 
 import os, os.path, stat, time, string
 from maildirgtk import MaildirGtk
-from nntplib import NNTP
+from nntplib import NNTP, NNTP_PORT
 
 # This file implements some classes which watch maildir-style directories
 # and NNTP newsgroups. A message is placed in the 'source' maildir when the
@@ -42,7 +42,7 @@ class MessageWatcher:
         d = self.__dict__.copy()
         d['checker'] = None
         return d
-    
+
     def parseMessage(self, filename, name, time, lines):
         # find messageid, build bodytext
         data = ''
@@ -57,6 +57,7 @@ class MessageWatcher:
                 msgid = line[where:]
         if msgid == None:
             return
+        msgid = int(msgid)
         m = Message(msgid, name, time, data)
         if self.msgs.get(msgid, None) != None:
             print "Hey, file %s duplicates msgid %s from file %s" % \
@@ -64,7 +65,13 @@ class MessageWatcher:
         self.msgs[msgid] = m
         if self.checker:
             self.checker(m)
-            
+
+    def deleteMessage(self, msgid):
+        try:
+            del self.msgs[msgid]
+        except KeyError:
+            pass
+        
     def dump(self):
         print len(self.msgs)," msgids:"
         for m in self.msgs.values():
@@ -112,7 +119,8 @@ class NewsWatcher(MessageWatcher):
         self.last = {}
         self.timeout = None
         self.pollInterval = 60
-
+        self.debug = 0
+        
     def __repr__(self):
         return "<NewsWatcher %s:%s (%s)>" % (self.server, self.port,
                                              ",".join(self.groups))
@@ -122,14 +130,17 @@ class NewsWatcher(MessageWatcher):
         return d
     
     def start(self):
-        self.nntp = NNTP(self.server, self.port, self.user, self.pw,
+        port = self.port
+        if not port:
+            port = NNTP_PORT
+        self.nntp = NNTP(self.server, port, self.user, self.pw,
                          readermode=1)
         # only look for messages that appear after we start. Usenet is big.
         if not self.last: # only do this the first time
             for g in self.groups:
                 resp, count, first, last, name = self.nntp.group(g)
                 self.last[g] = int(last)
-                print "last[%s]: %d" % (g, self.last[g])
+                if self.debug: print "last[%s]: %d" % (g, self.last[g])
         self.timeout = gtk.timeout_add(self.pollInterval*1000,
                                        self.doTimeout)
     
@@ -145,12 +156,13 @@ class NewsWatcher(MessageWatcher):
         return gtk.TRUE # keep going
         
     def poll(self):
-        print "polling", self
+        #print "polling", self
         for g in self.groups:
             resp, count, first, last, name = self.nntp.group(g)
             for num in range(self.last[g]+1, int(last)+1):
                 resp, num, id, lines = self.nntp.article("%d" % num)
                 name = "%s:%d" % (g, int(num))
+                if self.debug: print "got", name
                 if self.tag:
                     if not filter(lambda line, tag=tag: line.find(tag) != -1,
                                   lines):
@@ -208,8 +220,15 @@ class Watcher:
             if not dst.has_key(msgid):
                 m = src[msgid]
                 outstanding.append((m, m.time))
-        outstanding.sort(lambda x,y: cmp(x[0], y[0]))
+        outstanding.sort(lambda x,y: cmp(x[0].msgid, y[0].msgid))
         return outstanding
+    def age(self, msgid):
+        if not self.source.msgs.has_key(msgid):
+            return None
+        tx_time = self.source.msgs[msgid].time
+        age = time.time() - tx_time
+        return age
+        
     def received(self):
         """Return a list of tuples (dstmsg, latency), where latency is in
         seconds."""
@@ -220,9 +239,18 @@ class Watcher:
                 txtime = src[msgid].time
                 rxtime = dst[msgid].time
                 received.append((dst[msgid], rxtime - txtime))
-        received.sort(lambda x,y: cmp(x[0], y[0]))
+        received.sort(lambda x,y: cmp(x[0].msgid, y[0].msgid))
         return received
-
+    def abandon(self, msgid):
+        # give up on the message: remove it from the source list
+        self.source.deleteMessage(msgid)
+        # just in case, remove it from the dest lists too
+        for d in self.dests:
+            d.deleteMessage(msgid)
+    def flush(self, msgid):
+        return self.abandon(msgid)
+    
+    
 def do_test(wclass):
     # watch two maildirs
     w = wclass()
