@@ -661,6 +661,7 @@ PGP ID.")
 	  (with-expect proc
 	    (message "Sending passphrase...")
 	    (expect-send (concat passwd "\n"))
+	    (or mc-passwd-timeout (mc-deactivate-passwd t))
 	    (expect "No files specified.  Using stdin."
 	      (message "Passphrase sent.  Signing...")
 	      (set-buffer oldbuf)

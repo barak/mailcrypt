@@ -1,4 +1,9 @@
-1999-03-05  Leonard R. Budney  <lbudney@pobox.com>
+1999-03-12  Gregory Neil Shapiro  <gshapiro@sendmail.org>
+
+	* mc-pgp5.el (mc-pgp50-sign-parser): Deactivate the
+	  password if mc-passwd-timeout is set to nil.
+
+1999-03-05  Brian Warner <warner@lothar.com>
 
 	* mc-gpg.el: Patched GPG-signing code to work correctly with
 	GPG-0.9.3. Thanks to Brian Warner.
