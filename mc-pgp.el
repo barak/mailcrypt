@@ -94,7 +94,8 @@ PGP ID.")
     (let ((keyring (concat (mc-get-pgp-keydir) "secring"))
 	  (result (cdr-safe (assoc str mc-pgp-key-cache)))
 	  (key-regexp
-	   "^\\(pub\\|sec\\)\\s +[^/]+/\\(\\S *\\)\\s +\\S +\\s +\\(.*\\)$")
+	   "^\\(\\(pub\\|sec\\)\\s +[^/]+/\\(\\S *\\)\\s +\\S +\\s +\\(.*\\)\\)$")
+	  (revoke-regexp "REVOKED")
 	  (obuf (current-buffer))
 	  buffer)
       (if (null result)
@@ -105,17 +106,26 @@ PGP ID.")
 			      "+language=en" "-kv" str keyring)
 		(set-buffer buffer)
 		(goto-char (point-min))
-		(if (re-search-forward key-regexp nil t)
+		(while (and (null result)
+			    (re-search-forward key-regexp nil t))
 		    (progn
 		      (setq result
 			    (cons (buffer-substring-no-properties
-				   (match-beginning 3) (match-end 3))
+				   (match-beginning 4) (match-end 4))
 				  (concat
 				   "0x"
 				   (buffer-substring-no-properties
-				    (match-beginning 2) (match-end 2)))))
-		      (setq mc-pgp-key-cache (cons (cons str result)
-						   mc-pgp-key-cache)))))
+				    (match-beginning 3) (match-end 3)))))
+		      (setq key-start (match-beginning 1))
+		      (setq key-end (match-end 1))
+		      (save-restriction
+			    (narrow-to-region key-start key-end)
+			    (goto-char (point-min))
+			    (if (re-search-forward revoke-regexp nil t)
+				(setq result nil)
+			      (setq mc-pgp-key-cache 
+				    (cons (cons str result)
+					  mc-pgp-key-cache)))))))
 	    (if buffer (kill-buffer buffer))
 	    (set-buffer obuf)))
       (if (null result)

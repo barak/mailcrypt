@@ -78,7 +78,7 @@ PGP ID.")
     (let ((result (cdr-safe (assoc str mc-pgp50-key-cache)))
 	  (keyid-re "^sec\\S *\\s +\\w+\\s +\\(\\w+\\)\\s +")
 	  (userid-re "^uid\\s +\\(.*\\)$")
-	  (revoke-re "^.*REVOKED.*$")
+	  (revoke-re "REVOKED")
 	  (obuf (current-buffer))
 	  buffer)
       (if (null result)
@@ -89,24 +89,36 @@ PGP ID.")
 			      "+language=en" "-l" str)
 		(set-buffer buffer)
 		(goto-char (point-min))
-		;; first find a keyid line for a secret key
-		(if (re-search-forward keyid-re nil t)
-		    ;; groovy. Remember the keyid and then search forward for
-		    ;; the userid
-		    (progn
-		      (setq keyid (buffer-substring-no-properties
-				   (match-beginning 1) (match-end 1)))
-		      (if (re-search-forward userid-re nil t)
-			  (progn
-			    (setq result (cons (buffer-substring-no-properties
-						(match-beginning 1)
-						(match-end 1))
-					       keyid))
-			    (setq mc-pgp50-key-cache (cons (cons str result)
-							   mc-pgp50-key-cache))
-			    )))))
-	    (if buffer (kill-buffer buffer))
-	    (set-buffer obuf)))
+
+		(while 
+		    (and (null result)
+			 ;; first find a keyid line for a secret key
+			 (re-search-forward keyid-re nil t))
+		  ;; groovy. Remember the keyid and then search
+		  ;; forward for the userid
+		  (progn
+		    (setq keyid (buffer-substring-no-properties
+				 (match-beginning 1) (match-end 1)))
+		    (setq key-start (match-beginning 1))
+		    (if (re-search-forward userid-re nil t)
+			(progn
+			  (save-restriction
+			    (setq result 
+				  (cons (buffer-substring-no-properties
+					 (match-beginning 1)
+					 (match-end 1))
+					keyid))
+			    (setq key-end (match-end 1))
+			    (narrow-to-region key-start key-end)
+			    (goto-char (point-min))
+			    (if (re-search-forward revoke-re nil t)
+				(setq result nil)
+				(setq mc-pgp50-key-cache 
+				      (cons (cons str result)
+					    mc-pgp50-key-cache)))
+			    ))))))
+	(if buffer (kill-buffer buffer))
+	(set-buffer obuf)))
       (if (null result)
 	  (error "No PGP secret key for %s" str))
       result)))
