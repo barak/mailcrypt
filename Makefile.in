@@ -19,7 +19,7 @@ infodir=$(prefix)/info
 INFOFILES  = mailcrypt.info mailcrypt.info-1 mailcrypt.info-2
 
 # Where to put the helper scripts
-bindir=@exec_prefix@/bin
+bindir=$(prefix)/bin
 
 # Installation command
 INSTALL = @INSTALL@
