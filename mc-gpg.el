@@ -326,7 +326,7 @@ GPG ID.")
     (if (equal str "***** CONVENTIONAL *****") nil
       (let ((result (cdr-safe (assoc str mc-gpg-key-cache)))
 	    (key-regexp
-	     "^sec:[^:]*:[^:]*:[^:]*:\\([^:]*\\):[^:]*:[^:]*:[^:]*:[^:]*:\\([^:]*\\):$"
+	     "^\\(sec\\|pub\\):[^:]*:[^:]*:[^:]*:\\([^:]*\\):[^:]*:[^:]*:[^:]*:[^:]*:\\([^:]*\\):$"
 	     )
 	    (obuf (current-buffer))
 	    buffer)
@@ -354,11 +354,11 @@ GPG ID.")
 		      (progn
 			(setq result
 			      (cons (buffer-substring-no-properties
-				     (match-beginning 2) (match-end 2))
+				     (match-beginning 3) (match-end 3))
 				    (concat
 				     "0x"
 				     (buffer-substring-no-properties
-				      (match-beginning 1) (match-end 1)))))
+				      (match-beginning 2) (match-end 2)))))
 			(setq mc-gpg-key-cache (cons (cons str result)
 						     mc-gpg-key-cache)))))
 					;(if buffer (kill-buffer buffer))
