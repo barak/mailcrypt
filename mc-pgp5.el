@@ -358,6 +358,38 @@
 	      (setq results (cons result rgn)))
 			
 
+	     ;; OPTION 1.a:  The data is now signed, but is 8bit data.
+	     ("-----END PGP MESSAGE-----"
+
+	      ;; Catch the exit status.
+	      (setq result (process-exit-status proc))
+	      (delete-process proc)
+	      (message "Signing complete.")
+
+	      ;; Delete everything preceding the signed data.
+	      (goto-char (point-max))
+	      (re-search-backward 
+	       "-----BEGIN PGP SIGNED MESSAGE-----" nil t)
+	      (delete-region (point-min) (match-beginning 0))
+	      (setq rgn (point-min))
+
+	      ;; Convert out CR/NL -> NL
+	      (goto-char (point-min))
+	      (while (search-forward "\r\n" nil t)
+		(replace-match "\n"))
+
+	      ;; Delete everything after the signature.
+	      (goto-char (point-min))
+	      (re-search-forward
+	       "-----END PGP MESSAGE-----" nil t)
+	      (delete-region (match-end 0) (point-max))
+			 
+	      ;; Return the exit status, with the region
+	      ;; limits!
+	      (setq rgn (cons rgn (point-max)))
+	      (setq results (cons result rgn)))
+			
+
 	     ;; OPTION 2:  Awww...bad passphrase!
 	     ("Enter pass phrase:" 
 	      (mc-deactivate-passwd)
