@@ -1,4 +1,38 @@
+2002-11-29  Brian Warner  <warner@lothar.com>
+
+	* tests/gpg-testcases/E.latin1.e1r
+	* tests/gpg-testcases/CS.latin1.s1v
+	* tests/gpg-testcases/E.e1re3re4r
+	* tests/make_gpg_testcases.py (Latin1_CS_Case, Latin1_E_Case, EE_Case):
+	add some new test cases
+
+	* tests/remailer/gtkwatcher.glade
+	* tests/remailer/gtkwatcher.gladep: rewrite using glade-2
+	
+	* tests/remailer/gtkwatcher.py (WatcherGUI, GtkWatcher)
+	* tests/remailer/watcher.py (Watcher): rewrite: now uses gtk2, Maildir
+	class, DNotify if available (or 10-second poll if not).
+
+	* tests/remailer/maildir.py
+	* tests/remailer/maildirgtk.py
+	* tests/remailer/maildirtwisted.py: classes to watch Maildirs using
+	various	event loops.
+
+	* tests/remailer/dnotify.py: python interface to linux 2.4.x DNotify
+	facility, to get a signal when a directory changes
+
 2002-09-26  Brian Warner  <warner@lothar.com>
+
+	* tests/remailer/watcher.py (NewsWatcher): added code to poll an
+	NNTP server, to test Anon-Post-To: remailer usage.
+
+2002-09-26  Brian Warner  <warner@lothar.com>
+
+	* mailcrypt.texi (Remailer Quick Start): Emphasize that you can
+	only rewrite for one remailer/chain at a time (the prompt accepts
+	a single word, not a comma-separated-list), but point to the
+	section on building up chains of remailers for reference. Closes
+	SF#579442
 
 	* mailcrypt: Release mailcrypt 3.5.8
 
