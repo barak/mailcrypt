@@ -416,7 +416,7 @@ GPG ID.")
     (if recipients
 	(setq args (append (apply 'append 
 				  (mapcar '(lambda (x) 
-					     (list "--remote-user" 
+					     (list "--recipient" 
 						   (concat "\"" x "\""))) 
 					  recipients))
 			   args)))
