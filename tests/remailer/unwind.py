@@ -4,10 +4,13 @@ import GnuPGInterface
 import string, re, sys
 
 gnupg = GnuPGInterface.GnuPG()
-gnupg.options.extra_args += ['--homedir', 'remkeys']
+gnupg.options.extra_args += ['--homedir', 'remkeys', '--batch']
 
 # The keyring should hold private keys for all the remailers in the chain,
 # and each one should have a passphrase equal to the name of the key.
+
+def passphrase(bigname):
+    return re.search(r'(\w+@\w+\.\w+)', bigname).group(1)
 
 def unwind(recipient, message):
     """Unwind a message. Takes two parameters: the To: address of the
@@ -68,10 +71,11 @@ def unwind(recipient, message):
         crypttext = message[3:]
         assert(message[3] == '-----BEGIN PGP MESSAGE-----')
         # decrypt here
-        gnupg.passphrase = recipient # passphrase == keyname
+        gnupg.passphrase = passphrase(recipient) # passphrase == keyname
         devnull = open("/dev/null", "w")
         p = gnupg.run(['--decrypt'],
                       create_fhs=['stdin', 'stdout'],
+                      # comment out the next line to view stderr
                       attach_fhs={'stderr': devnull},
                       )
         p.handles['stdin'].write(string.join(crypttext,"\n"))
@@ -93,6 +97,8 @@ def unwind(recipient, message):
     
     r = re.search(r'^Anon-To: (.*)$', message[1])
     if not r:
+        print "Bad Message, no Anon-To"
+        print message
         raise 'bad message', "no anon-to"
     step['recipient'] = recipient
     step['anon-to'] = r.group(1)
@@ -117,7 +123,7 @@ def insistEquals(one, two):
     if one != two:
         raise "results don't match expected", "'%s' != '%s'" % (one, two)
 
-        
+
 def test_chain(firsthop, crypttext, plaintext, recipient, chain, subject=None):
     """Verify that the crypttext message does indeed match the plaintext
     message, sent to a given recipient and encrypted to the given remailer
