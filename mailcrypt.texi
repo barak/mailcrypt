@@ -156,6 +156,7 @@ Key Fetching
                                   keyrings on the local system.
 * Finger Fetch::                Fetching a key through finger.
 * HTTP Fetch::                  Fetching a key off of the Web.
+* GnuPG Fetch::                 Using GnuPG's internal keyserver interface.
 
 Miscellaneous Configuration
 
@@ -1174,6 +1175,7 @@ seconds; the default value is 30.
                                   keyrings on the local system.
 * Finger Fetch::                Fetching a key through finger.
 * HTTP Fetch::                  Fetching a key off of the Web.
+* GnuPG Fetch::                 Using GnuPG's internal keyserver interface.
 @end menu
 
 @node Keyring Fetch, Finger Fetch, Key Fetching, Key Fetching
@@ -1201,7 +1203,7 @@ The function @code{mc-pgp-fetch-from-finger} will attempt to fetch a key
 by fingering an address and parsing the output for a PGP public key
 block.
 
-@node  HTTP Fetch,  , Finger Fetch, Key Fetching
+@node HTTP Fetch, GnuPG Fetch, Finger Fetch, Key Fetching
 @section HTTP Fetch
 
 @findex mc-pgp-fetch-from-http
@@ -1276,6 +1278,26 @@ instead of the one at MIT, of course.
 
 Note that fetching from a key server can be somewhat slow, so be
 patient.  (At least it beats the tar out of the Email interface.)
+
+@node GnuPG Fetch,  , HTTP Fetch, Key Fetching
+@section GnuPG Fetch
+
+GnuPG happens to have a built-in HKP keyserver interface which is
+completely independent from MailCrypt's own key fetching support.  If
+your @file{.gnupg/options} file includes a line like:
+
+@samp{keyserver wwwkeys.pgp.net}
+
+then any operation that needs an otherwise-unavailable public key
+(which generally means signature verification) will automatically
+contact the keyserver and try to retrieve the key.  It sends the hex
+keyid to the server, not a string, so it could only be used at
+encryption time if you already know the keyid of your recipients.
+
+You can also tell GPG to explicitly request a key (by hex keyid) with
+@samp{--recv-keys}, or to send your own key with @samp{--send-keys}.
+Check the GnuPG manual for details.
+
 
 @node Miscellaneous Configuration, Tips, Key Fetching, Top
 @chapter Miscellaneous Configuration
