@@ -1,0 +1,34 @@
+
+EMACS=@EMACS@
+GNUPG=gpg
+
+# test cases and a packed test keyring are included in the distribution
+# tarball
+
+GPG_KEYS = gpg-keys/full-rings/pubring.gpg gpg-keys/exported/pubring.gpg
+
+check: gpg-testcases $(GPG_KEYS)
+	$(EMACS) -q --no-site-file -batch -l test-gpg.el -f run-all-tests
+
+onetest: gpg-testcases $(GPG_KEYS)
+	$(EMACS) -q --no-site-file -batch -l test-gpg.el -f run-one-test
+
+$(GPG_KEYS): 
+	$(MAKE) -C gpg-keys unpack
+	touch $@
+
+# When building from source, this script is used to make the testcases.
+# It puts test case files in gpg-testcases/* .
+gpg-testcases: $(GPG_KEYS) make_gpg_testcases.py
+	./make_gpg_testcases.py --outdir=gpg-testcases --gpg=$(GNUPG)
+
+matrix-testcases: rings
+	mkdir matrix-test-cases
+	for gpg in $(ALL_GNUPGS); do \
+	 mkdir matrix-decrypt-cases/$(gpg); \
+	 perl make-testcases.pl --outdir=matrix-decrypt-cases/$(gpg) --gpg=$(gpg);\
+	done
+
+
+clean:
+	rm -rf gpg-testcases
