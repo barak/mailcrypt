@@ -1,4 +1,4 @@
-;; mc-pgp.el, PGP support for Mailcrypt
+; mc-pgp.el, PGP support for Mailcrypt
 ;; Copyright (C) 1998  Len Budney <lbudney@pobox.com>
 
 ;;{{{ Licensing
@@ -114,9 +114,15 @@ PGP ID.")
       result)))
 
 ;; Thanks to Brian Warner
-(defun mc-pgp50-generic-parser (result)
+(defun mc-pgp50-generic-parser (proc oldbuf start end newbuf passwd)
   (let (start)
+    (process-send-region proc beg end)
+    (set-buffer newbuf)
+    (process-send-eof proc)
+    (while (eq 'run (process-status proc))
+      (accept-process-output proc 5))
     (goto-char (point-min))
+    (setq result (process-exit-status proc))
     (cond ((not (eq result 0))
 	   (prog1
 	       nil
@@ -135,7 +141,9 @@ PGP ID.")
 	    (setq start (match-beginning 0))
 	    (goto-char (point-max))
 	    (re-search-backward "^-----END PGP.*-----\n" nil t)
-	    (cons start (match-end 0)))))))
+	    (setq end (match-end 0))
+	    (set-buffer obuf)
+	    (cons t (cons start end)))))))
 
 (defun mc-pgp50-process-region 
   (beg end passwd program args parser &optional buffer)
@@ -232,7 +240,7 @@ PGP ID.")
 	    ;; Delete everything after the signature.
 	    (goto-char (point-min))
 	    (re-search-forward
-	     "-----END PGP MESSAGE-----" nil t)
+	     "-----END PGP MESSAGE-----\n" nil t)
 	    (delete-region (match-end 0) (point-max))
 			 
 	    ;; Return the exit status, with the region
@@ -607,7 +615,7 @@ PGP ID.")
 	      ;; Delete everything after the signature.
 	      (goto-char (point-min))
 	      (re-search-forward
-	       "-----END PGP SIGNATURE-----" nil t)
+	       "-----END PGP SIGNATURE-----\n" nil t)
 	      (delete-region (match-end 0) (point-max))
 			 
 	      ;; Return the exit status, with the region
@@ -639,7 +647,7 @@ PGP ID.")
 	      ;; Delete everything after the signature.
 	      (goto-char (point-min))
 	      (re-search-forward
-	       "-----END PGP MESSAGE-----" nil t)
+	       "-----END PGP MESSAGE-----\n" nil t)
 	      (delete-region (match-end 0) (point-max))
 			 
 	      ;; Return the exit status, with the region
@@ -730,14 +738,11 @@ PGP ID.")
   (let ((buffer (get-buffer-create mc-buffer-name))
 	args)
     (setq id (or id mc-pgp50-user-id))
-    (setq args (list "+verbose=1" "+batchmode" "+language=en" "-kxaf" id))
+    (setq args (list "+verbose=1" "+batchmode" "+language=en" "-x" id))
     (if mc-pgp50-comment
 	(setq args (cons (format "+comment=\"%s\"" mc-pgp50-comment) args)))
-    (if mc-pgp50-alternate-keyring
-	(setq args (append args (list (format "+pubring=%s"
-					      mc-pgp50-alternate-keyring)))))
 
-    (if (mc-pgp50-process-region (point) (point) nil mc-pgp50-path
+    (if (mc-pgp50-process-region (point) (point) nil mc-pgp50-pgpk-path
 			   args 'mc-pgp50-generic-parser buffer)
 	(progn
 	  (mc-message "Key for user ID: .*" buffer)
