@@ -1,4 +1,4 @@
-  Mailcrypt 3.5.1 is Available for Download
+  Mailcrypt 3.5.2 is Available for Download
 
 
   1.  Introduction
@@ -7,8 +7,8 @@
   Mailcrypt is an Emacs Lisp package which provides a simple interface
   to message encryption with PGP (you do use Emacs to handle your mail
   and news, right?). Mailcrypt version 3.5b1 and higher have been
-  extended to handle both PGP 2.6.x and PGP 5.x.  Versions 3.5b7 and
-  higher, including 3.5.1, also support encryption with GnuPG. Thanks
+  extended to handle both PGP 2.6.x and PGP 5.x.  Versions 3.5 and
+  higher, including 3.5.2, also support encryption with GnuPG. Thanks
   to Brian Warner.
 
 
@@ -16,20 +16,30 @@
 
   2.1. New Features/Enhancements
 
-  Cleaned up PGP 5.0 code, reducing compiler warnings. Cleaned up
-  Makefile and configuration support. Eliminated Perl wrapper for
-  GPG support. Fixed a bug which prevented signing 8-bit text.
-  Fixed a compatability bug with mh-e. Continued updating of
-  documentation. Various bug fixes.
+   We have key fetching for PGP 5.0! Okay, it uses finger and HTTP
+   only so far, but it's a very good start.
+
+   Improved compatibility for XEmacs users! We've fixed up several
+   gotchas which prevented version 3.5.1 from working "out of the box"
+   with XEmacs. Cross your fingers...it should be just fine now.
+
+   Added key fetching for PGP 5.0 using finger or HTTP, but not hkp
+   yet. Fixed a bug which dumped GNUS users into the wrong buffer
+   after verifying a signature. Fixed a compatibility bug between
+   XEmacs and FSF Emacs in mc-setversion. Fixed a bug in mh-e support
+   so that users can view decrypted messages without saving
+   them. Several minor bugfixes.
+
 
   2.2.	Stable Features for PGP 5.0 and GnuPG
 
-  Support for GnuPG encryption.  Key snarfing functionality for PGP
-  5.0.  Messages from PGP 5.0 operations now resemble more closely the
+  Support for GnuPG.  Key snarfing functionality for PGP 5.0.
+  Messages from PGP 5.0 operations now resemble more closely the
   messages generated for version 2.6.  Encryption works correctly,
   even when the secret keyring is not available (a requested feature
-  for paranoid types ;-).  Further updated documentation for support
-  under various mail packages.
+  for paranoid types ;-).  Mixmaster and Cypherpunk remailers can be
+  used in PGP 5.0 mode, if the user has an RSA key. Further updated
+  documentation for support under various mail packages.
 
 
   2.3.	Features for PGP 2.6.x (stable)
@@ -43,15 +53,19 @@
 
   2.4.	Still To Do
 
-  o  Add key fetching support for PGP 5.x.
+  o  Add hkp URLS and "pgpk -a" to key fetching support for PGP 5.x.
 
   o  Restore functionality on Windows 95/98/NT. If tiny-pgp can do it,
      we can too!
 
+  o  Refine Mailcrypt schemes so that alternate backends, like Crypt++,
+     can be used.
+
+
 
   3.  Downloading Mailcrypt
 
-  The Official Mailcrypt version 3.5.1 can be downloaded at:
+  The Official Mailcrypt version 3.5.2 can be downloaded at:
 
   <http://www.pobox.com/~lbudney/linux/software/mailcrypt.html>
 

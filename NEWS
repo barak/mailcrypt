@@ -1,3 +1,20 @@
+Noteworthy changes in Mailcrypt version 3.5.2:
+
+ * Added key fetching for PGP 5.0. Uses finger or HTTP, but not hkp yet.
+
+ * Fixed a bug which dumped GNUS users into the wrong buffer after
+   verifying a signature.
+
+ * Fixed a compatibility bug between XEmacs and FSF Emacs in
+   mc-setversion.
+
+ * Fixed a bug in mh-e support so that users can view decrypted
+   messages without saving them.
+
+ * Several minor bugfixes.
+
+
+
 Noteworthy changes in Mailcrypt version 3.5b4:
 
  * Fixed a bug which broke encryption to multiple recipients (PGP 5).
