@@ -792,7 +792,7 @@ PGP ID.")
     (while (eq 'run (process-status proc))
       (accept-process-output proc 5))
     (setq result (process-exit-status proc))
-    (cons (eq result 0) t)))
+    (list (eq result 0) t)))
 
 (defun mc-pgp50-snarf-keys (start end)
   ;; Returns number of keys found.
