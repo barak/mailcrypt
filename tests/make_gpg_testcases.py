@@ -145,35 +145,122 @@ def clearsign(signer, plaintext):
     #crypttext = stdout.read()
     #return crypttext
 
-def make_plaintext():
-    return "This is a plaintext message\n"
-def date_string():
-    # mc-gpg.el takes the YYYY-MM-DD date string from the SIG_ID status-fs
-    # line and delivers it to the user. This appears to be the GMT date of the
-    # signature. Extract the same thing here so we can tell the test harness
-    # what to expect. This needs to run on the same day as the gpg invocation
-    # used to create the signature, but this whole program only takes a few
-    # seconds to execute.
-    return time.strftime("%Y-%m-%d", time.gmtime()) # GMT
+class TestCase:
+    def __init__(self, filename):
+        self.filename = filename
+        self.plaintext = self.make_plaintext()
+        self.d = {}
+        self.d['name'] = self.filename
+        self.d['plaintext'] = self.plaintext
+        self.d['error'] = None
+        self.d['signature_status'] = None
 
+    def make_plaintext(self):
+        return "This is a plaintext message\n"
+    def date_string(self):
+        # mc-gpg.el takes the YYYY-MM-DD date string from the SIG_ID
+        # status-fs line and delivers it to the user. This appears to be the
+        # GMT date of the signature. Extract the same thing here so we can
+        # tell the test harness what to expect. This needs to run on the
+        # same day as the gpg invocation used to create the signature, but
+        # this whole program only takes a few seconds to execute.
+        return time.strftime("%Y-%m-%d", time.gmtime()) # GMT
 
-def e(filename, recip):
-    plaintext = make_plaintext()
-    d = {}
-    d['name'] = filename
-    d['encryption_id'] = "%s <%s@test>" % (recip, recip)
-    d['passphrase'] = recip
-    if recip == "other" or recip == "unknown":
-        d['error'] = "This message is not addressed to you"
-        d['plaintext'] = None
-    else:
-        d['error'] = None
-        d['plaintext'] = plaintext
-    d['signature_status'] = None
-    d['crypttext'] = "\n" + encrypt(recip, plaintext)
-    f = open(os.path.join(testcasedir,filename), "w")
-    emit_alist(f, d)
-    f.close()
+    def encrypted_fields(self, recip):
+        # run this after signed_fields so [signature_status] gets cleared
+        self.d['encryption_id'] = "0x%s" % id[recip][-16:]
+        self.d['passphrase'] = recip
+        if recip == "other" or recip == "unknown":
+            self.d['error'] = "This message is not addressed to you"
+            self.d['plaintext'] = None
+            self.d['signature_status'] = None
+
+    def symencrypted_fields(self):
+        self.d['encryption_id'] = "***** CONVENTIONAL *****"
+        self.d['passphrase'] = self.passphrase
+
+    def signed_fields(self, signer):
+        self.d['signature_status'] = ("Good signature from '%s <%s@test>' " + \
+                                 "TRUST_%s made %s") % \
+                                 (signer, signer,
+                                  trustmap[signer], self.date_string())
+        if signer == "unknown":
+            self.d['signature_status'] = "cannot check signature " + \
+                                         "from keyid %s" % \
+                                         id[signer][-16:]
+            # comes from 'cannot check signature' warning
+    def process(self, testcasedir):
+        self.make_crypttext()
+        f = open(os.path.join(testcasedir, self.filename), "w")
+        emit_alist(f, self.d)
+        f.close()
+        
+
+class E_Case(TestCase):
+    def __init__(self, filename, recip):
+        TestCase.__init__(self, filename)
+        self.recip = recip
+        self.encrypted_fields(recip)
+    def make_crypttext(self):
+        self.d['crypttext'] = "\n" + encrypt(self.recip, self.plaintext)
+        
+class ES_Case(TestCase):
+    def __init__(self, filename, recip, signer):
+        TestCase.__init__(self, filename)
+        self.recip = recip
+        self.signer = signer
+        self.signed_fields(signer)
+        self.encrypted_fields(recip)
+    def make_crypttext(self):
+        self.d['crypttext'] = "\n" + signencrypt(self.recip,
+                                                 self.signer,
+                                                 self.plaintext)
+
+class S_Case(TestCase):
+    def __init__(self, filename, signer):
+        TestCase.__init__(self, filename)
+        self.signer = signer
+        self.signed_fields(signer)
+    def make_crypttext(self):
+        self.d['crypttext'] = "\n" + sign(self.signer, self.plaintext)
+
+class CS_Case(TestCase):
+    def __init__(self, filename, signer):
+        TestCase.__init__(self, filename)
+        self.signer = signer
+        self.signed_fields(signer)
+    def make_crypttext(self):
+        self.d['crypttext'] = "\n" + clearsign(self.signer, self.plaintext)
+
+class SYM_Case(TestCase):
+    def __init__(self, filename, passphrase):
+        TestCase.__init__(self, filename)
+        self.passphrase = passphrase
+        self.symencrypted_fields()
+    def make_crypttext(self):
+        self.d['crypttext'] = "\n" + sym(self.passphrase, self.plaintext)
+
+def make_cases():
+    d = testcasedir
+    E_Case("E.e1r", "owner1").process(d)
+    E_Case("E.e2r", "owner2").process(d)
+    E_Case("E.e3", "other").process(d)
+    E_Case("E.e4", "unknown").process(d)
+    ES_Case("ES.e1r.s1v", "owner1", "owner1").process(d)
+    ES_Case("ES.e1r.s2v", "owner1", "trusted").process(d)
+    ES_Case("ES.e1r.s3v", "owner1", "untrusted").process(d)
+    ES_Case("ES.e1r.s4", "owner1", "unknown").process(d)
+    ES_Case("ES.e3.s1v", "other", "owner1").process(d)
+    ES_Case("ES.e4.s1v", "unknown", "owner1").process(d)
+    S_Case("S.s1v", "owner1").process(d)
+    S_Case("S.s2v", "trusted").process(d)
+    S_Case("S.s3v", "untrusted").process(d)
+    S_Case("S.s4", "unknown").process(d)
+    SYM_Case("SE", "password").process(d)
+    CS_Case("CS.s1v", "owner1").process(d)
+    CS_Case("CS.s2v", "trusted").process(d)
+    CS_Case("CS.s3v", "untrusted").process(d)
+    CS_Case("CS.s4", "unknown").process(d)
 
 # get keyids
 id = {}
@@ -188,91 +275,6 @@ trustmap = {
     'trusted': "MARGINAL",
     'untrusted': "UNDEFINED",
     }
-
-def es(filename, recip, signer):
-    plaintext = make_plaintext()
-    d = {}
-    d['name'] = filename
-    d['encryption_id'] = "%s <%s@test>" % (recip, recip)
-    d['passphrase'] = recip
-    d['signature_status'] = ("Good signature from '%s <%s@test>' " + \
-                             "TRUST_%s made %s") % \
-                             (signer, signer,
-                              trustmap[signer], date_string())
-    if signer == "unknown":
-        d['signature_status'] = "cannot check signature from keyid %s" % \
-                                id[signer][-16:]
-        # comes from 'cannot check signature' warning
-    if recip == "other" or recip == "unknown":
-        d['error'] = "This message is not addressed to you"
-        d['plaintext'] = None
-        d['signature_status'] = None
-    else:
-        d['error'] = None
-        d['plaintext'] = plaintext
-    d['crypttext'] = "\n" + signencrypt(recip, signer, plaintext)
-    f = open(os.path.join(testcasedir,filename), "w")
-    emit_alist(f, d)
-    f.close()
-
-def s(filename, signer):
-    plaintext = make_plaintext()
-    d = {}
-    d['name'] = filename
-    d['error'] = None
-    d['plaintext'] = plaintext
-    d['signature_status'] = ("Good signature from '%s <%s@test>' " + \
-                             "TRUST_%s made %s") % \
-                             (signer, signer,
-                              trustmap[signer], date_string())
-    if signer == "unknown":
-        d['signature_status'] = "cannot check signature from keyid %s" % \
-                                id[signer][-16:]
-        # comes from 'cannot check signature' warning
-    d['crypttext'] = "\n" + sign(signer, plaintext)
-    f = open(os.path.join(testcasedir,filename), "w")
-    emit_alist(f, d)
-    f.close()
-
-def cs(filename, signer):
-    plaintext = make_plaintext()
-    d = {}
-    d['name'] = filename
-    d['error'] = None
-    d['plaintext'] = plaintext
-    d['signature_status'] = ("Good signature from '%s <%s@test>' " + \
-                             "TRUST_%s made %s") % \
-                             (signer, signer,
-                              trustmap[signer], date_string())
-    if signer == "unknown":
-        d['signature_status'] = "cannot check signature from keyid %s" % \
-                                id[signer][-16:]
-        # comes from 'cannot check signature' warning
-    d['crypttext'] = "\n" + clearsign(signer, plaintext)
-    f = open(os.path.join(testcasedir,filename), "w")
-    emit_alist(f, d)
-    f.close()
-
-def make_cases():
-    e("E.e1r", "owner1")
-    e("E.e2r", "owner2")
-    e("E.e3", "other")
-    e("E.e4", "unknown")
-    es("ES.e1r.s1v", "owner1", "owner1")
-    es("ES.e1r.s2v", "owner1", "trusted")
-    es("ES.e1r.s3v", "owner1", "untrusted")
-    es("ES.e1r.s4", "owner1", "unknown")
-    es("ES.e3.s1v", "other", "owner1")
-    es("ES.e4.s1v", "unknown", "owner1")
-    s("S.s1v", "owner1")
-    s("S.s2v", "trusted")
-    s("S.s3v", "untrusted")
-    s("S.s4", "unknown")
-    sym("SE", "password")
-    cs("CS.s1v", "owner1")
-    cs("CS.s2v", "trusted")
-    cs("CS.s3v", "untrusted")
-    cs("CS.s4", "unknown")
     
 if __name__ == "__main__":
     os.mkdir(testcasedir)
