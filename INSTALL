@@ -108,6 +108,18 @@ like the following:
 This is the *only* special action required to install Mailcrypt for
 FSF Emacs 19.28.
 
+FSF Emacs 20.3 or higher
+========================
+
+To use Mailcrypt with rmail, put the following in your .emacs:
+
+     (add-hook 'rmail-show-message-hook 'mc-install-read-mode)
+
+Don't use the following, which worked for older emacsen:
+
+     (add-hook 'rmail-mode-hook 'mc-install-read-mode)
+
+
 XEmacs 20.x
 ===========
 
