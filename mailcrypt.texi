@@ -676,10 +676,12 @@ first.  Begin with the following steps:
 @enumerate
 
 @item
-Do @samp{finger rlist@@noisebox.remailer.org > ~/.remailers}.
-This will create a Levien-format list of remailers in the file
-@file{.remailers} in your home directory.  Mailcrypt will parse this the
-first time you access a remailer function.
+Do @samp{finger rlist@@noisebox.remailer.org > ~/.remailers}. This
+will create a Levien-format list of remailers in the file
+@file{.remailers} in your home directory (see the variable
+@code{mc-levien-file-name}). Mailcrypt will parse this the first time
+you access a remailer function. @samp{rlist@@mixmaster.shinn.net} is
+another good place to get this list.
 
 @item
 Look over the @file{.remailers} file and find the ones you want to use.
