@@ -6,7 +6,7 @@ if __name__ == '__main__':
 
 import gtk
 
-import os, os.path, stat, time, string, cPickle
+import os, os.path, stat, time, string
 from maildirgtk import MaildirGtk
 from nntplib import NNTP
 
@@ -49,17 +49,19 @@ class MessageWatcher:
         msgid = None
         key = "MailcryptRemailerMessageId="
         for line in lines:
-            data = data + line
+            line = line.rstrip("\n")
+            data = data + line + "\n"
             where = line.find(key)
             if where != -1:
                 where = where + len(key)
-                msgid = line[where:-1]
+                msgid = line[where:]
+        if msgid == None:
+            return
         m = Message(msgid, name, time, data)
         if self.msgs.get(msgid, None) != None:
             print "Hey, file %s duplicates msgid %s from file %s" % \
                   (filename, msgid, self.msgs[msgid].filename)
-        if msgid != None:
-            self.msgs[msgid] = m
+        self.msgs[msgid] = m
         if self.checker:
             self.checker(m)
             
@@ -100,6 +102,7 @@ class NewsWatcher(MessageWatcher):
     def __init__(self, server, groups,
                  user=None, pw=None, port=None, tag=None):
         MessageWatcher.__init__(self)
+        self.server = server
         self.groups = groups
         self.nntp = None  # the NNTP connection object
         self.user = user
@@ -110,22 +113,28 @@ class NewsWatcher(MessageWatcher):
         self.timeout = None
         self.pollInterval = 60
 
+    def __repr__(self):
+        return "<NewsWatcher %s:%s (%s)>" % (self.server, self.port,
+                                             ",".join(self.groups))
     def __getstate__(self):
-        d = self.__dict__.copy()
+        d = MessageWatcher.__getstate__(self)
         d['nntp'] = None # just in case
         return d
     
     def start(self):
-        self.nntp = NNTP(server, self.port, self.user, self.password,
+        self.nntp = NNTP(self.server, self.port, self.user, self.pw,
                          readermode=1)
         # only look for messages that appear after we start. Usenet is big.
         if not self.last: # only do this the first time
-            for g in groups:
+            for g in self.groups:
                 resp, count, first, last, name = self.nntp.group(g)
                 self.last[g] = int(last)
-        self.timeout = gtk.timeout_add(self.pollinterval*1000, self.doTimeout)
+                print "last[%s]: %d" % (g, self.last[g])
+        self.timeout = gtk.timeout_add(self.pollInterval*1000,
+                                       self.doTimeout)
     
     def stop(self):
+        self.nntp.quit()
         self.nntp = None
         if self.timeout:
             gtk.timeout_remove(self.timeout)
@@ -136,11 +145,12 @@ class NewsWatcher(MessageWatcher):
         return gtk.TRUE # keep going
         
     def poll(self):
+        print "polling", self
         for g in self.groups:
             resp, count, first, last, name = self.nntp.group(g)
             for num in range(self.last[g]+1, int(last)+1):
                 resp, num, id, lines = self.nntp.article("%d" % num)
-                name = "%s:%d" % (g, num)
+                name = "%s:%d" % (g, int(num))
                 if self.tag:
                     if not filter(lambda line, tag=tag: line.find(tag) != -1,
                                   lines):
