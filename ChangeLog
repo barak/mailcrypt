@@ -1,3 +1,46 @@
+2002-07-30  Brian Warner  <warner@lothar.com>
+
+	* tests/remailer/gtkwatcher.py: display message when row is selected,
+	some cosmetic improvements
+	* tests/remailer/gtkwatcher.glade: add message-viewing panel, menu bar
+	* tests/remailer/watcher.py (DirWatcher.poll): ignore messages without
+	the special message-id header
+
+	* mc-remail.el
+	(mc-remailer-preserved-headers, mc-rewrite-for-remailer): Merge
+	handling of Subject: header in with other preserved headers
+	instead of handling it specially. This should get Subject: put
+	into the ## section instead of the :: section, so most remailers
+	should copy it into the final message, allowing you to specify the
+	subject of the final plaintext email once more. Thanks to an
+	anonymous sourceforge bug submitter for the suggestion.
+	(mc-generic-pre-encrypt-function): Use Anon-To: instead of
+	Request-Remailing-To:, as the docs for modern remailers (defined
+	as MixMaster-2.9b33) prefers that command, even though they'll
+	still accept the old one. Remove the 'eric' remailer case (which
+	used Anon-Send-To:), because they've all gone away.
+
+	Note: I might have broken mixmaster 'Subject:' line support with
+	this change. It will be a few days before I can put together a
+	test setup to make sure I didn't.
+
+2002-07-29  Brian Warner  <warner@lothar.com>
+
+	* mailcrypt.texi (Remailer Quick Start): Update finger addresses
+	for remailer lists again, since frog's list seems to keep moving
+	around. Point at shinn, also mention noisebox and efga.
+
+	* tests/remailer/gtkwatcher.py, gtkwatcher.glade: more test tools.
+	This is a little gtk/python app to watch some Maildir-style
+	directories for messages. The idea is to send messages through a
+	remailer chain back into one of these directories. This app keeps
+	track of which messages are still outstanding.
+	* tests/remailer/test-remailer2.el: functions to speed up testing
+	remailer code. Adds 'C-c / t' annotate command to mc-write-mode
+	when loaded, which appends a parseable sequence number to the
+	message and stuffs a plaintext copy into the directory watched by
+	gtkwatcher.py
+
 2002-07-26  Brian Warner  <warner@lothar.com>
 
 	* tests/remailer/watcher.py: tool to help with remailer testing
