@@ -1,5 +1,8 @@
 2002-09-24  Brian Warner  <warner@lothar.com>
 
+	* tests/remailer/Makefile.in (have-py-gnupg.stamp): check for
+	GnuPGInterface before attempting to run tests
+
 	* NEWS: mention remailer test framework
 
 	* configure.in (AC_OUTPUT): build tests/remailer/Makefile too
