@@ -1,3 +1,12 @@
+2003-11-06  Kevin Bube  <kbube@users.sourceforge.net>
+
+	* mc-gpg.el: added a function for fetching keys by making use of
+	the gpg --recv-key feature. Also ported a function from mc-pgp.el
+	to mc-gpg.el to import keys by the finger protocol.
+
+	* Updated other files so that (mc-gpg-fetch-key) is used if
+	(mc-scheme-gpg) is used.
+
 2003-07-25  Brian Warner  <warner@lothar.com>
 
 	* mc-toplev.el (mc-gnus-decrypt-message): use
