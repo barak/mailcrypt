@@ -5,6 +5,7 @@
 (load-library "mc-gpg")
 (setq mc-gpg-extra-args '("--homedir" "gpg-keys/exported"))
 (setq mc-test-testcasedir "gpg-testcases")
+(setq mc-gpg-always-fetch 'never)
 
 (defvar mc-test-verbose nil)
 
@@ -93,6 +94,7 @@
 	expected-error expected-plaintext expected-sigstatus)
 
     (setq b (get-buffer-create "mc crypttext"))
+    (message "Testing %s ..." file)
     (if mc-test-verbose
         (message "testing with case %s" testcase-file))
     (setq testcase (mc-test-load-testcase testcase-file))
@@ -160,7 +162,7 @@
 	  (error "unexpected signature status '%s'" sigstatus))
       )
 
-    (message "test %s passed" file)
+    (message " test %s passed" file)
 ))
 
 ; error works liks this:
@@ -170,7 +172,7 @@
 (defun run-one-test ()
   ; it would be nice to take the test name from argv. see (command-line-args)
   (setq mc-test-verbose t)
-  (mc-test-decrypt-test "CS.s1v")
+  (mc-test-decrypt-test "ES.e1r.s1v")
 )
 
 (defun run-all-tests ()
