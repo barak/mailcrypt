@@ -1,3 +1,14 @@
+2001-11-19  Brian Warner  <warner@lothar.com>
+
+	* Makefile.in (install-info): Attempt portability between
+	texinfo's 'install-info' and debian's, by removing everything
+	except --info-dir from the invocation of install-info, and
+	embedding the menu entry text inside the .info file. Thanks to Kai
+	Grossjohann for the patch.
+	(mailcrypt.ps): use 'dvips -f' to generate the .ps file
+
+	* mailcrypt.texi: embed menu entry text with @direntry section.
+
 2001-11-05  Brian Warner  <warner@lothar.com>
 
 	* ChangeLog.1, Makefile.in: revived the real old ChangeLog as
