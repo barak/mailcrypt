@@ -462,9 +462,7 @@ PGP ID.")
 	     ;; OPTION 4:  The program exits.
 	     (exit
 	      (setq results (list 
-			     (process-exit-status proc) nil))))))
-
-      (pop-to-buffer obuf))
+			     (process-exit-status proc) nil)))))))
     results))
 
 (defun mc-pgp50-decrypt-region (start end &optional id)
@@ -646,9 +644,7 @@ PGP ID.")
 	     ;; OPTION 4:  The program exits.
 	     (exit
 	      (setq results (list 
-			     (process-exit-status proc) nil))))))
-
-      (pop-to-buffer obuf))
+			     (process-exit-status proc) nil)))))))
     results))
 
 (defun mc-pgp50-sign-parser (proc oldbuf start end newbuf passwd)
@@ -747,9 +743,7 @@ PGP ID.")
 	     ;; OPTION 3:  The program exits.
 	     (exit
 	      (setq results (list 
-			     (process-exit-status proc) nil))))))
-
-      (pop-to-buffer obuf))
+			     (process-exit-status proc) nil)))))))
     results))
 
 (defun mc-pgp50-sign-region (start end &optional id unclear)
