@@ -149,10 +149,12 @@ def make_plaintext():
     return "This is a plaintext message\n"
 def date_string():
     # mc-gpg.el takes the YYYY-MM-DD date string from the SIG_ID status-fs
-    # line and delivers it to the user. Dunno if this is GMT or localtime,
-    # need to check in the evening.
-    # return time.strftime("%Y-%m-%d", time.gmtime()) # GMT
-    return time.strftime("%Y-%m-%d", time.localtime()) # localtime
+    # line and delivers it to the user. This appears to be the GMT date of the
+    # signature. Extract the same thing here so we can tell the test harness
+    # what to expect. This needs to run on the same day as the gpg invocation
+    # used to create the signature, but this whole program only takes a few
+    # seconds to execute.
+    return time.strftime("%Y-%m-%d", time.gmtime()) # GMT
 
 
 def e(filename, recip):
