@@ -1,7 +1,7 @@
 Noteworthy changes in Mailcrypt version 3.5.8:
 
  * mc-remail.el updated to support modern remailers (as defined by MixMaster
-   version 2.9b33, on sourceforge)
+   version 2.9b33, on sourceforge). Closes most of SF#583330.
 
  ** the 'Subject:' header is now put in the ## section instead of the ::
     section, so remailers should copy them into the final message.
@@ -10,7 +10,7 @@ Noteworthy changes in Mailcrypt version 3.5.8:
 
  * fixed mc-gpg.el to cache passphrases by keyid instead of name; this will
    help users who have multiple secret keys with the same name but different
-   passphrases
+   passphrases. Closes Debian #161691.
 
  * less noteworthy changes:
 
