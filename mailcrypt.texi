@@ -651,7 +651,7 @@ first.  Begin with the following steps:
 @enumerate
 
 @item
-Do @samp{finger rlist@@publius.net > ~/.remailers}.
+Do @samp{finger rlist@@noisebox.remailer.org > ~/.remailers}.
 This will create a Levien-format list of remailers in the file
 @file{.remailers} in your home directory.  Mailcrypt will parse this the
 first time you access a remailer function.
@@ -661,7 +661,7 @@ Look over the @file{.remailers} file and find the ones you want to use.
 
 @item
 Add their PGP public keys to your keyring.  You can @code{finger
-pgpkeys@@kiwi.cs.berkeley.edu} for a list of remailer public keys.  Note
+dsskeys@@frogadmin.yi.org} for a list of remailer public keys.  Note
 that Mailcrypt @emph{requires} that you have the public keys of all the
 remailers you want to use, and therefore that the remailers support PGP
 encryption.
@@ -1016,13 +1016,30 @@ This is a collection of tips for using Mailcrypt's remailer support.
 
 @item
 @vindex mc-levien-file-name
-Read and understand the @file{.remailers} file.  If the service at
-kiwi.cs.berkeley.edu is gone by the time you read this, track down a
-comparable service elsewhere.  (Ask around in
-@file{news:alt.privacy.anon-server} or, as a last resort,
-@file{news:alt.security.pgp}.)  Check the documentation (@kbd{C-h v})
-for the variable @code{mc-levien-file-name} for a description of Levien
-format.
+Read and understand the @file{.remailers} file.  Other sources for
+this list include @file{http://www.chez.com/frogadmin/MyCypSta1.txt}
+and @file{http://anon.efga.org/Remailers/rlist}.  If all of these
+servers have gone away by the time you read this, track down a
+comparable service elsewhere.  (Do a web search for ``anonymous
+remailer list'', ask around in @file{news:alt.privacy.anon-server}, or,
+as a last resort, @file{news:alt.security.pgp}.)  Check the
+documentation (@kbd{C-h v}) for the variable
+@code{mc-levien-file-name} for a description of Levien format.
+
+@item
+Mailcrypt needs to be able to encrypt a message to each remailer in
+the chain, so it needs access to their public keys, in a keyring
+usable by the currently selected backend.  Keyrings containing keys
+for all the well-known remailers are usually available from the same
+places as the remailer lists above:
+@file{http://www.chez.com/frogadmin/Keys/dsskeys.asc},
+@file{http://anon.efga.org/Remailers/TypeIList/pubring.asc}.
+
+@c TODO: With the GPG backend, you can take one of the .pkr or .gpg -format
+@c keyrings, save it to ~/remailer-pubring.pgp, and the remailer encryption
+@c functions will automatically add that keyring to the set used when working
+@c with remailers. This means you don't have to clutter your normal keyring
+@c with the remailer keys.
 
 @item
 The relevant remailer properties are @code{pgp} (required), @code{hash}
