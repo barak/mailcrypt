@@ -8,7 +8,7 @@ import gtk
 
 import os, os.path, stat, time, string
 from maildirgtk import MaildirGtk
-from nntplib import NNTP, NNTP_PORT
+from nntplib import NNTP, NNTP_PORT, NNTPError
 
 # This file implements some classes which watch maildir-style directories
 # and NNTP newsgroups. A message is placed in the 'source' maildir when the
@@ -160,7 +160,10 @@ class NewsWatcher(MessageWatcher):
         for g in self.groups:
             resp, count, first, last, name = self.nntp.group(g)
             for num in range(self.last[g]+1, int(last)+1):
-                resp, num, id, lines = self.nntp.article("%d" % num)
+                try:
+                    resp, num, id, lines = self.nntp.article("%d" % num)
+                except NNTPError:
+                    continue
                 name = "%s:%d" % (g, int(num))
                 if self.debug: print "got", name
                 if self.tag:
