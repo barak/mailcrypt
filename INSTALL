@@ -34,6 +34,12 @@ mode.)  If this applies to you, edit Mailcrypt's `load-path.hack' file
 to add the appropriate directory to the load-path during byte
 compilation.
 
+In addition, PGP 5.0 support requires the file timer.el, which should
+be included in FSF Emacs, but is NOT included with Xemacs.  This file
+is included with Mailcrypt, and will be installed the timer library
+isn't found in the load path.  If you already have timer.el, but it is
+in an unusual place, edit the file `load-path.hack' file accordingly.
+
 Installation Names
 ==================
 
@@ -104,13 +110,13 @@ uses for gratuitous advertising.  To use Mailcrypt with such a version
 PGP 5.0 Support
 ===============
 
-Starting with Mailcrypt 3.5b1, Mailcrypt can support both older
-(2.6.*) and newer (5.0) versions of PGP.  Support for PGP 5.0 is
-limited, and excludes key snarfing, among other things.  All of the
-same keymaps and functions are used as in Mailcrypt 3.4; nothing
-should have changed but some back-end issues.  (Note: *please* send me
-suggestions and patches to <mailto:lbudney@pobox.com> if you have
-improvements or fixes you would make!)
+Starting with Mailcrypt 3.5b1, Mailcrypt can support both older (2.6.*)
+and newer (5.0) versions of PGP.  Support for PGP 5.0 is limited, and
+excludes key snarfing, among other things.  All of the same keymaps and
+functions are used as in Mailcrypt 3.4; nothing should have changed
+for the end user.  (Note: *please* send me suggestions and patches
+to <mailto:lbudney@pobox.com> if you have improvements or fixes you
+would make!)
 
 To use Mailcrypt 3.5b1, you must include two lines like the following in
 your .emacs file:
