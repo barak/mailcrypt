@@ -590,10 +590,10 @@ Remailer Quick Start
    To use Mailcrypt's remailing facilities, you need to configure them
 first.  Begin with the following steps:
 
-  1. Do `finger remailer-list@kiwi.cs.berkeley.edu > ~/.remailers'.
-     This will create a Levien-format list of remailers in the file
-     `.remailers' in your home directory.  Mailcrypt will parse this the
-     first time you access a remailer function.
+  1. Do `finger rlist@publius.net > ~/.remailers'.  This will create a
+     Levien-format list of remailers in the file `.remailers' in your
+     home directory.  Mailcrypt will parse this the first time you
+     access a remailer function.
 
   2. Look over the `.remailers' file and find the ones you want to use.
 
@@ -1155,4 +1155,23 @@ servers instead of the one at MIT, of course.
 
    Note that fetching from a key server can be somewhat slow, so be
 patient.  (At least it beats the tar out of the Email interface.)
+
+
+File: mailcrypt.info,  Node: Miscellaneous Configuration,  Next: Tips,  Prev: Key Fetching,  Up: Top
+
+Miscellaneous Configuration
+***************************
+
+   This chapter documents some additional Mailcrypt configuration
+options which could not be naturally described elsewhere.
+
+* Menu:
+
+* Alternate Keyring::           Specifying a different file to act
+                                  like your public keyring.
+* Comment Field::               Burma
+                                  Shave
+* Mode Line::                   Changing that "MC-w" and "MC-r" stuff
+* Key Bindings::                Which keys cause which actions.
+* Nonstandard Paths::           Useful if your PGP installation is weird.
 

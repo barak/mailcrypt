@@ -21,25 +21,6 @@ along with GNU Emacs; see the file COPYING.  If not, write to the Free
 Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 
 
-File: mailcrypt.info,  Node: Miscellaneous Configuration,  Next: Tips,  Prev: Key Fetching,  Up: Top
-
-Miscellaneous Configuration
-***************************
-
-   This chapter documents some additional Mailcrypt configuration
-options which could not be naturally described elsewhere.
-
-* Menu:
-
-* Alternate Keyring::           Specifying a different file to act
-                                  like your public keyring.
-* Comment Field::               Burma
-                                  Shave
-* Mode Line::                   Changing that "MC-w" and "MC-r" stuff
-* Key Bindings::                Which keys cause which actions.
-* Nonstandard Paths::           Useful if your PGP installation is weird.
-
-
 File: mailcrypt.info,  Node: Alternate Keyring,  Next: Comment Field,  Prev: Miscellaneous Configuration,  Up: Miscellaneous Configuration
 
 Alternate Keyring
