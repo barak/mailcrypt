@@ -5,6 +5,7 @@
 	* tests/remailer/watcher.py: add ability to flush old messages,
 	abandon them, query for age of outstanding ones. Make all msgids
 	integers. Fix use of default NNTP port.
+	(NewsWatcher.poll): Handle missing messages
 
 2002-11-29  Brian Warner  <warner@lothar.com>
 
