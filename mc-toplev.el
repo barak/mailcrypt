@@ -60,6 +60,10 @@
 (autoload 'mc-scheme-pgp65 "mc-pgp6" nil t)
 (autoload 'mc-scheme-gpg   "mc-gpg"  nil t)
 
+(autoload 'mc-remailer-scheme-type1 "mc-remail" nil t)
+(autoload 'mc-remailer-scheme-mixmaster "mc-remail2" nil t)
+(autoload 'mc-remailer-scheme-mixminion "mc-remail2" nil t)
+
 ;;}}}
 
 ;;{{{ Encryption
@@ -339,6 +343,101 @@ is verified."
 
 
 ;;}}}
+;;{{{ Remailer interface
+
+
+(defun mc-remail (arg)
+  "*Prepare the current buffer for delivery through an anonymous remailer.
+
+Exact behavior depends on current major mode.
+
+With \\[universal-argument], show verbose progress during remailing.
+
+With \\[universal-argument] \\[universal-argument], prompt for remailer scheme to use."
+  (interactive "p")
+  (mc-remail-region arg nil nil))
+
+(defun mc-remail-region (arg start end)
+  "*Deliver the region to an anonymous remailer."
+  (interactive "p\nr")
+  (let* ((mode-alist (cdr-safe (assq major-mode mc-modes-alist)))
+	 (func (cdr-safe (assq 'remailer-encrypt mode-alist)))
+         (verbose nil)
+	 scheme)
+    (unless func
+      (error "No remailer-encryption function defined for mode '%s'"
+             major-mode))
+    ;; func will usually be mc-remail-message, below
+    (if (>= arg 4)
+        (setq verbose t))
+    (if (>= arg 16)
+	(setq scheme
+	      (cdr (assoc
+		    (completing-read "Remailer Scheme: " mc-remailer-schemes)
+		    mc-remailer-schemes))))
+    (funcall func nil scheme start end verbose)))
+
+(defun mc-remail-generic (&optional recipients scheme start end verbose)
+  "*Generic function to send a region of data through a remailer."
+  (save-excursion
+    (or start (setq start (point-min-marker)))
+    (or (markerp start) (setq start (copy-marker start)))
+    (or end (setq end (point-max-marker)))
+    (or (markerp end) (setq end (copy-marker end)))
+    (run-hooks 'mc-pre-remail-hook)
+    (cond ((stringp recipients)
+	   (setq recipients
+		 (mc-split "\\([ \t\n]*,[ \t\n]*\\)+" recipients)))
+	  ((null recipients)
+	   (setq recipients
+		 (mc-cleanup-recipient-headers (read-string "Recipients: "))))
+	  (t (error
+              "mc-remail-generic: recipients not string or nil")))
+    (or scheme (setq scheme mc-default-remailer-scheme))
+    ;; this will be one of (mc-mixmaster-send mc-mixminion-send
+    ;; mc-remailer-type1-send)
+    (if (funcall (cdr (assoc 'encryption-func (funcall scheme)))
+		 recipients start end verbose)
+	(progn
+	  (run-hooks 'mc-post-remail-hook)
+	  t))))
+
+(defun mc-remail-message (&optional recipients scheme start end verbose)
+  "*Prepare a message for anonymous delivery to RECIPIENTS using the given
+remailer SCHEME. RECIPIENTS is a comma separated string. If SCHEME is nil,
+use the value of `mc-default-remailer-scheme'. Returns t on success, nil
+otherwise."
+  (save-excursion
+    (let ((headers-end (mc-find-headers-end))
+	  default-recipients)
+
+      (setq default-recipients
+	    (save-restriction
+	      (goto-char (point-min))
+	      (re-search-forward
+	       (concat "^" (regexp-quote mail-header-separator) "$"))
+	      (narrow-to-region (point-min) (point))
+	      (and (featurep 'mailalias)
+		   (not (featurep 'mail-abbrevs))
+		   mail-aliases
+		   (expand-mail-aliases (point-min) (point-max)))
+	      (mc-strip-addresses
+	       (mapcar 'cdr
+		       (mc-get-fields "to\\|cc\\|bcc")))))
+
+      (if (not recipients)
+	  (setq recipients
+		(if mc-use-default-recipients
+		    default-recipients
+		  (read-from-minibuffer "Recipients: " default-recipients))))
+     
+      (or start (setq start headers-end))
+      (or end (setq end (point-max-marker)))
+
+      (mc-remail-generic recipients scheme start end verbose))))
+
+;;}}}
+
 ;;{{{ Key management
 
 ;;{{{ mc-insert-public-key
