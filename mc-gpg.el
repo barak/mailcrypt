@@ -36,10 +36,10 @@
 ; #mc-gpg-insert-public-key (comment, altkeyring)
 ; #mc-gpg-snarf-keys (one, multiple, old, corrupt)
 ; key fetching (is there a GPG key server yet?)
-; clean up use of buffers, kill off old tmp buffers
+; clean up use of buffers, #kill off old tmp buffers
 ; in verify-region, print date of signature too
-;  maybe have bad-signature message print keyid/date? (no, sig is invalid,
-;   anything other than its invalidity is misleading)
+;  ~maybe have bad-signature message print keyid/date? (no, sig is invalid,
+;  ~ anything other than its invalidity is misleading)
 ; make messages shorter (get it all to fit in echo area)
 
 ; enhancements I'd like to add
@@ -235,6 +235,10 @@ The value returned is the value of the last form in BODY."
 	      (error "%s exited abnormally: '%s'" program rc) ;;is rc a string?
 	    )
 
+	  (if (= 127 rc)
+	      (error "%s could not be found" program) ;; at least on my system
+	    )
+
 	  ;; fill stderr buf
 	  (setq stderr-buf (get-buffer-create " *mailcrypt stderr temp"))
 	  (buffer-disable-undo stderr-buf)
@@ -274,7 +278,16 @@ The value returned is the value of the last form in BODY."
       (set-buffer obuf)
       (delete-file stderr-tempfilename)
       (delete-file status-tempfilename)
-      ;; maybe kill mybuf, others
+      ;; kill off temporary buffers (which would be useful for debugging)
+      (if t ;; nil for easier debugging
+	  (progn
+	    (if (get-buffer " *mailcrypt stdout temp")
+		(kill-buffer " *mailcrypt stdout temp"))
+	    (if (get-buffer " *mailcrypt stderr temp")
+		(kill-buffer " *mailcrypt stderr temp"))
+	    (if (get-buffer " *mailcrypt status temp")
+		(kill-buffer " *mailcrypt status temp"))
+	    ))
 )))
 
 
@@ -388,7 +401,7 @@ GPG ID.")
 		 (cdr key)
 		 (format "GPG passphrase for %s (%s): " (car key) (cdr key))))
 	  (setq args
-		(append (list "--local-user" (concat "\"" (car key) "\"")
+		(append (list "--local-user" (cdr key)
 			      "--sign" 
 			      )
 			args))
@@ -401,7 +414,7 @@ GPG ID.")
 
     ; if we're supposed to encrypt for the user too, we need to know their key
     (if (and recipients mc-encrypt-for-me)
-	(setq recipients (cons (car (or key
+	(setq recipients (cons (cdr (or key
 					(setq key (mc-gpg-lookup-key 
 						   mc-gpg-user-id 'encrypt)))
 				    ) recipients)))
@@ -418,8 +431,11 @@ GPG ID.")
     (message "%s" msg)
     (setq result (mc-gpg-process-region start end passwd mc-gpg-path args
 					'mc-gpg-insert-parser buffer))
-    (message "%s Done." msg)
-    t))
+    (if (not (car result))
+	(error "%s failed: %s" msg (nth 2 result)))
+
+    t
+))
 
 
 
@@ -523,7 +539,7 @@ GPG ID.")
   (let (keyid sigtype symmetric sigid sigdate sigtrust)
     (set-buffer statusbuf)
     (goto-char (point-min))
-    (if (re-search-forward "NEED_PASSPHRASE \\(\\S +\\)$" nil t)
+    (if (re-search-forward "NEED_PASSPHRASE \\(\\S +\\)" nil t)
 	(setq keyid (concat "0x" (match-string 1))))
     (goto-char (point-min))
     (if (re-search-forward "\\(\\S +SIG\\)" nil t)
@@ -533,8 +549,10 @@ GPG ID.")
 	(setq sigtrust (match-string 1)))
     (set-buffer stderrbuf)
     (goto-char (point-min))
-    (if (re-search-forward 
-	 "^gpg: public key decryption failed: Secret key not available$" nil t)
+    (if (and (not keyid)
+	     (re-search-forward 
+	      "^gpg: public key decryption failed: Secret key not available$" 
+	      nil t))
 	;; encrypted to a key we do not have. Bail now.
 	(list nil nil nil nil)
       (progn
@@ -694,7 +712,7 @@ GPG ID.")
 (defun mc-gpg-sign-region (start end &optional id unclear)
   (let ((process-environment process-environment)
 	(buffer (get-buffer-create mc-buffer-name))
-	passwd args key)
+	passwd args key result)
     (setq key (mc-gpg-lookup-key (or id mc-gpg-user-id) 'sign))
     (setq passwd
 	  (mc-activate-passwd
@@ -703,7 +721,7 @@ GPG ID.")
     (setq args
 	  (list
 	   "--batch" "--armor"
-	   "--local-user" (concat "\"" (cdr key) "\"")
+	   "--local-user" (cdr key)
 	   (if unclear "--sign" "--clearsign")
 	   ))
     (if mc-gpg-comment
@@ -712,12 +730,16 @@ GPG ID.")
     (if mc-gpg-extra-args
 	(setq args (append mc-gpg-extra-args args)))
     (message "Signing as %s ..." (car key))
-    (if (mc-gpg-process-region start end passwd mc-gpg-path args
-			       'mc-gpg-insert-parser buffer)
-	(progn
-	  (message "Signing as %s ... Done." (car key))
-	  t)
-      nil)))
+    (setq result (mc-gpg-process-region start end passwd mc-gpg-path args
+					'mc-gpg-insert-parser buffer))
+    (if (car result)
+	(message "Signing as %s ... Done." (car key))
+      (progn
+	(mc-deactivate-passwd t)
+	(error "Signature failed: %s" (nth 2 result))
+	))
+    (car result)
+))
 
 ; our convention for this parser: return '((STATUS MESSAGE) nil nil). 
 ;  STATUS= 'good: MESSAGE is displayed in the echo area (name of signator,
@@ -855,21 +877,22 @@ GPG ID.")
 
 (defun mc-gpg-insert-public-key (&optional id)
   (let ((buffer (get-buffer-create mc-buffer-name))
-	args)
+	args result)
     (setq id (or id mc-gpg-user-id))
-    (setq args (list "--export" "--armor" "--batch" id))
+    (setq args (list "--export" "--armor" "--batch" (concat "\"" id "\"")))
     (if mc-gpg-comment
 	(setq args (append (list "--comment" (format "'%s'" mc-gpg-comment))
 			   args)))
     (if mc-gpg-alternate-keyring
 	(setq args (append (list "--keyring" mc-gpg-alternate-keyring) args)))
 
-    (if (mc-gpg-process-region (point) (point) nil mc-gpg-path
-			   args 'mc-gpg-insert-parser buffer)
-	(progn
-	  (message (format "Key for user ID: %s" id))
-	  t))))
-
+    (setq result (mc-gpg-process-region (point) (point) nil mc-gpg-path
+					args 'mc-gpg-insert-parser buffer))
+    (if (car result)
+	(message (format "Key for user ID: %s" id))
+      (message "failed: %s" (nth 2 result)))
+    (car result)
+))
 
 ;; return convention: '(newkeys oldkeys weirdos). error with stderr if rc != 0
 (defun mc-gpg-snarf-parser (stdoutbuf stderrbuf statusbuf rc)
