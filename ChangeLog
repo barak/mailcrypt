@@ -1,5 +1,7 @@
 2002-06-12  Brian Warner  <warner@lothar.com>
 
+	* NEWS: summarize changes since 3.5.6
+
 	* mc-toplev.el (mc-mew-decrypt-message): remove unnecessary progn
 	(mc-mh-decrypt-message): Switch read-only off briefly when decrypting
 	mh-e buffers. Thanks to Peter Galbraith for the patch.
