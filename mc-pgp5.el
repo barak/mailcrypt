@@ -912,6 +912,16 @@ PGP ID.")
 (defvar mc-pgp50-keyserver-port 80
   "Port on which the keyserver's HTTP daemon lives.")
 
+(defvar mc-pgp50-hkpserver-req-template
+  "/pks/lookup?op=get&exact=on&search=%s HTTP/1.0"
+  "The request to pass to the HKP keyserver.")
+
+(defvar mc-pgp50-hkpserver-address "horowitz.surfnet.nl"
+  "Host name of HKP keyserver.")
+
+(defvar mc-pgp50-hkpserver-port 11371
+  "Port on which the HKP keyserver's Horowitz Key Protocol daemon lives.")
+
 (defvar mc-pgp50-fetch-timeout 20
   "*Timeout, in seconds, for any particular key fetch operation.")
 
@@ -979,6 +989,31 @@ when fetching keys.")
       (if buf (kill-buffer buf))
       (if connection (delete-process connection)))))
 
+(defun mc-pgp50-fetch-from-hkp (id)
+  (let (buf connection)
+    (unwind-protect
+	(progn
+	  (message "Fetching %s via Horowitz Key Protocol to %s..."
+		   (or (cdr id) (car id)) mc-pgp50-hkpserver-address)
+	  (setq buf (generate-new-buffer " *mailcrypt temp*"))
+	  (setq connection
+		(open-network-stream 
+		 "*key fetch*" 
+		 buf 
+		 mc-pgp50-hkpserver-address
+		 mc-pgp50-hkpserver-port))
+	  (process-send-string
+	   connection
+	   (concat "GET " (format mc-pgp50-hkpserver-req-template
+				  (or (cdr id) (car id))) "\r\n\r\n"))
+	  (while (and (eq 'open (process-status connection))
+		      (accept-process-output 
+		       connection 
+		       mc-pgp50-fetch-timeout)))
+	  (mc-pgp50-buffer-get-key buf))
+      (if buf (kill-buffer buf))
+      (if connection (delete-process connection)))))
+
 (defun mc-pgp50-fetch-from-finger (id)
   (let (buf connection user host)
     (unwind-protect
@@ -1007,6 +1042,7 @@ when fetching keys.")
       (if connection (delete-process connection)))))
 
 (defvar mc-pgp50-fetch-methods '(mc-pgp50-fetch-from-keyrings
+			       mc-pgp50-fetch-from-hkp
 			       mc-pgp50-fetch-from-finger
 			       mc-pgp50-fetch-from-http)
   "List of methods to try when attempting to fetch a key.  Each
