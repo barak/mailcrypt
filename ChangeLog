@@ -1,5 +1,8 @@
 2001-11-05  Brian Warner  <warner@lothar.com>
 
+	* ChangeLog, ChangeLog.old: merged ChangeLogs, removed .old, which
+	wasn't really old and overlapped the real one.
+
 	* mailcrypt.texi (Key Fetching): Add reminder about GnuPG's internal
 	keyserver support. Thanks to Dan Girellini.
 
@@ -272,6 +275,53 @@
 
 	* mc-gpg.el: Fixed mc-gpg.el to avoid using with-current-buffer,
 	which emacs 19 didn't have. Thanks to Brian Warner.
+
+1999-01-10  Brian Warner  <warner@lothar.com>
+
+	* mc-gpg.el (mc-gpg-process-region): kill off temporary buffers
+
+	(mc-gpg-insert-parser): if rc != 0, don't insert anything, and
+	return error information instead of erroring out. Change all
+	callers to deal with it. This fixes the "if we can't find gpg,
+	attempting to decrypt removes all text from the buffer" bug.
+	
+1999-01-09  Brian Warner  <warner@lothar.com>
+
+	* mc-gpg.el (mc-gpg-decrypt-parser): accomodate gnupg-0.9.1, which
+	emits NEED_PASSPHRASE status messages with two keyids. The first
+	is the encryption [subkey] id, the new second one is the primary
+	[dsa] keyid. We take the first one, but it doesn't really matter
+	because 'gpg --list-secret-keys 0xkeyid' will accept either. Had
+	to change the NEED_PASSPHRASE-recognizing regexp in
+	mc-gpg-decrypt-parser to ignore additional characters after the
+	first keyid.
+
+1998-11-27  Brian Warner  <warner@lothar.com>
+
+	* mc-gpg.el: define with-current-buffer if it wasn't already.
+	Needed for emacs19.  Thanks to Ed Ferguson and Greg Troxel for the
+	bug reports.
+
+	(mc-gpg-encrypt-region): switch back to passing hex keyids to gpg
+	instead of quoted strings: newer gpg can handle it if you give it
+	a subkey id.  Reduces the involvement of the shell, which is a
+	good thing.
+
+	(mc-gpg-decrypt-parser): if we see a NEED_PASSPHRASE message,
+	ignore the presence of a "secret key not available" message. This
+	deals with a funny case in which GPG sees a message with two
+	recipients, doesn't have a private key for the first one, emits
+	the failure message, but goes on to emit the passphrase message
+	about the second anyway. Fixes "can't decrypt a message sent to
+	multiple recipients" bug.
+
+	(mc-gpg-insert-public-key): put quotes around userid string used
+	in mc-gpg-insert-public-key: allows insertion when userid is
+	defined with spaces.
+
+	(mc-gpg-snarf-parser): don't modify the source buffer: fixes the
+	RMAIL "buffer is read-only" error message. Thanks to Kevin Fenzi
+	for the bug report.
 
 1998-11-26  Leonard R. Budney  <lbudney@pobox.com>
 
