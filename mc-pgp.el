@@ -26,6 +26,9 @@
 (defvar mc-pgp-path "pgp" "*The PGP executable.")
 (defvar mc-pgp-display-snarf-output nil
   "*If t, pop up the PGP output window when snarfing keys.")
+(defvar mc-pgp-always-fetch nil
+  "*If t, always fetch missing keys. If nil, prompt user. If 'never,
+never fetch keys, and don't ask.")
 (defvar mc-pgp-alternate-keyring nil
   "*Public keyring to use instead of default.")
 (defvar mc-pgp-comment
@@ -95,7 +98,7 @@ PGP ID.")
 	   "^\\(\\(pub\\|sec\\)\\s +[^/]+/\\(\\S *\\)\\s +\\S +\\s +\\(.*\\)\\)$")
 	  (revoke-regexp "REVOKED")
 	  (obuf (current-buffer))
-	  buffer)
+	  buffer key-start key-end)
       (if (null result)
 	  (unwind-protect
 	      (progn

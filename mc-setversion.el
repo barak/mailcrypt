@@ -19,6 +19,10 @@
 ;; the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 ;;}}}
 
+(defvar mc-default-scheme 'mc-scheme-pgp
+  "*Set the default encryption scheme for Malicrypt to use. Defaults
+to pgp 2.6 for backward compatibility.")
+
 (defun mc-setversion (&optional version)
   "Reset path and argument information for the selected version of PGP.
 Possible values of VERSION are 2.6, 5.0, and gpg."

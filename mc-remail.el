@@ -481,6 +481,9 @@ a description of Levien file format."
 	  (mapconcat 'identity regexps "\\)\\|\\(")
 	  "\\)"))
 
+; Quiet a warning message when the user hasn't set this.
+(defvar gnus-user-from-line nil)
+
 (defun mc-user-mail-address ()
   "Figure out the user's Email address as best we can."
   (mc-strip-address

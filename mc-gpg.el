@@ -68,6 +68,9 @@
 (defvar mc-gpg-path "gpg" "*The GPG executable.")
 (defvar mc-gpg-display-snarf-output nil
   "*If t, pop up the GPG output window when snarfing keys.")
+(defvar mc-gpg-always-fetch nil
+  "*If t, always fetch missing keys. If 'never, never fetch. If nil,
+prompt the user.")
 (defvar mc-gpg-alternate-keyring nil
   "*Public keyring to use instead of default.")
 (defvar mc-gpg-comment

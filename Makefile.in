@@ -75,15 +75,12 @@ installdirs: mkinstalldirs
 	$(srcdir)/mkinstalldirs $(lispdir) $(infodir) $(bindir)
 
 install-info: info
-	# There may be a newer info file in . than in srcdir.
-	-if test -f mailcrypt.info; then d=.; \
-	 else d=$(srcdir); fi; \
-	for file in $(INFOFILES); do\
-	  $(INSTALL_DATA) $$d/$$file $(infodir)/$$file; \
-	done;
-	$(INSTALL_INFO) --info-dir=$(infodir) \
+	cd $(srcdir) && for file in $(INFOFILES); do\
+	  $(INSTALL_DATA) $$file $(infodir)/$$file; \
+	done
+	-$(INSTALL_INFO) --info-dir=$(infodir) \
 	--entry="* Mailcrypt: (mailcrypt).       An Emacs/PGP interface" \
-	mailcrypt.info 
+	mailcrypt.info
 
 uninstall:
 	-cd $(lispdir) && rm -f $(SOURCES) $(OBJECTS)

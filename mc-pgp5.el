@@ -29,6 +29,9 @@
 (defvar mc-pgp50-pgpk-path "pgpk" "*The PGP 5.0 'pgpk' executable.")
 (defvar mc-pgp50-display-snarf-output nil
   "*If t, pop up the PGP output window when snarfing keys.")
+(defvar mc-pgp50-always-fetch nil
+  "*If t, always fetch missing keys. If 'never, never fetch. If nil,
+ask the user.")
 (defvar mc-pgp50-alternate-keyring nil
   "*Public keyring to use instead of default.")
 (defvar mc-pgp50-comment
@@ -379,6 +382,7 @@ PGP ID.")
 	  t)))))
 
 (defun mc-pgp50-decrypt-parser (proc oldbuf start end newbuf passwd)
+ (let (rgn result results)
   (setenv "PGPPASSFD" "0")
   (set-buffer newbuf)
   (goto-char (point-max))
@@ -463,7 +467,7 @@ PGP ID.")
 	     (exit
 	      (setq results (list 
 			     (process-exit-status proc) nil)))))))
-    results))
+    results)))
 
 (defun mc-pgp50-decrypt-region (start end &optional id)
   ;; returns a pair (SUCCEEDED . VERIFIED) where SUCCEEDED is t if
@@ -950,7 +954,7 @@ when fetching keys.")
 	  (while (and (not key) keyring-list)
 	    (setq buf (generate-new-buffer " *mailcrypt temp*"))
 	    (setq proc
-		  (start-process "*PGP*" buf mc-pgp50-path "-kxaf"
+		  (start-process "*PGP*" buf mc-pgp50-pgpk-path "-kxaf"
 				 "+verbose=0" "+batchmode"
 				 (format "+pubring=%s" (car keyring-list))
 				 (or (cdr id) (car id))))
