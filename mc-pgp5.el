@@ -257,7 +257,7 @@ PGP ID.")
 	   ;; encrypt messages, since the batch mode in PGP5.0 is
 	   ;; broken.  Holler!
 	   ("Enter pass phrase:" 
-	    (Interrupt-process proc)
+	    (interrupt-process proc)
 	    (delete-process proc)
 	    ;; This should never happen.
 	    (setq results '("Incorrect passphrase." nil)))
