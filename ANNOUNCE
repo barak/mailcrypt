@@ -1,4 +1,4 @@
-  Mailcrypt 3.5.7 is Available for Download
+  Mailcrypt 3.5.8 is Available for Download
 
 
   1.  Introduction
@@ -13,16 +13,10 @@
 
   2.1. New in this Release
 
-  This release contains hooks to make Mailcrypt usable in Mew summary,
-  draft, and message buffers (note that Mew handles RFC3156-style PGP/MIME
-  messages by itself; mailcrypt support is just for traditional 'inline'
-  encryption).
-
-  A few bugs were fixed. MH support was changed to work with the latest
-  release of mh-e. Gnus support was updated to be usable in the summary
-  buffer. Mailcrypt no longer hard-wires /tmp as a temporary directory, but
-  uses an emacs variable called temporary-file-directory instead, which might
-  work better on NT.
+  This is mainly a bugfix release. Anonymous remailer support was updated to
+  match modern remailers, and the GPG passphrase code was changed to cache
+  by keyid instead of name, which will help folks who use multiple keys with
+  the same name but different passphrases.
 
 
   2.2.	Stable Features for PGP 5.0 and GnuPG
@@ -63,7 +57,7 @@
 
   3.  Downloading Mailcrypt
 
-  The Official Mailcrypt version 3.5.7 can be downloaded at:
+  The Official Mailcrypt version 3.5.8 can be downloaded at:
 
   <http://mailcrypt.sourceforge.net>
 
