@@ -126,8 +126,7 @@ PGP ID.")
 					  mc-pgp-key-cache)))))))
 	    (if buffer (kill-buffer buffer))
 	    (set-buffer obuf)))
-      (if (null result)
-	  (error "No PGP secret key for %s" str))
+      (if (null result) nil )             ; We don't mind a missing "secring"
       result)))
 
 (defun mc-pgp-generic-parser (result)
@@ -173,6 +172,7 @@ PGP ID.")
 	(progn
 	  (setq mc-pgp-always-sign t)
 	  (setq key (mc-pgp-lookup-key (or id mc-pgp-user-id)))
+	  (if (not key) (error "No key available for signing."))
 	  (setq passwd
 		(mc-activate-passwd
 		 (cdr key)
@@ -247,6 +247,7 @@ PGP ID.")
 	args key new-key passwd result pgp-id)
     (undo-boundary)
     (setq key (mc-pgp-lookup-key (or id mc-pgp-user-id)))
+    (if (not key) (error "No key available for decrypting."))
     (setq
      passwd
      (if key
@@ -322,6 +323,7 @@ PGP ID.")
 	(buffer (get-buffer-create mc-buffer-name))
 	passwd args key)
     (setq key (mc-pgp-lookup-key (or id mc-pgp-user-id)))
+    (if (not key) (error "No key available for signing."))
     (setq passwd
 	  (mc-activate-passwd
 	   (cdr key)
