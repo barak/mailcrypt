@@ -90,7 +90,7 @@
 	(mc-test-messages '())
 	(mc-message-sigstatus-text nil)
         (testcase-file (expand-file-name file mc-test-testcasedir))
-	b testcase mc-test-passwd-alist errortext sigstatus rc
+	b testcase mc-test-passwd-alist errortext plaintext sigstatus rc
 	expected-error expected-plaintext expected-sigstatus)
 
     (setq b (get-buffer-create "mc crypttext"))
@@ -146,9 +146,22 @@
     ; was the decryption supposed to be successful?
     (setq expected-plaintext (cdr (assoc 'plaintext testcase)))
     (if expected-plaintext
-	(if (not (equal expected-plaintext (buffer-string)))
-	    (error "plaintext did not match: expected '%s', got '%s'"
-		   expected-plaintext (buffer-string))
+        (setq expected-plaintext (string-as-multibyte expected-plaintext)))
+    (setq plaintext (string-as-multibyte (buffer-string)))
+
+    (if expected-plaintext
+	(if (not (equal expected-plaintext plaintext))
+            (progn
+              
+              (message
+               "plaintext did not match: expected '%s', got '%s'"
+               expected-plaintext plaintext)
+              (message "elen %d, gotlen %d"
+                       (length expected-plaintext) (length plaintext))
+              (message "expected-multibyte-p %s, got multibyte-p %s"
+                       (multibyte-string-p expected-plaintext)
+                       (multibyte-string-p plaintext))
+              (error "plaintext did not match"))
 	  )
       )
 
@@ -172,19 +185,28 @@
 (defun run-one-test ()
   ; it would be nice to take the test name from argv. see (command-line-args)
   (setq mc-test-verbose t)
-  (mc-test-decrypt-test "SE")
+  (standard-display-european 1)
+  (mc-test-decrypt-test "CS.latin1.s1v"
+                        )
 )
 
 (defun run-all-tests ()
   (let (cases)
         
     (setq cases (append cases '("E.e1r" "E.e2r" "E.e3" "E.e4")))
+    (setq cases (append cases '("E.e1re3re4r" "E.latin1.e1r")))
     (setq cases (append cases '("ES.e1r.s1v" "ES.e1r.s2v" "ES.e1r.s3v"
-                                "ES.e1r.s4" "ES.e3.s1v" "ES.e4.s1v")
-                       ))
+                                "ES.e1r.s4" "ES.e3.s1v" "ES.e4.s1v")))
     (setq cases (append cases '("S.s1v" "S.s2v" "S.s3v" "S.s4")))
     (setq cases (append cases '("CS.s1v" "CS.s2v" "CS.s3v" "CS.s4")))
+    (setq cases (append cases '("CS.latin1.s1v")))
     (setq cases (append cases '("SE")))
+
+    (standard-display-european 0)
     (dolist (onecase cases)
       (mc-test-decrypt-test onecase))
+    (standard-display-european 1)
+    (dolist (onecase cases)
+      (mc-test-decrypt-test onecase))
+
 ))
