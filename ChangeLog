@@ -1,3 +1,7 @@
+1999-11-19  Matthias Andree <mandree@dosis.uni-dortmund.de>
+
+	* mailcrypt.texi: Fixed bug which spread index over many pages.
+	
 1999-09-08  Brian Warner  <warner@lothar.com>
 
 	* mc-gpg.el: revamp decrypt and verify parsers to handle
