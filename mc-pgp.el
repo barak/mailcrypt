@@ -455,13 +455,13 @@ PGP ID.")
 'never.")
 
 (defvar mc-pgp-keyserver-url-template
-  "/htbin/pks-extract-key.pl?op=get&search=%s"
+  "/pks/lookup?op=get&search=%s"
   "The URL to pass to the keyserver.")
 
 (defvar mc-pgp-keyserver-address "pgp.ai.mit.edu"
   "Host name of keyserver.")
 
-(defvar mc-pgp-keyserver-port 80
+(defvar mc-pgp-keyserver-port 11371
   "Port on which the keyserver's HTTP daemon lives.")
 
 (defvar mc-pgp-fetch-timeout 20
