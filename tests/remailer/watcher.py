@@ -50,10 +50,11 @@ class DirWatcher:
                 self.files[f]['msgid'] = msgid
                 st = os.stat(os.path.join(newdir,f))
                 self.files[f]['time'] = st[stat.ST_MTIME]
-                if self.ids.has_key(msgid):
+                if self.ids.get(msgid, None) != None:
                     print "Hey, file %s duplicates msgid %s from file %s" % \
                           (f, msgid, self.ids[msgid])
-                self.ids[msgid] = f
+                if msgid != None:
+                    self.ids[msgid] = f
     def dump(self):
         print "dir:", self.dir
         print len(self.files)," files:"
