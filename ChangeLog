@@ -1,35 +1,62 @@
+Fri Jul 24 13:33:54 1998  Leonard R. Budney  <lbudney@pobox.com>
+
+	* ONEWS, ChangeLog, NEWS: Updated news and changelog files for
+	the anticipated flurry of development and bug fixes.
+
 Thu Jul 23 02:37:55 1998  Leonard R. Budney  <lbudney@pobox.com>
 
-	* INSTALL, README:
-	Updated documentation for Xemacs users, and deleted some (old, and
-	apparently obsolete) pointers from the README file.
+	* INSTALL, README: Updated documentation for Xemacs users, and
+	deleted some (old, and apparently obsolete) pointers from the
+	README file.
 
-	* configure.in, timer.el, Makefile.in, configure:
-	Added timer.el to the Mailcrypt distribution, so that Mailcrypt should
-	work correctly for Xemacs users.  The configure script simply checks
-	whether timer.el is in the user's load path, and includes timer.el in
-	the list of files to compile and install if it isn't.
+	* configure.in, timer.el, Makefile.in, configure: Added timer.el
+	to the Mailcrypt distribution, so that Mailcrypt should work
+	correctly for Xemacs users.  The configure script simply checks
+	whether timer.el is in the user's load path, and includes timer.el
+	in the list of files to compile and install if it isn't.
 
 Wed Jul 22 02:20:49 1998  Leonard R. Budney  <lbudney@pobox.com>
 
-	* mc-pgp5.el:
-	Modified mc-pgp5-sign-parser to behave correctly when signing 8bit
-	data.  In that case, the PGP delimiter reads "END PGP MESSAGE"
-	rather than "END PGP SIGNATURE".  Thanks to Greg Steuck.
+	* mc-pgp5.el: Modified mc-pgp5-sign-parser to behave correctly
+	when signing 8bit data.  In that case, the PGP delimiter reads
+	"END PGP MESSAGE" rather than "END PGP SIGNATURE".  Thanks to
+	Greg Steuck.
 
 Tue Jul 21 12:25:18 1998  Leonard R. Budney  <lbudney@pobox.com>
 
-	* load-path.hack, Makefile.in:
-	Made Makefile more conformant to GNU standards, and eliminated annoying
-	warning about Emacs versions other than 19.*.  Thanks to Tony Silva.
+	* load-path.hack, Makefile.in: Made Makefile more conformant
+	to GNU standards, and eliminated annoying warning about Emacs
+	versions other than 19.*.  Thanks to Tony Silva.
 
-	* mailcrypt.el, mailcrypt.info: Updated version number in elisp code.
+	* mailcrypt.el, mailcrypt.info: Updated version number in
+	elisp code.
 
-	* Attic/pgpv.sh, Attic/pgpe.sh, Attic/pgps.sh, mc-setversion.el, Attic/mc-pgpk, mc-pgp5.el, mc-pgp.el, Makefile.in:
-	Removed dependency on shell scripts and perl scripts.  Added completion
+	* Attic/pgpv.sh, Attic/pgpe.sh, Attic/pgps.sh, mc-setversion.el,
+	Attic/mc-pgpk, mc-pgp5.el, mc-pgp.el, Makefile.in: Removed
+	dependency on shell scripts and perl scripts.  Added completion
 	to mc-setversion.  Thanks to Brian Warner.
 
-	* mc-pgp5.el, INSTALL:
-	Corrected initialization instructions and fixed regular expression to
-	permit handling of emails in Svenska.  Thanks to Jonas Linde.
+	* mc-pgp5.el, INSTALL: Corrected initialization instructions and
+	fixed regular expression to permit handling of emails in Svenska.
+	Thanks to Jonas Linde.
+
+	* Attic/mc-pgpk, Attic/pgpe.sh, Attic/pgps.sh, Attic/pgpv.sh,
+	mailcrypt.dvi, mailcrypt.texi, mkinstalldirs, texi2html.ext:
+	Initial revision
+
+	* Attic/mc-pgpk, Attic/pgpe.sh, Attic/pgps.sh, Attic/pgpv.sh,
+	mailcrypt.dvi, mailcrypt.texi, mkinstalldirs, texi2html.ext:
+	Initial revision.
+
+	* ANNOUNCE, ChangeLog, INSTALL, LCD-entry, Makefile.in, NEWS,
+	ONEWS, README, configure, configure.in, expect.el, install-sh,
+	load-path.hack, mailcrypt.el, mailcrypt.info, mc-pgp.el,
+	mc-pgp2.el, mc-pgp5.el, mc-remail.el, mc-setversion.el,
+	mc-toplev.el: Initial revision
+
+	* ANNOUNCE, ChangeLog, INSTALL, LCD-entry, Makefile.in, NEWS,
+	ONEWS, README, configure, configure.in, expect.el, install-sh,
+	load-path.hack, mailcrypt.el, mailcrypt.info, mc-pgp.el,
+	mc-pgp2.el, mc-pgp5.el, mc-remail.el, mc-setversion.el,
+	mc-toplev.el: Initial revision.
 
