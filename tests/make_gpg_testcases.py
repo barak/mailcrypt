@@ -253,7 +253,8 @@ class Latin1_CS_Case(CS_Case):
         return """
 Usted tiene que mostrar esta evidencia escrita a un oficial de policía cuando
 éste lo solicite así como a otro conductor o dueño do propiedad después de un
-accidente vial."""
+accidente vial.
+"""
     
 class SYM_Case(TestCase):
     def __init__(self, filename, passphrase):
