@@ -1,5 +1,46 @@
 2002-09-24  Brian Warner  <warner@lothar.com>
 
+	* NEWS: mention remailer test framework
+
+	* configure.in (AC_OUTPUT): build tests/remailer/Makefile too
+
+	* Makefile.in (dist,DISTFILES): distribute remailer test files too
+
+	* tests/Makefile.in (check-remailer): add target, 'make check' now
+	runs remailer test too (requires python and py-gnupg).
+
+	* tests/remailer/Makefile.in: shuffle directories. Now keys are
+	unpacked from ./rings.txt into new remailer-keys/, ./rlist.txt is
+	used for the remailer list. No scripts to generate the keys, just
+	to unpack them.
+
+	* tests/remailer/test-remailer.el (mc-test-encrypt-remailer): move
+	keys to ./remailer-keys, rlist to ./rlist.txt . Put unwind.py
+	errors in mc-errbuf.
+
+	* tests/remailer/unwind.py: move keys to ./remailer-keys, don't
+	hide stderr
+
+	* tests/test-gpg.el (mc-test-encrypt): force GPG encryption,
+	apparently I wasn't really doing that before
+
+	* tests/remailer/unwind.py (test_chain): The program that
+	validates encrypt-for-remailer output. Exits with rc==0 for
+	success, exception for error.
+
+	* tests/remailer/test-remailer.el: code for automated test of
+	mc-rewrite-for-chain. Creates message, encrypts for a remailer
+	chain (using dummy keys contained in remkeys/), then pipes through
+	unwind.py which decrypts the layers and validates recipients at
+	each level, finally checking the ultimate recipient, plaintext,
+	and headers.
+
+	* Makefile.in (GPG_TESTCASES): add SE case to the distribution
+
+	* NEWS: begin to write up changes for next release
+
+	* README.dev: explain regenerating keys/testcases a bit more
+
 	* tests/gpg-testcases/*: regenerate test cases, with the
 	encryption_id fix. Cases happen to be regenerated on a machine
 	with GnuPG-1.2.0 installed.
