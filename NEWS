@@ -1,4 +1,4 @@
-Noteworthy changes in Mailcrypt version 3.5.6+:
+Noteworthy changes in Mailcrypt version 3.5.7:
 
  * Integration with the Mew mail client: added hooks to use in Mew summary,
    draft, and message buffers. Note that Mew handles PGP-MIME (RFC3156,
