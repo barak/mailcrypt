@@ -1,3 +1,11 @@
+1999-11-22  Len Budney <lbudney@pobox.com>
+
+	* mc-toplev.el: Fixed a bug in mh-rmail support, which dropped
+	the user into a stupid buffer after decrypting a message. Okay,
+	I just reverted that section of code to the original code from
+	version 3.4. Question: why on earth do I fiddle with Pat's good
+	old code?
+
 1999-11-22  Brian Warner <warner@lothar.com>
 
 	* mc-toplev.el: Reversed the test of signature verification for

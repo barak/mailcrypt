@@ -651,18 +651,12 @@ Exact behavior depends on current major mode."
 	  (mh-show msg))
       (mh-show msg)
       (save-excursion
-	(set-buffer mh-show-buffer)
-      (let ((tmp (generate-new-buffer "*Mailcrypt Viewing*")))
-        (copy-to-buffer tmp (point-min) (point-max))
-        ;(switch-to-buffer tmp t)
-	(set-buffer tmp)
-        (goto-char (point-min))
-        (set-buffer-modified-p nil)
-        (if (setq decrypt-okay (car (mc-decrypt-message)))
-            (progn
-              (goto-char (point-min))
-              (set-buffer-modified-p nil))
-            (message "Decryption failed."))))
+        (set-buffer mh-show-buffer)
+ 	  (if (setq decrypt-okay (car (mc-decrypt-message)))
+	      (progn
+		(goto-char (point-min))
+		(set-buffer-modified-p nil))
+            (message "Decryption failed.")))
       (if (not decrypt-okay)
 	  (progn
 	    (mh-invalidate-show-buffer)
