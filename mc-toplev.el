@@ -612,6 +612,8 @@ Exact behavior depends on current major mode."
 
 ;;}}}		
 ;;{{{ MH
+(defvar mc-mh-backup-msg 3
+  "If 0, never back up MH messages.  If 3, always back up messages.")
 
 (defun mc-mh-decrypt-message ()
   "Decrypt the contents of the current MH message in the show buffer."
@@ -631,7 +633,7 @@ Exact behavior depends on current major mode."
 	    (set-buffer (create-file-buffer msg-filename))
 	    (insert-file-contents msg-filename t)
 	    (if (setq decrypt-okay (car (mc-decrypt-message)))
-		(save-buffer)
+		(save-buffer mc-mh-backup-msg)
 	      (message "Decryption failed.")
 	      (set-buffer-modified-p nil))
 	    (kill-buffer nil))
