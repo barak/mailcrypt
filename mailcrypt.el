@@ -548,4 +548,5 @@ Return the passphrase.  If PROMPT is nil, only return value if cached."
 (defalias 'mailcrypt-insert-public-key 'mc-insert-public-key)
 (defalias 'mailcrypt-snarf 'mc-snarf)
 ;;}}}
+
 (provide 'mailcrypt)
