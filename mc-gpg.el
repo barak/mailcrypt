@@ -589,6 +589,10 @@ GPG ID.")
 	 ((re-search-forward
 	   "^gpg: decryption failed: Bad key$" nil t)
 	  (list nil 'symmetric nil nil))
+	 ;; Other decryption failure--big kludge! LRB
+	 ((re-search-forward
+	   "^gpg:.*decryption failed" nil t)
+	  (list nil nil nil nil))
 	 ;; password/passphrase was good (we were able to decrypt the message)
 	 ;; or the message was just signed
 	 ;; figure out signatureness
