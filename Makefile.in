@@ -46,7 +46,7 @@ OBJECTS = @EXTRA_OBJS@ \
 
 GPG_TESTCASES = $(foreach f,CS.s1v CS.s3v E.e1r E.e3 ES.e1r.s1v ES.e1r.s3v \
 		  ES.e3.s1v S.s1v S.s3v CS.s2v CS.s4 E.e2r E.e4 ES.e1r.s2v \
-		  ES.e1r.s4 ES.e4.s1v S.s2v S.s4,tests/gpg-testcases/$(f))
+		  ES.e1r.s4 ES.e4.s1v S.s2v S.s4 SE,tests/gpg-testcases/$(f))
 
 DISTFILES = $(SOURCES) ANNOUNCE COPYING ChangeLog ChangeLog.1 INSTALL	      \
 	LCD-entry Makefile.in NEWS ONEWS README configure configure.in	      \
