@@ -23,8 +23,6 @@
 
 (defvar mc-pgp-user-id (user-login-name)
   "*PGP ID of your default identity.")
-(defvar mc-pgp-always-sign nil 
-  "*If t, always sign encrypted PGP messages, or never sign if 'never.")
 (defvar mc-pgp-path "pgp" "*The PGP executable.")
 (defvar mc-pgp-display-snarf-output nil
   "*If t, pop up the PGP output window when snarfing keys.")

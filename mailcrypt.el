@@ -60,6 +60,9 @@
 
 ;;{{{ Minor mode variables and functions
 
+(defvar mc-pgp-always-sign nil 
+  "*If t, always sign encrypted PGP messages, or never sign if 'never.")
+
 (defvar mc-read-mode nil
   "Non-nil means Mailcrypt read mode key bindings are available.")
 

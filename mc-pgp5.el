@@ -263,13 +263,11 @@ PGP ID.")
 	    (setq rgn (cons rgn (point-max)))
 	    (setq results (cons result rgn)))
 
-	   ;; OPTION 2:  Something is wrong!  We cannot sign and
-	   ;; encrypt messages, since the batch mode in PGP5.0 is
-	   ;; broken.  Holler!
+	   ;; OPTION 2:  The passphrase is no good.
 	   ("Enter pass phrase:" 
 	    (interrupt-process proc)
 	    (delete-process proc)
-	    ;; This should never happen.
+	    (mc-deactivate-passwd t)
 	    (setq results '("Incorrect passphrase." nil)))
 
 	   ;; OPTION 3:  There are keys missing.  Just bug out 
@@ -415,7 +413,7 @@ PGP ID.")
 			
 	     ;; OPTION 2:  Awww...bad passphrase!
 	     ("Enter pass phrase:" 
-	      (mc-deactivate-passwd)
+	      (mc-deactivate-passwd t)
 	      (interrupt-process proc)
 	      (delete-process proc)
 
@@ -671,7 +669,7 @@ PGP ID.")
 
 	     ;; OPTION 2:  Awww...bad passphrase!
 	     ("Enter pass phrase:" 
-	      (mc-deactivate-passwd)
+	      (mc-deactivate-passwd t)
 	      (interrupt-process proc)
 	      (delete-process proc)
 
