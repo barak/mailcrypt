@@ -277,7 +277,8 @@ trustmap = {
     }
     
 if __name__ == "__main__":
-    os.mkdir(testcasedir)
+    if not os.path.isdir(testcasedir):
+        os.mkdir(testcasedir)
     make_cases()
     
 
