@@ -4,7 +4,7 @@ import GnuPGInterface
 import string, re, sys
 
 gnupg = GnuPGInterface.GnuPG()
-gnupg.options.extra_args += ['--homedir', 'remkeys', '--batch']
+gnupg.options.extra_args += ['--homedir', 'remailer-keys', '--batch']
 
 # The keyring should hold private keys for all the remailers in the chain,
 # and each one should have a passphrase equal to the name of the key.
@@ -72,18 +72,14 @@ def unwind(recipient, message):
         assert(message[3] == '-----BEGIN PGP MESSAGE-----')
         # decrypt here
         gnupg.passphrase = passphrase(recipient) # passphrase == keyname
-        devnull = open("/dev/null", "w")
         p = gnupg.run(['--decrypt'],
                       create_fhs=['stdin', 'stdout'],
-                      # comment out the next line to view stderr
-                      attach_fhs={'stderr': devnull},
                       )
         p.handles['stdin'].write(string.join(crypttext,"\n"))
         p.handles['stdin'].close()
         plaintext = p.handles['stdout'].read()
         p.handles['stdout'].close()
         p.wait()
-        devnull.close()
         step['recipient'] = recipient
         step['encrypted'] = 1
         return [step] + unwind(recipient, plaintext)
