@@ -13,6 +13,7 @@ class DirWatcher:
     def __init__(self, d):
         self.dir = d
         self.files = {}
+        self.ids = {}
         self.mtime = 0
         self.make_maildir(d)
     def make_maildir(self, which):
@@ -30,20 +31,29 @@ class DirWatcher:
         if dir_mtime > self.mtime:
             self.mtime = dir_mtime
             self.files = {}
+            self.ids = {}
             for f in os.listdir(newdir):
                 fd = open(os.path.join(newdir,f))
                 self.files[f] = {}
                 self.files[f]['msgid'] = None
                 data = ''
+                msgid = None
                 for line in fd.readlines():
                     data = data + line
                     key = "MailcryptRemailerMessageId="
                     where = line.find(key)
                     if where != -1:
                         where = where + len(key)
-                        self.files[f]['msgid'] = line[where:-1]
+                        msgid = line[where:-1]
                 fd.close()
                 self.files[f]['data'] = data
+                self.files[f]['msgid'] = msgid
+                st = os.stat(os.path.join(newdir,f))
+                self.files[f]['time'] = st[stat.ST_MTIME]
+                if self.ids.has_key(msgid):
+                    print "Hey, file %s duplicates msgid %s from file %s" % \
+                          (f, msgid, self.ids[msgid])
+                self.ids[msgid] = f
     def dump(self):
         print "dir:", self.dir
         print len(self.files)," files:"
@@ -52,10 +62,7 @@ class DirWatcher:
                   (len(self.files[f]['data']), self.files[f]['msgid'])
         print
     def msgids(self):
-        ids = []
-        map(lambda x, self=self, ids=ids: ids.append(self.files[x]['msgid']),
-            self.files.keys())
-        return ids
+        return self.ids.keys()
                                                
 class Watcher:
     def __init__(self, source, dest):
@@ -64,14 +71,37 @@ class Watcher:
     def poll(self):
         self.source.poll()
         self.dest.poll()
-    def incomplete(self):
-        waiting = []
+    def outstanding(self):
+
+        """Return a list of tuples (msgid, time), where time is the absolute
+        time the message was sent."""
+
+        outstanding = []
         s_ids = self.source.msgids()
         d_ids = self.dest.msgids()
-        for i in s_ids:
-            if i not in d_ids:
-                waiting.append(i)
-        return waiting
+        for msgid in s_ids:
+            if msgid not in d_ids:
+                f = self.source.ids[msgid]
+                outstanding.append((msgid, self.source.files[f]['time']))
+        outstanding.sort(lambda x,y: cmp(x[0], y[0]))
+        return outstanding
+    def received(self):
+
+        """Return a list of tuples (msgid, latency), where latency is in
+        seconds."""
+
+        received = []
+        s_ids = self.source.msgids()
+        d_ids = self.dest.msgids()
+        for msgid in s_ids:
+            if msgid in d_ids:
+                txf = self.source.ids[msgid]
+                txtime = self.source.files[txf]['time']
+                rxf = self.dest.ids[msgid]
+                rxtime = self.dest.files[rxf]['time']
+                received.append((msgid, rxtime - txtime))
+        received.sort(lambda x,y: cmp(x[0], y[0]))
+        return received
 
 def test1():
     w = Watcher("sdir", "ddir")
@@ -90,8 +120,8 @@ def test2():
     import time
     while 1:
         w.poll()
-        waiting = w.incomplete()
-        print waiting
+        print "outstanding:", w.outstanding()
+        print "complete:", w.received()
         time.sleep(5)
 
 if __name__ == '__main__':
