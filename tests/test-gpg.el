@@ -18,7 +18,7 @@
 (defun mc-test-encrypt ()
   (let ((b (get-buffer-create "mc plaintext"))
 	(recipients '("owner1"))
-	(scheme 'mc-scheme-gpg)
+	(mc-default-scheme 'mc-scheme-gpg)
 	(mc-pgp-always-sign 'never)
 	)
     (set-buffer b)
