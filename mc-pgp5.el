@@ -680,6 +680,8 @@ PGP ID.")
 	   "-fat" "+verbose=1" "+language=en"
 	    (format "+clearsig=%s" (if unclear "off" "on"))
 	    "+batchmode" "-u" (cdr key)))
+    (if mc-pgp50-comment
+	(setq args (cons (format "+comment=\"%s\"" mc-pgp50-comment) args)))
 
     (message "pgps %s" (mapconcat 'identity args " "))
     (message "Signing as %s ..." (car key))
