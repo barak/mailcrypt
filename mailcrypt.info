@@ -1,5 +1,5 @@
 This is Info file mailcrypt.info, produced by Makeinfo version 1.68
-from the input file mailcrypt.texi.
+from the input file ./mailcrypt.texi.
 
    This documentation describes Mailcrypt version 3.5b7.  This
 documentation was last updated on August 29, 1998.
@@ -22,57 +22,57 @@ Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 
 
 Indirect:
-mailcrypt.info-1: 996
-mailcrypt.info-2: 50586
+mailcrypt.info-1: 998
+mailcrypt.info-2: 50705
 
 Tag Table:
 (Indirect)
-Node: Top996
-Node: Introduction4955
-Node: Prerequisites5708
-Node: Installation6812
-Node: Hooking into Rmail8436
-Node: Hooking into VM8979
-Node: Hooking into MH-E9419
-Node: Hooking into Gnus9753
-Node: Command Overview10125
-Node: General Use11300
-Node: Encrypting13748
-Node: Signing16401
-Node: Inserting Keys17745
-Node: Decrypting18724
-Node: Verifying20220
-Node: Snarfing Keys20813
-Node: Remailer Support21157
-Node: Remailer Introduction22166
-Node: Remailer Quick Start24688
-Node: Remailer Chains26037
-Node: Response Blocks29718
-Node: Pseudonyms31494
-Node: Remailing Posts33234
-Node: Mixmaster Support34492
-Node: Remailer Security37170
-Node: Verifiable Pseudonyms39247
-Node: Remailer Tips40740
-Node: Passphrase Cache42746
-Node: Key Fetching44424
-Node: Keyring Fetch46795
-Node: Finger Fetch47571
-Node: HTTP Fetch47850
-Node: Miscellaneous Configuration50586
-Node: Alternate Keyring51295
-Node: Comment Field52141
-Node: Mode Line52775
-Node: Key Bindings53361
-Node: Nonstandard Paths54330
-Node: Tips55719
-Node: Limitations56960
-Node: References58310
-Node: Online Resources58840
-Node: Key Servers61244
-Node: Mailing List62923
-Node: Politics63531
-Node: Credits64943
-Node: Index65887
+Node: Top998
+Node: Introduction4957
+Node: Prerequisites5710
+Node: Installation6814
+Node: Hooking into Rmail8438
+Node: Hooking into VM8981
+Node: Hooking into MH-E9421
+Node: Hooking into Gnus9755
+Node: Command Overview10127
+Node: General Use11302
+Node: Encrypting13732
+Node: Signing16520
+Node: Inserting Keys17864
+Node: Decrypting18843
+Node: Verifying20339
+Node: Snarfing Keys20932
+Node: Remailer Support21276
+Node: Remailer Introduction22285
+Node: Remailer Quick Start24807
+Node: Remailer Chains26156
+Node: Response Blocks29837
+Node: Pseudonyms31613
+Node: Remailing Posts33353
+Node: Mixmaster Support34611
+Node: Remailer Security37289
+Node: Verifiable Pseudonyms39366
+Node: Remailer Tips40859
+Node: Passphrase Cache42865
+Node: Key Fetching44543
+Node: Keyring Fetch46914
+Node: Finger Fetch47690
+Node: HTTP Fetch47969
+Node: Miscellaneous Configuration50705
+Node: Alternate Keyring51414
+Node: Comment Field52260
+Node: Mode Line52989
+Node: Key Bindings53575
+Node: Nonstandard Paths54544
+Node: Tips56342
+Node: Limitations57583
+Node: References58933
+Node: Online Resources59463
+Node: Key Servers61867
+Node: Mailing List63546
+Node: Politics64154
+Node: Credits65566
+Node: Index66510
 
 End Tag Table

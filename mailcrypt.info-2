@@ -1,5 +1,5 @@
 This is Info file mailcrypt.info, produced by Makeinfo version 1.68
-from the input file mailcrypt.texi.
+from the input file ./mailcrypt.texi.
 
    This documentation describes Mailcrypt version 3.5b7.  This
 documentation was last updated on August 29, 1998.
@@ -76,8 +76,10 @@ resulting in output which looks something like this:
      ----- END PGP FOOBAR -----
 
    To change the comment to one of your own, set the variable
-`mc-pgp-comment'.  Set it to `nil' to use PGP's default, which is
+`mc-pgp-comment'. Set it to `nil' to use PGP's default, which is
 probably either no comment or something defined in `config.txt'.
+`mc-pgp50-comment' and `mc-gpg-comment' are the corresponding variables
+for the other versions.
 
 
 File: mailcrypt.info,  Node: Mode Line,  Next: Key Bindings,  Prev: Comment Field,  Up: Miscellaneous Configuration
@@ -133,6 +135,14 @@ provided "just in case".
    Mailcrypt will look for the PGP executable in your standard search
 path under the name `pgp'.  To use a different name (or to provide a
 complete path), set the variable `mc-pgp-path'.
+
+   PGP 5.0 includes four separate executables, usually installed as
+"pgpe", "pgps", "pgpv", and "pgpk". The variables `mc-pgp50-pgpe-path',
+`mc-pgp50-pgps-path', `mc-pgp50-pgpv-path', and `mc-pgp50-pgpk-path'
+tell Mailcrypt where to find them if they are not on your search path.
+
+   GnuPG is normally installed as "gpg". `mc-gpg-path' tells Mailcrypt
+where to find the executable if it is not on your path.
 
    In order to keep your identities straight, Mailcrypt needs to know
 where your secret keyring resides.
@@ -451,6 +461,8 @@ variable documented in this manual.
 * mc-demix:                              Mixmaster Support.
 * mc-encrypt:                            Encrypting.
 * mc-encrypt-for-me:                     Encrypting.
+* mc-gpg-comment:                        Comment Field.
+* mc-gpg-path:                           Nonstandard Paths.
 * mc-insert-public-key:                  Inserting Keys.
 * mc-install-read-mode:                  General Use.
 * mc-install-write-mode:                 General Use.
@@ -473,6 +485,11 @@ variable documented in this manual.
 * mc-pgp-keyserver-url-template:         HTTP Fetch.
 * mc-pgp-path:                           Nonstandard Paths.
 * mc-pgp-user-id:                        Encrypting.
+* mc-pgp50-comment:                      Comment Field.
+* mc-pgp50-pgpe-path:                    Nonstandard Paths.
+* mc-pgp50-pgpk-path:                    Nonstandard Paths.
+* mc-pgp50-pgps-path:                    Nonstandard Paths.
+* mc-pgp50-pgpv-path:                    Nonstandard Paths.
 * mc-post-encryption-hook:               Encrypting.
 * mc-post-signature-hook:                Signing.
 * mc-pre-encryption-hook:                Encrypting.
