@@ -1,25 +1,28 @@
-  Mailcrypt 3.5.6 is Available for Download
+  Mailcrypt 3.5.7 is Available for Download
 
 
   1.  Introduction
 
-
   Mailcrypt is an Emacs Lisp package which provides a simple interface
   to message encryption with PGP (you do use Emacs to handle your mail
-  and news, right?).  Mailcrypt version 3.5b1 and higher have been
-  extended to handle both PGP 2.6.x and PGP 5.x.  Versions 3.5 and
-  higher, including 3.5.6, also support encryption with GnuPG.
+  and news, right?).  The current version of Mailcrypt handles PGP 2.6.x,
+  PGP 5.x, and GnuPG 1.x .
 
 
   2.  Features
 
   2.1. New in this Release
 
-  This release is contains no new features.  A one-character fix was
-  made to support the use of the latest GnuPG (gpg-1.0.5), some old
-  bugfixes (that have languished in CVS for an embarrassingly long
-  time) have been merged into the release, and the documentation was
-  updated to point to MailCrypt's new home on sourceforge.net.
+  This release contains hooks to make Mailcrypt usable in Mew summary,
+  draft, and message buffers (note that Mew handles RFC3156-style PGP/MIME
+  messages by itself; mailcrypt support is just for traditional 'inline'
+  encryption).
+
+  A few bugs were fixed. MH support was changed to work with the latest
+  release of mh-e. Gnus support was updated to be usable in the summary
+  buffer. Mailcrypt no longer hard-wires /tmp as a temporary directory, but
+  uses an emacs variable called temporary-file-directory instead, which might
+  work better on NT.
 
 
   2.2.	Stable Features for PGP 5.0 and GnuPG
@@ -55,12 +58,12 @@
   o  Refine Mailcrypt schemes so that alternate backends, like Crypt++,
      can be used.
 
-  o  Build self-test framework.
+  o  Expand self-test framework.
 
 
   3.  Downloading Mailcrypt
 
-  The Official Mailcrypt version 3.5.6 can be downloaded at:
+  The Official Mailcrypt version 3.5.7 can be downloaded at:
 
   <http://mailcrypt.sourceforge.net>
 
@@ -75,5 +78,5 @@
   <ftp://cag.lcs.mit.edu/pub/patl/>
 
   Share and Enjoy!
-	- Brian Warner <warner@lothar.com>
+	- Brian Warner <warner-mailcrypt@lothar.com>
 	- Len Budney <lbudney@pobox.com>
