@@ -645,6 +645,7 @@ else
   
   EXTRA_OBJS="timer.elc"
   
+  cp FSF-timer.el timer.el
 fi
 
 trap '' 1 2 15

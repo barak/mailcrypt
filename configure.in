@@ -17,6 +17,7 @@ else
   AC_SUBST(EXTRA_SRCS)
   EXTRA_OBJS="timer.elc"
   AC_SUBST(EXTRA_OBJS)
+  cp FSF-timer.el timer.el
 fi
 
 AC_OUTPUT(Makefile)

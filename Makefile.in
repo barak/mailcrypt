@@ -44,7 +44,7 @@ OBJECTS = @EXTRA_OBJS@ \
 DISTFILES = $(SOURCES) ANNOUNCE ChangeLog INSTALL LCD-entry Makefile.in \
 	NEWS ONEWS README configure configure.in install-sh load-path.hack \
 	mailcrypt.info mailcrypt.dvi mailcrypt.texi mkinstalldirs \
-	texi2html.ext timer.el
+	texi2html.ext FSF-timer.el
 
 SHELL = /bin/sh
 #.PHONY: all clean dist distclean dvi html info install \
