@@ -480,7 +480,7 @@ Exact behavior depends on current major mode."
 		 (rmail-cease-edit)
 		 (rmail-kill-label "edited")
 		 (rmail-add-label "decrypted")
-		 (if (cdr decryption-result)
+		 (if (not (cdr decryption-result))
 		     (rmail-add-label "verified")))
 		(t
 		 (let ((tmp (generate-new-buffer "*Mailcrypt Viewing*")))
