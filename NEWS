@@ -1,25 +1,28 @@
 Noteworthy changes in Mailcrypt version 3.5.8:
 
- * mc-remail.el updated to support modern remailers (defined as
-   MixMaster-2.9b33 from sourceforge)
+ * mc-remail.el updated to support modern remailers (as defined by MixMaster
+   version 2.9b33, on sourceforge)
 
- ** Subject: header is put in the ## section instead of :: section, so
-    remailers should copy them into the final message.
+ ** the 'Subject:' header is now put in the ## section instead of the ::
+    section, so remailers should copy them into the final message.
 
  ** Use Anon-To: instead of Request-Remailing-To
+
+ * fixed mc-gpg.el to cache passphrases by keyid instead of name; this will
+   help users who have multiple secret keys with the same name but different
+   passphrases
 
  * less noteworthy changes:
 
  ** added copy of GPL, since mailcrypt is distributed separately from Emacs
 
- ** began to add test framework for remailer testing.
+ ** Added unit test for anonymous remailer support. Encrypting through a
+    basic remailer chain can now be verified, if you have python and
+    py-gnupg installed.
 
  ** docs: updated 'finger' addresses for remailer lists again, since they
     keep moving
 
- ** fixed mc-gpg.el to cache passphrases by keyid instead of name; this will
-    help users who have multiple secret keys with the same name but
-    different passphrases
 
 Noteworthy changes in Mailcrypt version 3.5.7:
 
