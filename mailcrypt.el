@@ -204,7 +204,7 @@
 ;;}}}
 
 ;;{{{ User variables.
-(defconst mc-version "3.5.8")
+(defconst mc-version "3.5.8+")
 (defvar mc-temp-directory 
   (cond ((fboundp 'temp-directory) (temp-directory))
 	((boundp 'temporary-file-directory) temporary-file-directory)
@@ -303,6 +303,7 @@ If 'never, always use a viewer instead of replacing.")
 (defvar mc-passwd-cache nil "Cache for passphrases.")
 
 (defvar mc-schemes '(("pgp50" . mc-scheme-pgp50)
+                     ("pgp65" . mc-scheme-pgp65)
 		     ("pgp" . mc-scheme-pgp)
 		     ("gpg" . mc-scheme-gpg)
 		     ))
