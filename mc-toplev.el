@@ -526,7 +526,7 @@ Exact behavior depends on current major mode."
 	from-line)
     (if (interactive-p)
 	(vm-follow-summary-cursor))
-    (vm-select-folder-buffer)
+;   (vm-select-folder-buffer) ;; TNX Eric C. Newton for commenting out.
     (vm-check-for-killed-summary)
     (vm-error-if-folder-read-only)
     (vm-error-if-folder-empty)
