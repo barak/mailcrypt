@@ -3,6 +3,13 @@ AC_INIT(mailcrypt.el)
 
 AC_PROG_INSTALL()
 
+AC_PATH_PROG(INSTALL_INFO, install-info)
+if test "$INSTALL_INFO x" = " x"
+then
+  INSTALL_INFO=":"
+fi
+AC_SUBST(INSTALL_INFO)
+
 AC_PATH_PROG(BASENAME, basename)
 if test "$BASENAME x" = " x"
 then

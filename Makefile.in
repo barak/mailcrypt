@@ -14,8 +14,9 @@ datadir = $(prefix)/share
 # Where to put the .el and .elc files
 lispdir=$(datadir)/emacs/site-lisp
 
-# Where to put the Info file
+# Where to put the Info files
 infodir=$(prefix)/info
+INFOFILES  = mailcrypt.info mailcrypt.info-1 mailcrypt.info-2
 
 # Where to put the helper scripts
 bindir=@exec_prefix@/bin
@@ -23,6 +24,7 @@ bindir=@exec_prefix@/bin
 # Installation command
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
+INSTALL_INFO = @INSTALL_INFO@
 
 # Various auxiliary programs
 MAKEINFO=makeinfo
@@ -44,8 +46,8 @@ OBJECTS = @EXTRA_OBJS@ \
 
 DISTFILES = $(SOURCES) ANNOUNCE ChangeLog INSTALL LCD-entry Makefile.in \
 	NEWS ONEWS README configure configure.in install-sh load-path.hack \
-	mailcrypt.info mailcrypt.dvi mailcrypt.texi mkinstalldirs \
-	texi2html.ext FSF-timer.el
+	mailcrypt.texi mkinstalldirs texi2html.ext FSF-timer.el \
+	$(INFOFILES) mailcrypt.dvi
 
 SHELL = /bin/sh
 #.PHONY: all clean dist distclean dvi html info install \
@@ -59,7 +61,7 @@ SHELL = /bin/sh
 
 all: $(OBJECTS)
 
-install: all installdirs $(infodir)/mailcrypt $(bindir)
+install: all installdirs install-info $(bindir)
 	for f in $(SOURCES); do \
 	  $(INSTALL_DATA) $(srcdir)/$$f $(lispdir); \
 	done;
@@ -72,22 +74,25 @@ install: all installdirs $(infodir)/mailcrypt $(bindir)
 installdirs: mkinstalldirs
 	$(srcdir)/mkinstalldirs $(lispdir) $(infodir) $(bindir)
 
-$(infodir)/mailcrypt: mailcrypt.info
+install-info: info
 	# There may be a newer info file in . than in srcdir.
 	-if test -f mailcrypt.info; then d=.; \
 	 else d=$(srcdir); fi; \
-	$(INSTALL_DATA) $$d/mailcrypt.info $@; \
-	if $(SHELL) -c 'install-info --version'	>/dev/null 2>&1; then \
-	  install-info --infodir=$(infodir) $$d/mailcrypt.info; \
-	else true; fi
+	for file in $(INFOFILES); do\
+	  $(INSTALL_DATA) $$d/$$file $(infodir)/$$file; \
+	done;
+	$(INSTALL_INFO) --info-dir=$(infodir) \
+	--entry="* Mailcrypt: (mailcrypt).       An Emacs/PGP interface" \
+	mailcrypt.info 
 
 uninstall:
 	-cd $(lispdir) && rm -f $(SOURCES) $(OBJECTS)
-	-rm -f $(infodir)/mailcrypt
+	-cd $(infodir) && rm -f $(INFOFILES)
+	$(INSTALL_INFO) --remove --info-dir=$(infodir) mailcrypt.info
 
-info: mailcrypt.info
+info: $(INFOFILES)
 
-mailcrypt.info: mailcrypt.texi
+$(INFOFILES): mailcrypt.texi
 	$(MAKEINFO) $(srcdir)/mailcrypt.texi
 
 timer.el: FSF-timer.el

@@ -17,8 +17,8 @@
 @syncodeindex fn cp
 
 @set TITLE Mailcrypt
-@set VERSION 3.4
-@set UPDATED October 10, 1995
+@set VERSION 3.5b6
+@set UPDATED August 29, 1998
 
 @ifinfo
 
@@ -26,6 +26,7 @@ This documentation describes Mailcrypt version @value{VERSION}.  This
 documentation was last updated on @value{UPDATED}.
 
 Copyright 1995 Patrick J. LoPresti
+Copyright 1998 Leonard R. Budney
 
 The Mailcrypt program and this manual are published as free software.
 You may redistribute and/or modify them under the terms of the GNU
@@ -48,11 +49,14 @@ Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 @subtitle Version @value{VERSION}
 @subtitle @value{UPDATED}
 @author Patrick J. LoPresti <patl@@lcs.mit.edu>
+@author Leonard R. Budney <lbudney@@pobox.com>
 
 @c Copyright page
 @page
 @vskip 0pt plus 1filll
 Copyright @copyright{} 1995 Patrick J. LoPresti
+
+Copyright @copyright{} 1998 Leonard R. Budney
 
 The Mailcrypt program and this documentation are published as free
 software.  You may redistribute and/or modify them under the terms of
@@ -189,8 +193,8 @@ need to get started is contained in this Introduction alone.
 @node Prerequisites, Installation, Introduction, Introduction
 @section Prerequisites
 
-Mailcrypt requires version 19 of GNU Emacs.  Mailcrypt has been tested
-on a variety of systems under both FSF Emacs and XEmacs.
+Mailcrypt requires version 19 or higher of GNU Emacs.  Mailcrypt has
+been tested on a variety of systems under both FSF Emacs and XEmacs.
 
 Mailcrypt requires Pretty Good (tm) Privacy, usually known as PGP.  This
 document assumes that you have already obtained and installed PGP and
@@ -215,8 +219,17 @@ this manual.
 
 If Mailcrypt is not installed on your system, obtain the latest version
 from the Mailcrypt home page at
-@file{http://cag-www.lcs.mit.edu/mailcrypt/} and follow the instructions
-in the file @file{INSTALL}.
+@file{http://www.pobox.com/~lbudney/linux/software/mailcrypt.html} and
+follow the instructions in the file @file{INSTALL}.
+
+Next, decide what version of PGP you are using.  Versions 3.5 and higher
+of Mailcrypt support multiple versions of PGP.  To choose a version,
+add one of the following lines to your @file{.emacs} file:
+
+@lisp
+(mc-setversion "pgp")    ; for PGP 2.6.x
+(mc-setversion "pgp50")  ; for PGP 5.x
+@end lisp
 
 Next, teach your Emacs how and when to load the Mailcrypt functions and
 install the Mailcrypt key bindings.  Almost all Emacs major modes
@@ -291,8 +304,7 @@ To hook Mailcrypt into Gnus, use the following lines:
 @section Command Overview
 
 All Mailcrypt commands are (by default) activated by three-character key
-sequences which begin with @kbd{C-c /}.  The four most common operations
-are:
+sequences which begin with @kbd{C-c /}.  The most common operations are:
 
 @table @emph
 
@@ -324,6 +336,15 @@ is to access the @code{Mailcrypt} pull-down menu.
 
 @node  General Use, Remailer Support, Introduction, Top
 @chapter General Use
+
+@findex mc-setversion
+By default, Mailcrypt assumes you are using one of the PGP 2.6.x
+versions.  This permits backward compatibility for the millions of
+satisfied users of Mailcrypt 3.4 worldwide.  If you wish to specify a
+different version of PGP, use this function. Its action is the same as
+setting the variable @code{mc-default-scheme}. For a list of supported
+versions, press the tab key. Note that "pgp" in this context means
+version 2.6.x of PGP, the original (and default) PGP version.
 
 @findex mc-read-mode
 @findex mc-write-mode
@@ -1450,6 +1471,12 @@ topics related to PGP and Mailcrypt.
 @section Online Resources
 
 @table @file
+
+@item http://cag-www.lcs.mit.edu/mailcrypt/
+"Mailcrypt: An Emacs/PGP Interface", by Pat LoPresti. This page has
+been the Mailcrypt homepage since October 10, 1995.  It is still
+the distribution site for version 3.4 of Mailcrypt--a rock-solid
+version still to be recommended if you use only PGP 2.6.x.
 
 @item http://world.std.com/~franl/crypto.html
 "Cryptography, PGP, and Your Privacy", by Fran Litterio.  This page is
