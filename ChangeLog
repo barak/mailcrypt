@@ -1,3 +1,24 @@
+2003-07-25  Brian Warner  <warner@lothar.com>
+
+	* NEWS: summarize recent changes
+
+	* mc-gpg.el (mc-gpg-process-region): Set the gpg-stdout buffer
+	(which receives data from mailcrypt) to multibyte mode. This
+	should fix the "inserts \201 characters before non-ascii" bug
+	[SF#496157, SF#501891], and possibly others.
+
+	* tests/test-gpg.el (run-all-tests): Run tests twice, once with
+	standard-display-european turned on. This triggers the
+	long-standing "clearsigning inserts \201 characters" bug. Also
+	display mismatching plaintext a bit better.
+
+2003-07-16  Brian Warner  <warner@lothar.com>
+
+	* tests/make_gpg_testcases.py (Latin1_CS_Case.make_plaintext): 
+	clearsigned messages must always end with a newline. gpg will add
+	one if necessary. This caused the test case to fail.
+	* tests/gpg-testcases/CS.latin1.s1v: added newline to plaintext
+
 2003-07-15  Brian Warner  <warner@lothar.com>
 
 	* tests/remailer/fakemix.sh: oops, add script used by unit tests
