@@ -31,6 +31,7 @@
 ;  need to deal with untrusted keys, missing keys (offer to fetch), --throw
 ; #mc-gpg-decrypt-region [anything not clearsigned] (a,as,ae,ase)
 ;  need to implement signature-key fetch, ponder --throw-keyid case
+;  keys without passphrases, sigs with bad algorithms (ignore sig? warn?)
 ; #mc-gpg-sign-region (clearsign/notclearsign)
 ; #mc-gpg-verify-region [clearsigned only] (ok/badsig/missingkey/corruptmsg)
 ; #mc-gpg-insert-public-key (comment, altkeyring)
@@ -50,6 +51,8 @@
 ;   (this is embedded in gpg)
 ;  extra options, possibly by destination user. Maybe for pgp5.0/pgp2.6 compat?
 ;  rfc2015 operation (MIME: application/pgp-signature, etc)
+;  signature dates are currently reported with just the date. Find a time
+;   formatting function and use the longtime in the VALIDSIG message.
 
 ; mc-gpg-alternate-keyring seems dubious.. have two options, public/private?
 
@@ -71,7 +74,8 @@
 (defvar mc-gpg-alternate-keyring nil
   "*Public keyring to use instead of default.")
 (defvar mc-gpg-comment
-   (format "Processed by Mailcrypt %s and Gnu Privacy Guard <http://www.gnupg.org/>" mc-version)
+   (format "Processed by Mailcrypt %s and Gnu Privacy Guard <http://www.gnupg.o
+rg/>" mc-version)
   "*Comment field to appear in ASCII armor output.  If nil, let GPG use its 
 default.")
 (defconst mc-gpg-msg-begin-line "^-----BEGIN PGP MESSAGE-----\r?$"
@@ -86,27 +90,17 @@ default.")
   "Text for start of GPG public key.")
 (defconst mc-gpg-key-end-line "^-----END PGP PUBLIC KEY BLOCK-----\r?$"
   "Text for end of GPG public key.")
-(defconst mc-gpg-error-re "^\\(ERROR:\\|WARNING:\\).*"
-  "Regular expression matching an error from GPG")
-(defconst mc-gpg-sigok-re "^gpg: Good signature.*"
-  "Regular expression matching a GPG signature validation message")
-(defconst mc-gpg-newkey-re 
-  "^[^:]+:[^:]+: \\(key [0-9A-F]+\\): \\(.*\\)$"
-  "Regular expression matching a GPG key snarf message")
-(defconst mc-gpg-nokey-re
-  "Cannot find the public key matching userid '\\(.+\\)'$"
-  "Regular expression matching a GPG missing-key messsage")
-(defconst mc-gpg-key-expected-re
-  "gpg: Signature made .+ using .+ key ID \\(\\S +\\)\ngpg: Can't check signature: Public key not found")
 (defconst mc-gpg-extra-args nil
   "Extra arguments to pass to all invocations of gpg. Used during debugging to
 set --homedir, to use special test keys instead of the developer's normal
 keyring.")
 (defconst mc-gpg-debug-buffer nil
-  "A buffer for debugging messages. If nil, no debugging messages are logged.")
+  "A buffer for debugging messages. If nil, no debugging messages are logged.
+BEWARE! Sensitive data (including your passphrase) is put here. Set this with:
+ (setq mc-gpg-debug-buffer (get-buffer-create \"mc debug\"))")
 
-; we use with-current-buffer for clarity. emacs19 doesn't have it. This
-; code is cribbed from lazy-lock.el which does the same thing
+;; we use with-current-buffer for clarity. emacs19 doesn't have it. This
+;; code is cribbed from lazy-lock.el which does the same thing
 (eval-when-compile
   ;; We use this for clarity and speed.  Borrowed from a future Emacs.
   (or (fboundp 'with-current-buffer)
@@ -116,14 +110,13 @@ The value returned is the value of the last form in BODY."
 	(` (save-excursion (set-buffer (, buffer)) (,@ body)))))
   )
 
-; set this with (setq mc-gpg-debug-buffer (get-buffer-create "mc debug"))
 (defun mc-gpg-debug-print (string)
   (if (and (boundp 'mc-gpg-debug-buffer) mc-gpg-debug-buffer)
       (print string mc-gpg-debug-buffer)))
 
 ;; the insert parser will return '(t) and insert the whole of stdout if 
 ;; rc == 0, and will return '(nil rc stderr) if rc != 0
-(defun mc-gpg-insert-parser (stdoutbuf stderrbuf statusbuf rc)
+(defun mc-gpg-insert-parser (stdoutbuf stderrbuf statusbuf rc parserdata)
   (mc-gpg-debug-print 
    (format "(mc-gpg-generic-parser stdoutbuf=%s stderrbuf=%s rc=%s"
 	   stdoutbuf stderrbuf rc))
@@ -133,7 +126,7 @@ The value returned is the value of the last form in BODY."
 )
 
 ;; the null parser returns rc and never inserts anything
-(defun mc-gpg-null-parser (stdoutbuf stderrbuf statusbuf rc)
+(defun mc-gpg-null-parser (stdoutbuf stderrbuf statusbuf rc parserdata)
   (list nil rc))
 
 ; utility function (variant of mc-process-region):
@@ -142,7 +135,7 @@ The value returned is the value of the last form in BODY."
 ; three buffers of output are collected: stdout, stderr, and --status-fd
 ;
 ; parser is called with stdoutbuf as the current buffer as
-;  (parser stdoutbuf stderrbuf statusbuf rc)
+;  (parser stdoutbuf stderrbuf statusbuf rc parserdata)
 ; and is expected to return a list:
 ;  '(REPLACEP RESULT)
 ;
@@ -151,7 +144,8 @@ The value returned is the value of the last form in BODY."
 ; is left alone. RESULT (specifically (cdr parser-return-value)) is returned
 ; by mc-gpg-process-region.
 
-(defun mc-gpg-process-region (beg end passwd program args parser bufferdummy)
+(defun mc-gpg-process-region (beg end passwd program args parser bufferdummy
+				  &optional parserdata)
   (let ((obuf (current-buffer))
 	(process-connection-type nil)
 	(shell-file-name "/bin/sh") ;; ??? force? need sh (not tcsh) for "2>"
@@ -162,7 +156,8 @@ The value returned is the value of the last form in BODY."
 	proc rc status parser-result
 	)
     (mc-gpg-debug-print (format 
-       "(mc-gpg-process-region beg=%s end=%s passwd=%s program=%s args=%s parser=%s bufferdummy=%s)"
+       "(mc-gpg-process-region beg=%s end=%s passwd=%s program=%s args=%s parse
+r=%s bufferdummy=%s)"
        beg end passwd program args parser bufferdummy))
     (setq stderr-tempfilename 
 	  (make-temp-name (expand-file-name "mailcrypt-gpg-stderr-"
@@ -253,7 +248,9 @@ The value returned is the value of the last form in BODY."
 
 	  ;; feed the parser
 	  (set-buffer mybuf)
-	  (setq parser-result (funcall parser mybuf stderr-buf status-buf rc))
+	  (setq parser-result (funcall parser 
+				       mybuf stderr-buf status-buf 
+				       rc parserdata))
 	  (mc-gpg-debug-print (format " parser returned %s" parser-result))
 
 	  ;; what did the parser tell us?
@@ -276,8 +273,8 @@ The value returned is the value of the last form in BODY."
       (set-buffer obuf)
       (delete-file stderr-tempfilename)
       (delete-file status-tempfilename)
-      ;; kill off temporary buffers (which would be useful for debugging)
-      (if t ;; nil for easier debugging
+      ;; kill off temporary buffers unless we're debugging
+      (if (not mc-gpg-debug-buffer)
 	  (progn
 	    (if (get-buffer " *mailcrypt stdout temp")
 		(kill-buffer " *mailcrypt stdout temp"))
@@ -301,9 +298,11 @@ The value returned is the value of the last form in BODY."
 ;31:warner@zs2-pc4% gpg --list-secret-keys --with-colons --no-greeting
 ;/home/warner/.gnupg/secring.gpg
 ;-------------------------------
-;sec::1024:17:1FE9CBFDC63B6750:1998-08-04:0:::Brian Warner (temporary GPG key) <warner@lothar.com>:
+;sec::1024:17:1FE9CBFDC63B6750:1998-08-04:0:::Brian Warner (temporary GPG key) 
+<warner@lothar.com>:
 ;ssb::1024:20:C68E8DE9F759FBDE:1998-08-04:0:::
-;sec::768:17:16BD446D567E33CF:1998-08-04:0:::signature (sample signature key) <key@key>:
+;sec::768:17:16BD446D567E33CF:1998-08-04:0:::signature (sample signature key) <
+key@key>:
 ;sec::768:16:D514CB72B37D9AF4:1998-08-04:0:::crypt (crypt) <crypt@crypt>:
 ;sec::1024:17:4DBDD3258230A3E0:1998-08-04:0:::dummyy <d@d>:
 ;ssb::1024:20:549B0E6CBBBB43D1:1998-08-04:0:::
@@ -321,10 +320,11 @@ GPG ID.")
   ;; pair of strings (USER-ID . KEY-ID) which uniquely identifies the
   ;; matching key, or nil if no key matches.
   (let (args)
-    (if (equal str "***** CONVENTIONAL *****") nil
+    (if (string= str "***** CONVENTIONAL *****") nil
       (let ((result (cdr-safe (assoc str mc-gpg-key-cache)))
 	    (key-regexp
-	     "^\\(sec\\|pub\\):[^:]*:[^:]*:[^:]*:\\([^:]*\\):[^:]*:[^:]*:[^:]*:[^:]*:\\([^:]*\\):$"
+	     "^\\(sec\\|pub\\):[^:]*:[^:]*:[^:]*:\\([^:]*\\):[^:]*:[^:]*:[^:]*:
+[^:]*:\\([^:]*\\):$"
 	     )
 	    (obuf (current-buffer))
 	    buffer)
@@ -436,135 +436,136 @@ GPG ID.")
 ))
 
 
-; GPG DECRYPT BEHAVIOR:
+; GPG DECRYPT BEHAVIOR:  gnupg-0.9.9 only
+;  (all status messages are prefixed by "[GNUPG:] "
 
 ; signed (not encrypted) by a known key [S.s1v]:
 ;  rc == 0, stdout has message
-;  stderr: gpg: Signature made <date> using DSA key ID <pubkeyid32>
-;  stderr: gpg: Good signature from "<keyname>"
-;  status: GOODSIG <pubkeyid32> <keyname>
-;  status: TRUST_<level>
-;   0.9.0: GOODSIG <pubkeyid64> <keyname>
-;   0.9.1: VALIDSIG <pubkey-fingerprint>
-;   0.9.4: SIGID <sigprint> YYYY-MM-DD
-;   0.9.7: SIGID <sigprint> YYYY-MM-DD <longtime>
-;          VALIDSIG <pubkey-fingerprint> YYYY-MM-DD <longtime>
+;  status:
+;   SIG_ID <sigid> <date> <longtime>
+;   GOODSIG <longkeyid> <username>
+;   VALIDSIG <keyfingerprint> <date> <longtime>
+;   TRUST_foo
 
 ; signed (not encrypted) by unknown key [S.s4]:
 ;  rc == 2, stdout has message
-;  stderr: gpg: Signature made <date> using DSA key ID <pubkeyid32>
-;  stderr: Can't check signature: [Pp]ublic key not found
-;  status: ERRSIG
-;   0.9.5: ERRSIG <pubkeyid64> <algo-id>
-;   0.9.7: ERRSIG <pubkeyid64> <pubkey-algo-id> <hash-algo-id> <sig-class==00> <longtime> <rc==9>
-;      <rc>: 4 unknown algorithm, 9 missing pubkey
+;  status:
+;   ERRSIG <longkeyid> <pubkeyalgo> <hashalgo> <sigclass> <longtime> <rc>
+;   NO_PUBKEY <longkeyid>
 
 ; encrypted to a private key we don't have [E.e3]:
 ;  rc == 2,
-;  stderr: gpg: decryption failed: [Ss]ecret key not available
+;  stderr: gpg: decryption failed: secret key not available
 ;  status:
-;  0.4.4: none
-;  0.9.5: ENC_TO <keyid>
-;  0.9.6: DECRYPTION_FAILED
+;   ENC_TO <longkeyid> <keytype> <keylength==0>
+;   NO_SECKEY <longkeyid>
+;   DECRYPTION_FAILED
+
+; encrypted to us, our key has no passphrase
+;  rc == 0?
+;  stderr: gpg: NOTE: secret key foo is NOT protected
+;  status:
+;   ENC_TO <longkeyid> <keytype> <keylen==0>
+;   GOOD_PASSPHRASE
+;   DECRYPTION_OKAY
 
 ; encrypted to us, but we didn't give a passphrase [E.e1r, no pw]:
 ;  rc == 2
 ;  stderr: gpg: fatal: Can't query password in batchmode
 ;  status:
-;   0.4.4: NEED_PASSPHRASE <subkeyid>
-;   0.9.1: NEED_PASSPHRASE <subkeyid> <pubkeyid>
-;   0.9.5: ENC_TO <subkeyid>
+;    ENC_TO <longkeyid> <keytype> <keylength==0>
+;    NEED_PASSPHRASE <longkeyid> <otherlongkeyid> <keytype> <keylen==0>
+;    MISSSING_PASSPHRASE
+;    BAD_PASSPHRASE <longkeyid>
+;    DECRYPTION_FAILED
+; (N.B.: gpg cannot tell tell the difference between no passphrase and an
+;  empty passphrase.)
+
+; encrypted to us *and someone else*, no passphrase [E.e3re1r, no pw]:
+;  rc == 2?
+;  stderr: gpg: fatal: Can't query password in batchmode
+;  status:
+;    ENC_TO <longkeyid1> <keytype> <keylength==0>
+;    NEED_PASSPHRASE <longkeyid1> <otherlongkeyid> <keytype> <keylen==0>
+;    MISSSING_PASSPHRASE
+;    BAD_PASSPHRASE <longkeyid1>
+;    ENC_TO <longkeyid2> .. ..
+;    NO_SECKEY <longkeyid2>
+;    DECRYPTION_FAILED
 
 ; encrypted to us, but we used the wrong passphrase [E.e1r, bad pw]:
 ;  rc == 2
 ;  stderr: gpg: public key decryption failed: [Bb]ad passphrase
 ;  status:
-;   0.4.4: NEED_PASSPHRASE <subkeyid>
-;   0.9.1: NEED_PASSPHRASE <subkeyid> <pubkeyid>
-;   0.9.5: ENC_TO <subkeyid>
-;          BAD_PASSPHRASE <subkeyid>
-;   0.9.6: DECRYPTION_FAILED
+;    ENC_TO <longkeyid> <keytype> <keylength==0>
+;    NEED_PASSPHRASE <longkeyid> <otherlongkeyid> <keytype> <keylen==0>
+;    BAD_PASSPHRASE <longkeyid>
+;    DECRYPTION_FAILED
 
 ; encrypted to us, good passphrase [E.e1r, good pw]:
 ;  rc == 0, stdout has message
 ;  status:
-;   0.4.4: NEED_PASSPHRASE <subkeyid>
-;   0.9.1: NEED_PASSPHRASE <subkeyid> <pubkeyid>
-;   0.9.5: ENC_TO <subkeyid>
-;   0.9.6: GOOD_PASSPHRASE
-;          DECRYPTION_OKAY
+;    ENC_TO <longkeyid> <keytype> <keylength==0>
+;    NEED_PASSPHRASE <longkeyid> <otherlongkeyid> <keytype> <keylen==0>
+;    GOOD_PASSPHRASE
+;    DECRYPTION_OKAY
 
 ; encrypted to us, good passphrase, signed by trusted/untrusted party
 ;                                        [ES.e1r.s1v, good ps]:
 ;  rc == 0, stdout has message
 ;  stderr: gpg: Signature made <date> using DSA key ID <pubkeyid>
 ;  stderr: gpg: Good signature from "<keyname>"
-;  status: NEED_PASSPHRASE (as above)
-;  status: GOODSIG <pubkeyid> <keyname>
-;  status: TRUST_<level>
-;   0.4.5: GOODSIG <32bit-pubkeyid>. >=0.9.0: GOODSIG <64bit-pubkeyid>
-;   0.9.1 added VALIDSIG <big-fingerpring-of-pubkeyid>
-;   0.9.4 added SIG_ID <base64-sigid> <YYYY-MM-DD>
-;   0.9.5 added ENC_TO <64bit-subkeyid>
-;   0.9.6: GOOD_PASSPHRASE
-;          DECRYPTION_OKAY
-;   0.9.7: SIG_ID <base64-sigid> <YYY-MM-DD> <longtime>
-;          VALIDSIG <big> <YYYY-MM-DD> <longtime>
+;  status:
+;    ENC_TO <longkeyid> <keytype> <keylength==0>
+;    NEED_PASSPHRASE <longkeyid> <otherlongkeyid> <keytype> <keylen==0>
+;    GOOD_PASSPHRASE
+;    SIG_ID <sigid> <date> <longtime>
+;    GOODSIG <longkeyid> <username>
+;    VALIDSIG <keyfingerprint> <date> <longtime>
+;    TRUST_(UNDEFINED|NEVER|MARGINAL|FULLY|ULTIMATE)
+;    DECRYPTION_OKAY
 
 ; encrypted to us, good passphrase, signed by unknown party [ES.e1r.s4]:
 ;  rc == 2, stdout has message
 ;  stderr: gpg: Signature made <date> using DSA key ID <pubkeyid>
 ;  stderr: gpg: Can't check signature: [Pp]ublic key not found
-;  status: NEED_PASSPHRASE (as above)
-;  status: ERRSIG
-;   0.9.5: ERRSIG <64bit-pubkeyid> <algo-id>
-;          ENC_TO <subkeyid>
-;   0.9.6: GOOD_PASSPHRASE
-;          DECRYPTION_OKAY
-;   0.9.7: ERRSIG <64bit-pubkeyid> <algo-id> <hashid> <sig-class==01> <longtime> <rc==9>
+;  status:
+;    ENC_TO <longkeyid> <keytype> <keylength==0>
+;    NEED_PASSPHRASE <longkeyid> <otherlongkeyid> <keytype> <keylen==0>
+;    GOOD_PASSPHRASE
+;    ERRSIG <longkeyid> <pubkeyalgo> <hashalgo> <sigclass> <longtime> <rc>
+;     rc: 4 is unknown algorithm, 9 is missing public key
+;    NO_PUBKEY <longkeyid>
+;    DECRYPTION_OKAY
 
 ; symmetrically encrypted, we didn't give a passphrase
 ;  rc == 2, stderr: gpg: fatal: Can't query password in batchmode
-;  status: none
-;   0.9.6: NEED_PASSPHRASE_SYM 4 1 3
+;  status:
+;    NEED_PASSPHRASE_SYM <cipheralgo> <s2kmode> <s2khash>
+;    MISSING_PASSPHRASE
+;    DECRYPTION_FAILED
 
 ; symmetrically encrypted, we gave the wrong passphrase
 ;  rc == 2, stderr: gpg: decryption failed: [Bb]ad key
-;  status: none
-;   0.9.6: NEED_PASSPHRASE_SYM 4 1 3
-;          DECRYPTION_FAILED
+;  status:
+;    NEED_PASSPHRASE_SYM <cipheralgo> <s2kmode> <s2khash>
+;    DECRYPTION_FAILED
 
 ; symmetrically encrypted, good passphrase
 ;  rc == 0, stdout: message
-;  status: none
-;   0.9.6: NEED_PASSPHRASE_SYM 4 1 3  (cipheralgo, s2kmode, s2khash)
-;          DECRYPTION_OKAY
+;  status:
+;    NEED_PASSPHRASE_SYM <cipheralgo> <s2kmode> <s2khash>
+;    DECRYPTION_OKAY
 
 ; armored [A]:
 ;  rc == 0, stdout: message
-;  (note: indistinguishable from symmetric with good passphrase)
+;  no status
 
 ; corrupted armor
 ;  rc == 2, stderr: gpg: CRC error; stuff - stuff
 
 ; ( to test: multiple recipients, keys without passphrases)
 
-;; note that if rc != 0, one of the following has occurred:
-;; 1message is to us but we didn't give a passphrase
-;;   (no SIG messages, has NEED_PASSPHRASE)
-;; 2message was encrypted to a key we don't have
-;;   (no SIG messages, no NEED_PASSPHRASE messages, >0.9.5 has ENC_TO)
-;; 3message was symmetrically encrypted and we have no or wrong passphrase
-;;   (no SIG, no NEED_PASSPHRASE)
-;; 4everything decrypted OK, but the message was signed by an unknown key
-;;   (ERRSIG will be in status)
-;; 5message is corrupted
-;;   (no status messages at all, stderr says CRC error)
-;;
-;; so unless we've got 0.9.5 or later, we have to parse stderr to distinguish
-;; between #2 and #3 (and we must, to determine if we need to ask the
-;; user for a passphrase or not).
-;; For all versions, we have to parse stderr to distinguish between #3 and #5.
 
 ;; this parser's return convention:
 ;;   '( (
@@ -582,6 +583,12 @@ GPG ID.")
 ;;       )
 ;;      )
 ; todo: stealth ("--throw-keyid")?
+;       when there is a signature that we can't check because of a bad algo
+;       then we pretend there wasn't a signature. extend the return convention
+;       to signal this case.
+;       when there is a signature that we can't check because we don't
+;       currently have a key, and if we successfully fetch that key in
+;       mc-gpg-decrypt-region, how do we restart the operation?
 
 ;; cases:
 ;;  *not addressed to us (nil nil nil)
@@ -609,222 +616,277 @@ GPG ID.")
 ;;        *good sig (t t (t keyid-string date trust))
 ;;        *bad sig (t t (nil keyid-string date trust))
 
-; this parser's job is to find the decrypted data if any is available. The
-; code in -decrypt-region will worry about reporting other status information
-; like signatures
+;; a subfunction to extract the signature info. Used in both decrypt-parser
+;; and verify-parser. Call with statusbuf. Returns
+;;  '(sigtype sigid sigdate sigtrust)
 
-(defvar mc-gpg-handle-pre095 t
-  "Include parsing code to handle versions of GnuPG older than gpg-0.9.5 .
-Recent versions of GPG have better, more parseable status messages and don't
-require as many locale-specific stderr messages to be parsed. If t, parse
-stderr messages to figure out what gpg did. Leave this set to t unless you are
-running a recent GPG in a non-US locale and encounter problems with GPG
-messages not being recognized properly. Think of this variable as more of a
-#define constant to keep some parsing code clean.")
+(defun mc-gpg-sigstatus-parser ()
+  (let (sigtype sigid sigdate sigtrust)
 
-(defun mc-gpg-decrypt-parser (stdoutbuf stderrbuf statusbuf rc)
-  (let (enckeyid keyid symmetric badpass sigtype sigid sigdate sigtrust)
-    (set-buffer statusbuf)
-    ;; keyid: the message is encrypted to one of our keys. which one?
-    (goto-char (point-min))
-    (if (re-search-forward "^\\[GNUPG:\\]\\s +NEED_PASSPHRASE\\s +\\(\\S +\\)" 
-			   nil t)
-	(setq keyid (concat "0x" (match-string 1))))
-    (goto-char (point-min))
-    ;; badpass: t if gpg reported a bad passphrase (>=0.9.5)
-    ;;          we gave one, but it was wrong. this is different than us not
-    ;;          giving one.
-    (if (re-search-forward "^\\[GNUPG:\\]\\s +BAD_PASSPHRASE\\b" 
-			   nil t)
-	(setq badpass (concat "0x" (match-string 1))))
-    (if (and (not (= rc 0))
-	     (not badpass))
-	(progn
-	  (set-buffer stderrbuf)
-	  (goto-char (point-min))
-	  (if mc-gpg-handle-pre095
-	     (progn
-	       ;; gpg < 0.9.5 reports a bad PKE passphrase with rc!=0 and a
-	       ;; stderr msg. look for it
-	       (if (re-search-forward
-		    "^gpg: public key decryption failed: [Bb]ad passphrase" 
-		    nil t)
-		   (setq badpass t))
-	       ))
-	  ;; All versions (at least through 0.9.5) fail to distinguish (in the
-	  ;; --status-fd output) between not getting a passphrase for
-	  ;; symmetric encryption and getting a bad one. We need to figure out
-	  ;; the difference to pass up, since the caller must either ask for a
-	  ;; passphrase or error out because of a bad one.
-	  ;;
-	  ;; Although really we know whether we gave it a passphrase or not,
-	  ;; so if we passed suitable state information into this function
-	  ;; then this test wouldn't be necessary.
-	  (goto-char (point-min))
-	  (if (re-search-forward
-	       "^gpg: decryption failed: [Bb]ad key" nil t)
-	      (setq badpass t)) ;; ditto for symmetric encryption
-	  ;; The same problem exists for distinguishing that case from the
-	  ;; ascii-armored message being corrupted (a CRC error). Scan stderr
-	  ;; for the error message and error out right now if it was bogus
-	  (goto-char (point-min))
-	  (if (re-search-forward
-	       "^gpg: CRC error" nil t)
-	      (error "Corrupt GPG message"))
-	  (set-buffer statusbuf)
-	  ))
     ;; sigtype: GOOD, BAD, ERR
-    ;; sigid: who made the signature?
+    ;; sigid: who made the signature? (a name if possible, else hex keyid)
     ;; sigdate: date string of when the sig was made
     (goto-char (point-min))
-    (if (re-search-forward "^\\[GNUPG:\\]\\s +\\(GOOD\\|BAD\\|ERR\\)SIG" nil t)
+    (if (re-search-forward "^\\[GNUPG:\\] +\\(GOOD\\|BAD\\|ERR\\)SIG\\b" 
+			   nil t)
 	(progn
 	  (setq sigtype (match-string 1))
 	  (goto-char (point-min))
-	  (if (and (or (equal sigtype "GOOD") (equal sigtype "BAD"))
+	  (if (and (or (string= sigtype "GOOD") (string= sigtype "BAD"))
 		   (re-search-forward
-		    "^\\[GNUPG:\\]\\s +\\(GOOD\\|BAD\\)SIG\\s +\\(\\S +\\)\\s +\\(.*\\)$" nil t))
+		    "^\\[GNUPG:\\] +\\(GOOD\\|BAD\\)SIG +\\(\\S +\\) +\\(.*\\)$
+" nil t))
+	      ;; match-string 2 is the hex keyid of the signator. 
+	      ;; #3 is the name
 	      (setq sigid (match-string 3)))
-	  ;; match-string 2 is the hex keyid of the signator. m-s 3 is the name
+
+	  ;; for ERRSIG:
+	  ;;   match-string #1 is the hex keyid, #2 is the algorithm ID
+	  ;;       (17: DSA, 1,3: RSA, 20: Elgamal)
+	  ;;  #3: hashalgo, #4: sigclass, #5: longtime, #6: rc
+	  ;;   (rc==4 for unknown algo, 9 for missing public key)
+	  ;; we only set sigtype if:
+	  ;;   (#1 is present), and 
+	  ;;   ((#6 is missing) or (#6 == 9))
+	  ;; the idea being to not fetch a key if we aren't going to be able
+	  ;; to use the algorithm it wants
 	  (goto-char (point-min))
-	  (if (and (equal sigtype "ERR")
+	  (if (and (string= sigtype "ERR")
 		   (re-search-forward
-		    "^\\[GNUPG:\\]\\s +ERRSIG\\s +\\(\\S +\\)\\s +\\(.*\\)$" nil t))
-	      (setq sigid (concat "0x" (match-string 1))))
-	  ;; match-string 1 is the hex keyid, 2 is the algorithm ID
-	  ;;  (17: DSA, 1,3: RSA, 20: Elgamal)
-	  ;; sigdate is only in stderr. 0.9.4 adds SIG_ID <sigprint> YYYY-MM-DD
-	  ;; but time is only in stderr
-	  (set-buffer stderrbuf)
-	  (goto-char (point-min))
-	  (if (re-search-forward
-	       "^gpg: Signature made \\(.*\\) using" nil t)
-	      (setq sigdate (match-string 1)))
-	  ;; get the keyname that made the signature if it wasn't available in
-	  ;; the GOODSIG/BADSIG/ERRSIG status (true for ERRSIG in gpg <0.9.5
-	  ;; where it must be pulled out of stderr)
-	  (if mc-gpg-handle-pre095
-	      (progn
+		    "^\\[GNUPG:\\] +ERRSIG +\\(\\S +\\)" nil t))
+	      (let (errsig-rc (sigid-temp (match-string 1)))
 		(goto-char (point-min))
-		(if (and (not sigid)
-			 (re-search-forward
-			  "^gpg: Signature made .* key ID \\(.*\\)$" nil t))
-		    (setq sigid (concat "0x" (match-string 1))))))
-	  (set-buffer statusbuf)
+		(if (re-search-forward
+		     "^\\[GNUPG:\\] +ERRSIG +\\(\\S +\\) +\\(\\S +\\) +\\(\\S +
+\\) +\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\)" nil t)
+		    (setq errsig-rc (match-string 6)))
+		(if (or
+		     (not errsig-rc)
+		     (string= errsig-rc "9"))
+		    (setq sigid sigid-temp))
+		))
+	  
+	  ;; for GOODSIG:
+	  ;;  VALIDSIG should be present, with <keyfingerprint> <date> <time>
+	  (goto-char (point-min))
+	  (if (and (string= sigtype "GOOD")
+		   (re-search-forward
+		    "^\\[GNUPG:\\] +SIG_ID +\\(\\S +\\) +\\(\\S +\\)\\b" 
+		    nil t))
+	      (setq sigdate (match-string 2))
+	    ;; in gpg >= 0.9.7, a third field is a longtime value (seconds
+	    ;; since epoch)
+	    )
+	  
+	  ;; sigtrust: how trusted is the signing key?
+	  (goto-char (point-min))
+	  (if (re-search-forward "^\\[GNUPG:\\] +\\(TRUST_\\S +\\)$" nil t)
+	      (setq sigtrust (match-string 1)))
 	  ))
+        
+    (list sigtype sigid sigdate sigtrust))
+  )
+
     
-    ;; sigtrust: how trusted is the signing key?
+; this parser's job is to find the decrypted data if any is available. The
+; code in -decrypt-region will worry about reporting other status information
+; like signatures. PARSERDATA is non-nil if a passphrase was given to GPG.
+
+(defun mc-gpg-decrypt-parser (stdoutbuf stderrbuf statusbuf rc parserdata)
+  (let 
+      (
+       decryptstatus ; DECRYPTION_(OKAY|FAILED)
+       no-seckey ; NO_SECKEY
+       keyid ; NEED_PASSPHRASE <keyid>
+       missing-passphrase ; MISSING_PASSPHRASE
+       symmetric ; NEED_PASSPHRASE_SYM
+       badpass ; BAD_PASSPHRASE
+       sigtype ; GOODSIG, BADSIG, ERRSIG
+       sigid ;; GOODSIG <keyid>  (note: not SIG_ID!), 
+             ;;; or ERRSIG <keyid> if ERRSIG-rc is 9 for missing pubkey
+       sigdate ; VALIDSIG .. <date>
+       sigtrust ; TRUST_(UNDEFINED|NEVER|MARGINAL|FULLY|ULTIMATE)
+       )
+    ;; this code is split into two pieces. The first scans statusbuf
+    ;; (and stderr if absolutely necessary) for keywords, setting the
+    ;; local variables to describe what happened during our decryption attempt.
+    ;; We don't try too hard to interpret the results yet.
+
+    ;; the second part (the big cond statement below) interprets those vars
+    ;; to decide what to report to the caller
+
+    (set-buffer statusbuf)
+
+    ;; decryptstatus: no decryption took place, one was ok, or one failed
     (goto-char (point-min))
-    (if (re-search-forward "^\\[GNUPG:\\]\\s +\\(TRUST_\\S +\\)$" nil t)
-	(setq sigtrust (match-string 1)))
-    ;; enckeyid: who is the message encrypted to (not necessarily us)
-    ;; TODO: possibly multiple entries?
+    (if (re-search-forward
+	 "^\\[GNUPG:\\] +DECRYPTION_\\(OKAY\\|FAILED\\)\\b"
+	 nil t)
+	(setq decryptstatus (match-string 1)))
+
+    ;; no-seckey: set if we saw a NO_SECKEY message.
     (goto-char (point-min))
-    (if (re-search-forward "^\\[GNUPG:\\]\\s +ENC_TO \\(\\S +\\)" 
+    (if (re-search-forward
+	 "^\\[GNUPG:\\] +NO_SECKEY\\b"
+	 nil t)
+	(setq no-seckey t))
+    
+    ;; keyid: the message is encrypted to one of our private keys and we
+    ;; need a passphrase from the user. which one?
+    (goto-char (point-min))
+    (if (re-search-forward "^\\[GNUPG:\\] +NEED_PASSPHRASE +\\(\\S +\\)" 
 			   nil t)
-	(setq enckeyid (concat "0x" (match-string 1))))
+	(setq keyid (concat "0x" (match-string 1))))
+
+    ;; missing-passphrase: set if we saw MISSING_PASSPHRASE
+    (goto-char (point-min))
+    (if (re-search-forward "^\\[GNUPG:\\] +MISSING_PASSPHRASE\\b"
+			   nil t)
+	(setq missing-passphrase t))
+
+    ;; symmetric: Set if the message is symmetrically encrypted. 
+    (goto-char (point-min))
+    (if (re-search-forward
+	 "^\\[GNUPG:\\] +NEED_PASSPHRASE_SYM\\b"
+	 nil t)
+	(setq symmetric t))
+
+    ;; badpass: GPG did not get a good passphrase. Either we didn't give one
+    ;;  or we gave the wrong one.
+    (goto-char (point-min))
+    (if (re-search-forward "^\\[GNUPG:\\] +BAD_PASSPHRASE\\b" 
+			   nil t)
+	(setq badpass t))
+
+    (let ((sigstuff (mc-gpg-sigstatus-parser)))
+      (setq sigtype (nth 0 sigstuff))
+      (setq sigid (nth 1 sigstuff))
+      (setq sigdate (nth 2 sigstuff))
+      (setq sigtrust (nth 3 sigstuff))
+      )
+
+    ;; begin second piece: stare at those variables and decide what happened.
+    ;; refer to the "cases:" comment above for what we look for.
 
     (mc-gpg-debug-print 
      (format
-      "decrypt-parser: handle-pre095=%s enckeyid=%s keyid=%s symmetric=%s badpass=%s sigtype=%s sigid=%s sigdate=%s sigtrust=%s"
-      mc-gpg-handle-pre095 enckeyid keyid symmetric badpass sigtype sigid 
-      sigdate sigtrust))
+      "decrypt-parser: decryptstatus=%s no-seckey=%s keyid=%s missing-passphras
+e=%s symmetric=%s badpass=%s sigtype=%s sigid=%s sigdate=%s sigtrust=%s rc=%s"
+      decryptstatus no-seckey keyid missing-passphrase symmetric badpass sigtyp
+e sigid sigdate sigtrust rc))
 
     (cond
-     
-     ((or (and enckeyid (not keyid)) ;; encrypted but not to us, gpg>=0.9.5
-	  ;; need the following for gpg < 0.9.5
-	  (and mc-gpg-handle-pre095
-	       (not keyid)
-	       ;; no keyid (no passphrase needed). one of:
-	       ;;  just armored (rc==0, no msgs about sigs)
-	       ;;  only signed (rc==0 if key found, rc==2 if not, yes sig msg)
-	       ;;  encrypted but not to us (rc==2, no msg about sigs)
-	       ;;  symmetric, we didn't give a passphrase (rc==2, stderr msg)
-	       ;;  symmetric, bad passphrase (rc==2, stderr msg -> badpass)
-	       (not (= rc 0)) ;; remove armored, well-signed cases
-	       (not sigtype) ;; remove badly-signed case
-	       (not badpass) ;; remove symmetric-bad-passphrase case
-	       (progn ;; remove symmetric-no-passphrase case
-		 (set-buffer stderrbuf)
-		 (goto-char (point-min))
-		 (not (re-search-forward
-		       "^gpg: fatal: Can't query password in batchmode" nil t))
-		 ))
-	  )
-      ;; encrypted to a key we do not have. Bail now.
-      (list nil nil nil nil))
 
-     ;; check rc != 0 case. Five possibilities (#2 was eliminated above):
-     ;;  #1: message is to us but we didn't give/gave bad passphrase
-     ;;      (no SIG messages, has NEED_PASSPHRASE)
-     ;;  #2: message is encrypted but not to us
-     ;;  #3: message is symmetric but we didn't give/gave bad passphrase
-     ;;      (no SIG, no NEED_PASSPHRASE)
-     ;;  #4: message decrypted OK but was signed by unknown key
-     ;;      (ERRSIG, NEED_PASSPHRASE)
-     ;;  #5: message wasn't encrypted, only signed, but by an unknown key
-     ;;      (ERRSIG, no NEED_PASSPHRASE)
-
-     ((and (not (= rc 0)) (not keyid) sigtype)
-      ;; case #5: not encrypted but can't check signature
-      (list t 'signed t sigid))
-
-     ((and (not (= rc 0)) (not keyid))
-      ;; case #3: need passphrase for symmetric encryption
-      (if badpass
-	  (list nil 'symmetric nil nil)
-	(list nil 'symmetric "***** CONVENTIONAL *****" nil)))
-
-     ((and (not (= rc 0)) (not sigtype))
-      ;; case #1: need passphrase for public key encryption
-      (if badpass
-	  (list nil t nil nil)
-	(list nil t keyid nil)))
-
-     ((and (not (= rc 0)) (not (equal sigtype "ERR")))
-      (error "mc-gpg.el error, should never happen"))
-
-     ;; case #4: decrypted OK but signed by an unknown key: drops through
-
-     ((and (not keyid) (not sigtype))
-      ;; not public-key encrypted, not signed. is symmetric. must have worked
-      (list t 'symmetric t nil))
-
-     ((not keyid)
-      ;; not PKE, not symmetric: just signed
+     ((and (not decryptstatus) (not (or keyid symmetric)))
+      ;; either corrupt, armored-only, signed-only
+      ;;  or we're using an old gpg and no passphrase was requested:
+      ;;   either corrupt, armored-only, signed-only, or not for us.
       (cond
-       ((equal sigtype "ERR")
-	(list t 'signed t sigid)) ; signed by an unknown key
-
-       ((equal sigtype "GOOD")
-	(list t 'signed t (list t sigid sigtrust sigdate))) ; good sig
-       (t
-	(list t 'signed t (list nil sigid sigtrust sigdate))) ; bad sig
+       (sigtype
+	;; signed-only. extract info
+	(cond
+	 ((string= sigtype "GOOD")	  ;; good signature
+	  (list t 'signed t (list t sigid sigtrust sigdate)))
+	 ((string= sigtype "BAD")   ;; bad signature
+	  (list t 'signed t (list nil sigid sigtrust sigdate)))
+	 ((string= sigtype "ERR")   ;; couldn't check: why?
+	  (if sigid
+	      ;; didn't have the key, we can fetch it
+	      (list t 'signed t sigid)
+	    ;; can't use it. pretend it wasn't signed.
+	    (list t t t nil)))
+	 (t  ;; sigtype is bogus
+	  (error "sigtype was bogus. Shouldn't happen."))
+	 ))
+       ((not (= rc 0))  ;; corrupt
+	(error "The message was corrupt."))
+       (t  ;; armored-only
+	(list t 'symmetric t nil))
        ))
 
-     ;; at this point, it was PKE and we decrypted it successfully. The
-     ;; only question is whether it was signed or not
-     ((not sigtype)
-      (list t t t nil))  ; not signed
-     ((equal sigtype "ERR")
-      (list t t t sigid)) ; signed by unknown key
-     ((equal sigtype "GOOD")
-      (list t t t (list t sigid sigtrust sigdate))) ; good sig
-     (t
-      (list t t t (list nil sigid sigtrust sigdate))) ; bad sig
-     )))
+     ((or 
+       (string= decryptstatus "FAILED")
+       ;; couldn't decrypt: not to us, need pw, bad pw
+       (and (not decryptstatus) 
+	    (or keyid symmetric)
+	    (not (= rc 0)) 
+	    (not (string= sigtype "ERR")))
+       ;; or old gpg and we could have decrypted it (a passphrase was
+       ;; requested), but the decrypt went bad (rc!=0 but not due to ERRSIG)
+       )
+      (cond
+       ((and (not symmetric) (not keyid))
+	;; didn't ask for a passphrase, ergo it isn't for us
+	(list nil nil nil nil))
+       ((or missing-passphrase (not parserdata))
+	;; we didn't give a passphrase, need pubkey or symmetric
+	(if symmetric
+	    (list nil 'symmetric "***** CONVENTIONAL *****" nil)
+	  (list nil t keyid nil)))
+       (symmetric ;; symmetric fails without a BAD_PASSPHRASE
+	(list nil 'symmetric nil nil))
+       ((or badpass parserdata)
+	;; probably pubkey, we gave the wrong passphrase
+	(list nil t nil nil))
+       (t  ;; shouldn't happen, error out
+	(error "decryption failed, but I don't know why. Shouldn't happen."))
+       ))
+
+     ((or
+       (string= decryptstatus "OKAY")
+       ;; decrypted okay, check for signature
+       (and (not decryptstatus)
+	    keyid
+	    (not (= rc 0))
+	    (string= sigtype "ERR"))
+       ;; or old gpg and sigcheck went bad (rc!=0 due to ERRSIG)
+       (and (not decryptstatus)
+	    keyid
+	    (= rc 0))
+       ;; or old gpg, passphrase was requested, no errors reported
+       )
+      (cond
+       (sigtype   ;; there was a signature, extract the info (never sym here)
+	(cond
+	 ((string= sigtype "GOOD")  ;; good signature
+	  (list t t t (list t sigid sigtrust sigdate)))
+	 ((string= sigtype "BAD")   ;; bad signature
+	  (list t t t (list nil sigid sigtrust sigdate)))
+	 ((string= sigtype "ERR")   ;; couldn't check: why?
+	  (if sigid
+	      ;; didn't have the key. we can fetch it.
+	      (list t t t sigid)
+	    ;; no keyid, or we can't use it. pretend there wasn't a sig.
+	    (list t t t nil)))
+	 (t  ;; sigtype is bogus
+	  (error "sigtype was bogus. Shouldn't happen."))
+	 ))
+       (t         ;; there wasn't a signature
+	(if symmetric
+	    (list t 'symmetric t nil)
+	  (list t t t nil)))
+       ))
+
+     (t  ;; decryptstatus was bogus. error out.
+      (error "decryptstatus was bogus '%s'. Shouldn't happen." decryptstatus))
+
+     )
+    ))
+
+
+
 
 ;; message about who made the signature. This is a bit wide.. the date can
 ;; easily run off the echo area. Consider replacing 'Good signature' with
 ;; 'good sig', but keep it consistent with everything else. This function is
-;; used by both the decrypt section and the verify section
+;; used by both the decrypt section and the verify section.
+;; todo: should the keyid be put in here? If the user reads the trustvalue,
+;;  and if they have a trust path, then they can trust the name.
 (defun mc-gpg-format-sigline (goodp sigid sigtrust sigdate)
   (if goodp
       (format "Good signature from '%s' %s made %s"
 	      sigid sigtrust sigdate)
-    (format "BAD SIGNATURE from '%s' made %s"
-	    sigid sigdate)
+    (format "BAD SIGNATURE claiming to be from '%s'" sigid)
     ))
 
 ;; decrypt-region is first called without ID. This means we'll try to decrypt
@@ -856,15 +918,25 @@ messages not being recognized properly. Think of this variable as more of a
 					 "GPG passphrase for %s (%s): "
 					 (car key) (cdr key)))
 		  (mc-activate-passwd 
-		   id "GPG passphrase for conventional decryption: ")))))
+		   id "GPG passphrase for conventional decryption: ")))
+	  (if (string= passwd "")
+	      (progn
+		(mc-deactivate-passwd t)
+		(error "Empty passphrases are bad, mmkay?")))
+	  ;; in particular, they cause an infinite loop. If the key doesn't
+	  ;; have a passphrase, the decryption should have worked the first
+	  ;; time around.
+	  ))
     (setq args '("--batch"))
     (if mc-gpg-alternate-keyring
 	(setq args (append args (list "--keyring" mc-gpg-alternate-keyring))))
     (setq args (append args '("--decrypt"))) ; this wants to be last
     (message "Decrypting...")
+    ;; pass ID as the parserdata. This will be non-nil if a passphrase was
+    ;; given (i.e. 2nd pass), which affects decrypt status parsing
     (setq result
 	  (mc-gpg-process-region
-	   start end passwd mc-gpg-path args 'mc-gpg-decrypt-parser buffer))
+	   start end passwd mc-gpg-path args 'mc-gpg-decrypt-parser buffer id))
     ;(message "Decrypting... Done.")
     ;; result: '(HAVE-SECRET-KEY PASSPHRASE-OK SIG)
     ;;  SIG: nil, sigkeyid, or '(KEYID GOODP TRUSTLEVEL DATESTRING)
@@ -950,43 +1022,34 @@ messages not being recognized properly. Think of this variable as more of a
 ))
 
 
-; GPG VERIFY BEHAVIOR
+; GPG VERIFY BEHAVIOR: gnupg-0.9.9 only
+;  (all status messages are prefixed by "[GNUPG:] "
+;  (filenames in [] are my parts of my testsuite)
 
 ; corrupted sig (armor is corrupt) [CS.s1bad]:
-;  rc == 8, segfault
+;  rc == 2
 ;  stderr: gpg: CRC error; stuff - stuff
 ;          gpg: packet(1) with unknown version
 
-; GOOD sig from a known key
+; GOOD sig from a known key [CS.s1v,CS.s2v,CS.s3v]
 ;  rc == 0
-;  stderr: gpg: Signature made <date> using DSA key ID <pubkeyid32>
-;          gpg: Good signature from "<keyname>"
-;   (if key is untrusted, get big warning about it)
-;  status: GOODSIG <pubkeyid32> <keyname>
-;          TRUST_<level>
-;   0.9.0: GOODSIG<pubkeyid64> <keyname>
-;   0.9.1: VALIDSIG <pubkey-fingerprint>
-;   0.9.4: SIG_ID <sigprint> YYYY-MM-DD
-;   0.9.7: SIG_ID <sigprint> YYYY-MM-DD <longtime>
-;          VALIDSIG <pubkey-fingerprint> YYYY-MM-DD <longtime>
+;  status:
+;    SIG_ID <sigid> <date> <longtime>
+;    GOODSIG <longkeyid> <username>
+;    VALIDSIG <keyfingerprint> <date> <longtime>
+;    TRUST_(UNDEFINED|NEVER|MARGINAL|FULLY|ULTIMATE)
 
 ; BAD sig from a known key [CS.s1f]:
 ;  rc == 1
-;  stderr: gpg: Signature made <date> using DSA key ID <pubkeyid32>
-;          gpg: BAD signature from "<keyname>"
-;  status: BADSIG <pubkeyid32> <keyname>
-;   0.9.0: BADSIG <pubkeyid64> <keyname>
+;  status: BADSIG <longkeyid> <username>
 
 ; unknown key [CS.s4]:
 ;  rc == 2
-;  stderr: gpg: Signature made <date> using DSA key ID <pubkeyid32>
-;          gpg: Can't check signature: [pP]ublic key not found
-;  status: ERRSIG
-;   0.9.5: ERRSIG <pubkeyid64> <algo-id>
-;   0.9.7: ERRSIG <pubkeyid64> <algo-id> <hash-id> <sigclass==01> <longtime> <rc==9>
+;  status: 
+;   ERRSIG <longkeyid> <pubkeyalgo> <hashalgo> <sigclass> <longtime> <rc==9>
+;   NO_PUBKEY <longkeyid>
 
-;; so if rc != 0 and we see no mention of a signature (GOOD,BAD,ERR) then
-;;  assume armor corruption
+;; so no status messages mean armor corruption
 
 ;; return convention for mc-gpg-verify-parser:
 ;;  (same as sig section of decrypt parser)
@@ -996,65 +1059,31 @@ messages not being recognized properly. Think of this variable as more of a
 ;; (actual return includes a leading nil because the verify-parser should
 ;;  never replace the region with stdout)
 
-(defun mc-gpg-verify-parser (stdoutbuf stderrbuf statusbuf rc)
+(defun mc-gpg-verify-parser (stdoutbuf stderrbuf statusbuf rc parserdata)
   (let (sigtype sigid sigdate sigtrust)
     ;; parse FOOSIG with the same code as decrypt-parser
     (set-buffer statusbuf)
-    (goto-char (point-min))
-    (if (re-search-forward "^\\[GNUPG:\\]\\s +\\(GOOD\\|BAD\\|ERR\\)SIG" nil t)
-	(progn
-	  (setq sigtype (match-string 1))
-	  (goto-char (point-min))
-	  (if (and (or (equal sigtype "GOOD") (equal sigtype "BAD"))
-		   (re-search-forward
-		    "^\\[GNUPG:\\]\\s +\\(GOOD\\|BAD\\)SIG\\s +\\(\\S +\\)\\s +\\(.*\\)$" nil t))
-	      (setq sigid (match-string 3)))
-	  ;; match-string 2 is the hex keyid of the signator. m-s 3 is the name
-	  (goto-char (point-min))
-	  (if (and (equal sigtype "ERR")
-		   (re-search-forward
-		    "^\\[GNUPG:\\]\\s +ERRSIG\\s +\\(\\S +\\)\\s +\\(.*\\)$" nil t))
-	      (setq sigid (concat "0x" (match-string 1))))
-	  ;; match-string 1 is the hex keyid, 2 is the algorithm ID
-	  ;;  (17: DSA, 1,3: RSA, 20: Elgamal)
-	  ;; sigdate is only in stderr. 0.9.4 adds SIG_ID <sigprint> YYYY-MM-DD
-	  ;; but time is only in stderr
-	  (set-buffer stderrbuf)
-	  (goto-char (point-min))
-	  (if (re-search-forward
-	       "^gpg: Signature made \\(.*\\) using" nil t)
-	      (setq sigdate (match-string 1)))
-	  (goto-char (point-min))
-	  ;; get the keyname that made the signature if it wasn't available in
-	  ;; the GOODSIG/BADSIG/ERRSIG status (true for ERRSIG in gpg <0.9.5
-	  ;; where it must be pulled out of stderr)
-	  (if (and (not sigid)
-		   mc-gpg-handle-pre095
-		   (re-search-forward
-		    "^gpg: Signature made .* key ID \\(.*\\)$" nil t))
-	      (setq sigid (concat "0x" (match-string 1))))
-	  (set-buffer statusbuf)
-	  (goto-char (point-min))
-	  (if (re-search-forward "^\\[GNUPG:\\]\\s +\\(TRUST_\\S +\\)$" nil t)
-	      (setq sigtrust (match-string 1)))
-	  ))
+
+    (let ((sigstuff (mc-gpg-sigstatus-parser)))
+      (setq sigtype (nth 0 sigstuff))
+      (setq sigid (nth 1 sigstuff))
+      (setq sigdate (nth 2 sigstuff))
+      (setq sigtrust (nth 3 sigstuff))
+      )
 
     (mc-gpg-debug-print 
      (format
-      "decrypt-parser: handle-pre095=%s sigtype=%s sigid=%s sigdate=%s sigtrust=%s"
-      mc-gpg-handle-pre095 sigtype sigid sigdate sigtrust))
-    
-    (set-buffer stderrbuf)
-    (goto-char (point-min))
+      "decrypt-parser: sigtype=%s sigid=%s sigdate=%s sigtrust=%s"
+      sigtype sigid sigdate sigtrust))
+
     (if (and (not (= rc 0)) 
-	     (not sigtype) 
-	     (re-search-forward "^gpg: CRC error" nil t))
-	(error "Corrupt GPG message"))
+	     (not sigtype))
+	(error "The message was corrupt."))
 
     (cond
-     ((equal sigtype "ERR")
+     ((string= sigtype "ERR")
       (list nil sigid))
-     ((equal sigtype "GOOD")
+     ((string= sigtype "GOOD")
       (list nil (list t sigid sigtrust sigdate))) ;; good sig
      (t
       (list nil (list nil sigid sigtrust sigdate))))
@@ -1128,42 +1157,90 @@ messages not being recognized properly. Think of this variable as more of a
     (car result)
 ))
 
-;; return convention: '(newkeys oldkeys weirdos). error with stderr if rc != 0
-(defun mc-gpg-snarf-parser (stdoutbuf stderrbuf statusbuf rc)
+;; GPG IMPORT BEHAVIOR: gnupg-0.9.9 only
+
+;; status:
+;;  IMPORT_RES (12 fields)
+;;   1 <count> : number of keys seen
+;;   2 <no_user_id> : the number of keys without valid userids, including
+;;                    keys that weren't self-signed
+;;   3 <imported> : new public keys
+;;   4 <imported_rsa> : new RSA public keys (included in <imported>)
+;;   5 <unchanged> : old public keys
+;;   6 <n_uids>
+;;   7 <n_subk>
+;;   8 <n_sigs>
+;;   9 <n_revoc>
+;;   10 <sec_read> : number of secret keys seen
+;;   11 <sec_imported> : new secret keys
+;;   12 <sec_dups> : old secret keys
+
+;;   the first three are for public keys, the last three are for secret keys.
+;;   add them together, I guess. It's unlikely that anyone will be importing
+;;   armored secret keys via email, but if they do it will be reported as if
+;;   it were a public key.
+
+;; return convention: 
+;;  error with stderr if rc != 0
+;;  '(count bad new old changed secretp)
+
+(defun mc-gpg-snarf-parser (stdoutbuf stderrbuf statusbuf rc parserdata)
   (if (eq rc 0)
-      (let ((newkeys 0) (oldkeys 0) (weirdos 0) tmpstr)
-	(save-excursion
-	  (set-buffer stderrbuf)
-	  (goto-char (point-min))
-	  (while (re-search-forward mc-gpg-newkey-re nil t)
+      (let (count bad new old changed secretp)
+	(set-buffer statusbuf)
+	(goto-char (point-min))
+	(if (re-search-forward
+	     "^\\[GNUPG:\\] +IMPORT_RES +\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\) 
++\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\) +
+\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\)"
+	     nil t)
 	    (progn
-	      (setq tmpstr (buffer-substring-no-properties
-			    (match-beginning 2) (match-end 2)))
-	      (cond ((equal tmpstr "public key imported") 
-		     (setq newkeys (1+ newkeys)))
-		    ((equal tmpstr "not changed")
-		     (setq oldkeys (1+ oldkeys)))
-		    (t
-		     (setq weirdos (1+ weirdos))))))
-	  (list nil newkeys oldkeys weirdos)
-	))
+	      (setq count (string-to-number (match-string 1)))
+	      (setq bad (string-to-number (match-string 2)))
+	      (setq new (+ (string-to-number (match-string 3)) 
+			   (string-to-number (match-string 11))))
+	      (setq old (+ (string-to-number (match-string 5)) 
+			   (string-to-number (match-string 12))))
+	      (setq changed (- count bad new old))
+	      (setq secretp (not (string= (match-string 10) "0")))
+	      (list nil count bad new old changed secretp))
+	  (error "No key import status: your GnuPG is too old."))
+	)
     (error (with-current-buffer stderrbuf (buffer-string))))
 )
 
 (defun mc-gpg-snarf-keys (start end)
   ;; Returns number of keys found.
   (let ((buffer (get-buffer-create mc-buffer-name))
-	results args)
+	results args msg)
     (setq args '("--import" "--batch"))
     (if mc-gpg-alternate-keyring
 	(setq args (append args (list "--keyring" mc-gpg-alternate-keyring))))
     (message "Snarfing...")
     (setq results (mc-gpg-process-region start end nil mc-gpg-path args
 					 'mc-gpg-snarf-parser buffer))
-    (message (format "%d new keys, %d old, %d weird" 
-		     (nth 0 results) (nth 1 results) (nth 2 results)))
-    ;; might need to do a 'gpgm --check-trustdb' now
-    (nth 0 results) ;(+ news olds weirds)
+    ;; don't have to update trustdb: gpg does it automatically (although it
+    ;; might take a few seconds if a lot of keys or signatures have been
+    ;; added).
+
+    ;; Is there any point to displaying this message? mc-snarf-keys will
+    ;; display a simple "%d new keys found" message right after we return.
+    ;; Well, print it anyway, if the user looks in the *Messages* buffer
+    ;; they'll see more.
+    (setq msg (format "%d keys seen" (nth 0 results)))
+    (if (not (zerop (nth 1 results)))
+	(setq msg (concat msg (format ", %d bad" (nth 1 results)))))
+    (if (not (zerop (nth 2 results)))
+	(setq msg (concat msg (format ", %d new" (nth 2 results)))))
+    (if (not (zerop (nth 3 results)))
+	(setq msg (concat msg (format ", %d old" (nth 3 results)))))
+    (if (not (zerop (nth 4 results)))
+	(setq msg (concat msg (format ", %d changed" (nth 4 results)))))
+    (if (nth 5 results)
+	(setq msg (concat msg ", SECRET KEYS IMPORTED")))
+
+    (message msg)
+    (nth 2 results)
     ))
 
 (defun mc-scheme-gpg ()
@@ -1199,3 +1276,4 @@ anywhere."
   (error "Key fetching not yet implemented"))
 
 ;;}}}
+

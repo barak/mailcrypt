@@ -1,3 +1,13 @@
+1999-09-08  Brian Warner  <warner@lothar.com>
+
+	* mc-gpg.el: revamp decrypt and verify parsers to handle
+	gnupg-0.9.6 though 1.0.0 . Older versions have slight problems:
+	unknown signators and symmetrically-encrypted messages tend to
+	make mailcrypt think the message is corrupted, and some incidental
+	information (keyids for unknown keys, some signature dates) is
+	unavailable. Doesn't used stderr at all, barely uses the exit
+	status.
+
 1999-07-20  Leonard R. Budney  <lbudney@pobox.com>
 
 	* mc-pgp.el: Added check for PGP version mismatch when using
