@@ -125,6 +125,7 @@ Installation
 * Hooking into VM::             
 * Hooking into MH-E::           
 * Hooking into Gnus::           
+* Hooking into Mew::           
 
 General Use
 
@@ -265,6 +266,7 @@ described below.
 * Hooking into VM::             
 * Hooking into MH-E::           
 * Hooking into Gnus::           
+* Hooking into Mew::           
 @end menu
 
 @node Hooking into Rmail, Hooking into VM, Installation, Installation
@@ -307,7 +309,7 @@ To hook Mailcrypt into MH-E, use the following lines:
 (add-hook 'mh-letter-mode-hook 'mc-install-write-mode)
 @end lisp
 
-@node Hooking into Gnus,  , Hooking into MH-E, Installation
+@node Hooking into Gnus, Hooking into Mew, Hooking into MH-E, Installation
 @subsection Hooking into Gnus
 
 To hook Mailcrypt into Gnus, use the following lines:
@@ -317,6 +319,23 @@ To hook Mailcrypt into Gnus, use the following lines:
 (add-hook 'message-mode-hook 'mc-install-write-mode)
 (add-hook 'news-reply-mode-hook 'mc-install-write-mode)
 @end lisp
+
+@node Hooking into Mew,  , Hooking into Gnus, Installation
+@subsection Hooking into Mew
+
+To hook Mailcrypt into Mew, use the following lines:
+
+@lisp
+(add-hook 'mew-message-mode-hook 'mc-install-read-mode)
+(add-hook 'mew-summary-mode-hook 'mc-install-read-mode)
+(add-hook 'mew-draft-mode-hook 'mc-install-write-mode)
+@end lisp
+
+Note that Mew already has extensive support for MIME-encoded encrypted
+and/or signed messages (using the ``multipart/encrypted'' and
+``application/pgp-encrypted'' formats specified by RFC3156). Using
+MailCrypt within Mew is most useful for traditional ``inline'' armored
+encrypted/signed messages.
 
 @node Command Overview,  , Installation, Introduction
 @section Command Overview
