@@ -1,9 +1,22 @@
+Noteworthy changes in Mailcrypt version 3.5b4:
+
+ * Fixed a bug which broke encryption to multiple recipients (PGP 5).
+
+ * Fixed a bug which broke encryption of 8-bit data and files (PGP 5).
+
+ * Fixed the missing "timer.el" problem.  Now Mailcrypt should run
+   properly for Xemacs users.
+
+ * Eliminated some silly shell and perl scripts.
+
+ * Updated the README to reduce installation difficulties (I hope).
+
 
 
 Noteworthy changes in Mailcrypt version 3.5b1:
 
-No bug fixes; in fact there are probably fresh new bugs.
+ * No bug fixes; in fact there are probably fresh new bugs.
 
-Mailcrypt now supports PGP version 5.0 as well as version 2.6.*, and
-can be toggled between "active versions" at will.  Every effort has
-been made to ensure that what used to work, still works.
+ * Mailcrypt now supports PGP version 5.0 as well as version 2.6.*, and
+   can be toggled between "active versions" at will.  Every effort has
+   been made to ensure that what used to work, still works.
