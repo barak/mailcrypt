@@ -142,7 +142,7 @@ would make!)
 To use Mailcrypt 3.5b1 and higher, you must include two lines like the
 following in your .emacs file:
 
-	(autoload 'mc-setversion "mailcrypt" "Select PGP version" t)
+	(load-library "mc-setversion")
 	(mc-setversion "5.0") ;; Alternately, "2.6"
 
 The function mc-setversion is interactive, and can be used at any time
