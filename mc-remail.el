@@ -193,12 +193,12 @@ This is a list of strings.  Completion against it will be available
 when you are prompted for your pseudonym.")
 
 (defvar mc-remailer-preserved-headers
-  '("References" "Followup-to" "In-reply-to")
+  '("References" "Followup-to" "In-reply-to" "Subject")
   "*Header fields which are preserved as hashmark headers when rewriting.
 
 This is a list of strings naming the preserved headers.  Note that
-\"Subject\", \"Newsgroups\", and \"To\" are handled specially and
-should not be included in this list.")
+\"Newsgroups\" and \"To\" are handled specially and should not be included in
+this list.")
 
 ;;}}}
 ;;{{{ Handling Levien format remailer lists
@@ -465,8 +465,7 @@ a description of Levien file format."
 	    (if (mc-get-fields "From" colon-header)
 		"Send-To"
 	      (cond
-	       ((member "eric" props) "Anon-Send-To")
-	       ((member "cpunk" props) "Request-Remailing-To")
+	       ((member "cpunk" props) "Anon-To")
 	       (t (error "Remailer %s is not type-1" addr)))))
       (mc-replace-field to-field to colon-header)
       (mc-nuke-field "Reply-to" main-header))))
@@ -720,12 +719,6 @@ be passed to this program for rewriting.")
     (mapcar
      (function (lambda (hook) (funcall hook remailer)))
      (mc-remailer-pre-encrypt-hooks remailer))
-
-    ;; Move "Subject" lines down.
-    (goto-char (car (mc-find-colon-header t)))
-    (mapcar
-     (function (lambda (f) (insert (car f) ":" (cdr f))))
-     (mc-get-fields "Subject" main-header t))
 
     (if pause
 	(let ((cursor-in-echo-area t))
