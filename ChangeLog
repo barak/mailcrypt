@@ -1,5 +1,11 @@
 2002-06-10  Brian Warner  <warner@lothar.com>
 
+	* mailcrypt.el (mc-version): bump to "3.5.6+" while we're
+	in-between releases. If you distribute such intermediate versions,
+	make sure they're clearly labeled as coming out of CVS.
+	(mc-modes-alist): add case for mew-draft-mode, behaves just like
+	message-mode.
+
 	* mailcrypt.texi (Hooking into Mew): added blurb about how to glue
 	into Mew, and why you might not want to.
 	
