@@ -17,7 +17,7 @@
 @syncodeindex fn cp
 
 @set TITLE Mailcrypt
-@set VERSION 3.5.4
+@set VERSION 3.5.5
 @set UPDATED August 29, 1998
 
 @ifinfo

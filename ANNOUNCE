@@ -1,4 +1,4 @@
-  Mailcrypt 3.5.4 is Available for Download
+  Mailcrypt 3.5.5 is Available for Download
 
 
   1.  Introduction
@@ -8,7 +8,7 @@
   to message encryption with PGP (you do use Emacs to handle your mail
   and news, right?). Mailcrypt version 3.5b1 and higher have been
   extended to handle both PGP 2.6.x and PGP 5.x.  Versions 3.5 and
-  higher, including 3.5.4, also support encryption with GnuPG, thanks
+  higher, including 3.5.5, also support encryption with GnuPG, thanks
   to Brian Warner.
 
 
@@ -16,14 +16,11 @@
 
   2.1. New in this Release
 
-  This release is contains no new features, but a great many bug
-  fixes. Lots of things have been tightened up, for example: "fascist"
-  dialog boxes now run conditionally; signed messages can now quote
-  other signed messages without confusing Mailcrypt; email addresses
-  parsing is fully RFC 822 compliant, so recipient names are extracted
-  correctly even if they're weird; passphrase expiration works
-  correctly; Mailcrypt code now compiles with almost none of those
-  scary warnings.
+  This release is contains no new features. GnuPG support was completely
+  rewritten by Brian Warner to support versions through 1.0. Users of
+  GPG are encouraged to upgrade to version 1.0 because 1) it is a stable
+  production release, 2) it is tons better than previous releases, and 3)
+  it is definitely supported in Mailcrypt.
 
 
   2.2.	Stable Features for PGP 5.0 and GnuPG
@@ -66,7 +63,7 @@
 
   3.  Downloading Mailcrypt
 
-  The Official Mailcrypt version 3.5.4 can be downloaded at:
+  The Official Mailcrypt version 3.5.5 can be downloaded at:
 
   <http://www.pobox.com/~lbudney/linux/software/mailcrypt.html>
 
