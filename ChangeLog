@@ -1,3 +1,17 @@
+2001-06-23  Brian Warner  <warner@lothar.com>
+
+	* mc-setversion.el (mc-default-scheme): Fix typo. Thanks to Pavel
+	Janík for the catch.
+
+	* mc-gpg.el (mc-gpg-encrypt-region): Use --recipient instead of
+	old --remote-user to specify encryption target. This has been the
+	standard argument name since gnupg-0.9.3, --remote-user is not
+	documented and probably shouldn't be used. Unfortunately
+	--recipient didn't exist in gnupg-0.9.2 and before, so this will
+	break compatibility with ancient versions (where ancient = over
+	two years old.. not something to worry about). Thanks to Filip
+	Stokkeland for the catch.
+
 2001-05-21  Brian Warner  <warner@lothar.com>
 
 	* mailcrypt: Release mailcrypt-3.5.6
