@@ -1,5 +1,11 @@
 2001-11-05  Brian Warner  <warner@lothar.com>
 
+	* ChangeLog.1, Makefile.in: revived the real old ChangeLog as
+	ChangeLog.1 .  Patrick's original changelog text was in
+	ChangeLog.old v1.1 and disappeared because of a merge
+	problem. Used .1 instead of .old to make life with CVS easier, at
+	the request of the debian maintainer Davide Salvetti.
+
 	* ChangeLog, ChangeLog.old: merged ChangeLogs, removed .old, which
 	wasn't really old and overlapped the real one.
 
