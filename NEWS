@@ -1,3 +1,9 @@
+Noteworthy changes in Mailcrypt version 3.5.4:
+
+ * None, really; this is a bugfix release.
+
+
+
 Noteworthy changes in Mailcrypt version 3.5.3:
 
  * Added support for the Horowitz Key Protocol. PGP5 key fetching is

@@ -1,3 +1,109 @@
+1999-07-20  Leonard R. Budney  <lbudney@pobox.com>
+
+	* mc-pgp.el: Added check for PGP version mismatch when using
+	PGP 2.6.
+
+	* mailcrypt.info-1, mailcrypt.info-2, mailcrypt.info: Latest
+	info files.
+
+	* mc-gpg.el: Incorporated Brian Warner's Changes into GPG support.
+	Specific changes are noted in his Changelog entries, below.
+
+1999-07-18  Leonard R. Budney  <lbudney@pobox.com>
+
+	* mc-toplev.el: Changed GNUS interface to look at raw
+	articles. Thanks to Mr. Stainless Steel Rat.
+
+	* configure, configure.in: Modified configure script test
+	for emacs. When building Mailcrypt in a subshell of XEmacs,
+	the script would get confused because XEmacs would set the
+	environment variable EMACS to t. Thanks to Todd Sabin.
+
+	* mc-gpg.el: Added catchall pattern in GPG decrypt parser to
+	catch arbitrary "decryption failed" messages. This prevents
+	random failure from resulting in deleted message bodies! Thanks
+	to Robert Bihlmeyer.
+
+1999-07-17  Leonard R. Budney  <lbudney@pobox.com>
+
+	* mc-toplev.el: Changed rmail support so that errors do not
+	leave the user in some wacky buffer.
+
+1999-06-15  Brian Warner  <warner@lothar.com>
+
+	* mc-gpg.el: update comments to reflect GPG behavior through
+	0.9.7 (no code changes). Tested against 0.9.7, works ok, but
+	we're not taking advantage of the new GPG status codes yet.
+
+1999-05-25  Leonard R. Budney  <lbudney@pobox.com>
+
+	* mailcrypt.el: Changed message-box to message-or-box, which
+	doesn't annoy as many people with that invasive message
+	box. Thanks to Dave Love and Gunnar Evermann.
+
+	* Makefile.in, mc-gpg.el, mc-pgp.el, mc-pgp5.el, mc-remail.el,
+	mc-setversion.el: Cleaned up Makefile a bit, thanks to Francois
+	Pinard. Also added some defvar's to quiet almost all of those
+	pesky compiler warnings.  Thanks to Francois Pinard and to
+	Dave Love.
+
+1999-05-18  Leonard R. Budney  <lbudney@pobox.com>
+
+	* mc-gpg.el, mc-pgp.el, mc-pgp5.el: Tightened regular expressions
+	for matching PGP/GPG header strings only when they begin a
+	line. Also improved the comment in mc-gpg.el. Thanks to Ulrik
+	Dickow.
+
+1999-04-20  Leonard R. Budney  <lbudney@pobox.com>
+
+	* mailcrypt.el: Changed email address parsing to use the rfc822
+	library. Now extraction of recipient addresses is fully RFC
+	822 compliant.
+
+	* mc-toplev.el: Changed email address parsing to use the rfc822
+	library. Now extraction of recipient addresses is fully RFC 822
+	compliant. Thanks to Jack Twilley.
+
+1999-03-28  Brian Warner  <warner@lothar.com>
+
+	* mc-gpg.el: totally revamp decrypt-parser and verify-parser.
+	Tested against gpg-0.4.5 and gpg-0.9.5, checked GPG output
+	messages for 0.4.5 and 0.9.[012345] and these parsers should work
+	with them. GPG gives better and better status messages
+	(easy to parse, not locale-specific) in recent versions so I split
+	out the code that needs to scan stderr for information and created
+	a variable called mc-gpg-handle-pre095 (default to t) that
+	controls whether to use such code or not. If gpg-1.0 comes out and
+	everyone uses it and never uses old crufty versions, then this
+	will make it easier to rip that code out and have a much cleaner
+	set of parsers.
+
+1999-03-24  Brian Warner  <warner@lothar.com>
+
+	* mc-gpg.el (mc-gpg-verify-parser): cleanup, handle all gpg from 0.4.5
+	through 0.9.5, if the message is signed by an unknown key, get the
+	keyid efficiently and safely from gpg-0.9.5, else pull it from a
+	stderr message [less safe]
+
+1999-03-23  Brian Warner  <warner@lothar.com>
+
+	* mc-gpg.el (mc-gpg-insert-parser): if rc != 0, don't insert
+	anything, and return error information instead of erroring
+	out. Change all callers to deal with it. This fixes the "if we
+	can't find gpg, attempting to decrypt removes all text from the
+	buffer" bug.
+
+	* mc-gpg.el (mc-gpg-null-parser): fix [unused] null parser
+
+	* mc-gpg.el (mc-gpg-decrypt-parser): another message changed in
+	gpg-0.9.3 . Changed regexp to match either old ".. Secret key not
+	available" or new ".. public key not found"
+
+1999-03-20  Leonard R. Budney  <lbudney@pobox.com>
+
+	* ChangeLog, mc-pgp5.el: Fixed passphrase expiration when signing
+	messages. Thanks to Greg Shapiro.
+
 1999-03-12  Gregory Neil Shapiro  <gshapiro@sendmail.org>
 
 	* mc-pgp5.el (mc-pgp50-sign-parser): Deactivate the
