@@ -11,8 +11,9 @@
 @settitle @value{TITLE}
 @setchapternewpage off
 @c Entries for @command{install-info} to use
+@dircategory Emacs
 @direntry
-* Mailcrypt: (mailcrypt).       An Emacs/PGP interface
+* Mailcrypt: (mailcrypt).  An Emacs/PGP interface.
 @end direntry
 @c %**end of header
 
