@@ -15,10 +15,17 @@ rings.txt:
 	@echo "rings.txt must be manually created"
 	@exit 1
 
-check: $(GPG_KEYS)
+# check to make sure the necessary python module is available first. A
+# missing module will cause an error deep inside the test loop, and stderr
+# isn't communicated upwards very well.
+have-py-gnupg.stamp:
+	python -c 'import GnuPGInterface'
+	touch $@
+
+check: $(GPG_KEYS) have-py-gnupg.stamp
 	$(EMACS) -q --no-site-file -batch -l test-remailer.el -f run-all-tests
 
-onetest: $(GPG_KEYS)
+onetest: $(GPG_KEYS) have-py-gnupg.stamp
 	$(EMACS) -q --no-site-file -batch -l test-remailer.el -f run-one-test
 
 clean:
