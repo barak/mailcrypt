@@ -637,7 +637,7 @@ first.  Begin with the following steps:
 @enumerate
 
 @item
-Do @samp{finger remailer-list@@kiwi.cs.berkeley.edu > ~/.remailers}.
+Do @samp{finger rlist@@publius.net > ~/.remailers}.
 This will create a Levien-format list of remailers in the file
 @file{.remailers} in your home directory.  Mailcrypt will parse this the
 first time you access a remailer function.

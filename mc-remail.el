@@ -115,7 +115,7 @@ $remailer{\"NAME\"} = \"<EMAIL ADDRESS> PROPERTIES\";
 PROPERTIES is a space-separated set of strings.
 
 This format is named after Raphael Levien, who maintains a list of
-active remailers.  Do \"finger remailer-list@kiwi.cs.berkeley.edu\"
+active remailers.  Do \"finger rlist@publius.net\"
 for the latest copy of his list.")
 
 (defvar mc-remailer-user-chains nil
@@ -208,7 +208,7 @@ should not be included in this list.")
   (let (chains remailer remailer-name ranking)
     (while
 	(re-search-forward
-	 "^\\$remailer{\"\\(.+\\)\"}[ \t]*=[ \t]*\"\\(.*\\)\";"
+	 "^\\$remailer{['\"]\\(.+\\)['\"]}[ \t]*=[ \t]*['\"]\\(.*\\)['\"];"
 	 nil t)
       (let ((name (buffer-substring-no-properties
 		   (match-beginning 1) (match-end 1)))
@@ -244,7 +244,10 @@ should not be included in this list.")
       (if (not (null remailer))
 	  (setq chains (cons (list remailer-name remailer) chains))))
     (goto-char (point-min))
-    (if (re-search-forward "----------" nil t)
+    (if (re-search-forward "----------" nil t) ; Locate rankings at bottom
+	;; Read each word in the rankings section.  Each time we 
+	;; hit a remailer we've identified, append it to the ranking
+	;; list.  Thus we sort remailers according to rank.
 	(while (re-search-forward "^\\([a-zA-Z0-9\\-]+\\) " nil t)
 	  (setq remailer-name (buffer-substring-no-properties
 			       (match-beginning 1) (match-end 1)))
