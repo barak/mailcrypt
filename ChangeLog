@@ -1,3 +1,10 @@
+2001-05-06  Brian Warner  <warner@lothar.com>
+
+	* mc-gpg.el (mc-gpg-lookup-key): Change key-regexp to tolerate
+	extra fields at the end of lines emitted by --with-colons mode.
+	Needed to handle new output format in gnupg-1.0.5, otherwise you
+	get "No GPG secret key for xxx" errors.
+
 2000-10-29  Brian Warner  <warner@lothar.com>
 
 	* mailcrypt.info: Removed the generated .info files from the CVS
