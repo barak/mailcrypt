@@ -1,4 +1,4 @@
-  Mailcrypt 3.5.5 is Available for Download
+  Mailcrypt 3.5.6 is Available for Download
 
 
   1.  Introduction
@@ -6,21 +6,20 @@
 
   Mailcrypt is an Emacs Lisp package which provides a simple interface
   to message encryption with PGP (you do use Emacs to handle your mail
-  and news, right?). Mailcrypt version 3.5b1 and higher have been
+  and news, right?).  Mailcrypt version 3.5b1 and higher have been
   extended to handle both PGP 2.6.x and PGP 5.x.  Versions 3.5 and
-  higher, including 3.5.5, also support encryption with GnuPG, thanks
-  to Brian Warner.
+  higher, including 3.5.6, also support encryption with GnuPG.
 
 
   2.  Features
 
   2.1. New in this Release
 
-  This release is contains no new features. GnuPG support was completely
-  rewritten by Brian Warner to support versions through 1.0. Users of
-  GPG are encouraged to upgrade to version 1.0 because 1) it is a stable
-  production release, 2) it is tons better than previous releases, and 3)
-  it is definitely supported in Mailcrypt.
+  This release is contains no new features.  A one-character fix was
+  made to support the use of the latest GnuPG (gpg-1.0.5), some old
+  bugfixes (that have languished in CVS for an embarrassingly long
+  time) have been merged into the release, and the documentation was
+  updated to point to MailCrypt's new home on sourceforge.net.
 
 
   2.2.	Stable Features for PGP 5.0 and GnuPG
@@ -53,19 +52,17 @@
 
   o  Test Mailcrypt against PGP 6.5.
 
-  o  Fix the annoying Texinfo bug which spreads the manual index
-     out, four lines to a page.
-
   o  Refine Mailcrypt schemes so that alternate backends, like Crypt++,
      can be used.
 
+  o  Build self-test framework.
 
 
   3.  Downloading Mailcrypt
 
-  The Official Mailcrypt version 3.5.5 can be downloaded at:
+  The Official Mailcrypt version 3.5.6 can be downloaded at:
 
-  <http://www.pobox.com/~lbudney/linux/software/mailcrypt.html>
+  <http://mailcrypt.sourceforge.net>
 
   Since receiving the blessing of the original authors, this is now
   the official Mailcrypt site.
@@ -78,4 +75,5 @@
   <ftp://cag.lcs.mit.edu/pub/patl/>
 
   Share and Enjoy!
+	- Brian Warner <warner@lothar.com>
 	- Len Budney <lbudney@pobox.com>
