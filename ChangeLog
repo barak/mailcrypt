@@ -1,3 +1,8 @@
+2004-11-08  Brian Warner  <warner@lothar.com>
+
+	* mc-pgp.el (mc-scheme-pgp): fix typo.. how did this last so long?
+	Patch from Jari Aalto via Kevin Bube.
+
 2003-30-11  Kevin Bube  <kbube@users.sourceforge.net>
 
 	* mailcrypt.texi: updated description for GPG keyfetching with the
