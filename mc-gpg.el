@@ -106,6 +106,17 @@ keyring.")
 (defconst mc-gpg-debug-buffer nil
   "A buffer for debugging messages. If nil, no debugging messages are logged.")
 
+; we use with-current-buffer for clarity. emacs19 doesn't have it. This
+; code is cribbed from lazy-lock.el which does the same thing
+(eval-when-compile
+  ;; We use this for clarity and speed.  Borrowed from a future Emacs.
+  (or (fboundp 'with-current-buffer)
+      (defmacro with-current-buffer (buffer &rest body)
+	"Execute the forms in BODY with BUFFER as the current buffer.
+The value returned is the value of the last form in BODY."
+	(` (save-excursion (set-buffer (, buffer)) (,@ body)))))
+  )
+
 ; set this with (setq mc-gpg-debug-buffer (get-buffer-create "mc debug"))
 (defun mc-gpg-debug-print (string)
   (if (and (boundp 'mc-gpg-debug-buffer) mc-gpg-debug-buffer)
@@ -877,7 +888,7 @@ GPG ID.")
 		     (setq oldkeys (1+ oldkeys)))
 		    (t
 		     (setq weirdos (1+ weirdos))))))
-	  (list t newkeys oldkeys weirdos)
+	  (list nil newkeys oldkeys weirdos)
 	))
     (error (with-current-buffer stderrbuf (buffer-string))))
 )
