@@ -314,6 +314,13 @@ PGP ID.")
 	 (re-search-forward "^File is conventionally encrypted" nil t)))
       (if (null key) (mc-deactivate-passwd t))
       (mc-pgp-decrypt-region start end "***** CONVENTIONAL *****"))
+     ;; Or maybe this is the wrong PGP version
+     ((save-excursion
+	(and
+	 (set-buffer buffer)
+	 (goto-char (point-min))
+	 (re-search-forward "Unsupported packet format" nil t)))
+      (mc-message mc-pgp-error-re buffer "Not encrypted for PGP 2.6"))
      (t
       (mc-display-buffer buffer)
       (if (mc-message "^\aError: +Bad pass phrase\\.$" buffer)
