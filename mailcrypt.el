@@ -435,6 +435,13 @@ Email address.  ADDR-LIST may be a single string or a list of strings."
     (if msg (message-or-box "%s" msg))
     retval))
 
+(defun mc-message-sigstatus (msg &optional attention)
+  "Emit a signature status line. If ATTENTION is non-nil, be noisy about it."
+  ;; this function exists to be overridden by the unit tests
+  (if attention (ding))
+  (message-or-box "%s" msg)
+)
+
 (defun mc-process-region (beg end passwd program args parser &optional buffer)
   (let ((obuf (current-buffer))
 	(process-connection-type nil)
