@@ -759,20 +759,43 @@ PGP ID.")
 	  (mc-message "Key for user ID: .*" buffer)
 	  t))))
 
-(defun mc-pgp50-snarf-parser (result)
-  (eq result 0))
+(defun mc-pgp50-snarf-parser (proc oldbuf start end newbuf passwd)
+  (let (result)
+    ;; "pgpk +batchmode=1 -a file" is confused. Although it doesn't actually
+    ;; read the key from stdin, sometimes it will just stare at you for several
+    ;; seconds unless you type *something* into stdin. I've observed that it
+    ;; absorbs about 680 bits of entropy from /dev/random too, so it might be
+    ;; (pointlessly) generating some random data and thinks it should wait
+    ;; for some keyboard input to mix into the random pool, but gives up after
+    ;; a little while and gets on with the non-random business of importing a
+    ;; key. Send an EOF to make it hurry up. Sometimes that helps.
+    (process-send-eof proc)
+    (while (eq 'run (process-status proc))
+      (accept-process-output proc 5))
+    (setq result (process-exit-status proc))
+    (cons (eq result 0) t)))
 
 (defun mc-pgp50-snarf-keys (start end)
   ;; Returns number of keys found.
-  (let ((buffer (get-buffer-create mc-buffer-name)) tmpstr args)
-    (setq args '("+verbose=1" "+batchmode" "+language=en" "-kaf"))
+  (let ((buffer (get-buffer-create mc-buffer-name)) tmpstr args tempfile)
+    ;; a known bug in pgp5.0: "pgpk -a" doesn't read from stdin like it should.
+    ;; workaround: write key to a tempfile, then feed tempfile to pgpk -a
+    (setq tempfile 
+	  (make-temp-name (expand-file-name "mailcrypt-pgp50-snarffile-"
+					    temporary-file-directory)))
+    (write-region start end tempfile)
+    (setq args (list "+verbose=1" "+batchmode=1" "+language=en" "-a" tempfile))
     (if mc-pgp50-alternate-keyring
 	(setq args (append args (list (format "+pubring=%s"
 					      mc-pgp50-alternate-keyring)))))
     (message "Snarfing...")
-    (if (mc-pgp50-process-region start end nil mc-pgp50-path args
+    (if (mc-pgp50-process-region start end nil mc-pgp50-pgpk-path args
 			   'mc-pgp50-snarf-parser buffer)
 	(save-excursion
+	  (delete-file tempfile)
+	  ;; look for "3 matching keys found" in the stderr. We don't actually
+	  ;; find out how many are new versus how many are old. Just pretend
+	  ;; they're all new.
 	  (set-buffer buffer)
 	  (goto-char (point-min))
 	  (if (re-search-forward mc-pgp50-newkey-re nil t)
@@ -784,6 +807,7 @@ PGP ID.")
 		(if (equal tmpstr "No")
 		    0
 		  (car (read-from-string tmpstr))))))
+      (delete-file tempfile)
       (mc-display-buffer buffer)
       (mc-message mc-pgp50-error-re buffer "Error snarfing PGP keys")
       0)))
