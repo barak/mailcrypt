@@ -1,5 +1,5 @@
-This is Info file mailcrypt.info, produced by Makeinfo version 1.68
-from the input file ./mailcrypt.texi.
+This is mailcrypt.info, produced by Makeinfo version 3.12f from
+./mailcrypt.texi.
 
    This documentation describes Mailcrypt version 3.5.3.  This
 documentation was last updated on August 29, 1998.
@@ -158,7 +158,7 @@ like this:
 
      (setq mc-pgp-keydir "/users/patl/.pgp/")
 
-   Note that the trailing slash is *required*.
+   Note that the trailing slash is _required_.
 
    If the heuristic fails, please report it as a bug (*note Credits::.).
 
@@ -184,8 +184,8 @@ Tips
      `mc-passwd-timeout'.  If your paranoia permits, consider increasing
      it to five or ten minutes (*note Passphrase Cache::.).
 
-   * If Mailcrypt ever does something you wish it had not, *DON'T
-     PANIC*.  Just use the normal Emacs undo command, `M-x undo' or
+   * If Mailcrypt ever does something you wish it had not, _DON'T
+     PANIC_.  Just use the normal Emacs undo command, `M-x undo' or
      `C-x u', to restore your buffer (*note Emacs Undo: (emacs)Undo.).
      Mailcrypt keeps almost no state except what you see in your
      buffer, so any action can be undone this way.
@@ -198,6 +198,7 @@ Tips
      Mailcrypt automatically, and we can enjoy the feeling that people
      are actually using our package.
 
+
 
 File: mailcrypt.info,  Node: Limitations,  Next: References,  Prev: Tips,  Up: Top
 
@@ -209,7 +210,7 @@ interface.  Perhaps some future version will be; in the meantime, you
 will need to use the command-line interface for some operations.
 Things which the current version does not support include:
 
-*Complete Key Management*
+_Complete Key Management_
      Mailcrypt's key management support is limited to adding and
      extracting keys from keyrings.  It does not support key
      generation, key removal, key revocation, ID and trust parameter
@@ -218,15 +219,15 @@ Things which the current version does not support include:
      these warnings by viewing the `*MailCrypt*' buffer; see *Note
      Tips::.)
 
-*Encryption with Conventional Cryptography*
+_Encryption with Conventional Cryptography_
      Mailcrypt supports decryption but not encryption with
      "conventional" (i.e., non-public key) cryptography.
 
-*Detached Signatures*
+_Detached Signatures_
      Mailcrypt does not support the creation nor the verification of
      detached signatures.
 
-*"For your eyes only" Decryption*
+_"For your eyes only" Decryption_
      Mailcrypt will be unable to decrypt a file which was encrypted
      with the "for your eyes only" (`-m') option.  This is actually a
      bug in PGP, which provides no portable way to avoid its paging
@@ -341,6 +342,7 @@ key servers, see Brian LaMacchia's home page at
 
    * pgp-public-keys@pgp.ox.ac.uk
 
+
    For a complete list, consult any good online repository of PGP
 information (*note Online Resources::.).
 
@@ -378,7 +380,7 @@ freedom of speech is a controversial topic.  Anyway, here are some
 organizations you should definitely watch and preferably send lots of
 money.
 
-*The Electronic Frontier Foundation*
+_The Electronic Frontier Foundation_
      The EFF (`http://www.eff.org/') works to protect civil liberties in
      cyberspace.  They also maintain an impressive collection of on-line
      resources.  If you like Mailcrypt so much that you wish you had
@@ -386,11 +388,11 @@ money.
      your money go.  The EFF newsgroups, `comp.org.eff.news' and
      `comp.org.eff.talk', are required reading for the well-informed.
 
-*The League for Programming Freedom*
+_The League for Programming Freedom_
      The LPF (`http://www.lpf.org/') works to fight software patents,
      which threaten to make free software like Mailcrypt impossible.
 
-*The Center for Democracy and Technology*
+_The Center for Democracy and Technology_
      The CDT (`http://www.cdt.org/') has essentially the same goals as
      the EFF, but is more of a lobbying group.
 
@@ -432,6 +434,7 @@ our outstanding set of Beta testers:
    * Mark Baushke <mdb@cisco.com>
 
    * Mike Long <mike.long@analog.com>
+
 
 
 File: mailcrypt.info,  Node: Index,  Prev: Credits,  Up: Top

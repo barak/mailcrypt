@@ -1,5 +1,5 @@
-This is Info file mailcrypt.info, produced by Makeinfo version 1.68
-from the input file ./mailcrypt.texi.
+This is mailcrypt.info, produced by Makeinfo version 3.12f from
+./mailcrypt.texi.
 
    This documentation describes Mailcrypt version 3.5.3.  This
 documentation was last updated on August 29, 1998.
@@ -48,7 +48,7 @@ documentation was last updated on August 29, 1998.
 * Credits::                     Whom to blame.
 * Index::                       Keys, variables, and functions.
 
- -- The Detailed Node Listing --
+ --- The Detailed Node Listing ---
 
 Introduction
 
@@ -269,19 +269,19 @@ Command Overview
    All Mailcrypt commands are (by default) activated by three-character
 key sequences which begin with `C-c /'.  The most common operations are:
 
-*Encrypting a Message*
+_Encrypting a Message_
      `C-c / e' encrypts a message using the recipient's (or recipients')
      public key(s).  *Note Encrypting a Message: Encrypting.
 
-*Decrypting a Message*
+_Decrypting a Message_
      `C-c / d' decrypts a message using your secret key.  *Note
      Decrypting a Message: Decrypting.
 
-*Signing a Message*
+_Signing a Message_
      `C-c / s' clearsigns a message using your secret key.  *Note
      Signing a Message: Signing.
 
-*Verifying a Signature*
+_Verifying a Signature_
      `C-c / v' verifies the signature on a clearsigned message using the
      sender's public key.  *Note Verifying a Signature: Verifying.
 
@@ -389,7 +389,7 @@ Mailcrypt will offer to try to fetch it for you (*note Key Fetching::.).
    The default key for signing is the first one on the secret key ring
 which matches the string `mc-pgp-user-id'; this defaults to
 `(user-login-name)'.  Note that this differs from PGP's normal default,
-which is to use the first of *all* of the secret keys.  To mimic PGP's
+which is to use the first of _all_ of the secret keys.  To mimic PGP's
 behavior, set this variable to `""'. This variable is specific to pgp
 2.6.x; `mc-pgp50-user-id' and `mc-gpg-user-id' are the corresponding
 variables for pgp 5.0 and GnuPG.
@@ -417,7 +417,7 @@ appropriate passphrase unless it is cached (*note Passphrase Cache::.).
 Mailcrypt will call the functions listed in `mc-pre-signature-hook' and
 `mc-post-signature-hook' immediately before and after processing,
 respectively.  The signed message will replace the original message in
-the buffer.  *Do not* edit the message further with the signature
+the buffer.  _Do not_ edit the message further with the signature
 attached, because the signature would then be incorrect.  If you
 discover you need to edit a message after you have signed it, remove the
 signature first with the normal Emacs undo command `C-x u' (*note Emacs
@@ -557,7 +557,7 @@ remailer was set up by an untrustworthy party in the first place).
 Whoever controls the remailer will have access to the identities of
 senders and recipients.
 
-   One solution to this is to use *chains* of remailers that send
+   One solution to this is to use _chains_ of remailers that send
 encrypted messages.  For example, suppose Bill wishes to send a message
 to Louis using a chain of remailers A, B, and C.  He writes the message
 (possibly encrypting it for Louis), then encrypts the result (including
@@ -583,7 +583,7 @@ the chain.
 message to Louis, which defines a remailer chain that Louis can use to
 reply to Bill.  Louis can use this chain without knowing who Bill is -
 only the last remailer in the chain need know the final recipient.  Bill
-can also establish a *pseudonym* for use in signing his anonymous
+can also establish a _pseudonym_ for use in signing his anonymous
 messages.
 
    Mailcrypt includes facilities for sending messages via remailers, for
@@ -608,12 +608,12 @@ first.  Begin with the following steps:
 
   3. Add their PGP public keys to your keyring.  You can `finger
      pgpkeys@kiwi.cs.berkeley.edu' for a list of remailer public keys.
-     Note that Mailcrypt *requires* that you have the public keys of
+     Note that Mailcrypt _requires_ that you have the public keys of
      all the remailers you want to use, and therefore that the
      remailers support PGP encryption.
 
 
-     *Note:* These steps need only be done once, although repeating them
+     _Note:_ These steps need only be done once, although repeating them
      from time to time is probably a good idea, since remailers come
      and go.
 
@@ -697,7 +697,7 @@ default and is parsed at startup time.  The parser creates several
 chains, each containing a single remailer, and names each chain after
 the respective remailer.
 
-   Thus "replay" (for example) is actually the name of a *chain* whose
+   Thus "replay" (for example) is actually the name of a _chain_ whose
 single element is the remailer at <remailer@replay.com>.  So "replay"
 is a valid name of a chain to include in the definition of another
 chain, as was done above in the definition of "Bar".
@@ -730,7 +730,7 @@ may edit the innermost part of the response block to have a
    Inserting a response block also updates the `Reply-to' hashmark
 header field.  So, when your recipient replies to your message, the
 reply will automatically be addressed properly.  This only works if the
-last remailer in the chain used to encrypt the *message* supports
+last remailer in the chain used to encrypt the _message_ supports
 hashmarks (the response block chain doesn't matter).  If the last
 remailer does not support hashmarks, Mailcrypt will generate an error
 when you try to use the chain.
@@ -835,8 +835,8 @@ sub-chains which have the `mix' property and will use the Mixmaster
 executable to rewrite for those sub-chains.
 
    This allows arbitrary intermingling of Mixmaster and normal (also
-called "Type 1") remailers, but you should note that this is *not
-recommended*.  The recommended procedure is to have a single Mixmaster
+called "Type 1") remailers, but you should note that this is _not
+recommended_.  The recommended procedure is to have a single Mixmaster
 sub-chain which is most or all of the whole chain.
 
    There are advantages and disadvantages to having the Mixmaster
@@ -871,7 +871,7 @@ Remailer Security
 =================
 
    Keep in mind that there is only one person fully qualified to protect
-your privacy: *you*.  You are responsible for obtaining a list of
+your privacy: _you_.  You are responsible for obtaining a list of
 remailers and their public keys; you are responsible for choosing which
 of them to use and in what order.  There are public lists of remailers
 and keys (the Quick Start section above relies on them), but you pay for
@@ -894,7 +894,7 @@ messages and chains suitable for response blocks.  Some remailers don't
 even keep mail logs (at least, their operators claim they do not), so it
 may be literally impossible to trace a message back to you after the
 fact if you chain it through enough remailers.  Response blocks, on the
-other hand, have your identity buried in there *somewhere*.  In
+other hand, have your identity buried in there _somewhere_.  In
 principle, at least, it is possible to compromise the keys of all the
 remailers in the chain and decrypt the response block.  So you should
 either use very long and strong chains for your response blocks, avoid
@@ -982,6 +982,7 @@ Remailer Tips
      available on the Internet.  For some good starting points, see
      *Note References::.
 
+
 
 File: mailcrypt.info,  Node: Passphrase Cache,  Next: Key Fetching,  Prev: Remailer Support,  Up: Top
 
@@ -1059,7 +1060,7 @@ Fetch::.
 
    If the key is found, you will be shown the result of running PGP on
 it locally.  This allows you to inspect the signatures on the key
-*relative to your own keyring* before you consent to having it added.
+_relative to your own keyring_ before you consent to having it added.
 *Inspect the signatures carefully!*  Key distribution is often the
 Achilles' heel of public key protocols.  If you blindly use keys
 obtained from the key servers, you are asking for trouble.
