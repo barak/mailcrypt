@@ -114,9 +114,10 @@ $remailer{\"NAME\"} = \"<EMAIL ADDRESS> PROPERTIES\";
 
 PROPERTIES is a space-separated set of strings.
 
-This format is named after Raphael Levien, who maintains a list of
-active remailers.  Do \"finger rlist@publius.net\"
-for the latest copy of his list.")
+This format is named after Raphael Levien, who maintained a list of
+active remailers. Do \"finger rlist@noisebox.remailer.org\" or
+\"finger rlist@mixmaster.shinn.net\" for the latest copy of the
+remailer list.")
 
 (defvar mc-remailer-user-chains nil
   "An alist of remailer chains defined by the user.
