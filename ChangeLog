@@ -4,6 +4,7 @@
 	archive. They should be built from .texi before distributions, but
 	not tracked in CVS.
 	* mailcrypt.dvi: Ditto.
+	* Makefile.in (distclean): Remove .info and .dvi too.
 
 	* ChangeLog: add file-local variable to make date strings consistent.
 
