@@ -186,20 +186,20 @@ PGP ID.")
 
 	  ;; Hurm.  FIXME; must get better result codes.
 	  (if (stringp result)
-	      (message result)
+	      (message result))
 
 	    ;; If the parser found something, migrate it to the old
 	    ;; buffer.  In particular, the parser's job is to return
 	    ;; a cons of the form ( beg . end ) delimited the result
 	    ;; of PGP in the new buffer.
-	    (if (consp rgn)
-		(progn
-		  (set-buffer obuf)
-		  (delete-region beg end)
-		  (goto-char beg)
-		  (insert-buffer-substring mybuf (car rgn) (cdr rgn))
-		  (set-buffer mybuf)
-		  (delete-region (car rgn) (cdr rgn)))))
+	  (if (consp rgn)
+	      (progn
+		(set-buffer obuf)
+		(delete-region beg end)
+		(goto-char beg)
+		(insert-buffer-substring mybuf (car rgn) (cdr rgn))
+		(set-buffer mybuf)
+		(delete-region (car rgn) (cdr rgn))))
 
 	  ;; Return nil on failure and exit code on success
 	  (if rgn result nil))
@@ -414,8 +414,21 @@ PGP ID.")
 	      (goto-char (point-max))
 	      (if
 		  (re-search-backward 
-		   ".*\(Good signature made.*by key:\)" nil t)
-		  (setq rgn (cons rgn (match-beginning 1)))
+		   (concat 
+		    "\\(Good signature made.*by\\).*\n.*\n"
+		    "\[ \t\]*\\(.*\\)\n")
+		   nil t)
+		  (progn
+		    (setq rgn (cons rgn (match-beginning 1)))
+		    (setq result
+			  (concat 
+			   (buffer-substring-no-properties
+			    (match-beginning 1)
+			    (match-end 1))
+			   " "
+			   (buffer-substring-no-properties
+			    (match-beginning 2)
+			    (match-end 2)))))
 
 		;; Note that we don't check for a BAD signature.  The
 		;; effect is that the "BAD signature" message is
@@ -457,14 +470,12 @@ PGP ID.")
 (defun mc-pgp50-decrypt-region (start end &optional id)
   ;; returns a pair (SUCCEEDED . VERIFIED) where SUCCEEDED is t if
   ;; the decryption succeeded and verified is t if there was a valid signature
-  (let (
-	(process-environment process-environment)
+  (let ((process-environment process-environment)
 	(buffer (get-buffer-create mc-buffer-name))
 	args key new-key passwd result pgp-id)
     (undo-boundary)
     (setq key (mc-pgp50-lookup-key (or id mc-pgp50-user-id)))
-    (setq
-     passwd
+    (setq passwd
      (if key
 	 (mc-activate-passwd (cdr key)
 			     (format "PGP passphrase for %s (%s): "
@@ -485,7 +496,6 @@ PGP ID.")
 	   args 'mc-pgp50-decrypt-parser buffer))
     (cond
      (result
-      (message "Decrypting... Done.")
       ;; If verification failed due to missing key, offer to fetch it.
       ;; This is unchanged from mailcrypt 3.4, and should still work.
       ;; Execution never reaches this point when using PGP 5.0, however.
@@ -555,23 +565,54 @@ PGP ID.")
 	    (expect-cond
 
 	     ;; OPTION 1:  Great!  The signature is approved!
-	     ("Good signature made.*by key:\n"
+	     ("Good signature made"
 
-	      ;; Catch the exit status.
-	      (delete-process proc)
+	      ;; Let the program finish
+	      (process-send-eof proc)
+	      (while (eq 'run (process-status proc))
+		(accept-process-output proc 5))
+
+	      ;; Read the success message
+	      (goto-char (point-max))
+	      (re-search-backward
+	       "\\(Good signature made.*by\\).*\n.*\n\[ \t\]*\\(.*\\)\n" nil t)
 
 	      ;; Return the good news!
-	      (setq results '("Signature is valid." t)))
+	      (setq results
+		    (list
+		     (concat 
+		      (buffer-substring-no-properties
+		       (match-beginning 1)
+		       (match-end 1))
+		      " "
+		      (buffer-substring-no-properties
+		       (match-beginning 2)
+		       (match-end 2))) t)))
 
 	     ;; OPTION 2:  Shucks!  The signature is invalid!
 	     ("BAD signature made.*by key:\n"
 
-	      ;; Catch the exit status.
-	      (delete-process proc)
+	      ;; Let the program finish
+	      (process-send-eof proc)
+	      (while (eq 'run (process-status proc))
+		(accept-process-output proc 5))
 
-	      ;; Return the good news!
-	      (setq results 
-		    '("Signature is *NOT* valid!  You've been had!" nil)))
+	      ;; Read the warning message
+	      (goto-char (point-max))
+	      (re-search-backward
+	       "\\(BAD signature made.*by\\).*\n.*\n\[ \t\]*\\(.*\\)\n" nil t)
+
+	      ;; Return the bad news
+	      (setq results
+		    (list
+		     (concat 
+		      (buffer-substring-no-properties
+		       (match-beginning 1)
+		       (match-end 1))
+		      " "
+		      (buffer-substring-no-properties
+		       (match-beginning 2)
+		       (match-end 2))) t)))
 
 	     ;; OPTION 2a:  We don't have the right public key!
 	     ("\n.*Signature by unknown keyid: 0x.*\n"
