@@ -226,11 +226,16 @@ class Watcher:
         outstanding.sort(lambda x,y: cmp(x[0].msgid, y[0].msgid))
         return outstanding
     def age(self, msgid):
+        tx_time = self.txtime(msgid)
+        if not tx_time:
+            return None
+        age = time.time() - tx_time
+        return age
+    def txtime(self, msgid):
         if not self.source.msgs.has_key(msgid):
             return None
         tx_time = self.source.msgs[msgid].time
-        age = time.time() - tx_time
-        return age
+        return tx_time
         
     def received(self):
         """Return a list of tuples (dstmsg, latency), where latency is in
