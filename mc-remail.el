@@ -602,6 +602,7 @@ be passed to this program for rewriting.")
 	(main-header (mc-find-main-header))
 	(colon-header (mc-find-colon-header))
 	(hash-header (mc-find-hash-header))
+        (newsgroups (mc-get-fields "Newsgroups" nil t))
 	recipients preserved newsgroups first last rest preserved-regexp)
 
     ;; Figure out FIRST and LAST. FIRST is the first Mixmaster in the
@@ -639,18 +640,26 @@ be passed to this program for rewriting.")
     (setq recipients
 	  (mc-cleanup-recipient-headers
 	   (mapconcat 'cdr (mc-get-fields "To" main-header t) ", ")))
-    (setq newsgroups (mc-get-fields "Newsgroups" nil t))
-    ;; Mixmaster does not support posting...
-;;;    (if (and newsgroups
-;;;	     (not (member "post" (mc-remailer-properties last))))
     (if newsgroups
+	(setq newsgroups 
+	  (mc-cleanup-recipient-headers
+	   (cdr 
+	    (assoc "Newsgroups" newsgroups)))))
+    ;; Mixmaster does not support posting...
+;    (if newsgroups
+    ;; Now they do! (1998)
+    (if (and newsgroups
+	     (not (member "post" (mc-remailer-properties last))))
 	(error "Remailer %s does not support posting"
 	       (mc-remailer-address last)))
     (setq
      recipients
      (append (mapcar
-	      (function (lambda (c) (concat "Post:" (cdr c)))) newsgroups)
+	      (function (lambda (c) (concat "Post: " c))) newsgroups)
 	     recipients))
+
+    (mapcar
+     (function (lambda (c) (message c))) recipients)
 
     (setq
      preserved-regexp
