@@ -1,185 +1,253 @@
 #! /usr/bin/python
 
-import os, os.path, stat, time, string
+if __name__ == '__main__':
+    import pygtk
+    pygtk.require("2.0")
 
-# This program watches a pair of maildir-style directories. A message is
-# placed in the 'source' maildir when the user runs an elisp function just
-# before encrypting the message for a remailer chain. The 'dest' maildir
-# should be on the receiving end of a .qmail or .forward file. This program
-# polls both directories every ten seconds, watching for changes. It creates
-# a list of all files in 'source' that are not matched by files in 'dest'.
+import gtk
 
-class DirWatcher:
-    def __init__(self, d):
-        self.dir = d
-        self.files = {}
-        self.ids = {}
-        self.mtime = 0
-        self.make_maildir(d)
-    def make_maildir(self, which):
-        try:
-            os.mkdir(which)
-            os.mkdir(os.path.join(which, "new"))
-            os.mkdir(os.path.join(which, "tmp"))
-        except OSError:
-            return
-        except:
-            raise
-    def poll(self):
-        newdir = os.path.join(self.dir, "new")
-        dir_mtime = os.stat(newdir)[stat.ST_MTIME]
-        if dir_mtime > self.mtime:
-            self.mtime = dir_mtime
-            self.files = {}
-            self.ids = {}
-            for f in os.listdir(newdir):
-                fd = open(os.path.join(newdir,f))
-                self.files[f] = {}
-                self.files[f]['msgid'] = None
-                data = ''
-                msgid = None
-                for line in fd.readlines():
-                    data = data + line
-                    key = "MailcryptRemailerMessageId="
-                    where = line.find(key)
-                    if where != -1:
-                        where = where + len(key)
-                        msgid = line[where:-1]
-                fd.close()
-                self.files[f]['data'] = data
-                self.files[f]['msgid'] = msgid
-                st = os.stat(os.path.join(newdir,f))
-                self.files[f]['time'] = st[stat.ST_MTIME]
-                if self.ids.get(msgid, None) != None:
-                    print "Hey, file %s duplicates msgid %s from file %s" % \
-                          (f, msgid, self.ids[msgid])
-                if msgid != None:
-                    self.ids[msgid] = f
-    def dump(self):
-        print "dir:", self.dir
-        print len(self.files)," files:"
-        for f in self.files.keys():
-            print f, "%d bytes, id %s" % \
-                  (len(self.files[f]['data']), self.files[f]['msgid'])
-        print
-    def msgids(self):
-        return self.ids.keys()
-
+import os, os.path, stat, time, string, cPickle
+from maildirgtk import MaildirGtk
 from nntplib import NNTP
 
-class NewsWatcher:
-    def __init__(self, server, groups, user=None, pw=None, port=None):
+# This file implements some classes which watch maildir-style directories
+# and NNTP newsgroups. A message is placed in the 'source' maildir when the
+# user runs an elisp function just before encrypting the message for a
+# remailer chain. Messages that emerge from the chain as email will wind up
+# in the 'dest' maildir, which should be on the receiving end of a .qmail or
+# .forward file. Messages that emerge as news postings should appear in a
+# newsgroup monitored by the NewsWatcherService.
+
+# The Watcher class watches both the source directory and the target
+# dir/groups. It can provide a list of all files in 'source' that are not
+# matched by files in 'dest'.
+
+class Message:
+    def __init__(self, msgid, name, time, data):
+        self.msgid = msgid # the number inserted by the elisp counter
+        self.name = name
+        self.time = time # when the message was sent / arrived
+        self.data = data # contents of the mesage (inc headers)
+    def __repr__(self):
+        return "<Message #%s>" % self.msgid
+    
+class MessageWatcher:
+    def __init__(self):
+        self.msgs = {}
+        self.checker = None
+
+    def setChecker(self, checker):
+        self.checker = checker
+    def __getstate__(self):
+        d = self.__dict__.copy()
+        d['checker'] = None
+        return d
+    
+    def parseMessage(self, filename, name, time, lines):
+        # find messageid, build bodytext
+        data = ''
+        msgid = None
+        key = "MailcryptRemailerMessageId="
+        for line in lines:
+            data = data + line
+            where = line.find(key)
+            if where != -1:
+                where = where + len(key)
+                msgid = line[where:-1]
+        m = Message(msgid, name, time, data)
+        if self.msgs.get(msgid, None) != None:
+            print "Hey, file %s duplicates msgid %s from file %s" % \
+                  (filename, msgid, self.msgs[msgid].filename)
+        if msgid != None:
+            self.msgs[msgid] = m
+        if self.checker:
+            self.checker(m)
+            
+    def dump(self):
+        print len(self.msgs)," msgids:"
+        for m in self.msgs.values():
+            print m.msgid, "%d bytes, file %s" % (len(m.data), m.name)
+        print
+        
+    
+class DirWatcher(MaildirGtk, MessageWatcher):
+    """This object watches a single maildir for incoming messages. It scans
+    them for the MailcryptRemailerMessageId number, and stashes them in the
+    .msgids dictionary by id. It also gives them to a .checker function, if
+    set. The Maildir class tracks files that have been seen already, and
+    keeps a persistent list of them, so the checker will only be called once
+    per message."""
+    def __init__(self, basedir):
+        MessageWatcher.__init__(self)
+        MaildirGtk.__init__(self, basedir)
+
+    # we inherit start() and stop() from Maildir via MaildirGtk
+    
+    def messageReceived(self, name):
+        # name is relative to the directory being watched
+        #print "messageReceived", self.basedir, name
+        filename = os.path.join(self.basedir, name)
+        mtime = os.stat(filename)[stat.ST_MTIME]
+        fd = open(filename)
+        self.parseMessage(filename, name, mtime, fd.readlines())
+        fd.close()
+        
+    def dump(self):
+        print "dir:", self.basedir
+        MessageWatcher.dump(self)
+        
+class NewsWatcher(MessageWatcher):
+    def __init__(self, server, groups,
+                 user=None, pw=None, port=None, tag=None):
+        MessageWatcher.__init__(self)
         self.groups = groups
-        self.n = NNTP(server, port=port, user=user, password=pw,
-                      readermode=1)
+        self.nntp = None  # the NNTP connection object
+        self.user = user
+        self.pw = pw
+        self.port = port
+        self.tag = tag
         self.last = {}
-        self.files = {}
-        self.ids = {}
+        self.timeout = None
+        self.pollInterval = 60
+
+    def __getstate__(self):
+        d = self.__dict__.copy()
+        d['nntp'] = None # just in case
+        return d
+    
+    def start(self):
+        self.nntp = NNTP(server, self.port, self.user, self.password,
+                         readermode=1)
         # only look for messages that appear after we start. Usenet is big.
-        for g in groups:
-            resp, count, first, last, name = self.n.group(g)
-            self.last[g] = int(last)
+        if not self.last: # only do this the first time
+            for g in groups:
+                resp, count, first, last, name = self.nntp.group(g)
+                self.last[g] = int(last)
+        self.timeout = gtk.timeout_add(self.pollinterval*1000, self.doTimeout)
+    
+    def stop(self):
+        self.nntp = None
+        if self.timeout:
+            gtk.timeout_remove(self.timeout)
+            self.timeout = None
+
+    def doTimeout(self):
+        self.poll()
+        return gtk.TRUE # keep going
+        
     def poll(self):
         for g in self.groups:
-            resp, count, first, last, name = self.n.group(g)
+            resp, count, first, last, name = self.nntp.group(g)
             for num in range(self.last[g]+1, int(last)+1):
-                resp, num, id, lines = self.n.article("%d" % num)
-                # find the msgid
-                m = {}
-                msgid = None
-                key = "MailcryptRemailerMessageId="
-                for line in lines:
-                    where = line.find(key)
-                    if where != -1:
-                        where = where + len(key)
-                        msgid = line[where:]
-                if msgid != None:
-                    m['msgid'] = msgid
-                    m['data'] = string.join(lines, "\n")
-                    m['time'] = time.time()
-                    self.files[g,num] = m
-                    self.ids[msgid] = (g,num)
+                resp, num, id, lines = self.nntp.article("%d" % num)
+                name = "%s:%d" % (g, num)
+                if self.tag:
+                    if not filter(lambda line, tag=tag: line.find(tag) != -1,
+                                  lines):
+                        continue
+                self.parseMessage(name, name, time.time(), lines)
             self.last[g] = int(last)
-    def msgids(self):
-        return self.ids.keys()
         
 class Watcher:
-    def __init__(self, source, dest):
-        self.source = DirWatcher(source)
-        self.dest = DirWatcher(dest)
+    def __init__(self):
+        self.source = None
+        self.dests = []
+        self.watchers = []
+    def checker(self, m):
+        # something changed, somewhere. The message 'm' was added, but we don't
+        # know where. Override this method.
+        pass
+        
+    def addSource(self, source):
+        self.source = source
+        self.watchers.append(source)
+    def addDest(self, dest):
+        self.dests.append(dest)
+        self.watchers.append(dest)
+    def start(self):
+        if self.source:
+            self.source.setChecker(self.checker)
+        for d in self.dests:
+            d.setChecker(self.checker)
+        for w in self.watchers:
+            w.start()
+    def stop(self):
+        for w in self.watchers:
+            w.stop()
+            
     def poll(self):
+        # force a poll
         self.source.poll()
-        self.dest.poll()
+        for d in self.dests:
+            d.poll()
+            
+    def msgs(self):
+        # return dict of sent messages, and list of received messages. msgid
+        # is the key for both, and the Message is the value.
+        src = self.source.msgs
+        dst = {}
+        for d in self.dests:
+            dst.update(d.msgs)
+        return (src, dst)
     def outstanding(self):
-
-        """Return a list of tuples (msgid, time), where time is the absolute
+        """Return a list of tuples (srcmsg, time), where time is the absolute
         time the message was sent."""
-
+        src, dst = self.msgs()
         outstanding = []
-        s_ids = self.source.msgids()
-        d_ids = self.dest.msgids()
-        for msgid in s_ids:
-            if msgid not in d_ids:
-                f = self.source.ids[msgid]
-                outstanding.append((msgid, self.source.files[f]['time']))
+        for msgid in src.keys():
+            if not dst.has_key(msgid):
+                m = src[msgid]
+                outstanding.append((m, m.time))
         outstanding.sort(lambda x,y: cmp(x[0], y[0]))
         return outstanding
     def received(self):
-
-        """Return a list of tuples (msgid, latency), where latency is in
+        """Return a list of tuples (dstmsg, latency), where latency is in
         seconds."""
-
         received = []
-        s_ids = self.source.msgids()
-        d_ids = self.dest.msgids()
-        for msgid in s_ids:
-            if msgid in d_ids:
-                txf = self.source.ids[msgid]
-                txtime = self.source.files[txf]['time']
-                rxf = self.dest.ids[msgid]
-                rxtime = self.dest.files[rxf]['time']
-                received.append((msgid, rxtime - txtime))
+        src, dst = self.msgs()
+        for msgid in src.keys():
+            if dst.has_key(msgid):
+                txtime = src[msgid].time
+                rxtime = dst[msgid].time
+                received.append((dst[msgid], rxtime - txtime))
         received.sort(lambda x,y: cmp(x[0], y[0]))
         return received
 
-class Watcher2(Watcher):
-    def __init__(self, sourcedir, server, groups, port=None):
-        self.source = DirWatcher(sourcedir)
-        self.dest = NewsWatcher(server, groups, port=port)
-        
+def do_test(wclass):
+    # watch two maildirs
+    w = wclass()
+    sdir = DirWatcher("sdir")
+    w.addSource(sdir)
+    ddir = DirWatcher("ddir")
+    w.addDest(ddir)
+    print "running"
+    w.start()
+    while 1:
+        gtk.mainiteration()
+    w.stop()
+    print "finished"
+
 def test1():
-    w = Watcher("sdir", "ddir")
-    print "polling"
-    import time
-    while 1:
-        time.sleep(5)
-        w.poll()
-        w.source.dump()
-        w.dest.dump()
-        print
-
+    class Test1Watcher(Watcher):
+        def checker(self, m):
+            self.source.dump()
+            self.dests[0].dump()
+            print
+    do_test(Test1Watcher)
 def test2():
-    w = Watcher("sdir", "ddir")
-    print "polling"
-    import time
-    while 1:
-        w.poll()
-        print "outstanding:", w.outstanding()
-        print "complete:", w.received()
-        time.sleep(5)
-
-def test3():
-    w = Watcher2("sdir", "luther", ["lothar.mail.debian.devel"], port=8119)
-    print "polling"
-    import time
-    while 1:
-        w.poll()
-        print "outstanding:", w.outstanding()
-        print "complete:", w.received()
-        print w.dest.last
-        print w.dest.msgids()
-        time.sleep(5)
+    class Test2Watcher(Watcher):
+        def checker(self, m):
+            print "outstanding:", self.outstanding()
+            print "complete:", self.received()
+            print
+    do_test(Test2Watcher)
 
 if __name__ == '__main__':
-    test3()
+    test2()
     
+
+# TODO: make sure messages that are present at startup get counted too. For
+# Maildir, this means doing the scan in start instead of __init__. Must
+# decide about NewsWatcher, should probably do a scan at __init__ time,
+# record last[] info, then drop connection and reestablish at start.
+
