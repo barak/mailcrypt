@@ -352,8 +352,8 @@ versions.  This permits backward compatibility for the millions of
 satisfied users of Mailcrypt 3.4 worldwide.  If you wish to specify a
 different version of PGP, use this function. Its action is the same as
 setting the variable @code{mc-default-scheme}. For a list of supported
-versions, press the tab key. Note that "pgp" in this context means
-version 2.6.x of PGP, the original (and default) PGP version.
+versions, press the tab key. "2.6" means 2.6.x, the original (and default). 
+"5.0" is pgp 5.0. "gpg" is GnuPG.
 
 @findex mc-read-mode
 @findex mc-write-mode
@@ -448,7 +448,9 @@ The default key for signing is the first one on the secret key ring
 which matches the string @code{mc-pgp-user-id}; this defaults to
 @code{(user-login-name)}.  Note that this differs from PGP's normal
 default, which is to use the first of @emph{all} of the secret keys.  To
-mimic PGP's behavior, set this variable to @code{""}.
+mimic PGP's behavior, set this variable to @code{""}. This variable is
+specific to pgp 2.6.x; @code{mc-pgp50-user-id} and @code{mc-gpg-user-id} are
+the corresponding variables for pgp 5.0 and GnuPG.
 
 If you want to use a secret key other than your default for signing the
 message, pass a prefix argument to @code{mc-encrypt}.  (That is, type
@@ -1305,9 +1307,13 @@ Comment: Processed by Mailcrypt @value{VERSION}, an Emacs/PGP interface
 @end example
 
 @vindex mc-pgp-comment
+@vindex mc-pgp50-comment
+@vindex mc-gpg-comment
 To change the comment to one of your own, set the variable
-@code{mc-pgp-comment}.  Set it to @code{nil} to use PGP's default, which
+@code{mc-pgp-comment}. Set it to @code{nil} to use PGP's default, which
 is probably either no comment or something defined in @file{config.txt}.
+@code{mc-pgp50-comment} and @code{mc-gpg-comment} are the corresponding
+variables for the other versions.
 
 @node Mode Line, Key Bindings, Comment Field, Miscellaneous Configuration
 @section Mode Line
@@ -1364,6 +1370,20 @@ The information in this section should be unnecessary, but is provided
 Mailcrypt will look for the PGP executable in your standard search path
 under the name @file{pgp}.  To use a different name (or to provide a
 complete path), set the variable @code{mc-pgp-path}.
+
+@vindex mc-pgp50-pgpe-path
+@vindex mc-pgp50-pgps-path
+@vindex mc-pgp50-pgpv-path
+@vindex mc-pgp50-pgpk-path
+PGP 5.0 includes four separate executables, usually installed as "pgpe",
+"pgps", "pgpv", and "pgpk". The variables @code{mc-pgp50-pgpe-path},
+@code{mc-pgp50-pgps-path}, @code{mc-pgp50-pgpv-path}, and
+@code{mc-pgp50-pgpk-path} tell Mailcrypt where to find them if they are
+not on your search path.
+
+@vindex mc-gpg-path
+GnuPG is normally installed as "gpg". @code{mc-gpg-path} tells Mailcrypt
+where to find the executable if it is not on your path.
 
 In order to keep your identities straight, Mailcrypt needs to know where
 your secret keyring resides.

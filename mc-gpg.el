@@ -65,8 +65,6 @@
 
 (defvar mc-gpg-user-id (user-login-name)
   "*GPG ID of your default identity.")
-(defvar mc-gpg-always-sign nil 
-  "*If t, always sign encrypted GPG messages, or never sign if 'never.")
 (defvar mc-gpg-path "gpg" "*The GPG executable.")
 (defvar mc-gpg-display-snarf-output nil
   "*If t, pop up the GPG output window when snarfing keys.")
@@ -108,6 +106,7 @@ keyring.")
 (defconst mc-gpg-debug-buffer nil
   "A buffer for debugging messages. If nil, no debugging messages are logged.")
 
+; set this with (setq mc-gpg-debug-buffer (get-buffer-create "mc debug"))
 (defun mc-gpg-debug-print (string)
   (if (and (boundp 'mc-gpg-debug-buffer) mc-gpg-debug-buffer)
       (print string mc-gpg-debug-buffer)))
@@ -369,8 +368,8 @@ GPG ID.")
     (if mc-gpg-alternate-keyring
 	(setq args (append (list "--keyring" mc-gpg-alternate-keyring) args)))
 
-    (if (and (not (eq mc-gpg-always-sign 'never))
-	     (or mc-gpg-always-sign sign (y-or-n-p "Sign the message? ")))
+    (if (and (not (eq mc-pgp-always-sign 'never))
+	     (or mc-pgp-always-sign sign (y-or-n-p "Sign the message? ")))
 	(progn
 	  (setq key (mc-gpg-lookup-key (or id mc-gpg-user-id) 'encrypt))
 	  (setq passwd
@@ -659,7 +658,10 @@ GPG ID.")
 	    ))
 	 ((nth 0 sig) ;; good signature
 	  (progn
-	    ;; message about who made the signature
+	    ;; message about who made the signature. This is a bit wide..
+	    ;; the date can easily run off the echo area. Consider replacing
+	    ;; 'Good signature' with 'good sig', but keep it consistent with
+	    ;; everything else.
 	    (message (format "Good signature from '%s' %s made %s"
 			     (nth 1 sig) (nth 2 sig) (nth 3 sig)))
 	    '(t . t)
@@ -834,7 +836,7 @@ GPG ID.")
 	   (mc-gpg-fetch-key (cons nil gpg-id))
 	   (set-buffer obuf))
 	  (mc-gpg-verify-region start end t)
-	(error "Can't check signature: Public key not found")))
+	(error "Can't check signature: Public key 0x%s not found" (nth 1 result))))
      (t
       (error (nth 1 result))))
     ))
