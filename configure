@@ -634,8 +634,13 @@ done
 
 if test "$EMACS" = xemacs
 then
-  EMACSFLAGS="--vanilla"
-  
+  if $EMACS -batch -q --vanilla
+  then
+    EMACSFLAGS="--vanilla"         # We're running Xemacs 20.x or higher
+    
+  else
+    EMACSFLAGS="-q -no-site-file"  # Still running Xemacs 19.x
+  fi
 else if test "$EMACS" = emacs
 then
   EMACSFLAGS=""
