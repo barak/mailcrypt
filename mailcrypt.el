@@ -53,6 +53,7 @@
 (autoload 'mc-encrypt "mc-toplev" nil t)
 (autoload 'mc-sign "mc-toplev" nil t)
 (autoload 'mc-insert-public-key "mc-toplev" nil t)
+(autoload 'mc-remail "mc-toplev" nil t)
 (autoload 'mc-remailer-encrypt-for-chain "mc-remail" nil t)
 (autoload 'mc-remailer-insert-response-block "mc-remail" nil t)
 (autoload 'mc-remailer-insert-pseudonym "mc-remail" nil t)
@@ -103,8 +104,7 @@
       (define-key mc-write-mode-map "\C-c/s" 'mc-sign)
       (define-key mc-write-mode-map "\C-c/x" 'mc-insert-public-key)
       (define-key mc-write-mode-map "\C-c/k" 'mc-pgp-fetch-key)
-      (define-key mc-write-mode-map "\C-c/r"
-	'mc-remailer-encrypt-for-chain)
+      (define-key mc-write-mode-map "\C-c/r" 'mc-remail)
       (define-key mc-write-mode-map "\C-c/b"
 	'mc-remailer-insert-response-block)
       (define-key mc-write-mode-map "\C-c/p"
@@ -128,7 +128,7 @@
    ["Sign Message" mc-sign t]
    ["Insert Public Key" mc-insert-public-key t]
    ["Fetch Key" mc-pgp-fetch-key t]
-   ["Encrypt for Remailer(s)" mc-remailer-encrypt-for-chain t]
+   ["Encrypt for Remailer(s)" mc-remail t]
    ["Insert Pseudonym" mc-remailer-insert-pseudonym t]
    ["Insert Response Block" mc-remailer-insert-response-block t]
    ["Forget Passphrase(s)" mc-deactivate-passwd t]))
@@ -175,7 +175,7 @@
 \\[mc-sign]\t\tClearsign message
 \\[mc-insert-public-key]\t\tExtract public key from keyring and insert into message
 \\[mc-pgp-fetch-key]\t\tFetch a PGP key via finger or HTTP
-\\[mc-remailer-encrypt-for-chain]\t\tEncrypt message for remailing
+\\[mc-remail]\t\tEncrypt message for remailing
 \\[mc-remailer-insert-pseudonym]\t\tInsert a pseudonym (for remailing)
 \\[mc-remailer-insert-response-block]\t\tInsert a response block (for remailing)
 \\[mc-deactivate-passwd]\t\tForget passphrase(s)\n"
@@ -210,7 +210,12 @@
 	((boundp 'temporary-file-directory) temporary-file-directory)
 	("/tmp/"))
   "*Default temp directory to be used by Mailcrypt.")
-(defvar mc-default-scheme 'mc-scheme-pgp "*Default encryption scheme to use.")
+(defvar mc-default-scheme 'mc-scheme-pgp
+  "*Specifies the encryption scheme for Mailcrypt to use. Defaults
+to pgp 2.6 for backward compatibility.")
+(defvar mc-default-remailer-scheme 'mc-remailer-scheme-type1
+  "*Specifies the remailer scheme to use. Defaults to Type-1 for backward
+compatibility.")
 (defvar mc-passwd-timeout 60
   "*Time to deactivate password in seconds after a use.
 nil or 0 means deactivate immediately.  If the only timer package available
@@ -253,6 +258,7 @@ If 'never, always use a viewer instead of replacing.")
 			(verify . mc-rmail-summary-verify-signature)
 			(snarf . mc-rmail-summary-snarf-keys))
     (mew-draft-mode (encrypt . mc-encrypt-message)
+                    (remailer-encrypt . mc-remail-message)
                     (sign . mc-sign-message))
     (mew-message-mode (decrypt . mc-mew-decrypt-message))
     (mew-summary-mode (decrypt . mc-mew-summary-decrypt-message)
@@ -271,6 +277,7 @@ If 'never, always use a viewer instead of replacing.")
 		    (verify . mc-mh-verify-signature)
 		    (snarf . mc-mh-snarf-keys))
     (message-mode (encrypt . mc-encrypt-message)
+                  (remailer-encrypt . mc-remail-message)
                   (sign . mc-sign-message))
     (gnus-summary-mode (decrypt . mc-gnus-decrypt-message)
 		       (verify . mc-gnus-verify-signature)
@@ -279,16 +286,21 @@ If 'never, always use a viewer instead of replacing.")
 		       (verify . mc-gnus-verify-signature)
 		       (snarf . mc-gnus-snarf-keys))
     (mail-mode (encrypt . mc-encrypt-message)
+               (remailer-encrypt . mc-remail-message)
 	       (sign . mc-sign-message))
     (vm-mail-mode (encrypt . mc-encrypt-message)
+                  (remailer-encrypt . mc-remail-message)
 		  (sign . mc-sign-message))
     (mh-letter-mode (encrypt . mc-encrypt-message)
+                    (remailer-encrypt . mc-remail-message)
 		    (sign . mc-sign-message))
     (news-reply-mode (encrypt . mc-encrypt-message)
+                     (remailer-encrypt . mc-remail-message)
 		     (sign . mc-sign-message))
     ;; wanderlust: http://www.gohome.org/wl/
     ;; or perhaps http://www.lab3.kuis.kyoto-u.ac.jp/~tsumura/emacs/wl.html
     (wl-draft-mode (encrypt . mc-encrypt-message)
+                   (remailer-encrypt . mc-remail-message)
                    (sign . mc-sign-message))
     )
 
@@ -307,7 +319,10 @@ If 'never, always use a viewer instead of replacing.")
 		     ("pgp" . mc-scheme-pgp)
 		     ("gpg" . mc-scheme-gpg)
 		     ))
-
+(defvar mc-remailer-schemes '(("type1" . mc-remailer-scheme-type1)
+                              ("mixmaster" . mc-remailer-scheme-mixmaster)
+                              ("mixminion" . mc-remailer-scheme-mixminion)
+                              ))
 ;;}}}
 
 ;;{{{ Utility functions.
