@@ -1,3 +1,8 @@
+2003-30-11  Kevin Bube  <kbube@users.sourceforge.net>
+
+	* mailcrypt.texi: updated description for GPG keyfetching with the
+	new features.
+	
 2003-11-06  Kevin Bube  <kbube@users.sourceforge.net>
 
 	* mc-gpg.el: added a function for fetching keys by making use of
