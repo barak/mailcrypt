@@ -74,8 +74,7 @@
 (defvar mc-gpg-alternate-keyring nil
   "*Public keyring to use instead of default.")
 (defvar mc-gpg-comment
-   (format "Processed by Mailcrypt %s and Gnu Privacy Guard <http://www.gnupg.o
-rg/>" mc-version)
+   (format "Processed by Mailcrypt %s and Gnu Privacy Guard <http://www.gnupg.org/>" mc-version)
   "*Comment field to appear in ASCII armor output.  If nil, let GPG use its 
 default.")
 (defconst mc-gpg-msg-begin-line "^-----BEGIN PGP MESSAGE-----\r?$"
@@ -156,8 +155,7 @@ The value returned is the value of the last form in BODY."
 	proc rc status parser-result
 	)
     (mc-gpg-debug-print (format 
-       "(mc-gpg-process-region beg=%s end=%s passwd=%s program=%s args=%s parse
-r=%s bufferdummy=%s)"
+       "(mc-gpg-process-region beg=%s end=%s passwd=%s program=%s args=%s parser=%s bufferdummy=%s)"
        beg end passwd program args parser bufferdummy))
     (setq stderr-tempfilename 
 	  (make-temp-name (expand-file-name "mailcrypt-gpg-stderr-"
@@ -298,11 +296,9 @@ r=%s bufferdummy=%s)"
 ;31:warner@zs2-pc4% gpg --list-secret-keys --with-colons --no-greeting
 ;/home/warner/.gnupg/secring.gpg
 ;-------------------------------
-;sec::1024:17:1FE9CBFDC63B6750:1998-08-04:0:::Brian Warner (temporary GPG key) 
-<warner@lothar.com>:
+;sec::1024:17:1FE9CBFDC63B6750:1998-08-04:0:::Brian Warner (temporary GPG key) <warner@lothar.com>:
 ;ssb::1024:20:C68E8DE9F759FBDE:1998-08-04:0:::
-;sec::768:17:16BD446D567E33CF:1998-08-04:0:::signature (sample signature key) <
-key@key>:
+;sec::768:17:16BD446D567E33CF:1998-08-04:0:::signature (sample signature key) <key@key>:
 ;sec::768:16:D514CB72B37D9AF4:1998-08-04:0:::crypt (crypt) <crypt@crypt>:
 ;sec::1024:17:4DBDD3258230A3E0:1998-08-04:0:::dummyy <d@d>:
 ;ssb::1024:20:549B0E6CBBBB43D1:1998-08-04:0:::
@@ -323,8 +319,7 @@ GPG ID.")
     (if (string= str "***** CONVENTIONAL *****") nil
       (let ((result (cdr-safe (assoc str mc-gpg-key-cache)))
 	    (key-regexp
-	     "^\\(sec\\|pub\\):[^:]*:[^:]*:[^:]*:\\([^:]*\\):[^:]*:[^:]*:[^:]*:
-[^:]*:\\([^:]*\\):$"
+	     "^\\(sec\\|pub\\):[^:]*:[^:]*:[^:]*:\\([^:]*\\):[^:]*:[^:]*:[^:]*:[^:]*:\\([^:]*\\):$"
 	     )
 	    (obuf (current-buffer))
 	    buffer)
@@ -634,8 +629,7 @@ GPG ID.")
 	  (goto-char (point-min))
 	  (if (and (or (string= sigtype "GOOD") (string= sigtype "BAD"))
 		   (re-search-forward
-		    "^\\[GNUPG:\\] +\\(GOOD\\|BAD\\)SIG +\\(\\S +\\) +\\(.*\\)$
-" nil t))
+		    "^\\[GNUPG:\\] +\\(GOOD\\|BAD\\)SIG +\\(\\S +\\) +\\(.*\\)$" nil t))
 	      ;; match-string 2 is the hex keyid of the signator. 
 	      ;; #3 is the name
 	      (setq sigid (match-string 3)))
@@ -657,8 +651,7 @@ GPG ID.")
 	      (let (errsig-rc (sigid-temp (match-string 1)))
 		(goto-char (point-min))
 		(if (re-search-forward
-		     "^\\[GNUPG:\\] +ERRSIG +\\(\\S +\\) +\\(\\S +\\) +\\(\\S +
-\\) +\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\)" nil t)
+		     "^\\[GNUPG:\\] +ERRSIG +\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\)" nil t)
 		    (setq errsig-rc (match-string 6)))
 		(if (or
 		     (not errsig-rc)
@@ -770,10 +763,8 @@ GPG ID.")
 
     (mc-gpg-debug-print 
      (format
-      "decrypt-parser: decryptstatus=%s no-seckey=%s keyid=%s missing-passphras
-e=%s symmetric=%s badpass=%s sigtype=%s sigid=%s sigdate=%s sigtrust=%s rc=%s"
-      decryptstatus no-seckey keyid missing-passphrase symmetric badpass sigtyp
-e sigid sigdate sigtrust rc))
+      "decrypt-parser: decryptstatus=%s no-seckey=%s keyid=%s missing-passphrase=%s symmetric=%s badpass=%s sigtype=%s sigid=%s sigdate=%s sigtrust=%s rc=%s"
+      decryptstatus no-seckey keyid missing-passphrase symmetric badpass sigtype sigid sigdate sigtrust rc))
 
     (cond
 
@@ -1190,9 +1181,7 @@ e sigid sigdate sigtrust rc))
 	(set-buffer statusbuf)
 	(goto-char (point-min))
 	(if (re-search-forward
-	     "^\\[GNUPG:\\] +IMPORT_RES +\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\) 
-+\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\) +
-\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\)"
+	     "^\\[GNUPG:\\] +IMPORT_RES +\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\) +\\(\\S +\\)"
 	     nil t)
 	    (progn
 	      (setq count (string-to-number (match-string 1)))
@@ -1276,4 +1265,3 @@ anywhere."
   (error "Key fetching not yet implemented"))
 
 ;;}}}
-
