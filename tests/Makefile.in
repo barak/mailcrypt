@@ -5,9 +5,11 @@ GNUPG=gpg
 # test cases and a packed test keyring are included in the distribution
 # tarball
 
+check: check-gpg check-remailer
+
 GPG_KEYS = gpg-keys/full-rings/pubring.gpg gpg-keys/exported/pubring.gpg
 
-check: gpg-testcases/E.e1r $(GPG_KEYS)
+check-gpg: gpg-testcases/E.e1r $(GPG_KEYS)
 	$(EMACS) -q --no-site-file -batch -l test-gpg.el -f run-all-tests
 
 onetest: gpg-testcases/E.e1r $(GPG_KEYS)
@@ -29,6 +31,8 @@ matrix-testcases: rings
 	 perl make-testcases.pl --outdir=matrix-decrypt-cases/$(gpg) --gpg=$(gpg);\
 	done
 
+check-remailer:
+	$(MAKE) -C remailer check
 
 clean:
 	rm -rf gpg-testcases
