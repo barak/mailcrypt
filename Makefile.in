@@ -122,6 +122,7 @@ clean:
 distclean: clean
 	-rm -f *~ *.tar.gz
 	-rm -f Makefile config.status config.cache config.log timer.el
+	-rm -f *.info* *.dvi
 
 ${srcdir}/configure: configure.in
 	cd ${srcdir} && autoconf
