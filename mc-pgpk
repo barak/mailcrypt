@@ -1,0 +1,62 @@
+#!/usr/bin/perl -w
+# Author:  Len Budney
+#
+#   Date:  Jan 27, 1998
+#
+#   Desc:  Converts PGP5.0 key listing to the PGP2.6 equivalent listing,
+#	   so that mailcrypt can then parse it.  Note we do not change
+#	   the interface to pgpk, so mailcrypt must use the PGP5.0
+#	   arguments.  This program merely massages the output so that
+#	   it parses correctly.
+#
+#  Usage:  mc-pgpk <args>
+#	   where <args> are arguments compatible with pgpk.
+
+use strict;
+my $pgpk_args = join " ", @ARGV; # Arguments for pgpk.
+my $pgpk_prog = "pgpk";		 # Path to pgpk.
+
+# Run pgpk with the arguments provided, and catch the output for
+# massaging.
+open  "PGPK", "$pgpk_prog $pgpk_args |";
+my @output = <PGPK>;
+close "PGPK";
+my $exit_status = ($? >> 8);
+
+#----------------------------------------------------------------------
+# Massage the output now.
+#----------------------------------------------------------------------
+shift( @output );		# Get rid of the header line.
+@output = grep( /^(pub|sec|uid)/, @output );
+
+print "Type Bits/KeyID    Date       User ID\n";
+
+
+my $cur_key = "";		# Build key data rows.
+my $cur_row = "";		# Current row being read.
+my $numkeys =  0;		# Number of keys found.
+while ( $cur_row = shift( @output ) ){
+
+    # The UID signals the end of the key.
+    if( $cur_row =~ s/^uid // ){
+	$cur_key .= $cur_row;
+	print "$cur_key";
+	$numkeys++;
+	$cur_key = "";
+    }
+    else {
+	# Now read the key data to start a new key.
+	next unless
+	    $cur_row =~ m/^(pub|sec)..\s*(\d+)\s+0x([0-9A-Fa-f]+)\s([\d-]+)\s/;
+	$cur_key =  "$1  $2/$3 $4";
+	$cur_key =~ s:-:/:g;
+    }
+}
+if( $numkeys == 1 ){
+    print "1 matching key found.\n";
+}
+else{
+    print "$numkeys matching keys found.\n";
+}
+exit $exit_status;
+
