@@ -481,7 +481,7 @@ Exact behavior depends on current major mode."
 		 (rmail-cease-edit)
 		 (rmail-kill-label "edited")
 		 (rmail-add-label "decrypted")
-		 (if (not (cdr decryption-result))
+		 (if (cdr decryption-result)
 		     (rmail-add-label "verified")))
 		(t
 		 (let ((tmp (generate-new-buffer "*Mailcrypt Viewing*")))
@@ -495,7 +495,10 @@ Exact behavior depends on current major mode."
 		   (rmail-mode)
 		   (use-local-map (copy-keymap (current-local-map)))
 		   (local-set-key "q" 'mc-rmail-view-quit)
-		   (set-buffer-modified-p nil)))))
+		   (set-buffer-modified-p nil)
+		   (rmail-add-label "decrypted")
+		   (if (cdr decryption-result)
+		       (rmail-add-label "verified"))))))
       (if (eq major-mode 'rmail-edit-mode)
 	  (rmail-abort-edit)))))
 

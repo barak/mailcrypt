@@ -1,3 +1,10 @@
+1999-11-22  Brian Warner <warner@lothar.com>
+
+	* mc-toplev.el: Reversed the test of signature verification for
+	Rmail, which Len already reversed once, back in 3.5.2. What the
+	heck was he thinking? If it ever did something useful, it doesn't
+	now. Decryption status now shows properly when using Rmail.
+
 1999-11-19  Matthias Andree <mandree@dosis.uni-dortmund.de>
 
 	* mailcrypt.texi: Fixed bug which spread index over many pages.
