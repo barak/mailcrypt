@@ -1,5 +1,5 @@
-This is Info file mailcrypt.info, produced by Makeinfo-1.63 from the
-input file ./mailcrypt.texi.
+This is Info file mailcrypt.info, produced by Makeinfo version 1.68
+from the input file ./mailcrypt.texi.
 
    This documentation describes Mailcrypt version 3.4.  This
 documentation was last updated on October 10, 1995.
@@ -346,7 +346,7 @@ overrides the PGP "encrypttoself" flag; use this variable instead.)
 the message without encrypting it.
 
    Once you have edited the recipient list to your satisfaction, type
-`RET' to accept it.  You will then be asked whether you want to sign
+`<RET>' to accept it.  You will then be asked whether you want to sign
 the message; answer `y' or `n'.  You can avoid this question by setting
 the variable `mc-pgp-always-sign':  A value of `t' means "yes", a value
 of `'never' means "no".
@@ -596,8 +596,9 @@ first.  Begin with the following steps:
 
    Now test the remailer functions.  First compose an outgoing Email
 message (using `C-x m', for example) addressed to yourself.  Type `C-c
-/ r'.  Choose a remailer; use `TAB' to get completion on its name.  The
-buffer will be rewritten for anonymous mailing through that remailer.
+/ r'.  Choose a remailer; use `<TAB>' to get completion on its name.
+The buffer will be rewritten for anonymous mailing through that
+remailer.
 
 
 File: mailcrypt.info,  Node: Remailer Chains,  Next: Response Blocks,  Prev: Remailer Quick Start,  Up: Remailer Support
@@ -633,10 +634,10 @@ permutation of the four best remailers as ordered in the `~/.remailers'
 file.
 
    Now whenever you are prompted for a "remailer or chain", the chains
-"Foo", "Bar", "Baz", and "Quux" will be available, including `TAB'
+"Foo", "Bar", "Baz", and "Quux" will be available, including `<TAB>'
 completion on their names.  By capitalizing their names, you guarantee
-they will show up near the top of the completion list if you type `TAB'
-on an empty input.
+they will show up near the top of the completion list if you type
+`<TAB>' on an empty input.
 
    Now for the gritty details.  `mc-remailer-user-chains' is a list of
 chain definitions.  A chain definition is a list whose first element is
@@ -1549,114 +1550,114 @@ variable documented in this manual.
 
 * Menu:
 
-* C-c / a:                              Snarfing Keys.
-* C-c / b:                              Response Blocks.
-* C-c / d:                              Decrypting.
-* C-c / e:                              Encrypting.
-* C-c / f:                              Passphrase Cache.
-* C-c / k:                              Key Fetching.
-* C-c / p:                              Pseudonyms.
-* C-c / r:                              Remailer Chains.
-* C-c / s:                              Signing.
-* C-c / v:                              Verifying.
-* C-c / x:                              Inserting Keys.
-* mc-always-replace:                    Decrypting.
-* mc-deactivate-passwd:                 Passphrase Cache.
-* mc-decrypt:                           Decrypting.
-* mc-demix:                             Mixmaster Support.
-* mc-encrypt:                           Encrypting.
-* mc-encrypt-for-me:                    Encrypting.
-* mc-insert-public-key:                 Inserting Keys.
-* mc-install-read-mode:                 General Use.
-* mc-install-write-mode:                General Use.
-* mc-levien-file-name:                  Remailer Tips.
-* mc-mixmaster-list-path:               Mixmaster Support.
-* mc-mixmaster-path:                    Mixmaster Support.
-* mc-passwd-timeout:                    Passphrase Cache.
-* mc-pgp-alternate-keyring:             Alternate Keyring.
-* mc-pgp-always-sign:                   Encrypting.
-* mc-pgp-comment:                       Comment Field.
-* mc-pgp-fetch-from-finger:             Finger Fetch.
-* mc-pgp-fetch-from-http:               HTTP Fetch.
-* mc-pgp-fetch-from-keyrings:           Keyring Fetch.
-* mc-pgp-fetch-key:                     Key Fetching.
-* mc-pgp-fetch-keyring-list:            Keyring Fetch.
-* mc-pgp-fetch-methods:                 Key Fetching.
-* mc-pgp-keydir:                        Nonstandard Paths.
-* mc-pgp-keyserver-address:             HTTP Fetch.
-* mc-pgp-keyserver-port:                HTTP Fetch.
-* mc-pgp-keyserver-url-template:        HTTP Fetch.
-* mc-pgp-path:                          Nonstandard Paths.
-* mc-pgp-user-id:                       Encrypting.
-* mc-post-encryption-hook:              Encrypting.
-* mc-post-signature-hook:               Signing.
-* mc-pre-encryption-hook:               Encrypting.
-* mc-pre-signature-hook:                Signing.
-* mc-read-mode:                         General Use.
-* mc-read-mode-map:                     Key Bindings.
-* mc-read-mode-string:                  Mode Line.
-* mc-remailer-encrypt-for-chain:        Remailer Chains.
-* mc-remailer-internal-chains:          Remailer Chains.
-* mc-remailer-preserved-headers:        Remailing Posts.
-* mc-remailer-pseudonyms:               Pseudonyms.
-* mc-remailer-user-chains:              Remailer Chains.
-* mc-reread-levien-file:                Remailer Tips.
-* mc-sign:                              Signing.
-* mc-snarf:                             Snarfing Keys.
-* mc-verify:                            Verifying.
-* mc-write-mode:                        General Use.
-* mc-write-mode-map:                    Key Bindings.
-* mc-write-mode-string:                 Mode Line.
+* C-c / a:                               Snarfing Keys.
+* C-c / b:                               Response Blocks.
+* C-c / d:                               Decrypting.
+* C-c / e:                               Encrypting.
+* C-c / f:                               Passphrase Cache.
+* C-c / k:                               Key Fetching.
+* C-c / p:                               Pseudonyms.
+* C-c / r:                               Remailer Chains.
+* C-c / s:                               Signing.
+* C-c / v:                               Verifying.
+* C-c / x:                               Inserting Keys.
+* mc-always-replace:                     Decrypting.
+* mc-deactivate-passwd:                  Passphrase Cache.
+* mc-decrypt:                            Decrypting.
+* mc-demix:                              Mixmaster Support.
+* mc-encrypt:                            Encrypting.
+* mc-encrypt-for-me:                     Encrypting.
+* mc-insert-public-key:                  Inserting Keys.
+* mc-install-read-mode:                  General Use.
+* mc-install-write-mode:                 General Use.
+* mc-levien-file-name:                   Remailer Tips.
+* mc-mixmaster-list-path:                Mixmaster Support.
+* mc-mixmaster-path:                     Mixmaster Support.
+* mc-passwd-timeout:                     Passphrase Cache.
+* mc-pgp-alternate-keyring:              Alternate Keyring.
+* mc-pgp-always-sign:                    Encrypting.
+* mc-pgp-comment:                        Comment Field.
+* mc-pgp-fetch-from-finger:              Finger Fetch.
+* mc-pgp-fetch-from-http:                HTTP Fetch.
+* mc-pgp-fetch-from-keyrings:            Keyring Fetch.
+* mc-pgp-fetch-key:                      Key Fetching.
+* mc-pgp-fetch-keyring-list:             Keyring Fetch.
+* mc-pgp-fetch-methods:                  Key Fetching.
+* mc-pgp-keydir:                         Nonstandard Paths.
+* mc-pgp-keyserver-address:              HTTP Fetch.
+* mc-pgp-keyserver-port:                 HTTP Fetch.
+* mc-pgp-keyserver-url-template:         HTTP Fetch.
+* mc-pgp-path:                           Nonstandard Paths.
+* mc-pgp-user-id:                        Encrypting.
+* mc-post-encryption-hook:               Encrypting.
+* mc-post-signature-hook:                Signing.
+* mc-pre-encryption-hook:                Encrypting.
+* mc-pre-signature-hook:                 Signing.
+* mc-read-mode:                          General Use.
+* mc-read-mode-map:                      Key Bindings.
+* mc-read-mode-string:                   Mode Line.
+* mc-remailer-encrypt-for-chain:         Remailer Chains.
+* mc-remailer-internal-chains:           Remailer Chains.
+* mc-remailer-preserved-headers:         Remailing Posts.
+* mc-remailer-pseudonyms:                Pseudonyms.
+* mc-remailer-user-chains:               Remailer Chains.
+* mc-reread-levien-file:                 Remailer Tips.
+* mc-sign:                               Signing.
+* mc-snarf:                              Snarfing Keys.
+* mc-verify:                             Verifying.
+* mc-write-mode:                         General Use.
+* mc-write-mode-map:                     Key Bindings.
+* mc-write-mode-string:                  Mode Line.
 
 
 
 Tag Table:
-Node: Top956
-Node: Introduction4914
-Node: Prerequisites5667
-Node: Installation6761
-Node: Hooking into Rmail8034
-Node: Hooking into VM8366
-Node: Hooking into MH-E8806
-Node: Hooking into Gnus9140
-Node: Command Overview9454
-Node: General Use10634
-Node: Encrypting12610
-Node: Signing15261
-Node: Inserting Keys16605
-Node: Decrypting17584
-Node: Verifying19080
-Node: Snarfing Keys19673
-Node: Remailer Support20017
-Node: Remailer Introduction21026
-Node: Remailer Quick Start23548
-Node: Remailer Chains24912
-Node: Response Blocks28589
-Node: Pseudonyms30365
-Node: Remailing Posts32105
-Node: Mixmaster Support33363
-Node: Remailer Security36041
-Node: Verifiable Pseudonyms38118
-Node: Remailer Tips39611
-Node: Passphrase Cache41617
-Node: Key Fetching43295
-Node: Keyring Fetch45666
-Node: Finger Fetch46442
-Node: HTTP Fetch46721
-Node: Miscellaneous Configuration49457
-Node: Alternate Keyring50166
-Node: Comment Field51012
-Node: Mode Line51644
-Node: Key Bindings52230
-Node: Nonstandard Paths53199
-Node: Tips54588
-Node: Limitations55829
-Node: References57179
-Node: Online Resources57709
-Node: Key Servers59796
-Node: Mailing List61475
-Node: Politics62083
-Node: Credits63495
-Node: Index64439
+Node: Top964
+Node: Introduction4922
+Node: Prerequisites5675
+Node: Installation6769
+Node: Hooking into Rmail8042
+Node: Hooking into VM8374
+Node: Hooking into MH-E8814
+Node: Hooking into Gnus9148
+Node: Command Overview9462
+Node: General Use10642
+Node: Encrypting12618
+Node: Signing15271
+Node: Inserting Keys16615
+Node: Decrypting17594
+Node: Verifying19090
+Node: Snarfing Keys19683
+Node: Remailer Support20027
+Node: Remailer Introduction21036
+Node: Remailer Quick Start23558
+Node: Remailer Chains24923
+Node: Response Blocks28604
+Node: Pseudonyms30380
+Node: Remailing Posts32120
+Node: Mixmaster Support33378
+Node: Remailer Security36056
+Node: Verifiable Pseudonyms38133
+Node: Remailer Tips39626
+Node: Passphrase Cache41632
+Node: Key Fetching43310
+Node: Keyring Fetch45681
+Node: Finger Fetch46457
+Node: HTTP Fetch46736
+Node: Miscellaneous Configuration49472
+Node: Alternate Keyring50181
+Node: Comment Field51027
+Node: Mode Line51659
+Node: Key Bindings52245
+Node: Nonstandard Paths53214
+Node: Tips54603
+Node: Limitations55844
+Node: References57194
+Node: Online Resources57724
+Node: Key Servers59811
+Node: Mailing List61490
+Node: Politics62098
+Node: Credits63510
+Node: Index64454
 
 End Tag Table

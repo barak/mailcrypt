@@ -215,7 +215,7 @@
 ;;}}}
 
 ;;{{{ User variables.
-(defconst mc-version "3.5b1")
+(defconst mc-version "3.5b4")
 (defvar mc-default-scheme 'mc-scheme-pgp "*Default encryption scheme to use.")
 (defvar mc-passwd-timeout 60
   "*Time to deactivate password in seconds after a use.
