@@ -7,10 +7,10 @@ GNUPG=gpg
 
 GPG_KEYS = gpg-keys/full-rings/pubring.gpg gpg-keys/exported/pubring.gpg
 
-check: gpg-testcases $(GPG_KEYS)
+check: gpg-testcases/E.e1r $(GPG_KEYS)
 	$(EMACS) -q --no-site-file -batch -l test-gpg.el -f run-all-tests
 
-onetest: gpg-testcases $(GPG_KEYS)
+onetest: gpg-testcases/E.e1r $(GPG_KEYS)
 	$(EMACS) -q --no-site-file -batch -l test-gpg.el -f run-one-test
 
 $(GPG_KEYS): 
