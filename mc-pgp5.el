@@ -287,7 +287,14 @@ PGP ID.")
 	    (delete-process proc)
 	    (setq results '("One or more public keys are missing" nil)))
 
-	   ;; OPTION 4:  The program exits.
+	   ;; OPTION 4:  No recipients specified.
+	   ("You must specify at least one recipient"
+	    (interrupt-process proc)
+	    (delete-process proc)
+	    (mc-deactivate-passwd t)
+	    (setq results '("No recipients specified" nil)))
+
+	   ;; OPTION 5:  The program exits.
 	   (exit
 	    (setq results (list 
 			   (process-exit-status proc) nil)))))
