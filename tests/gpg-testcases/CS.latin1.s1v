@@ -1,0 +1,25 @@
+(
+(crypttext . "
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+
+Usted tiene que mostrar esta evidencia escrita a un oficial de policía cuando
+éste lo solicite así como a otro conductor o dueño do propiedad después de un
+accidente vial.
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.0 (GNU/Linux)
+
+iD8DBQE9limuyLIML7SBQD4RAi/6AKDi5BRDvO8/+XQfzT6s39jW/XaxVACghvpN
+YjtlXph2AcRO8xI48duy2nI=
+=X3O6
+-----END PGP SIGNATURE-----
+")
+(error . nil)
+(name . "CS.latin1.s1v")
+(plaintext . "
+Usted tiene que mostrar esta evidencia escrita a un oficial de policía cuando
+éste lo solicite así como a otro conductor o dueño do propiedad después de un
+accidente vial.")
+(signature_status . "Good signature from 'owner1 <owner1@test>' TRUST_ULTIMATE made 2002-09-28")
+)

@@ -1,0 +1,31 @@
+(
+(crypttext . "
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1.2.0 (GNU/Linux)
+
+hM4DabbdIAUf0qsQAvsFS9g+q66n6X+sXNL7m2BFo6PnltvpD2IAQDtkrPCLxLiz
+/zv6bFbQi98n/7po2BxqYL9hfzzQEvxMEc482glGLaQ8icJZ7JnaLS7+tW/F9qYc
+sgSpg9jayUOMV6Cuux8C/iki1VbIKnbVfbuMujNUR4qivNBySgz6kftqlyEjg7bi
+34tHAEkTB06usUicRCUXTULpnMagQ/Xd0r3BFDN4ZUwQwwl/5wPLRBuCcHZAL0Bd
++/ttwABN41uRKrIDmLoNjYTOA8duEuD34sJQEAMAhkIs5bU1ARiYmdH0MoYtfI35
+0ynKq9raia3YJ9Ha67yoOqeN/y8r5ZZsZbhvnMSY37sGYlowZEq6FXYjoFeeUVYO
+K5+TBr02ndVzScYazfJ9wyTin4SToIfBQPFjVqC1Av9odhtMM/0sdKtUeC/M2XQi
+tm+G0sY5X+GKInJq8cz2uxCzZbX7M+onjMrPjtCZYIj7Q3+Gl/aeHjbraoh84E08
+RKBAtY7x1Ff+FT/LR9b/5I75b7Jka35qYejITmabs5SEzgNXvC7dNIZOqxAC+weU
+l/fmsOG+WtoynMheFx4QlLO0KhW+i1KlGKYRZrRpJtf52ZmkpLXvpe9xrlc/LPBS
+Z8O283r6hdQ8KPc1D4rm+0sZC0v9R8maE/IGDQQYHJBwdNW1RTevXRO6/mggEQL+
+OXcDCYr11M3qpR9GIKkPU61+kf6jX/Vtmj/OnhKK/81DZBywIKweyf8gpB6ZaQwu
+PueitBzLz6GZ+LTuiWC9950m1mNCSk7CjsSz46vcQAuXNuySrpHfHBEmoiEsT9mW
+0lYBVVw9YeMdHIg7+ZrrzhM/SmeDfwpP5lVc2U0W2scpin+FTF2BepWjTMnHA8Y5
+db9OmytZ2lZxWeDwO2bOxHq06uVDIAkjrH8PdKcsBtHdqz73l9//7g==
+=/8WD
+-----END PGP MESSAGE-----
+")
+(encryption_id . "0xC8B20C2FB481403E")
+(error . nil)
+(name . "E.e1re3re4r")
+(passphrase . "owner1")
+(plaintext . "This is a plaintext message
+")
+(signature_status . nil)
+)
