@@ -19,9 +19,7 @@
 ;; the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 ;;}}}
 
-(defvar mc-default-scheme 'mc-scheme-pgp
-  "*Set the default encryption scheme for Mailcrypt to use. Defaults
-to pgp 2.6 for backward compatibility.")
+(require 'mailcrypt)
 
 (defun mc-setversion (&optional version)
   "Reset path and argument information for the selected version of PGP.
