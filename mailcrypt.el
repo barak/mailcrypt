@@ -339,7 +339,7 @@ stripping initial and trailing whitespace."
 ;	  (princ tmp))))))
 
 ;; In case I ever decide to do this right.
-(defconst mc-field-name-regexp "^\\(.+\\)")
+(defconst mc-field-name-regexp "^\\([^:]+\\)")
 (defconst mc-field-body-regexp "\\(.*\\(\n[ \t].*\\)*\n\\)")
 
 (defun mc-get-fields (&optional matching bounds nuke)
