@@ -1,10 +1,5 @@
-;; mc-pgp5.el, Support for PGP version 2.6.* in Mailcrypt
-;;           (C) 1998  Len Budney <lbudney@pobox.com>
-
-;; These functions have been added to Mailcrypt version 3.4, to
-;; support PGP version 5.0.  They depend on the "expect.el" functions
-;; kindly provided by Lars Magne Ingebrigtsen <[22]lmi@gnus.org> to
-;; interact with PGP, since batchmode support is sketchy or broken.
+;; mc-pgp.el, PGP support for Mailcrypt
+;; Copyright (C) 1998  Len Budney <lbudney@pobox.com>
 
 ;;{{{ Licensing
 ;; This file is intended to be used with GNU Emacs.
@@ -23,23 +18,126 @@
 ;; along with GNU Emacs; see the file COPYING.  If not, write to
 ;; the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 ;;}}}
-
-
-;; {{{ Modified mc-process-region uses "expect.el" to interact with PGP.
-;; This is necessary because PGP5.0 is fairly broken in its batch
-;; mode, and so *MUST* interact with the user under various error
-;; conditions.
-;;
-;; More particularly, the old mailcrypt ran PGP in batch mode, then
-;; exposed the results to a regexp-based parser.  This is not possible
-;; with PGP5.0 or PGP5.0i, since pgp* does not exit in the case of
-;; errors, but rather reprompts the user.  Our solution is to hand the
-;; PROCESS off to a parser, which subsumes some of the functionality
-;; which used to be in mc-process-region.
-;;
+(require 'mailcrypt)
 (require 'expect)
 
-(defun mc-pgp5-process-region 
+(defvar mc-pgp50-user-id (user-login-name)
+  "*PGP ID of your default identity.")
+(defvar mc-pgp50-always-sign nil 
+  "*If t, always sign encrypted PGP messages, or never sign if 'never.")
+(defvar mc-pgp50-pgpe-path "pgpe" "*The PGP 5.0 'pgpe' executable.")
+(defvar mc-pgp50-pgps-path "pgps" "*The PGP 5.0 'pgps' executable.")
+(defvar mc-pgp50-pgpv-path "pgpv" "*The PGP 5.0 'pgpv' executable.")
+(defvar mc-pgp50-pgpk-path "pgpk" "*The PGP 5.0 'pgpk' executable.")
+(defvar mc-pgp50-display-snarf-output nil
+  "*If t, pop up the PGP output window when snarfing keys.")
+(defvar mc-pgp50-alternate-keyring nil
+  "*Public keyring to use instead of default.")
+(defvar mc-pgp50-comment
+  (format "Processed by Mailcrypt %s, an Emacs/PGP interface" mc-version)
+  "*Comment field to appear in ASCII armor output.  If nil, let PGP
+use its default.")
+
+(defconst mc-pgp50-msg-begin-line "-----BEGIN PGP MESSAGE-----"
+  "Text for start of PGP message delimiter.")
+(defconst mc-pgp50-msg-end-line "-----END PGP MESSAGE-----\n?"
+  "Text for end of PGP message delimiter.")
+(defconst mc-pgp50-signed-begin-line "-----BEGIN PGP SIGNED MESSAGE-----"
+  "Text for start of PGP signed messages.")
+(defconst mc-pgp50-signed-end-line "-----END PGP SIGNATURE-----"
+  "Text for end of PGP signed messages.")
+(defconst mc-pgp50-key-begin-line "^-----BEGIN PGP PUBLIC KEY BLOCK-----\r?$"
+  "Text for start of PGP public key.")
+(defconst mc-pgp50-key-end-line "^-----END PGP PUBLIC KEY BLOCK-----\r?$"
+  "Text for end of PGP public key.")
+(defconst mc-pgp50-error-re "^\\(ERROR:\\|WARNING:\\).*"
+  "Regular expression matching an error from PGP")
+(defconst mc-pgp50-sigok-re "^.*Good signature.*"
+  "Regular expression matching a PGP signature validation message")
+(defconst mc-pgp50-badsig-re "^BAD signature.*"
+  "Regular expression matching a PGP signature validation message")
+(defconst mc-pgp50-newkey-re "^\\([0-9]+\\) +matching keys? found"
+  "Regular expression matching a PGP key snarf message")
+(defconst mc-pgp50-nokey-re
+  "No encryption keys found for: \\(.+\\)$"
+  "Regular expression matching a PGP missing-key messsage")
+(defconst mc-pgp50-key-expected-re
+  "Signature by unknown keyid: \\(\\S +\\)$")
+
+(defvar mc-pgp50-key-cache nil
+  "Association list mapping PGP IDs to canonical \"keys\".  A \"key\"
+is a pair (USER-ID . KEY-ID) which identifies the canonical IDs of the
+PGP ID.")
+
+;; Thanks to Brian Warner.
+(defun mc-pgp50-lookup-key (str)
+  ;; Look up the string STR in the user's key ring, expecting to find
+  ;; a private key.  Returns a pair of strings (USER-ID . KEY-ID)
+  ;; which uniquely identifies the matching key, or nil if no key
+  ;; matches.  Example:
+  ;; warner@foo -> ("Brian Warner <warner@foo.lothar.com>" "0x12345678")
+  (if (equal str "***** CONVENTIONAL *****") nil
+    (let ((result (cdr-safe (assoc str mc-pgp50-key-cache)))
+	  (keyid-re "^sec\\S *\\s +\\w+\\s +\\(\\w+\\)\\s +")
+	  (userid-re "^uid\\s +\\(.*\\)$")
+	  (revoke-re "^.*REVOKED.*$")
+	  (obuf (current-buffer))
+	  buffer)
+      (if (null result)
+	  (unwind-protect
+	      (progn
+		(setq buffer (generate-new-buffer " *mailcrypt temp"))
+		(call-process mc-pgp50-pgpk-path nil buffer nil
+			      "+language=en" "-l" str)
+		(set-buffer buffer)
+		(goto-char (point-min))
+		;; first find a keyid line for a secret key
+		(if (re-search-forward keyid-re nil t)
+		    ;; groovy. Remember the keyid and then search forward for
+		    ;; the userid
+		    (progn
+		      (setq keyid (buffer-substring-no-properties
+				   (match-beginning 1) (match-end 1)))
+		      (if (re-search-forward userid-re nil t)
+			  (progn
+			    (setq result (cons (buffer-substring-no-properties
+						(match-beginning 1)
+						(match-end 1))
+					       keyid))
+			    (setq mc-pgp50-key-cache (cons (cons str result)
+							   mc-pgp50-key-cache))
+			    )))))
+	    (if buffer (kill-buffer buffer))
+	    (set-buffer obuf)))
+      (if (null result)
+	  (error "No PGP secret key for %s" str))
+      result)))
+
+;; Thanks to Brian Warner
+(defun mc-pgp50-generic-parser (result)
+  (let (start)
+    (goto-char (point-min))
+    (cond ((not (eq result 0))
+	   (prog1
+	       nil
+	     (if (mc-message 
+		  "^Need a pass phrase to decrypt private key:$" 
+		  (current-buffer))
+		 (mc-deactivate-passwd t)
+	       (mc-message mc-pgp50-error-re (current-buffer)
+			   (format "PGP exited with status %d" result)))))
+	  ((re-search-forward mc-pgp50-nokey-re nil t)
+	   nil)
+	  (t
+	   (and
+	    (goto-char (point-min))
+	    (re-search-forward "-----BEGIN PGP.*-----$" nil t)
+	    (setq start (match-beginning 0))
+	    (goto-char (point-max))
+	    (re-search-backward "^-----END PGP.*-----\n" nil t)
+	    (cons start (match-end 0)))))))
+
+(defun mc-pgp50-process-region 
   (beg end passwd program args parser &optional buffer)
   (let ((obuf (current-buffer))
 	(process-connection-type nil)
@@ -83,8 +181,7 @@
 		  (goto-char beg)
 		  (insert-buffer-substring mybuf (car rgn) (cdr rgn))
 		  (set-buffer mybuf)
-		  (delete-region (car rgn) (cdr rgn))
-		  )))
+		  (delete-region (car rgn) (cdr rgn)))))
 	  ;; Return nil on failure and exit code on success
 	  (if rgn result))
       ;; Cleanup even on nonlocal exit
@@ -96,7 +193,155 @@
 
 ;;; }
 
-(defun mc-pgp5-decrypt-parser (proc oldbuf start end newbuf passwd)
+(defun mc-pgp50-encrypt-parser (proc oldbuf start end newbuf passwd)
+  (set-buffer newbuf)
+  (goto-char (point-max))
+  (progn
+    (unwind-protect
+	(with-expect proc
+	  (message "Encrypting message...")
+	  (set-buffer oldbuf)
+	  (process-send-region proc start end)
+	  (set-buffer newbuf)
+	  (process-send-eof proc)
+
+	  ;; Test output of the program, looking for
+	  ;; errors.
+	  (expect-cond
+
+	   ;; OPTION 1:  Great!  The data is now encrypted!
+	   ("-----END PGP MESSAGE-----"
+
+	    ;; Catch the exit status.
+	    (setq result (process-exit-status proc))
+	    (delete-process proc)
+	    (message "Encryption complete.")
+
+	    ;; Delete everything preceding the signed data.
+	    (goto-char (point-max))
+	    (re-search-backward 
+	     "-----BEGIN PGP MESSAGE-----" nil t)
+	    (delete-region (point-min) (match-beginning 0))
+	    (setq rgn (point-min))
+
+	    ;; Convert out CR/NL -> NL
+	    (goto-char (point-min))
+	    (while (search-forward "\r\n" nil t)
+	      (replace-match "\n"))
+
+	    ;; Delete everything after the signature.
+	    (goto-char (point-min))
+	    (re-search-forward
+	     "-----END PGP MESSAGE-----" nil t)
+	    (delete-region (match-end 0) (point-max))
+			 
+	    ;; Return the exit status, with the region
+	    ;; limits!
+	    (setq rgn (cons rgn (point-max)))
+	    (setq results (cons result rgn)))
+
+	   ;; OPTION 2:  Something is wrong!  We cannot sign and
+	   ;; encrypt messages, since the batch mode in PGP5.0 is
+	   ;; broken.  Holler!
+	   ("Enter pass phrase:" 
+	      (interrupt-process proc)
+	      (delete-process proc)
+	    ;; This should never happen.
+	    (setq results '("Cannot sign and encrypt yet." nil)))
+
+	   ;; OPTION 3:  There are keys missing.  Just bug out 
+	   ;; of the whole thing, for now.
+	   ("\nNo encryption keys found for:"
+	      (interrupt-process proc)
+	      (delete-process proc)
+	    (setq results '("One or more public keys are missing" nil)))
+
+	   ;; OPTION 4:  The program exits.
+	   (exit
+	    (setq results (list 
+			   (process-exit-status proc) nil)))))
+      (set-buffer obuf))
+    results))
+
+(defun mc-pgp50-encrypt-region (recipients start end &optional id sign)
+  (let ((process-environment process-environment)
+	(buffer (get-buffer-create mc-buffer-name))
+	;; Crock.  Rewrite someday.
+	(mc-pgp50-always-sign mc-pgp50-always-sign)
+	(obuf (current-buffer))
+	action msg args key passwd result pgp-id)
+    (setq args (list "+NoBatchInvalidKeys=off" "-fat" "+batchmode=1"))
+    (setq action (if recipients "Encrypting" "Armoring"))
+    (setq msg (format "%s..." action))  ; May get overridden below
+;    (if (and recipients (not mc-pgp50-version-five)) 
+;	(setq args (cons "-e" args)))
+    (if mc-pgp50-comment
+	(setq args (cons (format "+comment=\"%s\"" mc-pgp50-comment) args)))
+    (if mc-pgp50-alternate-keyring
+	(setq args (append args (list (format "+pubring=%s"
+					      mc-pgp50-alternate-keyring)))))
+    (if 
+	(and (not (eq mc-pgp50-always-sign 'never))
+	     (or 
+	      mc-pgp50-always-sign 
+	      sign 
+	      (y-or-n-p "Sign the message? ")))
+	     
+	(progn
+	  (setq mc-pgp50-always-sign t)
+	  (setq key (mc-pgp50-lookup-key (or id mc-pgp50-user-id)))
+	  (setq passwd
+		(mc-activate-passwd
+		 (cdr key)
+		 (format "PGP passphrase for %s (%s): " (car key) (cdr key))))
+	  (setq args
+		(nconc args (list "-s" "-u" (cdr key))))
+	  (setenv "PGPPASSFD" "0")
+	  (setq msg (format "%s+signing as %s ..." action (car key))))
+      (setq mc-pgp50-always-sign 'never))
+
+    (or key
+	(setq key (mc-pgp50-lookup-key mc-pgp50-user-id)))
+
+    (if (and recipients mc-encrypt-for-me)
+	(setq recipients (cons (cdr key) recipients)))
+
+    (if recipients
+	(setq args (append args
+			   (apply 'append (mapcar 
+					   '(lambda (x) (list "-r" x)) 
+					   recipients)))))
+
+    (message "pgpe %s" (mapconcat 'identity args " "))
+    (message "%s" msg)
+    (setq result (mc-pgp50-process-region 
+		  start end passwd mc-pgp50-pgpe-path args
+		  'mc-pgp50-encrypt-parser buffer))
+    (save-excursion
+      (set-buffer buffer)
+      (goto-char (point-min))
+      (if (re-search-forward mc-pgp50-nokey-re nil t)
+	  (progn
+	    (if result (error "This should never happen."))
+	    (setq pgp-id (buffer-substring-no-properties
+			  (match-beginning 1) (match-end 1)))
+	    (if (and (not (eq mc-pgp50-always-fetch 'never))
+		     (or mc-pgp50-always-fetch
+			 (y-or-n-p
+			  (format "Key for '%s' not found; try to fetch? "
+				  pgp-id))))
+		(progn
+		  (mc-pgp50-fetch-key (cons pgp-id nil))
+		  (set-buffer obuf)
+		  (mc-pgp50-encrypt-region recipients start end id))
+	      (mc-message mc-pgp50-nokey-re buffer)
+	      nil))
+	(if (not result)
+	    nil
+	  (message "%s Done." msg)
+	  t)))))
+
+(defun mc-pgp50-decrypt-parser (proc oldbuf start end newbuf passwd)
   (setenv "PGPPASSFD" 0)
   (set-buffer newbuf)
   (goto-char (point-max))
@@ -173,7 +418,90 @@
       (pop-to-buffer obuf))
     results))
 
-(defun mc-pgp5-verify-parser (proc oldbuf start end newbuf passwd)
+(defun mc-pgp50-decrypt-region (start end &optional id)
+  ;; returns a pair (SUCCEEDED . VERIFIED) where SUCCEEDED is t if
+  ;; the decryption succeeded and verified is t if there was a valid signature
+  (let (
+	(process-environment process-environment)
+	(buffer (get-buffer-create mc-buffer-name))
+	args key new-key passwd result pgp-id)
+    (undo-boundary)
+    (setq key (mc-pgp50-lookup-key (or id mc-pgp50-user-id)))
+    (setq
+     passwd
+     (if key
+	 (mc-activate-passwd (cdr key)
+			     (format "PGP passphrase for %s (%s): "
+				     (car key) (cdr key)))
+       (mc-activate-passwd id "PGP passphrase for conventional decryption: ")))
+    (if passwd
+	(setenv "PGPPASSFD" "0"))
+    (setq args '("+verbose=1" "+batchmode" "+language=en" "-f"))
+    (if mc-pgp50-alternate-keyring
+	(setq args (append args (list (format "+pubring=%s"
+					      mc-pgp50-alternate-keyring)))))
+
+    (message "pgpv %s" (mapconcat 'identity args " "))
+    (message "Decrypting...")
+    (setq result
+	  (mc-pgp50-process-region
+	   start end passwd mc-pgp50-pgpv-path
+	   args 'mc-pgp50-decrypt-parser buffer))
+    (cond
+     (result
+      (message "Decrypting... Done.")
+      ;; If verification failed due to missing key, offer to fetch it.
+      ;; This is unchanged from mailcrypt 3.4, and should still work.
+      ;; Execution never reaches this point when using PGP 5.0, however.
+      (save-excursion
+	(set-buffer buffer)
+	(goto-char (point-min))
+	(if (re-search-forward mc-pgp50-key-expected-re nil t)
+	    (setq pgp-id (concat "0x" (buffer-substring-no-properties
+				       (match-beginning 1)
+				       (match-end 1))))))
+      (if (and pgp-id
+	       (not (eq mc-pgp50-always-fetch 'never))
+	       (or mc-pgp50-always-fetch
+		   (y-or-n-p
+		    (format "Key %s not found; attempt to fetch? " pgp-id)))
+	       (mc-pgp50-fetch-key (cons nil pgp-id)))
+	  (progn
+	    (undo-start)
+	    (undo-more 1)
+	    (mc-pgp50-decrypt-region start end id))
+	(mc-message mc-pgp50-key-expected-re buffer)
+	(cons t (eq result 0))))
+     ;; Decryption failed; maybe we need to use a different user-id
+     ((save-excursion
+	(and
+	 (set-buffer buffer)
+	 (goto-char (point-min))
+	 (re-search-forward
+	  "^Key for user ID:.*\n.*Key ID \\([0-9A-F]+\\)" nil t)
+	 (setq new-key
+	       (mc-pgp50-lookup-key
+		(concat "0x" (buffer-substring-no-properties
+			      (match-beginning 1)
+			      (match-end 1)))))
+	 (not (and id (equal key new-key)))))
+      (mc-pgp50-decrypt-region start end (cdr new-key)))
+     ;; Or maybe it is conventionally encrypted
+     ((save-excursion
+	(and
+	 (set-buffer buffer)
+	 (goto-char (point-min))
+	 (re-search-forward "^File is conventionally encrypted" nil t)))
+      (if (null key) (mc-deactivate-passwd t))
+      (mc-pgp50-decrypt-region start end "***** CONVENTIONAL *****"))
+     (t
+      (mc-display-buffer buffer)
+      (if (mc-message "^\aError: +Bad pass phrase\\.$" buffer)
+	  (mc-deactivate-passwd t)
+	(mc-message mc-pgp50-error-re buffer "Error decrypting buffer"))
+      (cons nil nil)))))
+
+(defun mc-pgp50-verify-parser (proc oldbuf start end newbuf passwd)
   (setenv "PGPPASSFD")			; Delete this to exit batchmode!
   (set-buffer newbuf)
   (goto-char (point-max))
@@ -198,7 +526,7 @@
 	      (delete-process proc)
 
 	      ;; Return the good news!
-	      (setq results '("Signature is valid." nil)))
+	      (setq results '("Signature is valid." t)))
 
 	     ;; OPTION 2:  Shucks!  The signature is invalid!
 	     ("BAD signature made.*by key:\n"
@@ -236,77 +564,7 @@
       (pop-to-buffer obuf))
     results))
 
-(defun mc-pgp5-encrypt-parser (proc oldbuf start end newbuf passwd)
-  (set-buffer newbuf)
-  (goto-char (point-max))
-  (progn
-    (unwind-protect
-	(with-expect proc
-	  (message "Encrypting message...")
-	  (set-buffer oldbuf)
-	  (process-send-region proc start end)
-	  (set-buffer newbuf)
-	  (process-send-eof proc)
-
-	  ;; Test output of the program, looking for
-	  ;; errors.
-	  (expect-cond
-
-	   ;; OPTION 1:  Great!  The data is now encrypted!
-	   ("-----END PGP MESSAGE-----"
-
-	    ;; Catch the exit status.
-	    (setq result (process-exit-status proc))
-	    (delete-process proc)
-	    (message "Encryption complete.")
-
-	    ;; Delete everything preceding the signed data.
-	    (goto-char (point-max))
-	    (re-search-backward 
-	     "-----BEGIN PGP MESSAGE-----" nil t)
-	    (delete-region (point-min) (match-beginning 0))
-	    (setq rgn (point-min))
-
-	    ;; Convert out CR/NL -> NL
-	    (goto-char (point-min))
-	    (while (search-forward "\r\n" nil t)
-	      (replace-match "\n"))
-
-	    ;; Delete everything after the signature.
-	    (goto-char (point-min))
-	    (re-search-forward
-	     "-----END PGP MESSAGE-----" nil t)
-	    (delete-region (match-end 0) (point-max))
-			 
-	    ;; Return the exit status, with the region
-	    ;; limits!
-	    (setq rgn (cons rgn (point-max)))
-	    (setq results (cons result rgn)))
-
-	   ;; OPTION 2:  Something is wrong!  We cannot sign and
-	   ;; encrypt messages, since the batch mode in PGP5.0 is
-	   ;; broken.  Holler!
-	   ("Enter pass phrase:" 
-	      (interrupt-process proc)
-	      (delete-process proc)
-	    ;; This should never happen.
-	    (setq results '("Cannot sign and encrypt" nil)))
-
-	   ;; OPTION 3:  There are keys missing.  Just bug out 
-	   ;; of the whole thing, for now.
-	   ("\nNo encryption keys found for:"
-	      (interrupt-process proc)
-	      (delete-process proc)
-	    (setq results '("One or more public keys are missing" nil)))
-
-	   ;; OPTION 4:  The program exits.
-	   (exit
-	    (setq results (list 
-			   (process-exit-status proc) nil)))))
-      (set-buffer obuf))
-    results))
-
-(defun mc-pgp5-sign-parser (proc oldbuf start end newbuf passwd)
+(defun mc-pgp50-sign-parser (proc oldbuf start end newbuf passwd)
   (setenv "PGPPASSFD" 0)
   (set-buffer newbuf)
   (goto-char (point-max))
@@ -406,3 +664,301 @@
 
       (pop-to-buffer obuf))
     results))
+
+(defun mc-pgp50-sign-region (start end &optional id unclear)
+  (let ((process-environment process-environment)
+	(buffer (get-buffer-create mc-buffer-name))
+	passwd args key)
+    (setq key (mc-pgp50-lookup-key (or id mc-pgp50-user-id)))
+    (setq passwd
+	  (mc-activate-passwd
+	   (cdr key)
+	   (format "PGP passphrase for %s (%s): " (car key) (cdr key))))
+    (setenv "PGPPASSFD" "0")
+    (setq args
+	  (list
+	   "-fat" "+verbose=1" "+language=en"
+	    (format "+clearsig=%s" (if unclear "off" "on"))
+	    "+batchmode" "-u" (cdr key)))
+
+    (message "pgps %s" (mapconcat 'identity args " "))
+    (message "Signing as %s ..." (car key))
+    (if (mc-pgp50-process-region start end passwd mc-pgp50-pgps-path args
+			   'mc-pgp50-sign-parser)
+	(progn
+	  (message "Signing as %s ... Done." (car key))
+	  t)
+      nil)))
+
+(defun mc-pgp50-verify-region (start end &optional no-fetch)
+  (let ((buffer (get-buffer-create mc-buffer-name))
+	(obuf (current-buffer))
+	args pgp-id)
+    (setq args '("+verbose=1" "+batchmode" "+language=en" "-f"))
+    (if mc-pgp50-alternate-keyring
+	(setq args (append args (list (format "+pubring=%s"
+					      mc-pgp50-alternate-keyring)))))
+
+    (message "pgpv %s" (mapconcat 'identity args " "))
+    (message "Verifying...")
+    (if (mc-pgp50-process-region
+	 start end nil mc-pgp50-pgpv-path args 'mc-pgp50-verify-parser buffer)
+	t
+      (save-excursion
+	(set-buffer buffer)
+	(goto-char (point-min))
+	(if (and
+	     (not no-fetch)
+	     (re-search-forward mc-pgp50-key-expected-re nil t)
+	     (setq pgp-id
+		   (concat "0x" (buffer-substring-no-properties
+				 (match-beginning 1)
+				 (match-end 1))))
+	     (not (eq mc-pgp50-always-fetch 'never))
+	     (or mc-pgp50-always-fetch
+		 (y-or-n-p
+		  (format "Key %s not found; attempt to fetch? " pgp-id)))
+	     (mc-pgp50-fetch-key (cons nil pgp-id))
+	     (set-buffer obuf))
+	    (mc-pgp50-verify-region start end t)
+	  (mc-message mc-pgp50-error-re buffer)
+	  nil)))))
+
+(defun mc-pgp50-insert-public-key (&optional id)
+  (let ((buffer (get-buffer-create mc-buffer-name))
+	args)
+    (setq id (or id mc-pgp50-user-id))
+    (setq args (list "+verbose=1" "+batchmode" "+language=en" "-kxaf" id))
+    (if mc-pgp50-comment
+	(setq args (cons (format "+comment=\"%s\"" mc-pgp50-comment) args)))
+    (if mc-pgp50-alternate-keyring
+	(setq args (append args (list (format "+pubring=%s"
+					      mc-pgp50-alternate-keyring)))))
+
+    (if (mc-pgp50-process-region (point) (point) nil mc-pgp50-path
+			   args 'mc-pgp50-generic-parser buffer)
+	(progn
+	  (mc-message "Key for user ID: .*" buffer)
+	  t))))
+
+(defun mc-pgp50-snarf-parser (result)
+  (eq result 0))
+
+(defun mc-pgp50-snarf-keys (start end)
+  ;; Returns number of keys found.
+  (let ((buffer (get-buffer-create mc-buffer-name)) tmpstr args)
+    (setq args '("+verbose=1" "+batchmode" "+language=en" "-kaf"))
+    (if mc-pgp50-alternate-keyring
+	(setq args (append args (list (format "+pubring=%s"
+					      mc-pgp50-alternate-keyring)))))
+    (message "Snarfing...")
+    (if (mc-pgp50-process-region start end nil mc-pgp50-path args
+			   'mc-pgp50-snarf-parser buffer)
+	(save-excursion
+	  (set-buffer buffer)
+	  (goto-char (point-min))
+	  (if (re-search-forward mc-pgp50-newkey-re nil t)
+	      (progn
+		(if mc-pgp50-display-snarf-output (mc-display-buffer buffer))
+		(setq tmpstr (buffer-substring-no-properties
+			      (match-beginning 1) 
+			      (match-end 1)))
+		(if (equal tmpstr "No")
+		    0
+		  (car (read-from-string tmpstr))))))
+      (mc-display-buffer buffer)
+      (mc-message mc-pgp50-error-re buffer "Error snarfing PGP keys")
+      0)))
+
+(defun mc-scheme-pgp50 ()
+  (list
+   (cons 'encryption-func 		'mc-pgp50-encrypt-region)
+   (cons 'decryption-func		'mc-pgp50-decrypt-region)
+   (cons 'signing-func			'mc-pgp50-sign-region)
+   (cons 'verification-func 		'mc-pgp50-verify-region)
+   (cons 'key-insertion-func 		'mc-pgp50-insert-public-key)
+   (cons 'snarf-func			'mc-pgp50-snarf-keys)
+   (cons 'msg-begin-line 		mc-pgp50-msg-begin-line)
+   (cons 'msg-end-line 			mc-pgp50-msg-end-line)
+   (cons 'signed-begin-line 		mc-pgp50-signed-begin-line)
+   (cons 'signed-end-line 		mc-pgp50-signed-end-line)
+   (cons 'key-begin-line 		mc-pgp50-key-begin-line)
+   (cons 'key-end-line 			mc-pgp50-key-end-line)
+   (cons 'user-id			mc-pgp50-user-id)))
+
+;;{{{ Key fetching
+
+(defvar mc-pgp50-always-fetch nil
+  "*If t, always attempt to fetch missing keys, or never fetch if
+'never.")
+
+(defvar mc-pgp50-keyserver-url-template
+  "/htbin/pks-extract-key.pl?op=get&search=%s"
+  "The URL to pass to the keyserver.")
+
+(defvar mc-pgp50-keyserver-address "pgp.ai.mit.edu"
+  "Host name of keyserver.")
+
+(defvar mc-pgp50-keyserver-port 80
+  "Port on which the keyserver's HTTP daemon lives.")
+
+(defvar mc-pgp50-fetch-timeout 20
+  "*Timeout, in seconds, for any particular key fetch operation.")
+
+(defvar mc-pgp50-fetch-keyring-list nil
+  "*List of strings which are filenames of public keyrings to search
+when fetching keys.")
+
+(defsubst mc-pgp50-buffer-get-key (buf)
+  "Return the first key block in BUF as a string, or nil if none found."
+  (save-excursion
+    (let (start)
+      (set-buffer buf)
+      (goto-char (point-min))
+      (and (re-search-forward mc-pgp50-key-begin-line nil t)
+	   (setq start (match-beginning 0))
+	   (re-search-forward mc-pgp50-key-end-line nil t)
+	   (buffer-substring-no-properties start (match-end 0))))))
+
+(defun mc-pgp50-fetch-from-keyrings (id)
+  (let ((keyring-list mc-pgp50-fetch-keyring-list)
+	buf proc key)
+    (unwind-protect
+	(progn
+	  (message "Fetching %s from keyrings..." (or (cdr id) (car id)))
+	  (while (and (not key) keyring-list)
+	    (setq buf (generate-new-buffer " *mailcrypt temp*"))
+	    (setq proc
+		  (start-process "*PGP*" buf mc-pgp50-path "-kxaf"
+				 "+verbose=0" "+batchmode"
+				 (format "+pubring=%s" (car keyring-list))
+				 (or (cdr id) (car id))))
+	    ;; Because PGPPASSFD might be set
+	    (process-send-string proc "\r\n")
+	    (while (eq 'run (process-status proc))
+	      (accept-process-output proc 5))
+	    (setq key (mc-pgp50-buffer-get-key buf))
+	    (setq keyring-list (cdr keyring-list)))
+	  key)
+      (if buf (kill-buffer buf))
+      (if (and proc (eq 'run (process-status proc)))
+	  (interrupt-process proc)))))
+
+(defun mc-pgp50-fetch-from-http (id)
+  (let (buf connection)
+    (unwind-protect
+	(progn
+	  (message "Fetching %s via HTTP to %s..."
+		   (or (cdr id) (car id)) mc-pgp50-keyserver-address)
+	  (setq buf (generate-new-buffer " *mailcrypt temp*"))
+	  (setq connection
+		(open-network-stream "*key fetch*" buf mc-pgp50-keyserver-address
+				     mc-pgp50-keyserver-port))
+	  (process-send-string
+	   connection
+	   (concat "GET " (format mc-pgp50-keyserver-url-template
+				  (or (cdr id) (car id))) "\r\n"))
+	  (while (and (eq 'open (process-status connection))
+		      (accept-process-output connection mc-pgp50-fetch-timeout)))
+	  (mc-pgp50-buffer-get-key buf))
+      (if buf (kill-buffer buf))
+      (if connection (delete-process connection)))))
+
+(defun mc-pgp50-fetch-from-finger (id)
+  (let (buf connection user host)
+    (unwind-protect
+	(and (car id)
+	     (string-match "^\\(.+\\)@\\([^@]+\\)$" (car id))
+	     (progn
+	       (message "Trying finger %s..." (car id))
+	       (setq user (substring (car id)
+				     (match-beginning 1) (match-end 1)))
+	       (setq host (substring (car id)
+				     (match-beginning 2) (match-end 2)))
+	       (setq buf (generate-new-buffer " *mailcrypt temp*"))
+	       (condition-case nil
+		   (progn
+		     (setq connection
+			   (open-network-stream "*key fetch*" buf host 79))
+		     (process-send-string connection
+					  (concat "/W " user "\r\n"))
+		     (while
+			 (and (eq 'open (process-status connection))
+			      (accept-process-output connection
+						     mc-pgp50-fetch-timeout)))
+		     (mc-pgp50-buffer-get-key buf))
+		 (error nil))))
+      (if buf (kill-buffer buf))
+      (if connection (delete-process connection)))))
+
+(defvar mc-pgp50-fetch-methods '(mc-pgp50-fetch-from-keyrings
+			       mc-pgp50-fetch-from-finger
+			       mc-pgp50-fetch-from-http)
+  "List of methods to try when attempting to fetch a key.  Each
+element is a function to call with an ID as argument.  See the
+documentation for the function mc-pgp50-fetch-key for a description of
+the ID.")
+
+(defun mc-pgp50-fetch-key (&optional id)
+  "Attempt to fetch a key for addition to PGP keyring.  Interactively,
+prompt for string matching key to fetch.
+
+Non-interactively, ID must be a pair.  The CAR must be a bare Email
+address and the CDR a keyID (with \"0x\" prefix).  Either, but not
+both, may be nil.
+
+Return t if we think we were successful; nil otherwise.  Note that nil
+is not necessarily an error, since we may have merely fired off an Email
+request for the key."
+  (interactive)
+  (let ((methods mc-pgp50-fetch-methods)
+	(process-connection-type nil) key proc buf args)
+    (if (null id)
+	(setq id (cons (read-string "Fetch key for: ") nil)))
+    (while (and (not key) methods)
+      (setq key (funcall (car methods) id))
+      (setq methods (cdr methods)))
+    (if (not (stringp key))
+	(progn
+	  (message "Key not found.")
+	  nil)
+      ;; Maybe I'll do this right someday.
+      (unwind-protect
+	  (save-window-excursion
+	    (setq buf (generate-new-buffer " *PGP Key Info*"))
+	    (pop-to-buffer buf)
+	    (if (< (window-height) (/ (frame-height) 2))
+		(enlarge-window (- (/ (frame-height) 2)
+				   (window-height))))
+	    (setq args '("-f" "+verbose=0" "+batchmode"))
+	    (if mc-pgp50-alternate-keyring
+		(setq args
+		      (append args (list (format "+pubring=%s"
+						 mc-pgp50-alternate-keyring)))))
+
+	    (setq proc (apply 'start-process "*PGP*" buf mc-pgp50-path args))
+	    ;; Because PGPPASSFD might be set
+	    (process-send-string proc "\r\n")
+	    (process-send-string proc key)
+	    (process-send-string proc "\r\n")
+	    (process-send-eof proc)
+	    (set-buffer buf)
+	    (while (eq 'run (process-status proc))
+	      (accept-process-output proc 5)
+	      (goto-char (point-min)))
+	    (if (y-or-n-p "Add this key to keyring? ")
+		(progn
+		  (setq args (append args '("-ka")))
+		  (setq proc
+			(apply 'start-process "*PGP*" buf mc-pgp50-path args))
+		  ;; Because PGPPASSFD might be set
+		  (process-send-string proc "\r\n")
+		  (process-send-string proc key)
+		  (process-send-string proc "\r\n")
+		  (process-send-eof proc)
+		  (while (eq 'run (process-status proc))
+		    (accept-process-output proc 5))
+		  t)))
+	(if buf (kill-buffer buf))))))
+
+;;}}}

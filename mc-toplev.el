@@ -43,7 +43,8 @@
 (eval-and-compile
   (condition-case nil (require 'mailalias) (error nil)))
 
-(autoload 'mc-scheme-pgp "mc-pgp" nil t)
+(autoload 'mc-scheme-pgp   "mc-pgp"  nil t)
+(autoload 'mc-scheme-pgp50 "mc-pgp5" nil t)
 
 ;;}}}
 
@@ -178,8 +179,23 @@ Returns a pair (SUCCEEDED . VERIFIED) where SUCCEEDED is t if the encryption
 succeeded and VERIFIED is t if it had a valid signature."
   (save-excursion
     (let ((schemes mc-schemes)
-	  limits scheme)
-      (while (and schemes
+	  limits 
+	  (scheme mc-default-scheme))
+
+      ; Attempt to find a message signed according to the default
+      ; scheme.
+      (if mc-default-scheme
+	  (setq
+	   limits
+	   (mc-message-delimiter-positions
+	    (cdr (assoc 'msg-begin-line (funcall mc-default-scheme)))
+	    (cdr (assoc 'msg-end-line (funcall mc-default-scheme))))))
+
+      ; We can't find a message signed in the default scheme.
+      ; Step through all the schemes we know, trying to identify
+      ; the applicable one by examining headers.
+      (while (and (null limits)
+		  schemes
 		  (setq scheme (cdr (car schemes)))
 		  (not (setq
 			limits
@@ -276,8 +292,23 @@ Show the result as a message in the minibuffer. Returns t if the signature
 is verified."
   (save-excursion
     (let ((schemes mc-schemes)
-	  limits scheme)
-      (while (and schemes
+	  limits 
+	  (scheme mc-default-scheme))
+
+      ; Attempt to find a message signed according to the default
+      ; scheme.
+      (if mc-default-scheme
+	  (setq
+	   limits
+	   (mc-message-delimiter-positions
+	    (cdr (assoc 'signed-begin-line (funcall mc-default-scheme)))
+	    (cdr (assoc 'signed-end-line (funcall mc-default-scheme))))))
+
+      ; We can't find a message signed in the default scheme.
+      ; Step through all the schemes we know, trying to identify
+      ; the applicable one by examining headers.
+      (while (and (null limits)
+		  schemes
 		  (setq scheme (cdr (car schemes)))
 		  (not
 		   (setq
@@ -346,11 +377,26 @@ Exact behavior depends on current major mode."
   (let ((schemes mc-schemes)
 	(start (point-min))
 	(found 0)
-	limits scheme)
+	limits 
+	(scheme mc-default-scheme))
     (save-excursion
       (catch 'done
 	(while t
-	  (while (and schemes
+
+	  ; Attempt to find a message signed according to the default
+	  ; scheme.
+	  (if mc-default-scheme
+	      (setq
+	       limits
+	       (mc-message-delimiter-positions
+		(cdr (assoc 'key-begin-line (funcall mc-default-scheme)))
+		(cdr (assoc 'key-end-line (funcall mc-default-scheme))))))
+
+	  ; We can't find a message signed in the default scheme.
+	  ; Step through all the schemes we know, trying to identify
+	  ; the applicable one by examining headers.
+	  (while (and (null limits)
+		      schemes
 		      (setq scheme (cdr (car schemes)))
 		      (not
 		       (setq

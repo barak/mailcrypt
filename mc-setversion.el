@@ -29,55 +29,17 @@ Possible values of VERSION are 2.6 and 5.0."
       (progn
 	(setq called-interactively t)
 	(setq version 
-	      (completing-read "Select PGP version: " '(("2.6" 1) ("5.0" 2)))
-	      )))
+	      (completing-read 
+	       "Select PGP version: " mc-schemes nil t))))
 
-  (if (string-equal version "5.0")
+  (if (string-equal version "pgp50")
       (progn
-	(setq mc-pgp-version-five t)
-	(setq mc-pgp-path-encrypt "pgpe")
-	(setq mc-pgp-path-decrypt "pgpv")
-	(setq mc-pgp-path-sign    "pgps")
-	(setq mc-pgp-path-verify  "pgpv")
-	(setq mc-pgp-path-getkeys "pgpk")
-	(setq mc-pgp-key-cache nil)
-
-	;; Arguments to PGP for various actions.
-	(setq mc-pgp-encrypt-args
-	      (list "+NoBatchInvalidKeys=off" "-fat" "+batchmode=1"))
-	(setq mc-pgp-sign-arg "-fat")
-
-	;; Aliases to call the correct functions for this version.
-	(defalias 'mc-process-region     'mc-pgp5-process-region)
-	(defalias 'mc-pgp-decrypt-parser 'mc-pgp5-decrypt-parser)
-	(defalias 'mc-pgp-encrypt-parser 'mc-pgp5-encrypt-parser)
-	(defalias 'mc-pgp-verify-parser  'mc-pgp5-verify-parser )
-	(defalias 'mc-pgp-sign-parser    'mc-pgp5-sign-parser   )
+	(setq mc-default-scheme 'mc-scheme-pgp50)
 	(message "PGP version set to 5.0."))
-    (if (string-equal version "2.6")
+    (if (string-equal version "pgp")
 	(progn
-	  (setq mc-pgp-version-five nil)
-	  (setq mc-pgp-path-encrypt (concat mc-pgp2-path "pgp"))
-	  (setq mc-pgp-path-decrypt (concat mc-pgp2-path "pgp"))
-	  (setq mc-pgp-path-sign    (concat mc-pgp2-path "pgp"))
-	  (setq mc-pgp-path-verify  (concat mc-pgp2-path "pgp"))
-	  (setq mc-pgp-path-getkeys (concat mc-pgp2-path "pgp"))
-	  (setq mc-pgp-path         (concat mc-pgp2-path "pgp"))
-	  (setq mc-pgp-key-cache nil)
-
-	  ;; Arguments to PGP for various actions.
-	  (setq mc-pgp-encrypt-args
-		(list "+encrypttoself=off +verbose=1" "+batchmode"
-		      "+language=en" "-fat"))
-	  (setq mc-pgp-sign-arg "-fast")
-
-	  ;; Aliases to call the correct functions for this version.
-	  (defalias 'mc-process-region     'mc-pgp2-process-region)
-	  (defalias 'mc-pgp-decrypt-parser 'mc-pgp2-decrypt-parser)
-	  (defalias 'mc-pgp-encrypt-parser 'mc-pgp2-generic-parser)
-	  (defalias 'mc-pgp-verify-parser  'mc-pgp2-verify-parser )
-	  (defalias 'mc-pgp-sign-parser    'mc-pgp2-generic-parser)
-	  (defalias 'mc-pgp-generic-parser 'mc-pgp2-generic-parser)
+	  (setq mc-default-scheme 'mc-scheme-pgp)
 	  (message "PGP version set to 2.6."))
       (if called-interactively
-	  (message "You must specify a version; 5.0 or 2.6"))))))
+	  (message "You must specify a version; 5.0 or 2.6"))))
+))

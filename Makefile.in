@@ -36,11 +36,11 @@ VPATH = @srcdir@
 
 SOURCES = @EXTRA_SRCS@ \
 	mailcrypt.el mc-toplev.el mc-pgp.el mc-remail.el \
-	mc-pgp2.el mc-pgp5.el expect.el mc-setversion.el
+	mc-pgp5.el expect.el mc-setversion.el
 
 OBJECTS = @EXTRA_OBJS@ \
 	mailcrypt.elc mc-toplev.elc mc-pgp.elc mc-remail.elc \
-	mc-pgp2.elc mc-pgp5.elc expect.elc mc-setversion.elc
+	mc-pgp5.elc expect.elc mc-setversion.elc
 
 DISTFILES = $(SOURCES) ANNOUNCE ChangeLog INSTALL LCD-entry Makefile.in \
 	NEWS ONEWS README configure configure.in install-sh load-path.hack \

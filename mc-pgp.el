@@ -25,13 +25,11 @@
   "*PGP ID of your default identity.")
 (defvar mc-pgp-always-sign nil 
   "*If t, always sign encrypted PGP messages, or never sign if 'never.")
-(defvar old-pgp-path "/usr/bin/" "*The PGP executable.")
+(defvar mc-pgp-path "pgp" "*The PGP executable.")
 (defvar mc-pgp-display-snarf-output nil
   "*If t, pop up the PGP output window when snarfing keys.")
 (defvar mc-pgp-alternate-keyring nil
   "*Public keyring to use instead of default.")
-(defvar mc-pgp-default-version "5.0"
-  "*Default PGP version to use.  Choices are 5.0 and 2.6.")
 (defvar mc-pgp-comment
   (format "Processed by Mailcrypt %s, an Emacs/PGP interface" mc-version)
   "*Comment field to appear in ASCII armor output.  If nil, let PGP
@@ -60,20 +58,17 @@ use its default.")
   "Regular expression matching a PGP missing-key messsage")
 (defconst mc-pgp-key-expected-re
   "Key matching expected Key ID \\(\\S +\\) not found")
+
 (defvar mc-pgp-keydir nil
   "Directory in which keyrings are stored.")
 
-;; This function does not work in PGP5.0, because I can't coax PGP5.0
-;; to tell me where the keyring is located.  I will disable any calls
-;; to this function, which is essentially unchanged from its PGP2.6
-;; version, when in version 5.0 mode.
 (defun mc-get-pgp-keydir ()
   (if (null mc-pgp-keydir)
       (let ((buffer (generate-new-buffer " *mailcrypt temp*"))
 	    (obuf (current-buffer)))
 	(unwind-protect
 	    (progn
-	      (call-process mc-pgp-path-getkeys nil buffer nil "+verbose=1"
+	      (call-process mc-pgp-path nil buffer nil "+verbose=1"
 			    "+language=en" "-kv" "XXXXXXXXXX")
 	      (set-buffer buffer)
 	      (goto-char (point-min))
@@ -96,82 +91,57 @@ PGP ID.")
   ;; pair of strings (USER-ID . KEY-ID) which uniquely identifies the
   ;; matching key, or nil if no key matches.
   (if (equal str "***** CONVENTIONAL *****") nil
-    (let (
-	  (keyring (if (not mc-pgp-version-five)
-		       (concat (mc-get-pgp-keydir) "secring")))
+    (let ((keyring (concat (mc-get-pgp-keydir) "secring"))
 	  (result (cdr-safe (assoc str mc-pgp-key-cache)))
-	  (key-regexp 
-	   (if mc-pgp-version-five
-	       "^sec\\S *\\s +\\w+\\s +\\(\\w+\\)\\s +"
-	     "^\\(pub\\|sec\\)\\s +[^/]+/\\(\\S *\\)\\s +\\S +\\s +\\(.*\\)$"))
-	  (userid-regexp "^uid\\s +\\(.*\\)$")
+	  (key-regexp
+	   "^\\(pub\\|sec\\)\\s +[^/]+/\\(\\S *\\)\\s +\\S +\\s +\\(.*\\)$")
 	  (obuf (current-buffer))
-	  buffer keyid)
+	  buffer)
       (if (null result)
 	  (unwind-protect
 	      (progn
 		(setq buffer (generate-new-buffer " *mailcrypt temp"))
-		(if mc-pgp-version-five
-		    (call-process mc-pgp-path-getkeys nil buffer nil
-				  "+language=en" "-l" str)
-		  (call-process mc-pgp-path-getkeys nil buffer nil
-				"+language=en" "-kv" str keyring))
+		(call-process mc-pgp-path nil buffer nil
+			      "+language=en" "-kv" str keyring)
 		(set-buffer buffer)
 		(goto-char (point-min))
 		(if (re-search-forward key-regexp nil t)
-		    (if mc-pgp-version-five
-			;; for pgp5, we just found the keyid line. Remember
-			;; the keyid and continue searching forward for the
-			;; userid
-			(progn
-			  (setq keyid (buffer-substring-no-properties
-				       (match-beginning 1) (match-end 1)))
-			  (if (re-search-forward userid-regexp nil t)
-			      (progn
-				(setq result (cons 
-					      (buffer-substring-no-properties
-					       (match-beginning 1)
-					       (match-end 1))
-					      keyid))
-				(setq mc-pgp-key-cache (cons (cons str result)
-							     mc-pgp-key-cache))
-				)))
-		      (progn
-			(setq result
-			      (cons (buffer-substring-no-properties
-				     (match-beginning 3) (match-end 3))
-				    (concat
-				     "0x"
-				     (buffer-substring-no-properties
-				      (match-beginning 2) (match-end 2)))))
-			(setq mc-pgp-key-cache (cons (cons str result)
-						     mc-pgp-key-cache))))))
+		    (progn
+		      (setq result
+			    (cons (buffer-substring-no-properties
+				   (match-beginning 3) (match-end 3))
+				  (concat
+				   "0x"
+				   (buffer-substring-no-properties
+				    (match-beginning 2) (match-end 2)))))
+		      (setq mc-pgp-key-cache (cons (cons str result)
+						   mc-pgp-key-cache)))))
 	    (if buffer (kill-buffer buffer))
 	    (set-buffer obuf)))
       (if (null result)
 	  (error "No PGP secret key for %s" str))
       result)))
 
-;(defun mc-pgp-generic-parser (result)
-;  (let (start)
-;    (goto-char (point-min))
-;    (cond ((not (eq result 0))
-;	   (prog1
-;	       nil
-;	     (if (mc-message "^\aError: +Bad pass phrase\\.$" (current-buffer))
-;		 (mc-deactivate-passwd t)
-;	       (mc-message mc-pgp-error-re (current-buffer)
-;			   (format "PGP exited with status %d" result)))))
-;	  ((re-search-forward mc-pgp-nokey-re nil t)
-;	   nil)
-;	  (t
-;	   (and
-;	    (goto-char (point-min))
-;	    (re-search-forward "-----BEGIN PGP.*-----$" nil t)
-;	    (setq start (match-beginning 0))
-;	    (goto-char (point-max))
-;	    (re-search-backward "^-----END PGP.*-----\n" nil t)
-;	    (cons start (match-end 0)))))))
+(defun mc-pgp-generic-parser (result)
+  (let (start)
+    (goto-char (point-min))
+    (cond ((not (eq result 0))
+	   (prog1
+	       nil
+	     (if (mc-message "^\aError: +Bad pass phrase\\.$" (current-buffer))
+		 (mc-deactivate-passwd t)
+	       (mc-message mc-pgp-error-re (current-buffer)
+			   (format "PGP exited with status %d" result)))))
+	  ((re-search-forward mc-pgp-nokey-re nil t)
+	   nil)
+	  (t
+	   (and
+	    (goto-char (point-min))
+	    (re-search-forward "-----BEGIN PGP.*-----$" nil t)
+	    (setq start (match-beginning 0))
+	    (goto-char (point-max))
+	    (re-search-backward "^-----END PGP.*-----\n" nil t)
+	    (cons start (match-end 0)))))))
 
 (defun mc-pgp-encrypt-region (recipients start end &optional id sign)
   (let ((process-environment process-environment)
@@ -180,24 +150,18 @@ PGP ID.")
 	(mc-pgp-always-sign mc-pgp-always-sign)
 	(obuf (current-buffer))
 	action msg args key passwd result pgp-id)
-    (setq args mc-pgp-encrypt-args)
+    (setq args (list "+encrypttoself=off +verbose=1" "+batchmode"
+		     "+language=en" "-fat"))
     (setq action (if recipients "Encrypting" "Armoring"))
     (setq msg (format "%s..." action))  ; May get overridden below
-    (if (and recipients (not mc-pgp-version-five)) 
-	(setq args (cons "-e" args)))
-;    (if mc-pgp-comment
-;	(setq args (cons (format "+comment=%s" mc-pgp-comment) args)))
+    (if recipients (setq args (cons "-e" args)))
+    (if mc-pgp-comment
+	(setq args (cons (format "+comment=%s" mc-pgp-comment) args)))
     (if mc-pgp-alternate-keyring
 	(setq args (append args (list (format "+pubring=%s"
 					      mc-pgp-alternate-keyring)))))
-    (if 
-	(and (not mc-pgp-version-five)
-	     (and (not (eq mc-pgp-always-sign 'never))
-		  (or 
-		   mc-pgp-always-sign 
-		   sign 
-		   (y-or-n-p "Sign the message? "))))
-	     
+    (if (and (not (eq mc-pgp-always-sign 'never))
+	     (or mc-pgp-always-sign sign (y-or-n-p "Sign the message? ")))
 	(progn
 	  (setq mc-pgp-always-sign t)
 	  (setq key (mc-pgp-lookup-key (or id mc-pgp-user-id)))
@@ -217,18 +181,11 @@ PGP ID.")
     (if (and recipients mc-encrypt-for-me)
 	(setq recipients (cons (cdr key) recipients)))
 
-    (if recipients
-	(setq args (append args
-			   (if mc-pgp-version-five
-			       (apply 'append (mapcar 
-					       '(lambda (x) (list "-r" x)) 
-					       recipients))
-			     recipients))))
-
-    (message "%s" (mapconcat 'identity args " "))
+    (setq args (append args recipients))
+    
     (message "%s" msg)
-    (setq result (mc-process-region start end passwd mc-pgp-path-encrypt args
-				    'mc-pgp-encrypt-parser buffer))
+    (setq result (mc-process-region start end passwd mc-pgp-path args
+				    'mc-pgp-generic-parser buffer))
     (save-excursion
       (set-buffer buffer)
       (goto-char (point-min))
@@ -253,11 +210,31 @@ PGP ID.")
 	  (message "%s Done." msg)
 	  t)))))
 
+(defun mc-pgp-decrypt-parser (result)
+  (goto-char (point-min))
+  (cond ((eq result 0)
+	 ;; Valid signature
+	 (re-search-forward "^Signature made.*\n")
+	 (if (looking-at
+	      "\a\nWARNING:  Because this public key.*\n.*\n.*\n")
+	     (goto-char (match-end 0)))
+	 (cons (point) (point-max)))
+	((eq result 1)
+	 (re-search-forward
+	  "\\(\\(^File is conven.*\\)?Just a moment\\.+\\)\\|\\(^\\.\\)")
+	 (if (eq (match-beginning 2) (match-end 2))
+	     (if (looking-at
+		  "\nFile has signature.*\\(\n\a.*\n\\)*\nWARNING:.*\n")
+		 (goto-char (match-end 0)))
+	   (if (looking-at "Pass phrase appears good\\. \\.")
+	       (goto-char (match-end 0))))
+	 (cons (point) (point-max)))
+	(t nil)))
+
 (defun mc-pgp-decrypt-region (start end &optional id)
   ;; returns a pair (SUCCEEDED . VERIFIED) where SUCCEEDED is t if
   ;; the decryption succeeded and verified is t if there was a valid signature
-  (let (
-	(process-environment process-environment)
+  (let ((process-environment process-environment)
 	(buffer (get-buffer-create mc-buffer-name))
 	args key new-key passwd result pgp-id)
     (undo-boundary)
@@ -266,8 +243,9 @@ PGP ID.")
      passwd
      (if key
 	 (mc-activate-passwd (cdr key)
-			     (format "PGP passphrase for %s (%s): "
-				     (car key) (cdr key)))
+			     (and id
+				  (format "PGP passphrase for %s (%s): "
+					  (car key) (cdr key))))
        (mc-activate-passwd id "PGP passphrase for conventional decryption: ")))
     (if passwd
 	(setenv "PGPPASSFD" "0"))
@@ -278,14 +256,11 @@ PGP ID.")
     (message "Decrypting...")
     (setq result
 	  (mc-process-region
-	   start end passwd mc-pgp-path-decrypt 
-	   args 'mc-pgp-decrypt-parser buffer))
+	   start end passwd mc-pgp-path args 'mc-pgp-decrypt-parser buffer))
     (cond
      (result
       (message "Decrypting... Done.")
       ;; If verification failed due to missing key, offer to fetch it.
-      ;; This is unchanged from mailcrypt 3.4, and should still work.
-      ;; Execution never reaches this point when using PGP 5.0, however.
       (save-excursion
 	(set-buffer buffer)
 	(goto-char (point-min))
@@ -346,16 +321,30 @@ PGP ID.")
     (setenv "PGPPASSFD" "0")
     (setq args
 	  (list
-	   mc-pgp-sign-arg "+verbose=1" "+language=en"
+	   "-fast" "+verbose=1" "+language=en"
 	    (format "+clearsig=%s" (if unclear "off" "on"))
 	    "+batchmode" "-u" (cdr key)))
+    (if mc-pgp-comment
+	(setq args (cons (format "+comment=%s" mc-pgp-comment) args)))
     (message "Signing as %s ..." (car key))
-    (if (mc-process-region start end passwd mc-pgp-path-sign args
-			   'mc-pgp-sign-parser)
+    (if (mc-process-region start end passwd mc-pgp-path args
+			   'mc-pgp-generic-parser buffer)
 	(progn
 	  (message "Signing as %s ... Done." (car key))
 	  t)
       nil)))
+
+(defun mc-pgp-verify-parser (result)
+  (cond ((eq result 0)
+	 (mc-message mc-pgp-sigok-re (current-buffer) "Good signature")
+	 t)
+	((eq result 1)
+	 (mc-message mc-pgp-error-re (current-buffer) "Bad signature")
+	 nil)
+	(t
+	 (mc-message mc-pgp-error-re (current-buffer)
+		     (format "PGP exited with status %d" result))
+	 nil)))
 
 (defun mc-pgp-verify-region (start end &optional no-fetch)
   (let ((buffer (get-buffer-create mc-buffer-name))
@@ -367,7 +356,7 @@ PGP ID.")
 					      mc-pgp-alternate-keyring)))))
     (message "Verifying...")
     (if (mc-process-region
-	 start end nil mc-pgp-path-verify args 'mc-pgp-verify-parser buffer)
+	 start end nil mc-pgp-path args 'mc-pgp-verify-parser buffer)
 	t
       (save-excursion
 	(set-buffer buffer)
@@ -389,8 +378,6 @@ PGP ID.")
 	  (mc-message mc-pgp-error-re buffer)
 	  nil)))))
 
-;; I haven't even tried to make this work with PGP 5.0 yet.  It should
-;; still work with 2.6, since it is unchanged.
 (defun mc-pgp-insert-public-key (&optional id)
   (let ((buffer (get-buffer-create mc-buffer-name))
 	args)

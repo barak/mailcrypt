@@ -1,4 +1,4 @@
-;; mailcrypt.el v3.5b4, mail encryption with PGP
+;; mailcrypt.el v3.5b5, mail encryption with PGP
 ;; Copyright (C) 1995  Jin Choi <jin@atype.com>
 ;;                     Patrick LoPresti <patl@lcs.mit.edu>
 ;;           (C) 1998  Len Budney <lbudney@pobox.com>
@@ -56,25 +56,9 @@
 (autoload 'mc-remailer-insert-pseudonym "mc-remail" nil t)
 (autoload 'mc-setversion "mc-setversion" nil t)
 
-;; More autoloads are required to support multiple versions of PGP.
-(autoload 'mc-pgp5-process-region "mc-pgp5" nil t)
-(autoload 'mc-pgp5-decrypt-parser "mc-pgp5" nil t)
-(autoload 'mc-pgp5-encrypt-parser "mc-pgp5" nil t)
-(autoload 'mc-pgp5-verify-parser  "mc-pgp5" nil t) 
-(autoload 'mc-pgp5-sign-parser    "mc-pgp5" nil t)
-
-(autoload 'mc-pgp2-process-region      "mc-pgp2" nil t)
-(autoload 'mc-pgp2-decrypt-parser  "mc-pgp2" nil t)
-(autoload 'mc-pgp2-encrypt-parser  "mc-pgp2" nil t)
-(autoload 'mc-pgp2-verify-parser   "mc-pgp2" nil t) 
-(autoload 'mc-pgp2-sign-parser     "mc-pgp2" nil t)
-(autoload 'mc-pgp2-generic-parser  "mc-pgp2" nil t)
-
-
 ;;}}}
 
 ;;{{{ Minor mode variables and functions
-(defvar mc-pgp2-path "/usr/bin/")
 
 (defvar mc-read-mode nil
   "Non-nil means Mailcrypt read mode key bindings are available.")
@@ -215,7 +199,7 @@
 ;;}}}
 
 ;;{{{ User variables.
-(defconst mc-version "3.5b4")
+(defconst mc-version "3.5b5")
 (defvar mc-default-scheme 'mc-scheme-pgp "*Default encryption scheme to use.")
 (defvar mc-passwd-timeout 60
   "*Time to deactivate password in seconds after a use.
@@ -295,7 +279,9 @@ If 'never, always use a viewer instead of replacing.")
 
 (defvar mc-passwd-cache nil "Cache for passphrases.")
 
-(defvar mc-schemes '(("pgp" . mc-scheme-pgp)))
+(defvar mc-schemes '(("pgp50" . mc-scheme-pgp50)
+		     ("pgp" . mc-scheme-pgp)
+		     ))
 
 ;;}}}
 
@@ -431,6 +417,61 @@ Email address.  ADDR-LIST may be a single string or a list of strings."
     (if msg (message "%s" msg))
     retval))
 
+(defun mc-process-region (beg end passwd program args parser &optional buffer)
+  (let ((obuf (current-buffer))
+	(process-connection-type nil)
+	mybuf result rgn proc)
+    (unwind-protect
+	(progn
+	  (setq mybuf (or buffer (generate-new-buffer " *mailcrypt temp")))
+	  (set-buffer mybuf)
+	  (erase-buffer)
+	  (set-buffer obuf)
+	  (buffer-disable-undo mybuf)
+	  (setq proc
+		(apply 'start-process "*PGP*" mybuf program args))
+	  (if passwd
+	      (progn
+		(process-send-string proc (concat passwd "\n"))
+		(or mc-passwd-timeout (mc-deactivate-passwd t))))
+	  (process-send-region proc beg end)
+	  (process-send-eof proc)
+	  (while (eq 'run (process-status proc))
+	    (accept-process-output proc 5))
+	  (setq result (process-exit-status proc))
+	  ;; Hack to force a status_notify() in Emacs 19.29
+	  (delete-process proc)
+	  (set-buffer mybuf)
+	  (goto-char (point-max))
+	  (if (re-search-backward "\nProcess \\*PGP.*\n\\'" nil t)
+	      (delete-region (match-beginning 0) (match-end 0)))
+	  (goto-char (point-min))
+	  ;; CRNL -> NL
+	  (while (search-forward "\r\n" nil t)
+	    (replace-match "\n"))
+	  ;; Hurm.  FIXME; must get better result codes.
+	  (if (stringp result)
+	      (error "%s exited abnormally: '%s'" program result)
+	    (setq rgn (funcall parser result))
+	    ;; If the parser found something, migrate it
+	    (if (consp rgn)
+		(progn
+		  (set-buffer obuf)
+		  (delete-region beg end)
+		  (goto-char beg)
+		  (insert-buffer-substring mybuf (car rgn) (cdr rgn))
+		  (set-buffer mybuf)
+		  (delete-region (car rgn) (cdr rgn)))))
+	  ;; Return nil on failure and exit code on success
+	  (if rgn result))
+      ;; Cleanup even on nonlocal exit
+      (if (and proc (eq 'run (process-status proc)))
+	  (interrupt-process proc))
+      (set-buffer obuf)
+      (or buffer (null mybuf) (kill-buffer mybuf)))))
+
+;;}}}
+
 ;;{{{ Passphrase management
 (defun mc-activate-passwd (id &optional prompt)
   "Activate the passphrase matching ID, using PROMPT for a prompt.
@@ -489,5 +530,4 @@ Return the passphrase.  If PROMPT is nil, only return value if cached."
 (defalias 'mailcrypt-insert-public-key 'mc-insert-public-key)
 (defalias 'mailcrypt-snarf 'mc-snarf)
 ;;}}}
-
 (provide 'mailcrypt)

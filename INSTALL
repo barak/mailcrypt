@@ -19,9 +19,14 @@ The simplest way to build and install Mailcrypt is:
   1. `cd' to the Mailcrypt source directory and type `./configure' to
      configure Mailcrypt for your system.
 
-  2. Type `make' to build the byte-compiled Lisp files.
+  2. Look at the program names in mc-pgp.el and mc-pgp5.el to make
+     sure that they are correct.  On my system, for example, I call
+     PGP 2.6.3 as "pgp2".  If you call PGP 2.6.x as "pgp", then you
+     are probably OK.
 
-  3. Type `make install' to install the Mailcrypt Lisp files and Info
+  3. Type `make' to build the byte-compiled Lisp files.
+
+  4. Type `make install' to install the Mailcrypt Lisp files and Info
      manual.
 
 Load Path
@@ -142,8 +147,8 @@ would make!)
 To use Mailcrypt 3.5b1 and higher, you must include two lines like the
 following in your .emacs file:
 
-	(load-library "mc-setversion")
-	(mc-setversion "5.0") ;; Alternately, "2.6"
+	(load-library "mailcrypt")
+	(mc-setversion "pgp50") ;; Alternately, "pgp" for 2.6.x
 
 The function mc-setversion is interactive, and can be used at any time
 to toggle between PGP versions.  A nice future enhancement would be to
