@@ -1,3 +1,10 @@
+2003-05-23  Brian Warner  <warner@lothar.com>
+
+	* Makefile.in (SOURCES): add mc-pgp6.el
+	* mc-toplev.el (mc-scheme-pgp65): Add mc-pgp6 autoload
+	* mc-setversion.el (mc-setversion): add "6.5" setting
+	* mc-pgp6.el: PGP 6.5 support, contributed by Derek Atkins
+
 2003-05-20  Brian Warner  <warner@lothar.com>
 
 	* mailcrypt.texi (Signing): Move documentation of mc-pgp-user-id

@@ -57,6 +57,7 @@
 
 (autoload 'mc-scheme-pgp   "mc-pgp"  nil t)
 (autoload 'mc-scheme-pgp50 "mc-pgp5" nil t)
+(autoload 'mc-scheme-pgp65 "mc-pgp6" nil t)
 (autoload 'mc-scheme-gpg   "mc-gpg"  nil t)
 
 ;;}}}
