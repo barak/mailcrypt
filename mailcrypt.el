@@ -204,7 +204,7 @@
 ;;}}}
 
 ;;{{{ User variables.
-(defconst mc-version "3.5.7")
+(defconst mc-version "3.5.8")
 (defvar mc-temp-directory 
   (cond ((fboundp 'temp-directory) (temp-directory))
 	((boundp 'temporary-file-directory) temporary-file-directory)
