@@ -4,9 +4,6 @@
 (load-library "mc-toplev")
 (load-library "mc-gpg")
 (load-library "mc-remail")
-(setq mc-gpg-extra-args '("--homedir" "remkeys"))
-(setq mc-levien-file-name "remkeys/rlist.txt")
-(setq mc-remailer-user-chains '( ("123" ["rem1" "rem2" "rem3"])))
 
 (defvar mc-test-verbose nil)
 
@@ -26,13 +23,15 @@
 
 (defun mc-test-remailer-unwind (chain)
   ;; call this in the encrypted message buffer
-  (let ((chainstring "") start end)
+  (let ((chainstring "") start end errbuf)
     ;; find message body
     (goto-char (point-min))
     (re-search-forward
      (concat "^" (regexp-quote mail-header-separator) "\n"))
     (setq start (point))
     (setq end (point-max))
+
+    (setq errbuf (get-buffer-create "mc-errors"))
 
     ;; build chainstring
     (dolist (hop chain)
@@ -53,9 +52,7 @@
     (call-process-region start end
                          "python"
                          nil  ; DELETE: don't delete text as it is sent
-                         ;; DESTINATION: throw out process' stdout
-                         ;;(get-buffer-create "mc errs")
-                         nil
+                         errbuf ;; DESTINATION log stdout/stderr
                          nil  ; DISPLAY: don't update display
                          ;; args
                          "unwind.py"
@@ -72,8 +69,8 @@
          (recipients '("user@test.test"))
          (mc-default-scheme 'mc-scheme-gpg)
          (mc-pgp-always-sign 'never)
-         (mc-gpg-extra-args '("--homedir" "remkeys"))
-         (mc-levien-file-name "remkeys/rlist.txt")
+         (mc-gpg-extra-args '("--homedir" "remailer-keys"))
+         (mc-levien-file-name "rlist.txt")
          (mc-remailer-user-chains '( ("123" ["rem1" "rem2" "rem3"])))
          chains chain rc
 	)
