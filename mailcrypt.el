@@ -33,6 +33,7 @@
 
 (require 'easymenu)
 (require 'comint)
+(require 'rfc822)
 
 (eval-and-compile
   (condition-case nil (require 'itimer) (error nil))
@@ -397,7 +398,7 @@ Optional arg NUKE, if non-nil, means eliminate all fields returned."
 
 (defsubst mc-strip-address (addr)
   "Strip everything from ADDR except the basic Email address."
-  (car (cdr (mail-extract-address-components addr))))
+  (car (rfc822-addresses addr)))
 
 (defun mc-strip-addresses (addr-list)
   "Strip everything from the addresses in ADDR-LIST except the basic
@@ -405,7 +406,7 @@ Email address.  ADDR-LIST may be a single string or a list of strings."
   (if (not (listp addr-list)) (setq addr-list (list addr-list)))
   (setq addr-list
 	(mapcar
-	 (function (lambda (s) (mc-split "\\([ \t\n]*,[ \t\n]*\\)" s)))
+	 (function (lambda (s) (rfc822-addresses s)))
 	 addr-list))
   (setq addr-list (apply 'append addr-list))
   (mapconcat 'mc-strip-address addr-list ", "))
