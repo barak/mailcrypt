@@ -1,0 +1,9 @@
+*~
+/Makefile
+/build
+/config.log
+/config.status
+/htmls/
+/mailcrypt.info
+/tests/Makefile
+/tests/remailer/Makefile
