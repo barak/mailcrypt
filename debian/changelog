@@ -1,3 +1,23 @@
+mailcrypt (3.5.8+CVS.2005.04.29.1-12.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Build-Depend on install-info and don't call install-info with
+    an absolute path. Closes: #545665
+  * Ignore rm errors to prevent FTBFS. Closes: #545665
+  * Depend on "dpkg (>= 1.15.4) | install-info" as install-info
+    is no longer provided by dpkg
+  * Move "Homepage:" out of the package description
+  * Use "Editors" for the doc-base section, not "Apps/Editors"
+  * No longer ignore errors from make in the clean target
+  * Drop ePerl crap from the lintian overrides file
+  * Fix pending l10n issues. Debconf translations:
+    - Swedish (Martin Bagge).  Closes: #504032
+    - Spanish (Francisco Javier Cuadrado).  Closes: #533142
+    - Russian (Yuri Kozlov).  Closes: #543190
+    - Vietnamese (Clytie Siddall).  Closes: #548990
+
+ -- Christian Perrier <bubulle@debian.org>  Sun, 04 Oct 2009 09:28:36 +0200
+
 mailcrypt (3.5.8+CVS.2005.04.29.1-12) unstable; urgency=low
 
   * po/pt.po: Reencode; thanks to Christian Perrier.  (Closes: #436070)

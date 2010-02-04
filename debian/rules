@@ -79,7 +79,7 @@ clean: debian/po/templates.pot
 	$(checkdir)
 	-rm -rf build core $(tmp) debian/{files*,substvars}
 	-rm -f debian/po/updatepo
-	-$(MAKE) distclean
+	[ ! -f Makefile ] || $(MAKE) distclean
 	-rm -f $(DFILES)
 	$(fixperms)
 
@@ -104,9 +104,9 @@ binary-indep: build
 	$(INSTDIR) $(tmp)//usr/share/info/
 	umask 0022; echo -e "\nFile: dir\tNode: Top\tTop\n" \
 		> $(tmp)//usr/share/info//dir
-	$(MAKE) INSTALL_INFO="/usr/sbin/install-info" \
-		install-info infodir=$(tmp)//usr/share/info/ \
-		&& rm $(tmp)//usr/share/info//dir{,.old}
+	$(MAKE) INSTALL_INFO="install-info" \
+		install-info infodir=$(tmp)//usr/share/info/
+	-rm $(tmp)//usr/share/info//dir{,.old}
 	gzip -9frv $(tmp)//usr/share/info/
 
 	$(INSTDIR) $(tmp)//usr/share/doc/mailcrypt/ $(tmp)//usr/share/doc/mailcrypt//src/ \

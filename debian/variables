@@ -8,6 +8,7 @@
 <:$DOCSRCS="*.texi texi2html.ext":>//
 <:# miscellaneous package variables :>//
 <:$MENUSEC="Apps/Editors":>//
+<:$DOCSEC="Editors":>//
 <:$INFOSEC="Emacs":>//
 <:$INFOMENU="Mailcrypt":>//
 <:$INFODESC="Cryptographic interface for mail and news.":>//

@@ -1,15 +1,4 @@
-# <% lintian %> source override file
-
 # This is the ePerl source for templates.
 mailcrypt source: stray-translated-debconf-templates templates.in
 
-<:
-# arch-tag: dbc5b254-39b5-42da-8fe6-fec527358829
-#
-# local variables:
-# mode: fundamental
-# coding: utf-8
-# ispell-local-dictionary: "american"
-# ispell-check-comments: exclusive
-# end:
-:>//
+

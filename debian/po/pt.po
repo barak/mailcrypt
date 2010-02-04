@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mailcrypt-3.5.8+CVS.2005.04.29.1-10\n"
 "Report-Msgid-Bugs-To: salve@debian.org\n"
-"POT-Creation-Date: 2007-01-30 04:32+0100\n"
+"POT-Creation-Date: 2007-07-26 17:33+0200\n"
 "PO-Revision-Date: 2007-08-07 22:52+0200\n"
 "Last-Translator: Pedro Ribeiro <p.m42.ribeiro@gmail.com>\n"
 "Language-Team: Portuguese <traduz@debianpt.org>\n"
@@ -62,31 +62,24 @@ msgstr ""
 "texto \"(require 'mailcrypt-init)\" no seu ficheiro pessoal de configuração\n"
 "do Emacs (e.g., \"~/.emacs\" ou \"~/.emacs.el\") para carregá-lo."
 
-#. Type: note
-#. Description
-#: ../templates:2001
-msgid "Mailcrypt seems to be already auto-loaded at your site.  Good."
-msgstr "Parece que o Mailcrypt já está em auto-carregamento no seu site. Bem."
+#~ msgid "Mailcrypt seems to be already auto-loaded at your site.  Good."
+#~ msgstr ""
+#~ "Parece que o Mailcrypt já está em auto-carregamento no seu site. Bem."
 
-#. Type: note
-#. Description
-#: ../templates:2001
-msgid ""
-"By inspection of the file \"/etc/emacs/site-start.el\" Mailcrypt seems to be "
-"already auto-loaded by default at your site."
-msgstr ""
-"Ao inspeccionar o ficheiro \"/etc/emacs/site-start.el\" parece que o\n"
-"Mailcrypt já está em auto-carregamento por omissão no seu site."
+#~ msgid ""
+#~ "By inspection of the file \"/etc/emacs/site-start.el\" Mailcrypt seems to "
+#~ "be already auto-loaded by default at your site."
+#~ msgstr ""
+#~ "Ao inspeccionar o ficheiro \"/etc/emacs/site-start.el\" parece que o\n"
+#~ "Mailcrypt já está em auto-carregamento por omissão no seu site."
 
-#. Type: note
-#. Description
-#: ../templates:2001
-msgid ""
-"If this is not true, or if it's not what you want, please search that file "
-"looking for \"(require 'mailcrypt-init)\" resembling forms and fix it; then "
-"run \"dpkg-reconfigure mailcrypt\" if needed (recommended)."
-msgstr ""
-"Se isto não for verdade, ou não é o que pretende, procure por favor nesse\n"
-"ficheiro texto parecido com \"(require 'mailcrypt-init)\" e corrija-o;\n"
-"depois execute novamente \"dpkg-reconfigure mailcrypt\" se necessário\n"
-"(recomendado)."
+#~ msgid ""
+#~ "If this is not true, or if it's not what you want, please search that "
+#~ "file looking for \"(require 'mailcrypt-init)\" resembling forms and fix "
+#~ "it; then run \"dpkg-reconfigure mailcrypt\" if needed (recommended)."
+#~ msgstr ""
+#~ "Se isto não for verdade, ou não é o que pretende, procure por favor "
+#~ "nesse\n"
+#~ "ficheiro texto parecido com \"(require 'mailcrypt-init)\" e corrija-o;\n"
+#~ "depois execute novamente \"dpkg-reconfigure mailcrypt\" se necessário\n"
+#~ "(recomendado)."

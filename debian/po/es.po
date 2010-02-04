@@ -1,21 +1,40 @@
-# Spanish translations of the "debian/templates" file
-# of the mailcrypt Debian package.
-#
-# Copyright (C) 2006, 07 by Davide G. M. Salvetti.
-#
+# mailcrypt po-debconf translation to Spanish
+# Copyright (C) 2006, 2007 by Davide G. M. Salvetti
 # This file is distributed under the same license as the mailcrypt package.
 #
-# Gorka Olaizola <gorka@escomposlinux.org>, 2006.
+# Changes:
+#   - Initial translation
+#       Gorka Olaizola <gorka@escomposlinux.org>, 2006
 #
-# arch-tag: b86a594a-b3af-4a97-8b7b-e476b05c6d83
+#   - Updates
+#       Francisco Javier Cuadrado <fcocuadrado@gmail.com>, 2009
+#
+# Traductores, si no conocen el formato PO, merece la pena leer la
+# documentación de gettext, especialmente las secciones dedicadas a este
+# formato, por ejemplo ejecutando:
+#       info -n '(gettext)PO Files'
+#       info -n '(gettext)Header Entry'
+#
+# Equipo de traducción al español, por favor lean antes de traducir
+# los siguientes documentos:
+#
+#   - El proyecto de traducción de Debian al español
+#     http://www.debian.org/intl/spanish/
+#     especialmente las notas y normas de traducción en
+#     http://www.debian.org/intl/spanish/notas
+#
+#   - La guía de traducción de po's de debconf:
+#     /usr/share/doc/po-debconf/README-trans
+#     o http://www.debian.org/intl/l10n/po-debconf/README-trans
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: mailcrypt 3.5.8+CVS.2005.04.29.1-5\n"
+"Project-Id-Version: mailcrypt 3.5.8+CVS.2005.04.29.1-12\n"
 "Report-Msgid-Bugs-To: salve@debian.org\n"
 "POT-Creation-Date: 2007-07-26 17:33+0200\n"
-"PO-Revision-Date: 2007-07-26 17:47+0200\n"
-"Last-Translator: Gorka Olaizola <gorka@escomposlinux.org>\n"
-"Language-Team: Spanish <es@li.org>\n"
+"PO-Revision-Date: 2009-06-08 11:56+0100\n"
+"Last-Translator: Francisco Javier Cuadrado <fcocuadrado@gmail.com>\n"
+"Language-Team: Debian l10n Spanish <debian-l10n-spanish@debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,20 +43,21 @@ msgstr ""
 #. Description
 #: ../templates:1001
 msgid "Should Mailcrypt be auto-loaded by default at your site?"
-msgstr "¿Debe cargarse Mailcrypt por defecto en su sistema?"
+msgstr ""
+"¿Se debería cargar automáticamente Mailcrypt de forma predeterminada en su "
+"sistema?"
 
 #. Type: boolean
 #. Description
 #: ../templates:1001
-#, fuzzy
 msgid ""
 "Mailcrypt will globally (i.e., for all users on this site) overload certain "
 "Emacs functions and key-bindings if you answer affirmatively to this "
 "question."
 msgstr ""
-"Si selecciona sí en esta pregunta Mailcrypt cargará globalmente (para\n"
-"todos los usuarios de su máquina) algunas funciones y enlaces a teclas de\n"
-"Emacs."
+"Mailcrypt reemplazará globalmente (para todos los usuarios del sitio) "
+"ciertas funciones de Emacs y enlaces de teclas, si responde sí a esta "
+"pregunta."
 
 #. Type: boolean
 #. Description
@@ -47,21 +67,21 @@ msgid ""
 "however you may not want it to happen, and instead let single users at your "
 "site decide by themselves if they should load this package."
 msgstr ""
-"Esto es generalmente bueno, ya que Mailcrypt es un paquete potente, sin\n"
-"embargo quizás no quiera que esto suceda y prefiere que cada usuario\n"
-"decida por sí mismo si quiere cargar este paquete."
+"Esto es generalmente bueno, ya que Mailcrypt es un paquete muy útil, sin "
+"embargo quizás no quiera que esto suceda y, en su lugar, prefiere que cada "
+"usuario del sitio decida por sí mismo si quiere cargar este paquete."
 
 #. Type: boolean
 #. Description
 #: ../templates:1001
-#, fuzzy
 msgid ""
 "If you answer negatively, people who desire to use it will have to put the "
 "string \"(require 'mailcrypt-init)\" in their personal Emacs configuration "
 "file (e.g., \"~/.emacs\" or \"~/.emacs.el\") to load it."
 msgstr ""
-"Si responde no los usuarios que quieran usarlo deberán poner la cadena\n"
-"\"(require 'mailcrypt-init)\" en su fichero ~/.emacs para cargar Mailcrypt."
+"Si responde no, los usuarios que quieran usarlo deberán poner la cadena "
+"«(require 'mailcrypt-init)» en su archivo de configuración personal de Emacs "
+"(por ejemplo: «~/.emacs» o «~/.emacs.el») para cargarlo."
 
 #~ msgid "Mailcrypt seems to be already auto-loaded at your site.  Good."
 #~ msgstr "Parece que Mailcrypt ya está cargado en su sistema.  Bien."

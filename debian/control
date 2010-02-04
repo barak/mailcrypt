@@ -3,8 +3,9 @@ Priority: optional
 Section: mail
 Maintainer: Davide G. M. Salvetti <salve@debian.org>
 Standards-Version: 3.7.2
-Build-Depends-Indep: eperl, po-debconf, texinfo, texi2html
-
+Build-Depends-Indep: eperl, po-debconf, texinfo, texi2html, dpkg (>= 1.15.4) | install-info
+Homepage: http://mailcrypt.sourceforge.net/
+ 
 Package: mailcrypt
 Architecture: all
 Depends: debconf (>= 0.2.0) | debconf-2.0, gnupg, emacs22 | emacs21 | emacs-snapshot, make
@@ -24,5 +25,4 @@ Description: An Emacs interface to the GNU Privacy Guard
  Currently XEmacs ships with its own Mailcrypt, so this package should
  only be used with GNU/Emacs.  (I.e., you don't need to install this
  package if your site uses only XEmacs.)
- .
- Homepage: http://mailcrypt.sourceforge.net/
+
