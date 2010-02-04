@@ -1,26 +1,29 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Mailcrypt.
+# Copyright (C) 2006
+# This file is distributed under the same license as the mailcrypt package.
+# Davide G. M Salvetti <salve@debian.org>, 2006.
 #
-#, fuzzy
+# arch-tag: 12700049-164a-43a0-9fde-1ad75398c526
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: mailcrypt_3.5.8+CVS.2005.04.29.1-7\n"
 "Report-Msgid-Bugs-To: salve@debian.org\n"
 "POT-Creation-Date: 2006-06-09 23:06+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2006-06-19 15:41+0200\n"
+"Last-Translator: Steve Petruzzello <dlist@bluewin.ch>\n"
+"Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=iso-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: French\n"
+"X-Poedit-Country: SWITZERLAND\n"
+"X-Poedit-SourceCharset: iso-8859-15\n"
 
 #. Type: boolean
 #. Description
 #: ../templates:4
 msgid "Should Mailcrypt be auto-loaded by default at your site?"
-msgstr ""
+msgstr "Faut-il charger Mailcrypt par défaut pour votre site ?"
 
 #. Type: boolean
 #. Description
@@ -30,6 +33,9 @@ msgid ""
 "Emacs functions and key-bindings if you answer affirmatively to this "
 "question."
 msgstr ""
+"Avec cette option, Mailcrypt va globalement (c'est-à-dire pour tous les "
+"utilisateurs de ce site) remplacer certaines fonctions et raccourcis-clavier "
+"d'Emacs."
 
 #. Type: boolean
 #. Description
@@ -39,6 +45,9 @@ msgid ""
 "however you may not want it to happen, and instead let single users at your "
 "site decide by themselves if they should load this package."
 msgstr ""
+"C'est en général une bonne initiative puisque Mailcrypt est un paquet très "
+"utile. Néanmoins, vous pouvez refuser et laisser le choix aux utilisateurs "
+"de votre site de charger ce paquet."
 
 #. Type: boolean
 #. Description
@@ -48,12 +57,15 @@ msgid ""
 "string \"(require 'mailcrypt-init)\" in their personal Emacs configuration "
 "file (e.g., \"~/.emacs\" or \"~/.emacs.el\") to load it."
 msgstr ""
+"En refusant cette option, les utilisateurs désireux d'utiliser ce paquet "
+"devront entrer la chaîne « (require 'mailcrypt-init) » dans leur fichier de "
+"configuration d'Emacs (e.g. ~/.emacs ou ~/.emacs.el) pour le charger."
 
 #. Type: note
 #. Description
 #: ../templates:19
 msgid "Mailcrypt seems to be already auto-loaded at your site.  Good."
-msgstr ""
+msgstr "Mailcrypt déjà chargé automatiquement"
 
 #. Type: note
 #. Description
@@ -62,6 +74,8 @@ msgid ""
 "By inspection of the file \"/etc/emacs/site-start.el\" Mailcrypt seems to be "
 "already auto-loaded by default at your site."
 msgstr ""
+"L'inspection du fichier /etc/emacs/site-start.el indique que Mailcrypt "
+"semble chargé par défaut sur votre site."
 
 #. Type: note
 #. Description
@@ -71,3 +85,7 @@ msgid ""
 "looking for \"(require 'mailcrypt-init)\" resembling forms and fix it; then "
 "run \"dpkg-reconfigure mailcrypt\" if needed (recommended)."
 msgstr ""
+"Si cela n'est pas le cas, ou si ce n'est pas ce que vous désirez, veuillez "
+"rechercher la chaîne « (require mailcrypt-init) » dans ce fichier et la "
+"corriger. Ensuite, il est recommandé de lancer la commande « dpkg-"
+"reconfigure mailcrypt »."

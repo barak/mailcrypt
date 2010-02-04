@@ -37,9 +37,13 @@ STRIP := strip -R .note -R .comment
 
 DFILES := debian/README debian/copyright \
 debian/config debian/postinst debian/prerm debian/postrm \
-debian/docbase debian/lintian debian/templates.merged \
+debian/docbase debian/lintian \
 debian/bug.presubj debian/bug.script \
 debian/install debian/remove
+
+DCSOURCES := $(shell cat debian/po/POTFILES.in \
+		| perl -pe 's|^\[[^]]+\] +(.*)$$|debian/$${1}|')
+DFILES += $(patsubst %templates, %templates.dcobj, $(DCSOURCES))
 
 SCRIPTS := configure install-sh
 SOURCES := *.in *.el load-path.hack
@@ -51,20 +55,16 @@ pre-build:
 
 debian/rules: debian/variables
 
-% :: %.in
+%:: %.in
 	eperl -d DEBIAN_DIR="$(shell pwd)/debian/" \
 		-I "$(shell pwd)/debian/" -P -o $@ $<
 
-.PHONY: updatepo
-updatepo: debian/po/updatepo
+debian/po/templates.pot: $(DCSOURCES)
+	umask 0022 && debconf-updatepo --verbose --podir=debian/po/
+	@touch $@
 
-debian/po/updatepo: debian/templates
-	umask 0022 && debconf-updatepo --verbose \
-		--podir=debian/po/
-	touch debian/po/updatepo
-
-debian/templates.merged: debian/templates debian/po/updatepo
-	po2debconf --verbose debian/templates > $@
+%.dcobj: % debian/po/templates.pot
+	po2debconf --verbose --podir debian/po $< > $@
 
 build: $(DFILES)
 	$(checkdir)
@@ -136,7 +136,7 @@ binary-indep: build
 	$(INSTDATA) debian/lintian $(tmp)//usr/share/lintian/overrides//mailcrypt
 
 	$(INSTDIR) $(tmp)//DEBIAN/
-	$(INSTDATA) debian/templates.merged \
+	$(INSTDATA) debian/templates.dcobj \
 		$(tmp)//DEBIAN//templates
 	$(INSTSCRIPT) debian/{config,postinst,postrm,prerm} \
 		$(tmp)//DEBIAN/

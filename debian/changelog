@@ -1,11 +1,34 @@
+mailcrypt (3.5.8+CVS.2005.04.29.1-8) unstable; urgency=low
+
+  * rules.in (po-debconf): Refactored.
+    (updatepo): Removed.
+    (clean): Updated accordingly.
+    (debian/po/templates.pot): Renamed from "debian/po/updatepo".
+    (debian/templates.merged): Removed.
+    (%.dcobj): New.
+    (DCSOURCES): New.
+    (DFILES): Removed "debian/templates.merged"; automatically add merged
+    templates, with extension ".dcobj".
+    (binary-indep): Updated accordingly.
+
+  * postinst.in, postrm.in, prerm.in: Fixed typo; exit 1 if called with
+    unknown argument; thanks to Justin Pryzby.
+  * prerm.in (failed-upgrade): Was backwards, fixed; thanks to Justin
+    Pryzby.
+
+  * po/fr.po: New file; thanks to Steve Petruzzello.  (Closes: #374420)
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Mon, 19 Jun 2006 15:39:13 +0200
+
 mailcrypt (3.5.8+CVS.2005.04.29.1-7) unstable; urgency=low
 
   * control (Description): URL to upstream added.
 
   * docbase.in (texinfo/Files): Typo fixed.
 
-  * templates (mailcrypt/default): Rephrased to avoid making assumptions
-    about interfaces in templates; also mention "~/.emacs.el"
+  * templates.in: Renamed from "template".
+  * templates.in (mailcrypt/default): Rephrased to avoid making
+    assumptions about interfaces in templates; also mention "~/.emacs.el"
     as a possible Emacs init file.
   * de.po, it.po, es.po, templates.pot: Updated accordingly.
 
@@ -14,12 +37,13 @@ mailcrypt (3.5.8+CVS.2005.04.29.1-7) unstable; urgency=low
 
   * lintian.in: New file; <:=${ecode}:>/install/<:=${PACKAGE}:> is a
     maintainer script.
+  * rules.in: Install it.
 
  -- Davide G. M. Salvetti <salve@debian.org>  Wed,  7 Jun 2006 22:19:59 +0200
 
 mailcrypt (3.5.8+CVS.2005.04.29.1-6) unstable; urgency=low
 
-  * templates (_Description): Typo fixed.
+  * templates (_Description): Fixed typo.
   * de.po, es.po, it.po, templates.pot: Updated accordingly.
 
  -- Davide G. M. Salvetti <salve@debian.org>  Tue,  6 Jun 2006 14:25:10 +0200

@@ -12,8 +12,8 @@ _Description: Should Mailcrypt be auto-loaded by default at your site?
  site decide by themselves if they should load this package.
  .
  If you answer negatively, people who desire to use it will have to put the
- string "(require 'mailcrypt-init)" in their personal "~/.emacs" or
- "~/.emacs.el" file to load it.
+ string "(require 'mailcrypt-init)" in their personal Emacs configuration
+ file (e.g., "~/.emacs" or "~/.emacs.el") to load it.
 
 Template: mailcrypt/alreadydefault
 Type: note
@@ -25,8 +25,9 @@ _Description: Mailcrypt seems to be already auto-loaded at your site.  Good.
  looking for "(require 'mailcrypt-init)" resembling forms and fix it; then
  run "dpkg-reconfigure mailcrypt" if needed (recommended).
 
-# arch-tag: 8d29b17e-926e-4f69-b5db-7c5681bf5328<:='-child':>
 <:
+# arch-tag: f0377964-4347-46dc-a310-3f371380b170
+#
 # local variables:
 # mode: text
 # coding: utf-8
