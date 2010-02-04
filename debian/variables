@@ -1,5 +1,5 @@
 <:
-# Copyright (C) 1999, 2000, 01, 02, 03, 04, 05, 06
+# Copyright (C) 1999, 2000, 01, 02, 03, 04, 05, 06, 07
 # by Davide G. M. Salvetti.
 :>//
 <:$PACKAGE="mailcrypt":>//
@@ -34,13 +34,15 @@
 <:# <% debconf %> :>//
 <:$CONFMODULE="/usr/share/debconf/confmodule":>//
 <:# <% docbase %> :>//
-<:$DINSTALL="test -x /usr/sbin/install-docs && install-docs --install":>//
-<:$DREMOVE="test -x /usr/sbin/install-docs && install-docs --remove":>//
+<:$DINSTALL="type install-docs &>/dev/null && install-docs --install":>//
+<:$DREMOVE="type install-docs &>/dev/null && install-docs --remove":>//
 <:$docbase="/usr/share/doc-base/":>//
 <:# <% emacs %> :>//
 <:$ELCLOG="CompilationLog":>//
-<:$EINSTALL="/usr/lib/emacsen-common/emacs-package-install":>//
-<:$EREMOVE="/usr/lib/emacsen-common/emacs-package-remove":>//
+<:$EINSTALL="test -x /usr/lib/emacsen-common/emacs-package-install"
+. " && /usr/lib/emacsen-common/emacs-package-install":>//
+<:$EREMOVE="test -x /usr/lib/emacsen-common/emacs-package-remove"
+. " && /usr/lib/emacsen-common/emacs-package-remove":>//
 <:$SSEL="/etc/emacs/site-start.el":>//
 <:$sstartd="/etc/emacs/site-start.d/":>//
 <:$ecode="/usr/lib/emacsen-common/packages/":>//
@@ -62,7 +64,9 @@
 <:$info="/usr/share/info/":>//
 <:# <% texmf %> :>//
 <:$texmf="/usr/share/texmf/":>//
-<:$MKTEXLSR="mktexlsr >/dev/null":>//
+<:$MKTEXLSR="kpsewhich --version &>/dev/null"
+. " && type mktexlsr &>/dev/null"
+. " && mktexlsr >/dev/null":>//
 <:# <% dictionaries-common %> :>//
 <:$dict="/usr/share/dict/":>//
 <:$winfo="/var/lib/dictionaries-common/wordlist/":>//

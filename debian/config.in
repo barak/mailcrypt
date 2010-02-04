@@ -11,13 +11,12 @@ source <:=${CONFMODULE}:>
 db_version 2.0
 
 case "${1}" in
-    (configure|reconfigure)
+    configure|reconfigure)
 	db_input medium <:=$PACKAGE:>/default || true
-	db_go || true
-    ;;
-    (*) echo >&2 "${0##*/}/<:=${PACKAGE}:>:" \
+	db_go || true;;
+    *) echo >&2 "${0##*/}/<:=${PACKAGE}:>:" \
 	"Unknown argument: \"${1}\"."
-    ;;
+	exit 1
 esac
 
 exit 0

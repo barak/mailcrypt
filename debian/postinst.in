@@ -15,18 +15,25 @@ source <:=${CONFMODULE}:>
 db_version 2.0
 
 case "${1}" in
-    (abort-deconfigure|abort-remove|abort-upgrade|configure)
-    <:# Emacs install :>//
-    <:=${EINSTALL}:> <:=${PACKAGE}:>
-    <:# register documentation with <% doc-base %> :>//
-    <:=${DINSTALL}:> <:=if($_="${docbase}/${PACKAGE}")=~tr|/|/|s:>
-    <:# install <% info %> menu into <% info %> directory :>//
-    <:=IINSTALL ():> <:="${info}/${PACKAGE}.info.gz":>
-    ;;
-    (*) echo >&2 "${0##*/}/<:=${PACKAGE}:>:" \
+    abort-deconfigure|abort-remove|abort-upgrade|configure) :;;
+    *) echo >&2 "${0##*/}/<:=${PACKAGE}:>:" \
 	"Unknown argument: \"${1}\"."
-    exit 1
-    ;;
+	exit 1
+esac
+
+<:# install <% info %> menu into <% info %> directory :>//
+case "${1}" in abort-remove|abort-upgrade|configure)
+	<:=IINSTALL ():> <:="${info}/${PACKAGE}.info.gz":>
+esac
+
+<:# register documentation with <% doc-base %> :>//
+case "${1}" in abort-remove|abort-upgrade|configure)
+    <:=${DINSTALL}:> <:=if($_="${docbase}/${PACKAGE}")=~tr|/|/|s:>
+esac
+
+<:# Emacs install :>//
+case "${1}" in abort-deconfigure|abort-remove|abort-upgrade|configure)
+    <:=${EINSTALL}:> <:=${PACKAGE}:>
 esac
 
 exit 0

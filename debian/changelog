@@ -1,10 +1,21 @@
-mailcrypt (3.5.8+CVS.2005.04.29.1-11) unstable; urgency=low
+mailcrypt (3.5.8+CVS.2005.04.29.1-12) unstable; urgency=low
 
-  * po/nl.po: New file; thanks to Bart Cornelis.  (Closes: #415520)
+  * po/pt.po: Reencode; thanks to Christian Perrier.  (Closes: #436070)
+
+  * control (Depends): Change "emacs21 | emacs22 | emacs-snapshot" to
+    "emacs22 | emacs21 | emacs-snapshot" in order to prefer "emacs22" to
+    "emacs21" ; thanks to Tatsuya Kinoshita.  (Closes: #435902)
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Tue, 07 Aug 2007 23:04:19 +0200
+
+mailcrypt (3.5.8+CVS.2005.04.29.1-11) unstable; urgency=low
 
   * install.in (do_install): State the log file location; thanks to Romain
     Francoise.  (See: #408227)
 
+  * po/nl.po: New file; thanks to Bart Cornelis.  (Closes: #415520)
+  * po/pt.po:  New file; thanks to Jacobo Tarrio.  (Closes: #430992)
+  
   * rules.in (build-package): Added dependency on the "clean" target.
 
   * bug.script.in (FLAVORS), control (Depends), install.in, remove.in:
@@ -18,9 +29,18 @@ mailcrypt (3.5.8+CVS.2005.04.29.1-11) unstable; urgency=low
   * cs.po, de.po, es.po, fr.po, it.po, nl.po, templates.pot: Consequently
     updated.  (Closes: #388927)
 
-  * po/pt.po:  New file; thanks to Jacobo Tarrio.  (Closes: #430992)
+  * copyright.in, COPYRIGHT, variables: Update copyright.
+  * config.in, install.in, postinst.in, postrm.in, prerm.in, remove.in:
+    Linting.
+  * postinst.in, postrm.in, prerm.in: Check script arguments before
+    calling actions.
+  * variables (DINSTALL, DREMOVE): Check for "install-docs" in "${PATH}"
+    rather than by absolute location.
 
- -- Davide G. M. Salvetti <salve@debian.org>  Thu, 26 Jul 2007 18:49:01 +0200
+  * install.in (do_install): Remove an extra space character in the
+    'setting-up' message.
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Mon, 30 Jul 2007 23:54:25 +0200
 
 mailcrypt (3.5.8+CVS.2005.04.29.1-10) unstable; urgency=low
 
