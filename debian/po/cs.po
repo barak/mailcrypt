@@ -1,0 +1,93 @@
+# Czech translations of the "debian/templates" file
+# of the mailcrypt Debian package.
+#
+# Copyright (C) 2007 Davide G. M. Salvetti
+#
+# This file is distributed under the same license as the mailcrypt Debian
+# package.
+#
+# Martin Sin <martin.sin@zshk.cz>, 2006.
+#
+# arch-tag: 8302e3cf-196c-4743-bfdd-7cec55c30e7f
+msgid ""
+msgstr ""
+"Project-Id-Version: mailcrypt 3.5.8+CVS.2005.04.29.1-9\n"
+"Report-Msgid-Bugs-To: salve@debian.org\n"
+"POT-Creation-Date: 2006-06-09 23:06+0200\n"
+"PO-Revision-Date: 2007-01-28 11:42+0100\n"
+"Last-Translator: Martin Sin <martin.sin@zshk.cz>\n"
+"Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: boolean
+#. Description
+#: ../templates:4
+msgid "Should Mailcrypt be auto-loaded by default at your site?"
+msgstr "Má se na tomto počítači načítat Mailcrypt automaticky?"
+
+#. Type: boolean
+#. Description
+#: ../templates:4
+msgid ""
+"Mailcrypt will globally (i.e., for all users on this site) overload certain "
+"Emacs functions and key-bindings if you answer affirmatively to this "
+"question."
+msgstr ""
+"V případě, že odpovíte kladně, bude Mailcrypt nastaven globálně (pro všechny "
+"uživatele tohoto počítače) a budou tím změněny některé funkce a klávesová "
+"nastavení Emacsu."
+
+#. Type: boolean
+#. Description
+#: ../templates:4
+msgid ""
+"This is generally a good thing, since Mailcrypt is a very useful package; "
+"however you may not want it to happen, and instead let single users at your "
+"site decide by themselves if they should load this package."
+msgstr ""
+"To je obecně považováno za správnou věc, neboť je balíček Mailcrypt velmi "
+"užitečný; možná si to ale nepřejete a chcete místo toho nechat "
+"rozhodnutí o použití tohoto balíčku na jednotlivých uživatelích."
+
+#. Type: boolean
+#. Description
+#: ../templates:4
+msgid ""
+"If you answer negatively, people who desire to use it will have to put the "
+"string \"(require 'mailcrypt-init)\" in their personal Emacs configuration "
+"file (e.g., \"~/.emacs\" or \"~/.emacs.el\") to load it."
+msgstr ""
+"Odpovíte-li záporně, pak budou muset lidé, kteří budou chtít Mailcrypt "
+"používat, přidat do svého konfiguračního souboru (např.: \"~/.emacs\" nebo "
+"\"~/.emacs.el\") řetězec \"(require 'mailcrypt-init)\"."
+
+#. Type: note
+#. Description
+#: ../templates:19
+msgid "Mailcrypt seems to be already auto-loaded at your site.  Good."
+msgstr ""
+"Zdá se, že již je Mailcrypt na tomto stroji načítán automaticky. Skvělé."
+
+#. Type: note
+#. Description
+#: ../templates:19
+msgid ""
+"By inspection of the file \"/etc/emacs/site-start.el\" Mailcrypt seems to be "
+"already auto-loaded by default at your site."
+msgstr ""
+"Kontrolou souboru \"/etc/emacs/site-start.el\" jsem zjistil, že je na tomto "
+"počítači Mailcrypt načítán automaticky."
+
+#. Type: note
+#. Description
+#: ../templates:19
+msgid ""
+"If this is not true, or if it's not what you want, please search that file "
+"looking for \"(require 'mailcrypt-init)\" resembling forms and fix it; then "
+"run \"dpkg-reconfigure mailcrypt\" if needed (recommended)."
+msgstr ""
+"Pokud to tak není, nebo si to nepřejete, podívejte se prosím do zmíněného "
+"souboru, najděte něco jako \"(require 'mailcrypt-init)\" a opravte to; "
+"pak spusťte podle potřeby \"dpkg-reconfigure mailcrypt\" (doporučený postup)."

@@ -1,3 +1,10 @@
+mailcrypt (3.5.8+CVS.2005.04.29.1-10) unstable; urgency=low
+
+  * po/cs.po: New file; thanks to Martin Šín.  (Closes: #382926)
+  * po/de.po: Updated file; thanks to Helge Kreutzmann.  (Closes: #407728)
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Sun, 28 Jan 2007 12:08:23 +0100
+
 mailcrypt (3.5.8+CVS.2005.04.29.1-9) unstable; urgency=medium
 
   * Urgency medium: fixes an important bug.
