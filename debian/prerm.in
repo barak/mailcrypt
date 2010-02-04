@@ -1,0 +1,57 @@
+#include "variables"
+#!/bin/bash -e
+#
+# prerm configuration file for Debian <:=$PACKAGE:> package.
+# $Id: prerm.in,v 1.7 2002/09/27 13:03:41 salve Exp $
+#
+<:=@COPYRIGHT:>//
+
+set -o posix
+
+source <:=$CONFMODULE:>
+db_version 2.0
+
+deconf_autoload () {
+    rm -f <:=$sstartd:>/<:=$EPRIORITY:><:=$PACKAGE:>.el
+    return 0
+}
+
+case "$1" in
+    (deconfigure)
+    <:# deconfigure in-favour ${3:newpkg} ${4:newver} removing ${6:oldpkg} ${7:oldver}:>//
+	<:# remove emacs startup file if present:>//
+	deconf_autoload
+    ;;
+    (remove|upgrade)
+    <:# remove
+      # (or, in case of conflict with newpkg)
+      # remove in-favour ${3:newpkg} ${4:newver}:>//
+    <:# upgrade ${2:newver}:>//
+	<:# remove emacs startup file if present:>//
+	deconf_autoload
+	<:# remove info menu from info dir:>//
+	<:=$IREMOVE:> <:=$PACKAGE:>
+	<:# remove doc menu from doc dir:>//
+	<:=$DREMOVE:> <:=$PACKAGE:>
+	<:# remove byte compiled elisp:>//
+	<:=$EREMOVE:> <:=$PACKAGE:>
+    ;;
+    (failed-upgrade)
+    <:# failed-upgrade ${2:oldver}
+      # (fix old prerm from version $2 bugs here):>//
+	:
+    ;;
+    (*)
+	echo "${0##*/}: Called with unknown argument \`$1'." >&2
+    ;;
+esac
+
+<:# to be sure debconf moves on:>//
+db_stop
+
+exit 0
+<:
+# local Variables:
+# mode: shell-script
+# end:
+:>//

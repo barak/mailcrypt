@@ -1,0 +1,344 @@
+mailcrypt (3.5.8-2) unstable; urgency=high
+
+  * ../mc-gpg.el: Patch from upstream CVS; thanks to James Troup.
+  (Closes: #234954, #117204)
+  * control(Depends): Removed emacs20; thanks to Martin Michlmayr.
+  (Closes: #232769)
+  
+ -- Davide G. M. Salvetti <salve@debian.org>  Sat, 28 Feb 2004 12:11:35 +0100
+
+mailcrypt (3.5.8-1) unstable; urgency=medium
+
+  * New upstream release.  (Closes: #161691)
+  * control(Depends): Removed mule2.
+  (Standards-Version): Upgraded to 3.5.7.
+  * postinst(do_link): Removed.
+  * prerm(undo_link): Removed.
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Fri, 27 Sep 2002 15:34:07 +0200
+
+mailcrypt (3.5.7-1) unstable; urgency=medium
+
+  * New upstream release.
+  * control(Description): Added Mew.
+  (Section): mail.
+  * copyright: Added Brian Warner as appropriate.
+  * docbase(Abstract): Added Mew.
+  (Author): Added Brian Warner.
+  * mailcrypt-init.el: Added Mew's hooks.
+  * rules(clean): Do not remove mailcrypt.info* and mailcrypt.dvi any more.
+  
+ -- Davide G. M. Salvetti <salve@debian.org>  Sun,  1 Sep 2002 17:25:24 +0200
+
+mailcrypt (3.5.6.20010925-2) unstable; urgency=high
+
+  * COPYRIGHT: Updated.
+  * control: Build-Depends -> Build-Depends-Indep.
+  * mailcrypt-init.el: Make GNU Privacy Guard the default encryption
+    scheme.  (Closes: #142447)
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Fri, 12 Apr 2002 00:28:55 +0200
+
+mailcrypt (3.5.6.20010925-1) unstable; urgency=low
+
+  * control(Standards-Version): Updated to 3.5.6.
+  * mc-gpg-utf-8.patch: Removed (added upstream).
+  * rules(build): Remove mc-gpg-utf-8.patch (added upstream).
+    (clean): Remove mc-gpg-utf-8.patch (added upstream).
+  * templates: Added Spanish; thanks to Gorka Olaizola.
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Fri, 19 Oct 2001 11:48:47 +0200
+
+mailcrypt (3.5.6-3) unstable; urgency=low
+
+  * control(Standards-Version): Updated to 3.5.5.
+  * mc-gpg-utf-8.patch: New file; thanks to Francesco Potortì.
+  * remove: Changed `|| true' after `rmdir' to `test -d && rmdir'.
+  * rules(build): Add mc-gpg-utf-8.patch.
+    (clean): Remove mc-gpg-utf-8.patch.  (Closes: #100582)
+  * templates(alreadydefault): Type changed from `text' to `note'.
+    (Closes: #106340)
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Sat, 28 Jul 2001 16:15:53 +0200
+
+mailcrypt (3.5.6-2) unstable; urgency=low
+
+  * remove: Added `|| true' after `rmdir'; thanks to Timshel Knoll.
+  (Closes: #101068)
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Sat, 16 Jun 2001 13:45:49 +0200
+
+mailcrypt (3.5.6-1) unstable; urgency=low
+
+  * New upsgream release.
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Fri, 25 May 2001 17:09:43 +0200
+
+mailcrypt (3.5.5.20010506-2) unstable; urgency=high
+
+  * rules (build): Removed debian/rules from deps.
+  (debian/rules): Removed debian/system.variables from deps.  (Closes: #97579)
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Wed, 16 May 2001 14:47:08 +0200
+
+mailcrypt (3.5.5.20010506-1) unstable; urgency=low
+
+  * New upstream (CVS) version.  (Closes: #96840)
+  * variables (DOCS): Added WARNINGS file.
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Wed,  9 May 2001 14:08:06 +0200
+
+mailcrypt (3.5.5-11) unstable; urgency=low
+
+  * control (Section): non-US.
+  * templates: Added German; thanks to Joerg Rieger.  (Closes: #86785)
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Sat,  5 May 2001 15:49:56 +0200
+
+mailcrypt (3.5.5-10) unstable; urgency=medium
+
+  * control (Depends): removed emacs19, as it's no more in unstable;
+    thanks to Martin Michlmayr.  (Closes: #82680, #82691)
+  * control (Build-Depends): added eperl.
+  * install: Removed emacs19.
+  * remove: Added historic cleanup code.
+  * remove: Removed emacs19.
+  * rules (debian/rules): added.
+  * rules (build): added debian/rules.
+  * ../gpgwrap.pl.in: removed, as it's no more part of Mailcrypt.
+  * ../mailcrypt.el: reverted to the upstream version.
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Wed,  7 Feb 2001 17:58:41 +0100
+
+mailcrypt (3.5.5-9) unstable; urgency=low
+
+  * config: Reenabled "$1" detection case: debconf has been fixed
+    in the meanwhile.
+  * control (Section): non-US/mail.
+  * control (Build-Depends): added texinfo, texi2html.
+  * postinst: Removed no more needed beauty stuff.
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Wed, 17 Jan 2001 17:05:04 +0100
+
+mailcrypt (3.5.5-8) unstable; urgency=low
+
+  * COPYRIGHT: Updated.
+  * control: Added emacs21 dependence.
+  * install: Added support for emacs21.
+  * remove: Added support for emacs21.
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Thu, 11 Jan 2001 01:44:47 +0100
+
+mailcrypt (3.5.5-7) unstable; urgency=low
+
+  * README: Obsolete information removed.
+  * control: Standards-Version: 3.2.1.
+  * control: Dependence on pgp or pgp5i removed, as gnupg is fully
+    supported.
+  * control: Description: updated.
+  * control: Section: mail, contrib --> non-US.
+  * docbase: Updated.
+  * rules: Added -isp to dpkg-gencontrol.
+  * templates: Wording improved.
+  * templates: Localized in Italian.
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Sun, 29 Oct 2000 01:16:14 +0200
+
+mailcrypt (3.5.5-6) frozen unstable; urgency=medium
+
+  * control: Added |pgp5i dependence.
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Thu, 20 Jan 2000 15:52:56 +0100
+
+mailcrypt (3.5.5-5) unstable; urgency=low
+
+  * control: Standards-Version: 3.0.0.
+  * remove: Fixed typo. (Closes: #52498)
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Sun, 12 Dec 1999 23:10:45 +0100
+
+mailcrypt (3.5.5-4) unstable; urgency=low
+
+  * Debconf support updated.
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Sun, 31 Oct 1999 22:54:14 +0100
+
+mailcrypt (3.5.5-3) unstable; urgency=low
+
+  * control: Added mule2 support.
+  * install: Added mule2 support.
+  * remove: Added mule2 support.
+  * rules: Rule to update system.variables added.
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Fri, 22 Oct 1999 21:41:39 +0200
+
+mailcrypt (3.5.5-2) unstable; urgency=low
+
+  * variables: Split generic stuff to system.variables.
+  * postinst,prerm: Fixed typo. (Closes: #47418)
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Thu, 14 Oct 1999 21:09:56 +0200
+
+mailcrypt (3.5.5-1) unstable; urgency=low
+
+  * New upstream version. (Closes: #47297)
+  * preinst: New file.
+  * templates: Fixed typo. (Closes: #47306)
+  * variables: Added texi2html.ext to $DOCS.
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Wed, 13 Oct 1999 16:08:27 +0200
+
+mailcrypt (3.5.4-5) unstable; urgency=low
+
+  * Debconf support added.
+  * Eperl handling of Debian files.
+  * COPYRIGHT: New file.
+  * README: Added note for TeX/TeXInfo sources.
+  * config: New file.
+  * control: Dependence on debconf added.
+  * install: Really ignore emacs.
+  * postrm: New file.
+  * remove: Really ignore emacs.
+  * rules: New doc directory for TeX/TeXInfo sources.
+  * templates: New file.
+  * variables: New file.
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Tue, 12 Oct 1999 16:06:05 +0200
+
+mailcrypt (3.5.4-4) unstable; urgency=low
+
+  * postinst: Fixed ../share/doc/pkg bug. (Closes: #47119)
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Mon, 11 Oct 1999 09:42:45 +0200
+
+mailcrypt (3.5.4-3) unstable; urgency=low
+
+  * Docbase support added.
+  * docbase: New file.
+  * emacsen.install: Renamed to install.
+  * emacsen.install.source: Renamed to install.in.
+  * emacsen.remove: Renamed to remove.
+  * mailcrypt.dhelp: File removed.
+  * mailcrypt.menu: File removed.
+  * postinst: Docbase support added.
+  * postrm: File removed.
+  * prerm: Docbase support added.
+  * rules: Docbase support added.
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Thu,  7 Oct 1999 17:47:54 +0200
+
+mailcrypt (3.5.4-2) unstable; urgency=low
+
+  * control: Sandards-Version: 3.0.0.
+  * mailcrypt.dhelp: New file.
+  * mailcrypt.menu: Updated accordingly.
+  * postinst: Updated accordingly; dhelp support added.
+  * prerm: Added dhelp support.
+  * rules: Updated accordingly; dhelp support added.
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Wed,  6 Oct 1999 00:48:33 +0200
+
+mailcrypt (3.5.4-1) unstable; urgency=medium
+
+  * New upstream version. (Closes: #34490)
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Sun,  3 Oct 1999 14:39:56 +0200
+
+mailcrypt (3.5.1-1) unstable; urgency=low
+
+  * New upstream version. (Closes: #30741)
+  * copyright: Updated.
+  * mailcrypt-init.el: Fixed rmail hooks.  Added autoload for
+    mc-setversion. (Closes: #30740)
+  * rules: Added REAMDE.gpg to $DOCS.
+  * control: Mention GPG.
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Thu, 17 Dec 1998 20:49:03 +0100
+
+mailcrypt (3.5b7-2) unstable; urgency=low
+
+  * control: Mailcrypt now depends on gnupg|pgp
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Tue, 15 Dec 1998 16:10:40 +0100
+
+mailcrypt (3.5b7-1) unstable; urgency=low
+
+  * New upstream version.
+  * ../mailcrypt.el: Old patch to support message-mode removed, as it was
+    added upstream.
+  * mailcrypt-init.el: Default URL fixes removed, as they were added
+    upstream.
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Fri,  9 Oct 1998 22:46:52 +0200
+
+mailcrypt (3.5b6-1) unstable; urgency=low
+
+  * New upstream version.
+  * rules: Added auto-detection of info and html generated files.
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Sun, 27 Sep 1998 23:43:18 +0200
+
+mailcrypt (3.5b5-1) unstable; urgency=low
+
+  * New upstream version. (Closes: #23963)
+  * copyright: Updated info to include Len Budney.
+  * mailcrypt-init.el: Updated mc-pgp-keyserver-url-template and
+    mc-pgp-keyserver-port (merged from 3.4-4.1). (Closes: #25896)
+  * emacsen.install: Moved to emacsen.install.source.
+  * rules: Updated $(SOURCES); generate $SOURCES in emacsen.install
+    from emacsen.install.source.
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Thu, 27 Aug 1998 11:35:35 +0200
+
+mailcrypt (3.4-4) frozen unstable; urgency=low
+
+  * emacsen.install: Performed s/load-path-hack/lpath/g.
+  * postinst: Moved abort stuff in a separate nop case statement.
+  * postrm: New file.
+  * prerm: Moved call to update-menus to postrm.
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Tue, 21 Apr 1998 18:59:05 +0200
+
+mailcrypt (3.4-3) unstable; urgency=low
+
+  * postinst: Fixed test for update-menus; corrected a typo.  (Thanks
+    to Ben Gertzfield.)
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Fri,  6 Mar 1998 15:54:12 +0100
+
+mailcrypt (3.4-2) unstable; urgency=medium
+
+  * New maintainer.
+  * README.Debian: Renamed to README, added a few notes.
+  * control: Moved to contrib/mail. (Closes: #10530)
+  * control: Updated Standards-Version 2.4.0.0. (Closes: #9533)
+  * control: Changed Depends: pgp, emacs19|emacs20.
+  * copyright: Rewritten from scratch.
+  * emacsen.install: New file.
+  * emacsen.remove: New file.
+  * mailcrypt-init.el: Added debian-emacs-flavor code.
+  * mailcrypt.menu: New file.
+  * postinst: Added support for `menu'.
+  * postinst: Added call to emacs-package-install.
+  * prerm: Added support for `menu'.
+  * prerm: Added call to emacs-package-remove.
+  * rules: Rewritten from scratch.
+  * rules: Added HTML documentation in /usr/doc/mailcrypt/mailcrypt.html/.
+  * rules: Install elisp files under /usr/share/emacs/.
+  * rules: Modified to support the new emacsen proposal.
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Thu, 19 Feb 1998 00:20:28 +0100
+
+Tue May 21 20:27:50 1996  Joe Reinhardt  <jmr@everest.radiology.uiowa.edu>
+
+	* mailcrypt.el (mc-modes-alist): updated assoc. list for message mode
+
+	* mailcrypt-init.el: message mode hooks
+
+Sun May 19 16:19:11 1996  Joe Reinhardt  <jmr@everest.radiology.uiowa.edu>
+
+	* Makefile: modified to work with Debian packaging scheme
+
+	* mailcrypt-init.el: new file to setup hooks for mail and news
+
+

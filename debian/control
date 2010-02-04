@@ -1,0 +1,26 @@
+Source: mailcrypt
+Section: mail
+Priority: optional
+Build-Depends-Indep: eperl, texinfo, texi2html
+Maintainer: Davide G. M. Salvetti <salve@debian.org>
+Standards-Version: 3.5.7
+
+Package: mailcrypt
+Architecture: all
+Depends: debconf (>= 0.2.0), gnupg, emacs21
+Description: An Emacs interface to the GNU Privacy Guard
+ Mailcrypt is an Emacs lisp package that provides a simple but
+ powerful interface to cryptographic functions for mail and news.  With
+ Mailcrypt, encryption becomes a seamlessly integrated part of your mail
+ and news handling environment.  Mailcrypt can automatically fetch
+ public keys to encode, decode, and verify messages, and can be configured
+ to automate mailing through anonymous remailers.
+ .
+ Although Mailcrypt may be used to process data in arbitrary Emacs
+ buffers, it is most useful in conjunction with other Emacs packages for
+ handling mail and news.  Mailcrypt has specialized support for Rmail,
+ VM, MH-E, Mew, and Gnus.
+ .
+ Currently XEmacs ships with its own Mailcrypt, so this package should
+ only be used with GNU/Emacs.  (I.e., you don't need to install this
+ package if your site uses only XEmacs.)

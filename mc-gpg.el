@@ -173,6 +173,16 @@ The value returned is the value of the last form in BODY."
 	  (setq mybuf (get-buffer-create " *mailcrypt stdout temp"))
 	  (set-buffer mybuf)
 	  (erase-buffer)
+	  ;; set the stdout buffer to be multibyte, so it can handle
+	  ;; whatever characters come back from GPG. These may be non-ASCII,
+	  ;; and unibyte buffers can't handle those correctly. If emacs is
+	  ;; in unibyte mode (such as when standard-display-european is
+	  ;; active), the multibyte characters will be downgraded to unibyte
+	  ;; when they are copied back into the email buffer. iso-latin-1
+	  ;; characters will survive this transition, others will not (but
+	  ;; then you wouldn't be using standard-display-european anyway).
+	  (set-buffer-multibyte t)
+
 	  (set-buffer obuf)
 	  (buffer-disable-undo mybuf)
 
@@ -194,6 +204,7 @@ The value returned is the value of the last form in BODY."
 	  (setq proc
 		(apply 'start-process-shell-command "*GPG*" mybuf 
 		       program args))
+
 	  ;; send in passwd if necessary
 	  (if passwd
 	      (progn
@@ -201,11 +212,13 @@ The value returned is the value of the last form in BODY."
 		(or mc-passwd-timeout (mc-deactivate-passwd t))))
 	  ;; send in the region
 	  (process-send-region proc beg end)
+
 	  ;; finish it off
 	  (process-send-eof proc)
 	  ;; wait for it to finish
 	  (while (eq 'run (process-status proc))
 	    (accept-process-output proc 5))
+
 	  ;; remember result codes
 	  (setq status (process-status proc))
 	  (setq rc (process-exit-status proc))

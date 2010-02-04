@@ -1,0 +1,36 @@
+#include "variables"
+Document: <:=$PACKAGE:>
+Title: Mailcrypt: An Emacs interface to the GNU Privacy Guard and anonymous remailers.
+Author: Patrick J. LoPresti, Leonard R. Budney, Brian Warner
+Abstract: Mailcrypt is an Emacs Lisp package which provides a simple but
+ powerful interface to cryptographic functions for mail and news.
+ .
+ With Mailcrypt, encryption becomes a seamlessly integrated part of your mail
+ and news handling environment.  Mailcrypt can automatically fetch public keys
+ to encode, decode, and verify messages, and can be configured to automate
+ mailing through anonymous remailers.
+ .
+ Although Mailcrypt may be used to process data in arbitrary Emacs buffers, it
+ is most useful in conjunction with other Emacs packages for handling mail and
+ news.  Mailcrypt has specialized support for Rmail, VM, MH-E, Mew, and Gnus.
+Section: <:=$MENUSEC:>
+
+Format: texinfo
+Files: <:=if($_="$doc/$PACKAGE.texi.gz")=~tr|/|/|s:>
+
+Format: info
+Index: <:=if($_="$info/$PACKAGE.info.gz")=~tr|/|/|s:>
+Files: <:=if($_="$info/$PACKAGE.info*")=~tr|/|/|s:>
+
+Format: HTML
+Index: <:=if($_="$html/index.html")=~tr|/|/|s:>
+Files: <:=if($_="$html/*.html")=~tr|/|/|s:>
+<:
+# LocalWords:  mailcrypt remailers LoPresti Budney Rmail VM MH MENUSEC texinfo
+# LocalWords:  doc tr HTML html
+#
+# local variables:
+# mode: text
+# fill-column: 78
+# end:
+:>//

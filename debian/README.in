@@ -1,0 +1,35 @@
+#include "variables"
+The Debian Package mailcrypt
+----------------------------
+
+
+Loading Mailcrypt
+=================
+
+Users will need to put "(require 'mailcrypt-init)" in their "~/.emacs" to load
+Mailcrypt, unless the local system administrator chose to start it by default.
+
+System Administrators wanting to start Mailcrypt by default on their site
+should answer accordingly at the appropriate configuration time question
+(and may issue "dpkg-reconfigure <:=$PACKAGE:>" in case they changed their
+minds afterwards).
+
+
+Online Documentation
+====================
+
+Online documentation may be found in the info or HTML manual.
+
+TeXInfo sources may be found in "<:=if($_="$doc/$PACKAGE.texi.gz")=~tr|/|/|s:>".
+
+
+Davide G. M. Salvetti <salve@debian.org>, <:=$_=gmtime:>.
+<:
+# LocalWords:  mailcrypt init dpkg HTML TeXInfo docsrc tr ui setq mc
+# LocalWords:  gmtime
+#
+# local variables:
+# mode: text
+# fill-column: 78
+# end:
+:>//

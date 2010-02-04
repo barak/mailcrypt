@@ -1,0 +1,51 @@
+#include "variables"
+This is Debian GNU/Linux prepackaged version of the Mailcrypt Emacs Lisp
+program, written by Jin Choi and Pat LoPresti.
+
+The current release of this package was assembled by:
+		   Davide G. M. Salvetti <salve@debian.org>
+using sources obtained via http://mailcrypt.sourceforge.net:
+<411b53d4ce9f92102d994eb7a8f661ba mailcrypt_3.5.8.orig.tar.gz>.
+
+The current Mailcrypt upstream maintainer is:
+  Brian Warner <warner@lothar.com>.
+
+The first Mailcrypt Debian package was assembled by:
+  Joe Reinhardt <joe-reinhardt@uiowa.edu>.
+
+
+COPYRIGHT
+=========
+
+Mailcrypt program: Copyright (C) 1995  Jin Choi <jin@atype.com>
+                   Patrick LoPresti <patl@lcs.mit.edu>
+                   (C) 1998  Len Budney <lbudney@pobox.com>
+                   (C) 2001  Brian Warner <warner@lothar.com>.
+
+Mailcrypt manual:  Copyright 1995 Patrick J. LoPresti.
+                   Copyright 1998 Leonard R. Budney
+                   Copyright 2001 Brian Warner
+
+The Mailcrypt program and this manual are published as free software.  You may
+redistribute and/or modify them under the terms of the GNU General Public
+License as published by the Free Software Foundation; either version 2, or (at
+your option) any later version.
+
+Mailcrypt is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+Place, Suite 330, Boston, MA 02111-1307, USA.
+
+On Debian GNU/Linux system you can find a copy of the GNU General Public
+License in "<:=$GPL:>".
+<:
+# LocalWords:  Mailcrypt Jin Choi LoPresti Budney
+#
+# local variables:
+# mode: text
+# fill-column: 78
+# end:
+:>//

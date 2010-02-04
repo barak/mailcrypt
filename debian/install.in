@@ -1,0 +1,44 @@
+#include "variables"
+#!/bin/bash -e
+#
+# elisp install file for Debian <:=$PACKAGE:> package.
+# $Id: install.in,v 1.9 2002/09/01 15:08:40 salve Exp $
+#
+<:=@COPYRIGHT:>//
+
+set -o posix
+
+FLAVOR=$1
+
+EFLAGS="-batch -q -l lpath.el -f batch-byte-compile"
+
+case "$FLAVOR" in
+    (emacs)
+	:
+    ;;
+    (emacs20|emacs21|mule2)
+	echo -n "install/<:=$PACKAGE:>: Byte-compiling for $FLAVOR... "
+	install -m 755 -d <:=if($_=$lisp)=~s|emacs|\$FLAVOR|:>
+	for i in <:=$SOURCES:>
+	    do cp <:=$lisp:>/$i <:=if($_=$lisp)=~s|emacs|\$FLAVOR|:>
+	done
+	cat <<-EOF ><:=if($_=$lisp)=~s|emacs|\$FLAVOR|:>/lpath.el
+		(setq load-path (cons nil load-path))
+	EOF
+	(cd <:=if($_=$lisp)=~s|emacs|\$FLAVOR|:> \
+	    && $FLAVOR $EFLAGS <:=$SOURCES:>  2>&1 \
+	    | gzip -9qf > <:=$ELCLOG:>.gz)
+	rm -f <:=if($_=$lisp)=~s|emacs|\$FLAVOR|:>/*.el
+	echo "done."
+    ;;
+    (*)
+	echo "install/<:=$PACKAGE:>: Ignoring emacsen flavor $FLAVOR."
+    ;;
+esac
+
+exit 0
+<:
+# local Variables:
+# mode: shell-script
+# end:
+:>//

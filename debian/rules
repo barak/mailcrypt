@@ -1,0 +1,123 @@
+#! /usr/bin/make -f
+#
+# BEWARE: The rules file is AUTOMATICALLY GENERATED from rules.in
+#
+# rules file for Debian mailcrypt package.
+# $Id: rules,v 1.40 2002/09/01 15:08:41 salve Exp $
+#
+# Copyright (C) 1998, 99, 2000, 01, 02 by Davide Giovanni Maria Salvetti.
+#
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 2 of the License, or (at your
+# option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to: The Free Software Foundation, Inc.,
+# 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+#
+# On Debian GNU/Linux System you can find a copy of the GNU General Public
+# License in "/usr/share/common-licenses/GPL".
+
+tmp	:= $(shell pwd)/debian/tmp/
+
+SHELL		:= /bin/bash
+INSTDIR		:= install -m 755 -d
+INSTPROG	:= install -m 755 -s
+INSTDATA	:= install -m 644
+INSTSCRIPT	:= install -m 755
+
+DFILES	:=	debian/README debian/config debian/copyright debian/docbase \
+		debian/install debian/preinst debian/postinst debian/prerm \
+		debian/postrm debian/remove debian/templates
+# WARNING: debian/rules SHOULD NOT be in $(DFILES), for Debian policy
+# (it's CVS registered), lest it will be deleted by clean.
+# Beside, it's automatically remade by make
+
+debian/system.variables: /home/salve/Debian/Packages/system.variables
+	$(INSTDATA) $< $@
+
+debian/rules: debian/variables
+
+# Eperl is simply great: thanks, Ralf!
+% :: %.in
+	eperl -P -o $@ $<
+
+build: $(DFILES)
+	$(checkdir)
+	./configure
+	$(MAKE) MAKEINFO="makeinfo --verbose" \
+		TEXI2HTML="texi2html -verbose" \
+		info html
+	touch build
+
+clean:
+	$(checkdir)
+	-rm -rf build core trashcan $(tmp) debian/files* debian/substvars
+	-rm -f	$(DFILES)
+	-$(MAKE) distclean
+
+binary: binary-indep binary-arch
+
+binary-arch: checkroot build
+	$(checkdir)
+
+binary-indep: checkroot build
+	$(checkdir)
+	-rm -rf $(tmp)
+
+#       install package
+	$(INSTDIR) $(tmp)//usr/share/info/ $(tmp)//usr/share/emacs/site-lisp/mailcrypt/
+	$(INSTDATA) mailcrypt.el mc-toplev.el mc-pgp.el mc-remail.el mc-pgp5.el mc-gpg.el expect.el mc-setversion.el $(tmp)//usr/share/emacs/site-lisp/mailcrypt/
+	$(INSTDATA) mailcrypt.info* $(tmp)//usr/share/info/
+	gzip -9frv $(tmp)//usr/share/info/
+
+#       install Debian doc
+	$(INSTDIR) $(tmp)//usr/share/doc/mailcrypt/ $(tmp)//usr/share/doc/mailcrypt//HTML
+	$(INSTDATA) ANNOUNCE ChangeLog.1 NEWS ONEWS README README.gpg mailcrypt.texi texi2html.ext $(tmp)//usr/share/doc/mailcrypt/
+	$(INSTDATA) debian/README $(tmp)//usr/share/doc/mailcrypt//README.Debian
+	$(INSTDATA) ChangeLog $(tmp)//usr/share/doc/mailcrypt/
+	$(INSTDATA) debian/changelog $(tmp)//usr/share/doc/mailcrypt//changelog.Debian
+	gzip -9frv $(tmp)//usr/share/doc/mailcrypt/
+	ln -sf ChangeLog.gz $(tmp)//usr/share/doc/mailcrypt//changelog.gz
+	$(INSTDATA) debian/copyright $(tmp)//usr/share/doc/mailcrypt/
+	$(INSTDATA) *.html $(tmp)//usr/share/doc/mailcrypt//HTML
+	ln -snf mailcrypt_toc.html $(tmp)//usr/share/doc/mailcrypt//HTML/index.html
+
+#       install Debian system files
+	$(INSTDIR) $(tmp)//usr/lib/emacsen-common/packages//{install,remove} $(tmp)//usr/share/doc-base/
+	$(INSTDATA) debian/mailcrypt-init.el $(tmp)//usr/share/emacs/site-lisp/mailcrypt//../
+	$(INSTDATA) debian/docbase $(tmp)//usr/share/doc-base//mailcrypt
+	$(INSTSCRIPT) debian/install $(tmp)//usr/lib/emacsen-common/packages//install/mailcrypt
+	$(INSTSCRIPT) debian/remove $(tmp)//usr/lib/emacsen-common/packages//remove/mailcrypt
+
+#       install Debian control files
+	$(INSTDIR) $(tmp)//DEBIAN/
+	$(INSTDATA) debian/templates $(tmp)//DEBIAN/
+	$(INSTSCRIPT) debian/{config,preinst,postinst,prerm,postrm} $(tmp)//DEBIAN/
+
+#       standard stuff
+#-#	cd $(tmp) && du -k * | grep -v 'DEBIAN' | sort -k 2 -o $(tmp)//DEBIAN//du
+	cd $(tmp) && md5sum \
+		$$(find ./ -path './DEBIAN' -prune -o -type f -printf "%P\n") \
+		| sort -k 2 -o $(tmp)//DEBIAN//md5sums
+	dpkg-gencontrol -isp
+	chown -R root.root $(tmp)
+	chmod -R go=rX $(tmp)
+	dpkg --build $(tmp) ..
+
+checkdir = test -f debian/rules
+
+checkroot:
+	$(checkdir)
+	test root = "$$(whoami)"
+
+source diff:
+	@echo >&2 'source and diff are obsolete - use dpkg-source -b'; false
+
+.PHONY: binary binary-arch binary-indep clean checkroot

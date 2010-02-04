@@ -1,0 +1,67 @@
+#include "variables"
+#!/bin/bash -e
+#
+# postinst configuration file for Debian <:=$PACKAGE:> package.
+# $Id: postinst.in,v 1.10 2002/09/27 13:03:15 salve Exp $
+#
+<:=@COPYRIGHT:>//
+
+set -o posix
+
+source <:=$CONFMODULE:>
+db_version 2.0
+
+conf_autoload () {
+    db_get <:=$PACKAGE:>/default || true
+    if [ $RET = "true" ]; then umask 022;
+	cat <<-EOF ><:=$sstartd:>/<:=$EPRIORITY:><:=$PACKAGE:>.el
+		(require 'mailcrypt-init)
+	EOF
+	chmod 644 <:=$sstartd:>/<:=$EPRIORITY:><:=$PACKAGE:>.el
+    else
+	rm -f <:=$sstartd:>/<:=$EPRIORITY:><:=$PACKAGE:>.el
+    fi
+    return 0
+}
+
+case "$1" in
+    (abort-remove|abort-upgrade|configure)
+    <:# abort-remove in-favour ${3:newpkg} ${4:newver}
+      # (undo prerm remove in-favour $3 $4):>//
+    <:# abort-upgrade ${2:newver}
+      # (undo prerm upgrade $2):>//
+    <:# configure ${2:lastconfver}
+      # (or, if there wasn't an old version at all)
+      # configure ${2=""|"<unknow>"}
+      # (or, if dpkg version is very old)
+      # configure
+      # (dregistered files and conffiles have been installed):>//
+	<:# install byte compiled lisp:>//
+	<:=$EINSTALL:> <:=$PACKAGE:>
+	<:# install doc menu into doc dir:>//
+	<:=$DINSTALL:> <:="$docbase/$PACKAGE":>
+	<:# install info menu into info dir:>//
+	<:=$IINSTALL:> <:="$info/$PACKAGE.info.gz":>
+	<:# put or remove emacs startup file:>//
+	conf_autoload
+    ;;
+    (abort-deconfigure)
+    <:# abort-deconfigure in-favour ${3:newpkg} ${4:newver} removing ${6:oldpkg} ${7:oldver}
+      # (undo prerm deconfigure in-favour $3 $4 removing $6 $7):>//
+	<:# put or remove emacs startup file:>//
+	conf_autoload
+    ;;
+    (*)
+	echo "${0##*/}: Called with unknown argument \`$1'." >&2
+    ;;
+esac
+
+<:# to be sure debconf moves on:>//
+db_stop
+
+exit 0
+<:
+# local Variables:
+# mode: shell-script
+# end:
+:>//
