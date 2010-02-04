@@ -60,7 +60,7 @@ EOF
 
 case "${FLAVOR}" in
     (emacs) : ;;
-    (emacs21|emacs-snapshot)
+    (emacs21|emacs-snapshot|emacs22)
     do_install ${FLAVOR}
     ;;
     (*) echo >&2 "install/<:=${PACKAGE}:>:" \
