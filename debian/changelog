@@ -1,3 +1,10 @@
+mailcrypt (3.5.8+CVS.2005.04.29.1-9) unstable; urgency=medium
+
+  * Urgency medium: fixes an important bug.
+  * prerm.in: Fixed typo; thanks to Yavor Doganov.  (Closes: #374789)
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Wed, 21 Jun 2006 14:20:24 +0200
+
 mailcrypt (3.5.8+CVS.2005.04.29.1-8) unstable; urgency=low
 
   * rules.in (po-debconf): Refactored.

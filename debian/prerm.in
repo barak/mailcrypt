@@ -15,6 +15,7 @@ case "${1}" in
     <:=${DREMOVE}:> <:=${PACKAGE}:>
     <:# Emacs remove :>//
     <:=${EREMOVE}:> <:=${PACKAGE}:>
+    ;;
     (*) echo >&2 "${0##*/}/<:=${PACKAGE}:>:" \
 	"Unknown argument: \"${1}\"."
     exit 1
