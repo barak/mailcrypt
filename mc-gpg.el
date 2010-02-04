@@ -3,7 +3,7 @@
 ;;                     Patrick LoPresti <patl@lcs.mit.edu>
 ;;               1998  Brian Warner <warner@lothar.com>
 
-;; $Id$
+;; $Id: mc-gpg.el,v 1.22 2003/07/25 07:50:52 warner Exp $
 
 ;;{{{ Licensing
 ;; This file is intended to be used with GNU Emacs.

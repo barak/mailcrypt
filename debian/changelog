@@ -1,8 +1,16 @@
+mailcrypt (3.5.8-3) unstable; urgency=low
+
+  * control (Depends), install, remove: Added emacs-snapshot as a
+    supported Emacs flavor.
+  * control (Standard-Versions): Upgraded to 3.6.1.
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Fri, 22 Apr 2005 18:35:52 +0200
+
 mailcrypt (3.5.8-2) unstable; urgency=high
 
   * ../mc-gpg.el: Patch from upstream CVS; thanks to James Troup.
   (Closes: #234954, #117204)
-  * control(Depends): Removed emacs20; thanks to Martin Michlmayr.
+  * control (Depends): Removed emacs20; thanks to Martin Michlmayr.
   (Closes: #232769)
   
  -- Davide G. M. Salvetti <salve@debian.org>  Sat, 28 Feb 2004 12:11:35 +0100
@@ -10,23 +18,23 @@ mailcrypt (3.5.8-2) unstable; urgency=high
 mailcrypt (3.5.8-1) unstable; urgency=medium
 
   * New upstream release.  (Closes: #161691)
-  * control(Depends): Removed mule2.
+  * control (Depends): Removed mule2.
   (Standards-Version): Upgraded to 3.5.7.
-  * postinst(do_link): Removed.
-  * prerm(undo_link): Removed.
+  * postinst (do_link): Removed.
+  * prerm (undo_link): Removed.
 
  -- Davide G. M. Salvetti <salve@debian.org>  Fri, 27 Sep 2002 15:34:07 +0200
 
 mailcrypt (3.5.7-1) unstable; urgency=medium
 
   * New upstream release.
-  * control(Description): Added Mew.
+  * control (Description): Added Mew.
   (Section): mail.
   * copyright: Added Brian Warner as appropriate.
-  * docbase(Abstract): Added Mew.
+  * docbase (Abstract): Added Mew.
   (Author): Added Brian Warner.
   * mailcrypt-init.el: Added Mew's hooks.
-  * rules(clean): Do not remove mailcrypt.info* and mailcrypt.dvi any more.
+  * rules (clean): Do not remove mailcrypt.info* and mailcrypt.dvi any more.
   
  -- Davide G. M. Salvetti <salve@debian.org>  Sun,  1 Sep 2002 17:25:24 +0200
 
@@ -41,9 +49,9 @@ mailcrypt (3.5.6.20010925-2) unstable; urgency=high
 
 mailcrypt (3.5.6.20010925-1) unstable; urgency=low
 
-  * control(Standards-Version): Updated to 3.5.6.
+  * control (Standards-Version): Updated to 3.5.6.
   * mc-gpg-utf-8.patch: Removed (added upstream).
-  * rules(build): Remove mc-gpg-utf-8.patch (added upstream).
+  * rules (build): Remove mc-gpg-utf-8.patch (added upstream).
     (clean): Remove mc-gpg-utf-8.patch (added upstream).
   * templates: Added Spanish; thanks to Gorka Olaizola.
 
@@ -51,12 +59,12 @@ mailcrypt (3.5.6.20010925-1) unstable; urgency=low
 
 mailcrypt (3.5.6-3) unstable; urgency=low
 
-  * control(Standards-Version): Updated to 3.5.5.
-  * mc-gpg-utf-8.patch: New file; thanks to Francesco Potortì.
+  * control (Standards-Version): Updated to 3.5.5.
+  * mc-gpg-utf-8.patch: New file; thanks to Francesco PotortÃ¬.
   * remove: Changed `|| true' after `rmdir' to `test -d && rmdir'.
-  * rules(build): Add mc-gpg-utf-8.patch.
+  * rules (build): Add mc-gpg-utf-8.patch.
     (clean): Remove mc-gpg-utf-8.patch.  (Closes: #100582)
-  * templates(alreadydefault): Type changed from `text' to `note'.
+  * templates (alreadydefault): Type changed from `text' to `note'.
     (Closes: #106340)
 
  -- Davide G. M. Salvetti <salve@debian.org>  Sat, 28 Jul 2001 16:15:53 +0200
