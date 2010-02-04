@@ -23,7 +23,7 @@
 
 @set TITLE Mailcrypt
 @set VERSION 3.5.8
-@set UPDATED August 29, 1998
+@set UPDATED November 30, 2003
 
 @ifinfo
 
@@ -143,6 +143,7 @@ General Use
 Remailer Support
 
 * Remailer Introduction::       A little about remailers in general.
+* Types of Remailers::          The different remailer networks
 * Remailer Quick Start::        Getting started quickly.
 * Remailer Chains::             Creating custom chains of your very own.
 * Response Blocks::             A way to let people reply to your
@@ -151,6 +152,7 @@ Remailer Support
 * Remailing Posts::             Posting to USENET anonymously or
                                   pseduonymously.
 * Mixmaster Support::           Remailers for the truly paranoid.
+* Mixmaster and Mixminion::     Support for external remailer clients.
 * Remailer Security::           Caveats.
 * Verifiable Pseudonyms::       Giving expression to the voices in your
                                   head.
@@ -376,12 +378,13 @@ is to access the @code{Mailcrypt} pull-down menu.
 
 @findex mc-setversion
 By default, Mailcrypt assumes you are using one of the PGP 2.6.x
-versions.  This permits backward compatibility for the millions of
-satisfied users of Mailcrypt 3.4 worldwide.  If you wish to specify a
-different version of PGP, use this function. Its action is the same as
-setting the variable @code{mc-default-scheme}. For a list of supported
-versions, press the tab key. "2.6" means 2.6.x, the original (and default). 
-"5.0" is pgp 5.0. "gpg" is GnuPG.
+versions. This permits backward compatibility for the millions of
+satisfied users of Mailcrypt 3.4 worldwide. If you wish to specify a
+different version of PGP, use the @code{mc-setversion} function. Its
+action is the same as setting the variable @code{mc-default-scheme}.
+For a list of supported versions, press the tab key. ``2.6'' means
+2.6.x, the original (and default). ``5.0'' is pgp 5.0. ``6.5'' is pgp
+6.5. ``gpg'' is GnuPG.
 
 @findex mc-read-mode
 @findex mc-write-mode
@@ -471,21 +474,15 @@ If an error occurs, Mailcrypt will display an appropriate diagnostic.
 If you do not have the public key for one of the specified recipients,
 Mailcrypt will offer to try to fetch it for you (@pxref{Key Fetching}).
 
-@vindex mc-pgp-user-id
-The default key for signing is the first one on the secret key ring
-which matches the string @code{mc-pgp-user-id}; this defaults to
-@code{(user-login-name)}.  Note that this differs from PGP's normal
-default, which is to use the first of @emph{all} of the secret keys.  To
-mimic PGP's behavior, set this variable to @code{""}. This variable is
-specific to pgp 2.6.x; @code{mc-pgp50-user-id} and @code{mc-gpg-user-id} are
-the corresponding variables for pgp 5.0 and GnuPG.
+If you want to use a secret key other than your default for signing
+the message, pass a prefix argument to @code{mc-encrypt}. (That is,
+type @kbd{C-u C-c / e}.) Mailcrypt will prompt for a string and will
+sign with the first key on your secret keyring which matches that
+string. It will be assumed that you want to sign the message, so you
+will not be prompted. See the next section, @ref{Signing, , Signing a
+Message} for information about which key is used by default to sign
+the message.
 
-If you want to use a secret key other than your default for signing the
-message, pass a prefix argument to @code{mc-encrypt}.  (That is, type
-@kbd{C-u C-c / e}.)  Mailcrypt will prompt for a string and will sign with
-the first key on your secret keyring which matches that string.  It will
-be assumed that you want to sign the message, so you will not be
-prompted.
 
 @node Signing, Inserting Keys, Encrypting, General Use
 @section Signing a Message
@@ -512,12 +509,35 @@ signature first with the normal Emacs undo command @kbd{C-x u}
 (@pxref{Undo, Emacs Undo, Undoing Changes, emacs, The GNU Emacs
 Manual}).
 
-The variable @code{mc-pgp-user-id} controls which secret key is used for
-signing; it is described in @ref{Encrypting, , Encrypting a Message}.
-To use a different secret key, pass a prefix argument to @code{mc-sign}.
-(That is, type @kbd{C-u C-c / s}.)  Mailcrypt will prompt for a string
-and will sign with the first key on your secret keyring which matches
-that string.
+The variable @code{mc-pgp-user-id} controls which secret key is used
+for signing. To use a different secret key, pass a prefix argument to
+@code{mc-sign}. (That is, type @kbd{C-u C-c / s}.) Mailcrypt will
+prompt for a string and will sign with the first key on your secret
+keyring which matches that string.
+
+
+@vindex mc-pgp-user-id
+The default key for signing is the first one on the secret key ring
+which matches the string @code{mc-pgp-user-id}; this defaults to
+@code{(user-login-name)}.  Note that this differs from PGP's normal
+default, which is to use the first of @emph{all} of the secret keys.  To
+mimic PGP's behavior, set this variable to @code{""}. This variable is
+specific to pgp 2.6.x; @code{mc-pgp50-user-id} and @code{mc-gpg-user-id} are
+the corresponding variables for pgp 5.0 and GnuPG.
+
+If you have multiple secret keys with the same name (perhaps you
+generate a new key every few years, but keep the expired keys on your
+secret key ring so you can decrypt old messages), you may want to use
+a hex keyid in @code{mc-gpg-user-id} or equivalent. A simple name will
+cause mailcrypt to use the first matching secret key, which may not be
+the most recent one. Using a hex keyid will force the encryption
+program to use that exact secret key for signing. Put something like
+the following in your @file{.emacs}:
+
+@lisp
+(setq mc-gpg-user-id "0x03A5E108")
+@end lisp
+
 
 @node Inserting Keys, Decrypting, Signing, General Use
 @section Inserting a Public Key Block
@@ -610,6 +630,7 @@ may want to skip it on first reading.
 
 @menu
 * Remailer Introduction::       A little about remailers in general.
+* Types of Remailers::          The different remailer networks
 * Remailer Quick Start::        Getting started quickly.
 * Remailer Chains::             Creating custom chains of your very own.
 * Response Blocks::             A way to let people reply to your
@@ -618,13 +639,14 @@ may want to skip it on first reading.
 * Remailing Posts::             Posting to USENET anonymously or
                                   pseduonymously.
 * Mixmaster Support::           Remailers for the truly paranoid.
+* Mixmaster and Mixminion::     Support for external remailer clients.
 * Remailer Security::           Caveats.
 * Verifiable Pseudonyms::       Giving expression to the voices in your
                                   head.
 * Remailer Tips::               Free advice.
 @end menu
 
-@node Remailer Introduction, Remailer Quick Start, Remailer Support, Remailer Support
+@node Remailer Introduction, Types of Remailers, Remailer Support, Remailer Support
 @section Remailer Introduction
 There are several anonymous remailer services running on the Internet.
 These are programs that accept mail, strip off information that would
@@ -663,11 +685,105 @@ only the last remailer in the chain need know the final recipient.  Bill
 can also establish a @emph{pseudonym} for use in signing his anonymous
 messages.
 
-Mailcrypt includes facilities for sending messages via remailers, for
-defining chains of remailers, for generating response blocks, and for
-using pseudonyms.
+More sophisticated systems split the message into multiple pieces to
+further disguise the path it takes through the network. Special client
+programs are used to construct and encrypt the pieces.
 
-@node Remailer Quick Start, Remailer Chains, Remailer Introduction, Remailer Support
+Mailcrypt includes facilities for sending messages via remailers, for
+defining chains of remailers, for generating response blocks, for
+using pseudonyms, and for interfacing with remailer client programs.
+
+@node Types of Remailers, Remailer Quick Start, Remailer Introduction, Remailer Support
+@section Types of Remailers
+
+There are currently three classes of remailer networks in use, not
+counting the original single-hop address-rewriter machines (like the
+late penet.fi).
+
+
+@table @asis
+
+@item Cypherpunk (Type 1)
+Machines in the original cypherpunk remailer network accept messages
+with commands to send a portion of the message out to another machine.
+By wrapping the final message text in layers of encryption like an
+onion, the message is sent through chains of remailers, each machine
+decrypting one layer and sending the rest out to the next hop.
+
+One disadvantage of this scheme is that the message gets smaller by a
+fairly constant amount on each hop, making traffic analysis easier to
+perform.
+
+Mailcrypt automates the process of wrapping your final message in
+layers of encryption for each remailer along the desired chain. Type 1
+remailers are handled by @code{mc-remailer-scheme-type1}.
+
+@item Mixmaster (Type 2)
+The next generation of remailers use a special client program (written
+in C) to encode the message differently. The message is broken up into
+multiple identically-sized pieces, which follow separate paths through
+the network, and are recombined at the far end. At each hop, random
+padding is added to make sure that @emph{all} inter-node messages are
+exactly the same size. This makes traffic analysis more difficult.
+Periodic dummy messages are also sent to further complicate attacks.
+
+The most common type-2 client program for Unix is named ``mixmaster''.
+There are two different versions, with fairly different interfaces.
+Mailcrypt supports both.
+
+The older version comes from a package named ``mix-2.0.3'', and has an
+interface that modifies a message in-place. The mailcrypt interface to
+this is through @code{mc-remailer-scheme-type1} and behaves much like
+the normal encryption interface: you hit the button and your email is
+modified in place; the To: header is replaced with the target of the
+first remailer in the chain. As you can imagine, this API is
+problematic, as large messages must be split into multiple pieces.
+
+The modern type-2 client program is an updated version of
+``mixmaster'', from a package named ``mixmaster-2.9.0'' (distributed
+at @file{http://mixmaster.sourceforge.net/}. This version does not
+modify the message in place; rather it accepts an email message on
+stdin and sends the resulting series of packets directly. The
+mailcrypt interface to the new mixmaster is through
+@code{mc-remailer-scheme-mixmaster}. When you chose ``encrypt for
+remailer'' within this scheme, the message is sent directly to the
+client program and delivered immediately, bypassing your MUA mode's
+normal ``send'' command.
+
+@item Mixminion (Type 3, under development)
+A new generation of remailer networks is under currently development
+(at @file{http://www.mixminion.net/}). One notable improvement is the
+addition of automatic reply blocks. A major flaw of the type-2 network
+is that to give someone the ability to reply to a message, you have to
+give them a type-1 reply block. This makes the response more
+vulnerable to traffic analysis. Mixminion message can be formed in
+such a way that the response path is automatically embedded in the
+outgoing message.
+
+Mixminion uses a client program (called ``mixminion'') which behaves
+just like the modern ``mixmaster'' client. Through
+@code{mc-remailer-scheme-mixminion}, mailcrypt supports a command to
+send the body of the current message to the mixminion client.
+
+Mixminion is under development, please check the web page for the
+current status before using it.
+
+@end table
+
+@vindex mc-default-remailer-scheme
+The remailer scheme currently in use is determined by the
+@code{mc-default-remailer-scheme} variable. Set this to one of
+@code{mc-remailer-scheme-type1}, @code{mc-remailer-scheme-mixmaster},
+or @code{mc-remailer-scheme-mixminion}. For example, use the following
+in your @file{.emacs} to make @kbd{C-c / r} always use the modern
+mixmaster client:
+
+@lisp
+(setq mc-default-remailer-scheme 'mc-remailer-scheme-mixmaster)
+@end lisp
+
+
+@node Remailer Quick Start, Remailer Chains, Types of Remailers, Remailer Support
 @section Remailer Quick Start
 
 To use Mailcrypt's remailing facilities, you need to configure them
@@ -706,6 +822,12 @@ message (using @kbd{C-x m}, for example) addressed to yourself.  Type
 on its name.  The buffer will be rewritten for anonymous mailing through
 that remailer.
 
+Note that you can only select a single remailer when you rewrite the
+message. To send the message through multiple hops, either rewrite the
+message multiple times, or define a @emph{chain} of remailers that can
+be referred to like a single remailer. Remailer chains are described
+in the next section.
+
 The remailer list and keyrings can also be obtained via HTTP.
 @file{http://anon.efga.org/Remailers/Settings} and
 @file{http://mixmaster.shinn.net/stats/settings/index.html} have lists
@@ -715,14 +837,16 @@ of URLs from which these can be retrieved.
 @node Remailer Chains, Response Blocks, Remailer Quick Start, Remailer Support
 @section Remailer Chains
 
+@findex mc-remail
 @findex mc-remailer-encrypt-for-chain
 @kindex C-c / r
-@code{mc-write-mode} binds the function
-@code{mc-remailer-encrypt-for-chain} to the key @kbd{C-c / r}.  This
-function rewrites the message for a remailer or chain.  The resulting
-buffer is just a new Email message, so it can itself be rewritten for
-another remailer; this is one way to manually construct a remailer
-chain.
+@code{mc-write-mode} binds the function @code{mc-remail} to the key
+@kbd{C-c / r}. Depending upon the current remailer scheme, this
+function may pass the message directly to a remailer client, or may
+simply rewrite the message for a remailer or chain. For ``type1''
+remailers, the resulting buffer is just a new Email message, so it can
+itself be rewritten for another remailer; this is one way to manually
+construct a remailer chain.
 
 Mailcrypt also has powerful facilities for defining automatic chains.
 We will start with an example.  Suppose you have put the following into
@@ -897,8 +1021,12 @@ composing mail.  In this case, the response block will include the
 @samp{From} line and the @samp{Newsgroups} line (which is the news
 analogue to the @samp{To} line).
 
-@node Mixmaster Support, Remailer Security, Remailing Posts, Remailer Support
+@node Mixmaster Support, Mixmaster and Mixminion, Remailing Posts, Remailer Support
 @section Mixmaster Support
+
+(note: this chapter describes mailcrypt's support for the ``old''
+mixmaster interface. For a description of mailcrypt's support for the
+modern mixmaster client see @ref{Mixmaster and Mixminion}.)
 
 @dfn{Mixmaster} is a new kind of remailer which provides excellent
 security against traffic analysis and replay attacks.  (For more
@@ -924,11 +1052,13 @@ file:
 executable.  @code{mc-mixmaster-list-path} is the complete path to the
 @code{type2.list} file.
 
-Once these variables are defined, Mailcrypt will automatically try to
-use the Mixmaster executable whenever possible.  Specifically, when you
-rewrite a message for a chain, Mailcrypt will find maximal length
-sub-chains which have the @code{mix} property and will use the Mixmaster
-executable to rewrite for those sub-chains.
+Once these variables are defined, (and if the remailer scheme is set
+@code{mc-remailer-scheme-type1}, see @ref{Types of Remailers}),
+Mailcrypt will automatically try to use the Mixmaster executable
+whenever possible. Specifically, when you rewrite a message for a
+chain, Mailcrypt will find maximal length sub-chains which have the
+@code{mix} property and will use the Mixmaster executable to rewrite
+for those sub-chains.
 
 This allows arbitrary intermingling of Mixmaster and normal (also called
 @dfn{Type 1}) remailers, but you should note that this is @emph{not
@@ -963,7 +1093,79 @@ Note that Mixmaster remailers cannot be used for response blocks.
 Mailcrypt will ignore the @code{mix} property when generating a response
 block.
 
-@node Remailer Security, Verifiable Pseudonyms, Mixmaster Support, Remailer Support
+@node Mixmaster and Mixminion, Remailer Security, Mixmaster Support, Remailer Support
+@section Mixmaster and Mixminion
+
+Mailcrypt now contains preliminary support for the modern mixmaster
+client, as well as the experimental mixminion client. This support is
+accessed through the @code{mc-remailer-scheme-mixmaster} and
+@code{mc-remailer-scheme-mixminion} scheme settings.
+
+Both of these clients operate in a mode where the completely absorb
+the message body. When run, they accept the text on stdin, decide upon
+a remailer chain, construct the message packets, then transmit the
+packets directly. Unlike the type1 (and older mixmaster) interface,
+once these client programs finish, the message has been sent and the
+user's MUA buffer is no longer needed. Note, in particular, that this
+bypasses the MUA's ``send'' command.
+
+To make sure that the user does not accidentally use the MUA mode to
+send the message (non-anonymously), Mailcrypt will attempt to erase
+the message buffer and To: header. Some MUA modes may also have
+support code which will delete the message buffer altogether.
+
+Mailcrypt will also ask ``Do you really want to send this message''
+before running the client program. This is your last chance to avoid
+sending the message.
+
+The modern client programs are designed to convey message
+@emph{bodies}, not the headers-plus-body that usually make up an email
+message. Email headers, even with the obvious ones like From: and
+Message-Id: stripped out, are too likely to leak information, making
+it possible for the message recipient to figure out who sent the
+message. Any extra information about the kind of system used to
+construct the message serves to reduce the ``anonymity set'', the set
+of possible message senders. A smaller anonymity set means less
+anonymity.
+
+The client programs have command-line arguments to add certain headers
+(like Subject:) back into the message. Different clients (and
+different versions of the same client) offer different options. Where
+possible, Mailcrypt will take the headers from your message and pass
+them to the remailer client program. Note that most clients only allow
+a single recipient to be named.
+
+Mailcrypt support for modern remailer clients is still preliminary. It
+does not yet provide control over several options offered by the
+clients. Features not useable include:
+
+@table @emph
+
+@item Mixmaster
+Newsgroup-posting
+
+Nym support
+
+Automatic sign/encrypt
+
+reply-chain generation
+
+file attachments
+
+@item Mixminion
+
+reply block generation
+
+@end table
+
+In addition, both clients offer ways to influence the chain of
+remailers to use for the message. Mailcrypt does not currently offer a
+way to access this control: messages will be sent using the default
+client settings (which usually means a chain of four reliable hops).
+
+
+
+@node Remailer Security, Verifiable Pseudonyms, Mixmaster and Mixminion, Remailer Support
 @section Remailer Security
 
 Keep in mind that there is only one person fully qualified to protect
@@ -1153,10 +1355,10 @@ leave your terminal unattended.
 @node Key Fetching, Miscellaneous Configuration, Passphrase Cache, Top
 @chapter Key Fetching
 
-@findex mc-pgp-fetch-key
+@findex mc-fetch-key
 @kindex C-c / k
 Mailcrypt knows how to fetch PGP public keys from the key servers
-(@pxref{Key Servers}).  The function @code{mc-pgp-fetch-key} is bound by
+(@pxref{Key Servers}).  The function @code{mc-fetch-key} is bound by
 default to @kbd{C-c / k} in both @code{mc-read-mode} and
 @code{mc-write-mode}.  Additionally, @code{mc-encrypt},
 @code{mc-decrypt}, and @code{mc-verify} will offer to call this function
@@ -1315,8 +1517,9 @@ patient.  (At least it beats the tar out of the Email interface.)
 @section GnuPG Fetch
 
 GnuPG happens to have a built-in HKP keyserver interface which is
-completely independent from MailCrypt's own key fetching support.  If
-your @file{.gnupg/options} file includes a line like:
+completely independent from MailCrypt's own key fetching support. If
+your @file{.gnupg/gpg.conf} (@file{.gnupg/options} for older versions)
+file includes a line like:
 
 @samp{keyserver wwwkeys.pgp.net}
 
@@ -1330,6 +1533,31 @@ You can also tell GPG to explicitly request a key (by hex keyid) with
 @samp{--recv-keys}, or to send your own key with @samp{--send-keys}.
 Check the GnuPG manual for details.
 
+It is also possible to fetch keys with @code{mc-fetch-key}, although
+its behaviour is a bit different from the one described in the pgp
+section, if @code{mc-default-scheme} is set to
+@code{'mc-scheme-gpg}. When called interactively, it will prompt for
+a key ID to fetch from a keyserver. You can either set the server to
+query with
+
+@lisp
+;; Key server at DFN (Germany)
+;; You should choose another one in your region.
+(setq mc-gpg-keyserver "blackhole.pca.dfn.de")
+@end lisp
+
+in your @file{.emacs} file or let GPG use its default defined in its
+configuration file. Every string that can be passed to the gpg
+@samp{--keyserver} option is allowed for @code{mc-gpg-keyserver}. At
+the moment it is @emph{not}
+possible to pass a search string to the function. Please use the
+@samp{--search-key} command option if you have a newer version of
+gpg. Maybe someday we will write a frontend for this.
+
+If you want to finger a key from a server use the
+@code{mc-gpg-fetch-from-finger} function. It expects an input of the
+form @samp{USER@@HOST}. The variable @code{mc-gpg-finger-timeout}
+defines the timeout in seconds for the operation.
 
 @node Miscellaneous Configuration, Tips, Key Fetching, Top
 @chapter Miscellaneous Configuration
@@ -1428,7 +1656,7 @@ following code in your @file{.emacs} file:
 (define-key mc-read-mode-map "\C-c\C-md" 'mc-decrypt)
 (define-key mc-read-mode-map "\C-c\C-mv" 'mc-verify)
 (define-key mc-read-mode-map "\C-c\C-ma" 'mc-snarf)
-(define-key mc-read-mode-map "\C-c\C-mk" 'mc-pgp-fetch-key)
+(define-key mc-read-mode-map "\C-c\C-mk" 'mc-fetch-key)
 @end lisp
 
 For more information on Emacs key bindings, see @ref{Key Bindings, ,
@@ -1678,16 +1906,11 @@ there.  Besides, it takes mere seconds and the pain passes quickly.
 
 @node Mailing List, Politics, Key Servers, References
 @section Mailing List
-If you would like to automatically receive information about new
-releases of Mailcrypt, send Email to
-@samp{mc-announce-request@@cag.lcs.mit.edu} asking to be placed on the
-@samp{mc-announce} mailing list.  The mailing list is maintained
-manually, so please be patient.
+New releases of Mailcrypt are announced on the SourceForge mailing
+lists. They are where discussion about bugs and new features take place.
 
-The @samp{mc-announce} list is reserved for announcements of new
-Mailcrypt versions, so it has extremely low volume.  We encourage you to
-add yourself so we can get a rough idea of how many people are using
-our package.
+Please see @file{http://mailcrypt.sourceforge.net/} for subscription
+instructions and archives.
 
 @node Politics,  , Mailing List, References
 @section Politics
@@ -1726,8 +1949,12 @@ International "Church" of Scientology (see
 @node Credits, Index, References, Top
 @chapter Credits
 Mailcrypt was written by Jin Choi (jin@@atype.com) and Pat LoPresti
-(patl@@lcs.mit.edu).  Please send us your bug reports and comments.
-Also see @ref{Mailing List}.
+(patl@@lcs.mit.edu). PGP 5 support was added by Len Budney. GnuPG,
+modern mixmaster, and mixminion support were added by Brian Warner.
+
+Mailcrypt is hosted on SourceForge, at
+@file{http://mailcrypt.sourceforge.net/}. Please send us your bug
+reports and comments. Also see @ref{Mailing List}.
 
 This documentation was mostly written by Pat LoPresti, but borrows
 heavily from an earlier version by Hal Abelson (hal@@mit.edu).

@@ -1,8 +1,7 @@
 #include "variables"
-#!/bin/bash -e
+#! /bin/bash -e
 #
-# postinst configuration file for Debian <:=$PACKAGE:> package.
-# $Id: postinst.in,v 1.10 2002/09/27 13:03:15 salve Exp $
+# postinst for <:=$PACKAGE:>
 #
 <:=@COPYRIGHT:>//
 

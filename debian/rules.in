@@ -1,43 +1,36 @@
 #include "variables"
-<:##############################################################################:>//
-<:# WARNING: The rules file AUTOMATICALLY REGENERATE itself from this very one #:>//
-<:#     Read the GNU Make Manual if you don't understand Makefile Remaking!    #:>//
-<:##############################################################################:>//
 #! /usr/bin/make -f
 #
-# BEWARE: The rules file is AUTOMATICALLY GENERATED from rules.in
-#
-# rules file for Debian <:=$PACKAGE:> package.
-# $Id: rules.in,v 1.11 2002/09/01 15:08:41 salve Exp $
+# rules for <:=$PACKAGE:>
 #
 <:=@COPYRIGHT:>//
 
-tmp	:= $(shell pwd)/debian/tmp/
+tmp := $(shell pwd)/debian/tmp/
 
-SHELL		:= /bin/bash
-INSTDIR		:= install -m 755 -d
-INSTPROG	:= install -m 755 -s
-INSTDATA	:= install -m 644
-INSTSCRIPT	:= install -m 755
+SHELL := /bin/bash
+INSTDIR := install -m 755 -d
+INSTPROG := install -m 755 -s
+INSTDATA := install -m 644
+INSTSCRIPT := install -m 755
 
-DFILES	:=	debian/README debian/config debian/copyright debian/docbase \
-		debian/install debian/preinst debian/postinst debian/prerm \
-		debian/postrm debian/remove debian/templates
-# WARNING: debian/rules SHOULD NOT be in $(DFILES), for Debian policy
-# (it's CVS registered), lest it will be deleted by clean.
-# Beside, it's automatically remade by make
+<:# DO NOT include debian/rules :>//
+DFILES := debian/README debian/copyright \
+debian/config debian/preinst debian/postinst debian/prerm debian/postrm \
+debian/install debian/remove \
+debian/docbase debian/templates
 
-debian/system.variables: /home/salve/Debian/Packages/system.variables
+debian/system.variables: /home/salve/.../Debian/Packages/system.variables
 	$(INSTDATA) $< $@
 
 debian/rules: debian/variables
 
-# Eperl is simply great: thanks, Ralf!
+<:# Eperl is simply great: thanks, Ralf! :>//
 % :: %.in
 	eperl -P -o $@ $<
 
 build: $(DFILES)
 	$(checkdir)
+	test -e ./configure || autoconf
 	./configure
 	$(MAKE) MAKEINFO="makeinfo --verbose" \
 		TEXI2HTML="texi2html -verbose" \
@@ -46,7 +39,7 @@ build: $(DFILES)
 
 clean:
 	$(checkdir)
-	-rm -rf build core trashcan $(tmp) debian/files* debian/substvars
+	-rm -rf build core $(tmp) debian/files* debian/substvars
 	-rm -f	$(DFILES)
 	-$(MAKE) distclean
 
@@ -59,13 +52,13 @@ binary-indep: checkroot build
 	$(checkdir)
 	-rm -rf $(tmp)
 
-#       install package
+<:# install package :>//
 	$(INSTDIR) $(tmp)/<:=$info:> $(tmp)/<:=$lisp:>
 	$(INSTDATA) <:=$SOURCES:> $(tmp)/<:=$lisp:>
 	$(INSTDATA) <:=$INFOS:> $(tmp)/<:=$info:>
 	gzip -9frv $(tmp)/<:=$info:>
 
-#       install Debian doc
+<:# install Debian doc :>//
 	$(INSTDIR) $(tmp)/<:=$doc:> $(tmp)/<:=$html:>
 	$(INSTDATA) <:=$DOCS:> $(tmp)/<:=$doc:>
 	$(INSTDATA) debian/README $(tmp)/<:=$doc:>/README.Debian
@@ -77,20 +70,19 @@ binary-indep: checkroot build
 	$(INSTDATA) <:=$HTMLS:> $(tmp)/<:=$html:>
 	ln -snf mailcrypt_toc.html $(tmp)/<:=$html:>/index.html
 
-#       install Debian system files
+<:# install Debian system files :>//
 	$(INSTDIR) $(tmp)/<:=$ecode:>/{install,remove} $(tmp)/<:=$docbase:>
 	$(INSTDATA) debian/<:=$PACKAGE:>-init.el $(tmp)/<:=$lisp:>/../
 	$(INSTDATA) debian/docbase $(tmp)/<:=$docbase:>/<:=$PACKAGE:>
 	$(INSTSCRIPT) debian/install $(tmp)/<:=$ecode:>/install/<:=$PACKAGE:>
 	$(INSTSCRIPT) debian/remove $(tmp)/<:=$ecode:>/remove/<:=$PACKAGE:>
 
-#       install Debian control files
+<:# install Debian control files :>//
 	$(INSTDIR) $(tmp)/<:=$debian:>
 	$(INSTDATA) debian/templates $(tmp)/<:=$debian:>
 	$(INSTSCRIPT) debian/{config,preinst,postinst,prerm,postrm} $(tmp)/<:=$debian:>
 
-#       standard stuff
-#-#	cd $(tmp) && du -k * | grep -v 'DEBIAN' | sort -k 2 -o $(tmp)/<:=$debian:>/du
+<:# standard stuff :>//
 	cd $(tmp) && md5sum \
 		$$(find ./ -path './DEBIAN' -prune -o -type f -printf "%P\n") \
 		| sort -k 2 -o $(tmp)/<:=$debian:>/md5sums

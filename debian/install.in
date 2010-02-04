@@ -1,8 +1,7 @@
 #include "variables"
-#!/bin/bash -e
+#! /bin/bash -e
 #
-# elisp install file for Debian <:=$PACKAGE:> package.
-# $Id: install.in,v 1.10 2005/04/11 17:33:51 salve Exp $
+# elisp install for <:=$PACKAGE:>
 #
 <:=@COPYRIGHT:>//
 

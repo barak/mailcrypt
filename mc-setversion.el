@@ -19,19 +19,18 @@
 ;; the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 ;;}}}
 
-(defvar mc-default-scheme 'mc-scheme-pgp
-  "*Set the default encryption scheme for Mailcrypt to use. Defaults
-to pgp 2.6 for backward compatibility.")
+(require 'mailcrypt)
 
 (defun mc-setversion (&optional version)
   "Reset path and argument information for the selected version of PGP.
-Possible values of VERSION are 2.6, 5.0, and gpg."
+Possible values of VERSION are 2.6, 5.0, 6.5, and gpg."
   (interactive)
 
   (if (null version)
       (let
 	  ((oldversion
 	    (cond
+	     ((eq mc-default-scheme 'mc-scheme-pgp65) "6.5")
 	     ((eq mc-default-scheme 'mc-scheme-pgp50) "5.0")
 	     ((eq mc-default-scheme 'mc-scheme-pgp) "2.6")
 	     ((eq mc-default-scheme 'mc-scheme-gpg) "gpg")
@@ -45,6 +44,7 @@ Possible values of VERSION are 2.6, 5.0, and gpg."
 		 ("2.6" 1) 
 		 ("5.0" 2)
 		 ("gpg" 3)
+		 ("6.5" 4)
 		 ) nil 
 		   t   ; REQUIRE-MATCH
 		   nil ; INITIAL
@@ -54,6 +54,10 @@ Possible values of VERSION are 2.6, 5.0, and gpg."
 	    (setq version oldversion))))
 
   (cond
+   ((string-equal version "6.5")
+    (progn
+      (setq mc-default-scheme 'mc-scheme-pgp65)
+      (message "PGP version set to 6.5.")))
    ((string-equal version "5.0")
     (progn
       (setq mc-default-scheme 'mc-scheme-pgp50)

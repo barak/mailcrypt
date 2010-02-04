@@ -1,3 +1,15 @@
+mailcrypt (3.5.8+CVS.2005.04.29.1-1) unstable; urgency=medium
+
+  * New CVS upstream source.
+  * Urgency high: Fixes a serious bug.
+  * ../Makefile.in (mailcrypt_toc.html): Added an option to "texi2html" in
+    order to avoid a subdirectory for the generated HTML files; thanks to
+    Matt Kraai.  (Closes: #323730)
+    (distclean): Also remove "tests/Makefile", "tests/remailer/Makefile",
+    and "autom4te.cache/".
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Sun, 11 Sep 2005 00:19:49 +0200
+
 mailcrypt (3.5.8-3) unstable; urgency=low
 
   * control (Depends), install, remove: Added emacs-snapshot as a
@@ -9,9 +21,9 @@ mailcrypt (3.5.8-3) unstable; urgency=low
 mailcrypt (3.5.8-2) unstable; urgency=high
 
   * ../mc-gpg.el: Patch from upstream CVS; thanks to James Troup.
-  (Closes: #234954, #117204)
+    (Closes: #234954, #117204)
   * control (Depends): Removed emacs20; thanks to Martin Michlmayr.
-  (Closes: #232769)
+    (Closes: #232769)
   
  -- Davide G. M. Salvetti <salve@debian.org>  Sat, 28 Feb 2004 12:11:35 +0100
 
@@ -19,7 +31,7 @@ mailcrypt (3.5.8-1) unstable; urgency=medium
 
   * New upstream release.  (Closes: #161691)
   * control (Depends): Removed mule2.
-  (Standards-Version): Upgraded to 3.5.7.
+    (Standards-Version): Upgraded to 3.5.7.
   * postinst (do_link): Removed.
   * prerm (undo_link): Removed.
 
@@ -29,10 +41,10 @@ mailcrypt (3.5.7-1) unstable; urgency=medium
 
   * New upstream release.
   * control (Description): Added Mew.
-  (Section): mail.
+    (Section): mail.
   * copyright: Added Brian Warner as appropriate.
   * docbase (Abstract): Added Mew.
-  (Author): Added Brian Warner.
+    (Author): Added Brian Warner.
   * mailcrypt-init.el: Added Mew's hooks.
   * rules (clean): Do not remove mailcrypt.info* and mailcrypt.dvi any more.
   
@@ -72,20 +84,21 @@ mailcrypt (3.5.6-3) unstable; urgency=low
 mailcrypt (3.5.6-2) unstable; urgency=low
 
   * remove: Added `|| true' after `rmdir'; thanks to Timshel Knoll.
-  (Closes: #101068)
+    (Closes: #101068)
 
  -- Davide G. M. Salvetti <salve@debian.org>  Sat, 16 Jun 2001 13:45:49 +0200
 
 mailcrypt (3.5.6-1) unstable; urgency=low
 
-  * New upsgream release.
+  * New upstream release.
 
  -- Davide G. M. Salvetti <salve@debian.org>  Fri, 25 May 2001 17:09:43 +0200
 
 mailcrypt (3.5.5.20010506-2) unstable; urgency=high
 
   * rules (build): Removed debian/rules from deps.
-  (debian/rules): Removed debian/system.variables from deps.  (Closes: #97579)
+    (debian/rules): Removed debian/system.variables from deps.
+    (Closes: #97579)
 
  -- Davide G. M. Salvetti <salve@debian.org>  Wed, 16 May 2001 14:47:08 +0200
 

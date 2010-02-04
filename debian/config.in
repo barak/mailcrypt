@@ -1,8 +1,7 @@
 #include "variables"
-#!/bin/bash -e
+#! /bin/bash -e
 #
-# config configuration file for Debian <:=$PACKAGE:> package.
-# $Id: config.in,v 1.6 2002/09/01 15:08:40 salve Exp $
+# config for <:=$PACKAGE:>
 #
 <:=@COPYRIGHT:>//
 

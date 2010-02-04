@@ -1,4 +1,163 @@
+2004-11-08  Brian Warner  <warner@lothar.com>
+
+	* mc-pgp.el (mc-scheme-pgp): fix typo.. how did this last so long?
+	Patch from Jari Aalto via Kevin Bube.
+
+2003-30-11  Kevin Bube  <kbube@users.sourceforge.net>
+
+	* mailcrypt.texi: updated description for GPG keyfetching with the
+	new features.
+	
+2003-11-06  Kevin Bube  <kbube@users.sourceforge.net>
+
+	* mc-gpg.el: added a function for fetching keys by making use of
+	the gpg --recv-key feature. Also ported a function from mc-pgp.el
+	to mc-gpg.el to import keys by the finger protocol.
+
+	* Updated other files so that (mc-gpg-fetch-key) is used if
+	(mc-scheme-gpg) is used.
+
+2003-07-25  Brian Warner  <warner@lothar.com>
+
+	* mc-toplev.el (mc-gnus-decrypt-message): use
+	gnus-article-edit-done to replace the decrypted message, as it
+	updates some of the headers. patch from Ivan Boldyrev, SF#646005.
+
+	* NEWS: summarize recent changes
+
+	* mc-gpg.el (mc-gpg-process-region): Set the gpg-stdout buffer
+	(which receives data from mailcrypt) to multibyte mode. This
+	should fix the "inserts \201 characters before non-ascii" bug
+	[SF#496157, SF#501891], and possibly others.
+
+	* tests/test-gpg.el (run-all-tests): Run tests twice, once with
+	standard-display-european turned on. This triggers the
+	long-standing "clearsigning inserts \201 characters" bug. Also
+	display mismatching plaintext a bit better.
+
+2003-07-16  Brian Warner  <warner@lothar.com>
+
+	* tests/make_gpg_testcases.py (Latin1_CS_Case.make_plaintext): 
+	clearsigned messages must always end with a newline. gpg will add
+	one if necessary. This caused the test case to fail.
+	* tests/gpg-testcases/CS.latin1.s1v: added newline to plaintext
+
+2003-07-15  Brian Warner  <warner@lothar.com>
+
+	* tests/remailer/fakemix.sh: oops, add script used by unit tests
+
+2003-07-14  Brian Warner  <warner@lothar.com>
+
+	* tests/remailer/Makefile.in, tests/remailer/test-remailer3.el:
+	unit tests for new remailer code
+	* mc-remail2.el (mc-mixminion-ask): hook to make tests simpler
+
+	* mailcrypt.texi (Types of Remailers): Document remailer-schemes,
+	how to use new mixmaster/mixminion clients.
+	(Credits): Note Len and Brian's contributions, add SourceForge
+	pointer.
+
+	* mc-toplev.el (mc-remail): Add remailer-schemes
+
+	* mc-remail.el (mc-remailer-scheme-type1): change old remailer
+	code to support remailer-schemes.
+	(mc-remailer-encrypt-for-chain): now verbose mode (pause between
+	encryption layers) is achieved with 'C-uC-u' (two prefix args
+	instead of just one)
+
+	* mailcrypt.el (mc-default-remailer-scheme): new remailer support.
+	Changed [C-c / r] to invoke 'mc-remail', which is then mapped into
+	a remailer-scheme-specific function
+
+	* mc-remail2.el: added support for mixminion and new mixmaster clients
+
+	* mc-setversion.el: remove mc-default-scheme, as it is defined in
+	mailcrypt.el
+
+	* mailcrypt.el (mc-schemes): Add "pgp65" to the schemes list, so
+	mc-setversion can tab-complete on it.
+	(mc-version): bump version to "3.5.8+" while we're in between
+	releases, to avoid confusion with the real "3.5.8" release.
+
+2003-06-13  Brian Warner  <warner@lothar.com>
+
+	* mc-pgp6.el: actually add the file. How embarrassing. Thanks to
+	"nega" for the catch.
+
+2003-05-23  Brian Warner  <warner@lothar.com>
+
+	* Makefile.in: remove 'bindir' now that helper scripts are long-gone
+
+	* Makefile.in (SOURCES): add mc-pgp6.el
+	* mc-toplev.el (mc-scheme-pgp65): Add mc-pgp6 autoload
+	* mc-setversion.el (mc-setversion): add "6.5" setting
+	* mc-pgp6.el: PGP 6.5 support, contributed by Derek Atkins
+
+2003-05-20  Brian Warner  <warner@lothar.com>
+
+	* mailcrypt.texi (Signing): Move documentation of mc-pgp-user-id
+	variables to the 'Signing a Message' section. Explain use of hex
+	keyids to deal with multiple identically-named keys.
+
+2003-05-19  Brian Warner  <warner@lothar.com>
+
+	* mailcrypt.el (mc-modes-alist): Add support for the Wanderlust
+	mail mode. Thanks to Fumitoshi UKAI for the patch.
+
+2002-12-01  Brian Warner  <warner@lothar.com>
+
+	* tests/remailer/gtkwatcher.glade
+	* tests/remailer/gtkwatcher.py
+	(WatcherGUI.do_dst_popup): tweak popups to pick the right message
+
+2002-11-30  Brian Warner  <warner@lothar.com>
+
+	* tests/remailer/gtkwatcher.glade
+	* tests/remailer/gtkwatcher.py: add popup menus for message actions
+	(WatcherGUI.do_update): show send time in local timezone, not GMT
+        add send time to Received Messages popup
+
+	* tests/remailer/watcher.py: add ability to flush old messages,
+	abandon them, query for age of outstanding ones. Make all msgids
+	integers. Fix use of default NNTP port.
+	(NewsWatcher.poll): Handle missing messages
+	(Watcher.txtime): code to get send time of a message
+
+2002-11-29  Brian Warner  <warner@lothar.com>
+
+	* tests/gpg-testcases/E.latin1.e1r
+	* tests/gpg-testcases/CS.latin1.s1v
+	* tests/gpg-testcases/E.e1re3re4r
+	* tests/make_gpg_testcases.py (Latin1_CS_Case, Latin1_E_Case, EE_Case):
+	add some new test cases
+
+	* tests/remailer/gtkwatcher.glade
+	* tests/remailer/gtkwatcher.gladep: rewrite using glade-2
+	
+	* tests/remailer/gtkwatcher.py (WatcherGUI, GtkWatcher)
+	* tests/remailer/watcher.py (Watcher): rewrite: now uses gtk2, Maildir
+	class, DNotify if available (or 10-second poll if not).
+
+	* tests/remailer/maildir.py
+	* tests/remailer/maildirgtk.py
+	* tests/remailer/maildirtwisted.py: classes to watch Maildirs using
+	various	event loops.
+
+	* tests/remailer/dnotify.py: python interface to linux 2.4.x DNotify
+	facility, to get a signal when a directory changes
+
 2002-09-26  Brian Warner  <warner@lothar.com>
+
+	* tests/remailer/watcher.py (NewsWatcher): added code to poll an
+	NNTP server, to test Anon-Post-To: remailer usage.
+
+2002-09-26  Brian Warner  <warner@lothar.com>
+
+	* mailcrypt.texi (Remailer Quick Start): Emphasize that you can
+	only rewrite for one remailer/chain at a time (the prompt accepts
+	a single word, not a comma-separated-list), but point to the
+	section on building up chains of remailers for reference. Closes
+	SF#579442
 
 	* mailcrypt: Release mailcrypt 3.5.8
 

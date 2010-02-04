@@ -1,0 +1,27 @@
+(
+(crypttext . "
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1.2.0 (GNU/Linux)
+
+hM4DV7wu3TSGTqsQAwCM7/8ic8uFhiqQ5o7zZF+nRz+LOeaFzefA564LnS7E1Kvc
+AW7RMLAqjz6Xt1uxyfgo9RBb+HYYyBdM9nM9whzfs3GgjHH30kxNOjZDVmBr7UK1
+UWRxk1bjfLl6w8nM0BIC/0QKtr3sacVWJht8x6ewZzOxXhkzL/5PE08NAP4IFdwy
+YQD0plSPi65BfHvFfeURPFbM7URaPOfhxKU+GfyQIjDgNO1Rh2tKki1LJ0mE9GQc
+TAdsi5Lg23CJx2agiiWI7tK8AaPnXhat+E8BLaLimdZqCtypJHdp6p36s3OvqqqJ
+VCrr1egLjwDs6RbR6p/dXjzHoFLgf0DA7U9CK4JtEHvL9EqFbCGjz61a2tHbllUB
+zl3gCKpRWR93wYvW6eEcUA1zbH0igRn4E6082uRl2yKr/EMM8XoMSHhb507+B6kL
+KcPbbH/k589ScANMdMYjky2RbCBmWWrXM/dEF/FKkSQTqleufKCTE4bxw2T3KBta
+EiOBMRr9AbYVDJL42QI=
+=s+8c
+-----END PGP MESSAGE-----
+")
+(encryption_id . "0xC8B20C2FB481403E")
+(error . nil)
+(name . "E.latin1.e1r")
+(passphrase . "owner1")
+(plaintext . "
+Usted tiene que mostrar esta evidencia escrita a un oficial de policía cuando
+éste lo solicite así como a otro conductor o dueño do propiedad después de un
+accidente vial.")
+(signature_status . nil)
+)

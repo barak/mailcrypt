@@ -1,8 +1,9 @@
 ;-*-emacs-lisp-*-
 
 ;; mailcrypt-init.el, perform mailcrypt initialization
+;; Copyright (C) 1998, 99, 2002, 05
+;; by Davide G. M. Salvetti <salve@debian.org>
 ;; Copyright (C) 1996 Joe Reinhardt <joe-reinhardt@uiowa.edu>
-;; Copyright © Davide G. M. Salvetti <salve@debian.org>, 1998, 1999, 2002.
 
 ;;{{{ Licensing
 ;; This file is intended to be used with GNU Emacs.
@@ -19,7 +20,7 @@
 
 ;; You should have received a copy of the GNU General Public License along
 ;; with this program; if not, write to the Free Software Foundation, Inc.,
-;; 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+;; 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 ;;}}}
 
 (provide 'mailcrypt-init)

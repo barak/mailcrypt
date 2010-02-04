@@ -1,8 +1,7 @@
 #include "variables"
-#!/bin/bash -e
+#! /bin/bash -e
 #
-# postrm configuration file for Debian <:=$PACKAGE:> package.
-# $Id: postrm.in,v 1.6 2002/09/01 15:08:41 salve Exp $
+# postrm for <:=$PACKAGE:>
 #
 <:=@COPYRIGHT:>//
 

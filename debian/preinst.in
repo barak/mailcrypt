@@ -1,8 +1,7 @@
 #include "variables"
-#!/bin/bash -e
+#! /bin/bash -e
 #
-# preinst configuration file for Debian <:=$PACKAGE:> package.
-# $Id: preinst.in,v 1.5 2002/09/01 15:08:41 salve Exp $
+# preinst for <:=$PACKAGE:>
 #
 <:=@COPYRIGHT:>//
 

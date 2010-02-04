@@ -1,12 +1,11 @@
-<:# Copyright (C) 1999, 2000, 01, 02 by Davide Giovanni Maria Salvetti.:>//
-<:# $Id: variables,v 1.8 2002/09/01 15:08:41 salve Exp $:>//
-<:# BEWARE: The file mailcrypt-init.el is not yet EPerled!:>//
+<:# Copyright (C) 1999, 2000, 01, 02, 05 by Davide Giovanni Maria Salvetti.:>//
+<:# BEWARE: The file mailcrypt-init.el is not yet EPerled! :>//
 <:$PACKAGE="mailcrypt":>//
-<:# Documentation:>//
+<:# documentation :>//
 <:$DOCS="ANNOUNCE ChangeLog.1 NEWS ONEWS README README.gpg mailcrypt.texi texi2html.ext":>//
-<:# Mailcrypt sources:>//
+<:# sources :>//
 <:$SOURCES="mailcrypt.el mc-toplev.el mc-pgp.el mc-remail.el mc-pgp5.el mc-gpg.el expect.el mc-setversion.el":>//
-<:# Misc package variables:>//
+<:# misc package variables :>//
 <:$HTMLS="*.html":>//
 <:$INFOS="$PACKAGE.info*":>//
 <:$MENUSEC="Apps/Editors":>//

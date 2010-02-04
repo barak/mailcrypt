@@ -1,8 +1,7 @@
 #include "variables"
-#!/bin/bash -e
+#! /bin/bash -e
 #
-# elisp remove file for Debian <:=$PACKAGE:> package.
-# $Id: remove.in,v 1.10 2005/04/11 17:33:32 salve Exp $
+# elisp remove for <:=$PACKAGE:>
 #
 <:=@COPYRIGHT:>//
 
@@ -16,7 +15,7 @@ FLAVOR=$1
   # mailcrypt had a typo bug and failed to remove $ELCLOG.gz.
 
   # The affected time window is from 1999-10-12 to 1999-12-12, when the emacs19
-  # Debian version was 19.34-21 and the emacs20 ones were 20.3-11--20.4-3.
+  # Debian version was 19.34-21 while the emacs20 ones were 20.3-11--20.4-3.
 
   # However, other emacsen may have been used as well, so our strategy is to
   # remove $ELCLOG.gz and its parents, if empty, from every no more installed
@@ -24,7 +23,7 @@ FLAVOR=$1
 
   # Of course package, files, and directories names are hardcoded here, as this
   # is code that deals with old cruft, and should not change in the future with
-  # variables or system.variables.
+  # "variables" or "system.variables".
 :>//
 clean_old_cruft () {
     rm -f /usr/share/emacs/$1/site-lisp/mailcrypt/CompilationLog.gz
