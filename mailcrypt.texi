@@ -121,11 +121,11 @@ Introduction
 
 Installation
 
-* Hooking into Rmail::          
-* Hooking into VM::             
-* Hooking into MH-E::           
-* Hooking into Gnus::           
-* Hooking into Mew::           
+* Hooking into Rmail::
+* Hooking into VM::
+* Hooking into MH-E::
+* Hooking into Gnus::
+* Hooking into Mew::
 
 General Use
 
@@ -264,11 +264,11 @@ Then add additional lines for your own mail and news packages as
 described below.
 
 @menu
-* Hooking into Rmail::          
-* Hooking into VM::             
-* Hooking into MH-E::           
-* Hooking into Gnus::           
-* Hooking into Mew::           
+* Hooking into Rmail::
+* Hooking into VM::
+* Hooking into MH-E::
+* Hooking into Gnus::
+* Hooking into Mew::
 @end menu
 
 @node Hooking into Rmail, Hooking into VM, Installation, Installation
@@ -792,28 +792,54 @@ first.  Begin with the following steps:
 @enumerate
 
 @item
-Do @samp{finger rlist@@mixmaster.shinn.net > ~/.remailers}. This
-will create a Levien-format list of remailers in the file
-@file{.remailers} in your home directory (see the variable
-@code{mc-levien-file-name}). Mailcrypt will parse this the first time
-you access a remailer function. @samp{rlist@@noisebox.remailer.org} is
-another good place to get this list.
+Download Levien-format list of remailers from
+@file{http://www.tahina.priv.at/~cm/stats/rlist.txt} (as of
+2007-03-01) and save the file to @samp{~/.remailers}. See the variable
+@code{mc-levien-file-name} to chnage the file name anad location.
+Mailcrypt will parse this the first time you access a remailer
+function.
 
 @item
 Look over the @file{.remailers} file and find the ones you want to use.
+The lines that list remailers and their capabilities look like ones
+below. It is best to consuts remailer statistics page to determine
+the most reliable candidats for chaining.
+
+@lisp
+$remailer{"frell"} = "..."
+$remailer{"starwars"} = "..."
+@end lisp
 
 @item
-Add their PGP public keys to your keyring. You can @code{finger
-remailer-keys@@mixmaster.shinn.net} for an armored keyring full of
-remailer public keys. Note that Mailcrypt @emph{requires} that you
-have the public keys of all the remailers you want to use, and
-therefore that the remailers support PGP encryption.
+Add their PGP public keys to your keyring. You can for an armored
+keyring full of remailer public keys. Note that Mailcrypt
+@emph{requires} that you have the public keys of all the remailers you
+want to use, and therefore that the remailers support PGP encryption.
+
+The list of remailers and their keys (as of 2007-03-01) can be found at
+@file{http://www.noreply.org/echolot/thesaurus/}. With gpg, after each
+@emph{key} has been saved to a file, the entries can be imported into
+separate public keyring with command:
+
+@list
+gpg --no-options --no-default-keyring \
+    --keyring ~/.gnupg/pubring-remailer.gpg \
+    --import *.key
+@end lisp
+
+In order for gpg to use separate keyring, the new keyring file must be
+configured to @file{~/.gnupg/gpg.conf} by adding this line:
+
+@list
+keyring pubring-remailer.gpg
+@end lisp
 
 @end enumerate
 
 @quotation
-@emph{Note:} These steps need only be done once, although repeating them
-from time to time is probably a good idea, since remailers come and go.
+@emph{Note:} Downloading the remailer list and their keys need only be
+done once, although repeating them from time to time is probably a
+good idea, since remailers come and go.
 @end quotation
 
 Now test the remailer functions.  First compose an outgoing Email
@@ -827,12 +853,6 @@ message. To send the message through multiple hops, either rewrite the
 message multiple times, or define a @emph{chain} of remailers that can
 be referred to like a single remailer. Remailer chains are described
 in the next section.
-
-The remailer list and keyrings can also be obtained via HTTP.
-@file{http://anon.efga.org/Remailers/Settings} and
-@file{http://mixmaster.shinn.net/stats/settings/index.html} have lists
-of URLs from which these can be retrieved.
-
 
 @node Remailer Chains, Response Blocks, Remailer Quick Start, Remailer Support
 @section Remailer Chains
@@ -1028,10 +1048,10 @@ analogue to the @samp{To} line).
 mixmaster interface. For a description of mailcrypt's support for the
 modern mixmaster client see @ref{Mixmaster and Mixminion}.)
 
-@dfn{Mixmaster} is a new kind of remailer which provides excellent
+@dfn{Mixmaster} is a newer type of remailer which provides excellent
 security against traffic analysis and replay attacks.  (For more
-information on these attacks and Mixmaster, see Lance Cottrell's home
-page at @file{http://www.obscura.com/~loki/}.
+information on these attacks and Mixmaster, see Lance Cottrell's FAQ
+at @file{http://mixmaster.sourceforge.net/faq.shtml}.
 
 If you do not use Mixmaster, you may skip this section entirely;
 Mailcrypt's default configuration treats Mixmaster as if it did not
@@ -1212,7 +1232,7 @@ is your pseudonym.  You upload the public key to the key servers or
 otherwise distribute it.  (Be aware that anyone who compromises your
 account can read the IDs on your secret keyring, thus discovering your
 verifiable pseudonyms.)
-   
+
 @item
 You compose an Email message, Email reply, news post, or news followup.
 
@@ -1251,30 +1271,19 @@ This is a collection of tips for using Mailcrypt's remailer support.
 
 @item
 @vindex mc-levien-file-name
-Read and understand the @file{.remailers} file.  Other sources for
-this list include @file{http://www.chez.com/frogadmin/MyCypSta1.txt}
-and @file{http://anon.efga.org/Remailers/rlist}.  If all of these
-servers have gone away by the time you read this, track down a
-comparable service elsewhere.  (Do a web search for ``anonymous
-remailer list'', ask around in @file{news:alt.privacy.anon-server}, or,
-as a last resort, @file{news:alt.security.pgp}.)  Check the
-documentation (@kbd{C-h v}) for the variable
-@code{mc-levien-file-name} for a description of Levien format.
+Read and understand the @file{.remailers} file. Do a web search for
+``anonymous remailer list'', ask around in
+@file{news:alt.privacy.anon-server}, or, as a last resort,
+@file{news:alt.security.pgp}. Check the documentation (@kbd{C-h v})
+for the variable @code{mc-levien-file-name} for a description of
+Levien format.
 
 @item
 Mailcrypt needs to be able to encrypt a message to each remailer in
 the chain, so it needs access to their public keys, in a keyring
 usable by the currently selected backend.  Keyrings containing keys
 for all the well-known remailers are usually available from the same
-places as the remailer lists above:
-@file{http://www.chez.com/frogadmin/Keys/dsskeys.asc},
-@file{http://anon.efga.org/Remailers/TypeIList/pubring.asc}.
-
-@c TODO: With the GPG backend, you can take one of the .pkr or .gpg -format
-@c keyrings, save it to ~/remailer-pubring.pgp, and the remailer encryption
-@c functions will automatically add that keyring to the set used when working
-@c with remailers. This means you don't have to clutter your normal keyring
-@c with the remailer keys.
+places as the remailer lists.
 
 @item
 The relevant remailer properties are @code{pgp} (required), @code{hash}
@@ -1803,23 +1812,18 @@ topics related to PGP and Mailcrypt.
 
 @table @file
 
-@item http://cag-www.lcs.mit.edu/mailcrypt/
-"Mailcrypt: An Emacs/PGP Interface", by Pat LoPresti. This page has
-been the Mailcrypt homepage since October 10, 1995.  It is still
-the distribution site for version 3.4 of Mailcrypt--a rock-solid
-version still to be recommended if you use only PGP 2.6.x.
+@item http://sourceforge.net/users/patl
+"Mailcrypt: An Emacs/PGP Interface", by Patrick J. LoPresti. The author
+of original Mailcrypt.
 
 @item http://world.std.com/~franl/crypto.html
-"Cryptography, PGP, and Your Privacy", by Fran Litterio.  This page is
-simply excellent.  It makes all the other References in this chapter
-redundant, but we will include them anyway for redundancy.
+"Cryptography Web Sites, Publications, FAQs, and References", by Fran
+Litterio. This page is simply excellent. It makes all the other
+References in this chapter redundant, but we will include them anyway
+for redundancy.
 
-@item http://web.mit.edu/network/pgp.html
-MIT is the canonical distribution site for PGP; this is the announcement
-page.
-
-@item ftp://rtfm.mit.edu/pub/usenet/alt.security.pgp/
-This is an archive site for the @file{alt.security.pgp} FAQ lists.
+@item http://www.faqs.org/faqs/by-newsgroup/alt/alt.security.pgp.html
+This is a site for the @file{alt.security.pgp} FAQ lists.
 
 @item news:alt.security.pgp
 The @file{alt.security.pgp} newsgroup is a good place to go for
@@ -1827,8 +1831,8 @@ discussion about PGP, as well as any topic which any fool anywhere ever
 thinks is related to PGP.  It is also a good last resort for getting
 answers to questions, but please read the FAQ lists first.
 
-@item http://pgp.ai.mit.edu/~bal/pks-toplev.html
-Brian LaMacchia (bal@@zurich.ai.mit.edu) has put together a World Wide
+@item http://www.farcaster.com/
+Brian LaMacchia put together a World Wide
 Web interface to the public key servers (@pxref{Key Servers}).
 Mailcrypt uses this interface by default when attempting to fetch keys
 via HTTP (@pxref{HTTP Fetch}); most people get to his interface through
@@ -1839,16 +1843,13 @@ The Cypherpunks are dedicated to taking proactive measures to ensure
 privacy in the digital age.  They wrote the software for, and operate
 many of, the anonymous remailers currently in existence.
 
-@item http://www.cs.berkeley.edu/~raph/
-Raph Levien actively maintains a remailer list which Mailcrypt knows how
-to parse.  If you are impressed by how easy it is to configure
-Mailcrypt's remailer functions, Raph is the one to thank.  Raph's page
-also has many useful links.
+@item http://www.advogato.org/person/raph/
+Raph Levien (raph.levien at gmail.com) previously maintained a
+remailer list. If you are impressed by how easy it is to configure
+Mailcrypt's remailer functions, Raph is the one to thank.
 
-@item http://www.obscura.com/~loki/
-Lance Cottrell is the author of Mixmaster.  His home page is the
-canonical source for information on Mixmaster and is a good source for
-PGP pointers in general.
+@item http://en.wikipedia.org/wiki/Lance_Cottrell
+Lance Cottrell is the author of Mixmaster.
 
 @item http://www.gnupg.org/
 Homepage for the GNU Privacy Guard. This is a GPL-ed replacement for PGP.
@@ -1942,9 +1943,10 @@ the EFF, but is more of a lobbying group.
 @end table
 
 Mailcrypt's remailer support was inspired by the Communications Decency
-Act of 1995 (see @file{http://www.cdt.org/cda.html}) and by the
+Act of 1995 (see @file{http://www.cdt.org/speech/cda/} and
+@file{http://wikipedia.org/wiki/Communications_Decency_Act}) and by the
 International "Church" of Scientology (see
-@file{http://www.mit.edu:8001/people/rnewman/scientology/}).
+@file{http://wikipedia.org/wiki/Church_of_Scientology}).
 
 @node Credits, Index, References, Top
 @chapter Credits

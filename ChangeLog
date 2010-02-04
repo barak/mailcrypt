@@ -1,3 +1,21 @@
+2007-03-01  Jari Aalto  <jari aalto A T cante net>
+
+        * mailcrypt.texi (Remailer Quick Start): Removed non-existing
+        URLs: noisebox.remailer.org, mixmaster.shinn.net, anon.efga.org.
+        Added new instructions where to get the rmailer list (rlist).
+        Added instructions how to import remailer keys to separate gpg
+        pubring and how to configure gpg to use it. Removed non-existing
+        www.obscura.com and pointed URL to correct Mixmaster FAQ location.
+        (Remailer Tips): Removed non-exiting URLs www.chez.com and
+        anon.efga.org. Rmeoved `@c' commaent lines that explained how to
+        use separate gpgp keyrings. The instructions were added above.
+        (Online Resources): Added notes to links that no longer exist.
+        Removed non-exiting links: web.mit.edu. Updated links:
+        rtfm.mit.edu/pub/usenet/alt.security.pgp/ => www.faqs.org.
+        Updated homepages: Patrick J. LoPresti, Brian LaMacchia, Lance
+        Cottrell, Raph Levien Updated links to "Communications Decency
+        Act" etc.
+
 2004-11-08  Brian Warner  <warner@lothar.com>
 
 	* mc-pgp.el (mc-scheme-pgp): fix typo.. how did this last so long?
