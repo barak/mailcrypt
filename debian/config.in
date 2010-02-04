@@ -12,13 +12,7 @@ db_version 2.0
 
 case "${1}" in
     (configure|reconfigure)
-	if egrep "\brequire[[:space:]]+[^)]*'mailcrypt-init\b" \
-	    <:=$SSEL:> &>/dev/null; then
-	    db_set <:=$PACKAGE:>/default false || true
-	    db_text low <:=$PACKAGE:>/alreadydefault || true
-	else
-	    db_input medium <:=$PACKAGE:>/default || true
-	fi
+	db_input medium <:=$PACKAGE:>/default || true
 	db_go || true
     ;;
     (*) echo >&2 "${0##*/}/<:=${PACKAGE}:>:" \

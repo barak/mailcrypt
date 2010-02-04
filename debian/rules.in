@@ -18,7 +18,7 @@ INSTDATA := install -m 644
 INSTSCRIPT := install -m 755
 STRIP := strip -R .note -R .comment
 
-<:# DO NOT include <% debian/rules %> or <% debian/templates %> :>//
+<:# DO NOT include <% debian/rules %> nor <% debian/templates %> :>//
 DFILES := debian/README debian/copyright \
 debian/config debian/postinst debian/prerm debian/postrm \
 debian/docbase debian/lintian \
@@ -53,7 +53,7 @@ debian/po/templates.pot: $(DCSOURCES)
 %.dcobj: % debian/po/templates.pot
 	po2debconf --verbose --podir debian/po $< > $@
 
-build: $(DFILES)
+build: $(DFILES) debian/po/templates.pot
 	$(checkdir)
 	chmod a+x ./configure;	<:# next upstream release remove me :>//
 	./configure --infodir=<:=${info}:>
@@ -63,7 +63,7 @@ build: $(DFILES)
 	touch build
 
 .PHONY: clean
-clean:
+clean: debian/po/templates.pot
 	$(checkdir)
 	-rm -rf build core $(tmp) debian/{files*,substvars}
 	-rm -f debian/po/updatepo
@@ -149,7 +149,7 @@ binary-arch: build
 	$(checkroot)
 
 .PHONY: build-package
-build-package:
+build-package: clean
 	dpkg-buildpackage -rfakeroot -tc -i
 
 .PHONY: source diff

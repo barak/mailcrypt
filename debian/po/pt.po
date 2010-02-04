@@ -1,0 +1,91 @@
+# Portuguese translations of the "debian/templates" file
+# of the mailcrypt Debian package.
+#
+# Copyright (C) 2007 by Davide G. M. Salvetti.
+#
+# This file is distributed under the same license as the mailcrypt package.
+#
+# Pedro Ribeiro <p.m42.ribeiro@gmail.com>, 2007.
+#
+# arch-tag: 729b28f9-784c-4dcc-84f7-c09dde384e78
+msgid ""
+msgstr ""
+"Project-Id-Version: mailcrypt-3.5.8+CVS.2005.04.29.1-10\n"
+"Report-Msgid-Bugs-To: salve@debian.org\n"
+"POT-Creation-Date: 2007-01-30 04:32+0100\n"
+"PO-Revision-Date: 2007-07-26 17:48+0200\n"
+"Last-Translator: Pedro Ribeiro <p.m42.ribeiro@gmail.com>\n"
+"Language-Team: Portuguese <traduz@debianpt.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: boolean
+#. Description
+#: ../templates:1001
+msgid "Should Mailcrypt be auto-loaded by default at your site?"
+msgstr "Deve auto-carregar o Mailcrypt por omisÅ„o no seu site ?"
+
+#. Type: boolean
+#. Description
+#: ../templates:1001
+msgid ""
+"Mailcrypt will globally (i.e., for all users on this site) overload certain "
+"Emacs functions and key-bindings if you answer affirmatively to this "
+"question."
+msgstr ""
+"O Mailcrypt vai globalmente (i.e., para todos os utilizadores deste site) "
+"substituir certas funÅÁÅıes e comandos de teclado do Emacs se responder "
+"afirmativamente a esta questÅ„o."
+
+#. Type: boolean
+#. Description
+#: ../templates:1001
+msgid ""
+"This is generally a good thing, since Mailcrypt is a very useful package; "
+"however you may not want it to happen, and instead let single users at your "
+"site decide by themselves if they should load this package."
+msgstr ""
+"Normalmente isto ÅÈ bom, uma vez que o Mailcrypt ÅÈ um pacote muito Å˙til; no "
+"entanto pode nÅ„o querer isto, e deixar que os utilizadores decidam se querem "
+"ou nÅ„o este pacote."
+
+#. Type: boolean
+#. Description
+#: ../templates:1001
+msgid ""
+"If you answer negatively, people who desire to use it will have to put the "
+"string \"(require 'mailcrypt-init)\" in their personal Emacs configuration "
+"file (e.g., \"~/.emacs\" or \"~/.emacs.el\") to load it."
+msgstr ""
+"Se responder negativamente, quem desejar utilizÅ·-lo terÅ· que colocar o texto "
+"\"(require 'mailcrypt-init)\" no seu ficheiro pessoal de configuraÅÁÅ„o do "
+"Emacs (e.g., \"~/.emacs\" ou \"~/.emacs.el\") para carregÅ·-lo."
+
+#. Type: note
+#. Description
+#: ../templates:2001
+msgid "Mailcrypt seems to be already auto-loaded at your site.  Good."
+msgstr "Parece que o mailcrypt jÅ· estÅ· em auto-carregamento no seu site. Bem."
+
+#. Type: note
+#. Description
+#: ../templates:2001
+msgid ""
+"By inspection of the file \"/etc/emacs/site-start.el\" Mailcrypt seems to be "
+"already auto-loaded by default at your site."
+msgstr ""
+"Ao inspeccionar o ficheiro \"/etc/emacs/site-start.el\" parece que o Mailcrypt"
+"jÅ· estÅ· em auto-carregamento por omissÅ„o no seu site."
+
+#. Type: note
+#. Description
+#: ../templates:2001
+msgid ""
+"If this is not true, or if it's not what you want, please search that file "
+"looking for \"(require 'mailcrypt-init)\" resembling forms and fix it; then "
+"run \"dpkg-reconfigure mailcrypt\" if needed (recommended)."
+msgstr ""
+"Se isto nÅ„o for verdade, ou nÅ„o ÅÈ o que pretende, procure por favor nesse "
+"ficheiro texto parecido com \"(require 'mailcrypt-init)\" e corrija-o; depois "
+"execute novamente \"dpkg-reconfigure mailcrypt\" se necessÅ·rio (recomendado)."

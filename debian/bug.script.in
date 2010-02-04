@@ -19,7 +19,7 @@ cat >&3 <<EOF
 EOF
 
 <:# Default flavors: only GNU/Emacsen, XEmacs comes with its own Mailcrypt.:>//
-FLAVORS=${*:-"emacs21 emacs-snapshot"}
+FLAVORS=${*:-"emacs21 emacs22 emacs-snapshot"}
 
 for FLAVOR in ${FLAVORS}; do
     if [ -x /usr/bin/${FLAVOR} ]; then

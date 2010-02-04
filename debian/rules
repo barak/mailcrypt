@@ -66,7 +66,7 @@ debian/po/templates.pot: $(DCSOURCES)
 %.dcobj: % debian/po/templates.pot
 	po2debconf --verbose --podir debian/po $< > $@
 
-build: $(DFILES)
+build: $(DFILES) debian/po/templates.pot
 	$(checkdir)
 	chmod a+x ./configure;		./configure --infodir=/usr/share/info/
 	$(MAKE) MAKEINFO="makeinfo --verbose" \
@@ -75,7 +75,7 @@ build: $(DFILES)
 	touch build
 
 .PHONY: clean
-clean:
+clean: debian/po/templates.pot
 	$(checkdir)
 	-rm -rf build core $(tmp) debian/{files*,substvars}
 	-rm -f debian/po/updatepo
@@ -156,7 +156,7 @@ binary-arch: build
 	$(checkroot)
 
 .PHONY: build-package
-build-package:
+build-package: clean
 	dpkg-buildpackage -rfakeroot -tc -i
 
 .PHONY: source diff

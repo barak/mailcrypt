@@ -1,15 +1,19 @@
-# Mailcrypt.
-# Copyright (C) 2006
+# French translations of the "debian/templates" file
+# of the mailcrypt Debian package.
+#
+# Copyright (C) 2006, 07 by Davide G. M. Salvetti.
+#
 # This file is distributed under the same license as the mailcrypt package.
-# Davide G. M Salvetti <salve@debian.org>, 2006.
+#
+# Steve Petruzzello <dlist@bluewin.ch>, 2006.
 #
 # arch-tag: 12700049-164a-43a0-9fde-1ad75398c526
 msgid ""
 msgstr ""
 "Project-Id-Version: mailcrypt_3.5.8+CVS.2005.04.29.1-7\n"
 "Report-Msgid-Bugs-To: salve@debian.org\n"
-"POT-Creation-Date: 2006-06-09 23:06+0200\n"
-"PO-Revision-Date: 2006-06-19 15:41+0200\n"
+"POT-Creation-Date: 2007-07-26 17:33+0200\n"
+"PO-Revision-Date: 2007-07-26 17:50+0200\n"
 "Last-Translator: Steve Petruzzello <dlist@bluewin.ch>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,13 +25,13 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../templates:4
+#: ../templates:1001
 msgid "Should Mailcrypt be auto-loaded by default at your site?"
 msgstr "Faut-il charger Mailcrypt par défaut pour votre site ?"
 
 #. Type: boolean
 #. Description
-#: ../templates:4
+#: ../templates:1001
 msgid ""
 "Mailcrypt will globally (i.e., for all users on this site) overload certain "
 "Emacs functions and key-bindings if you answer affirmatively to this "
@@ -39,7 +43,7 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../templates:4
+#: ../templates:1001
 msgid ""
 "This is generally a good thing, since Mailcrypt is a very useful package; "
 "however you may not want it to happen, and instead let single users at your "
@@ -51,7 +55,7 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../templates:4
+#: ../templates:1001
 msgid ""
 "If you answer negatively, people who desire to use it will have to put the "
 "string \"(require 'mailcrypt-init)\" in their personal Emacs configuration "
@@ -61,31 +65,22 @@ msgstr ""
 "devront entrer la chaîne « (require 'mailcrypt-init) » dans leur fichier de "
 "configuration d'Emacs (e.g. ~/.emacs ou ~/.emacs.el) pour le charger."
 
-#. Type: note
-#. Description
-#: ../templates:19
-msgid "Mailcrypt seems to be already auto-loaded at your site.  Good."
-msgstr "Mailcrypt déjà chargé automatiquement"
+#~ msgid "Mailcrypt seems to be already auto-loaded at your site.  Good."
+#~ msgstr "Mailcrypt déjà chargé automatiquement"
 
-#. Type: note
-#. Description
-#: ../templates:19
-msgid ""
-"By inspection of the file \"/etc/emacs/site-start.el\" Mailcrypt seems to be "
-"already auto-loaded by default at your site."
-msgstr ""
-"L'inspection du fichier /etc/emacs/site-start.el indique que Mailcrypt "
-"semble chargé par défaut sur votre site."
+#~ msgid ""
+#~ "By inspection of the file \"/etc/emacs/site-start.el\" Mailcrypt seems to "
+#~ "be already auto-loaded by default at your site."
+#~ msgstr ""
+#~ "L'inspection du fichier /etc/emacs/site-start.el indique que Mailcrypt "
+#~ "semble chargé par défaut sur votre site."
 
-#. Type: note
-#. Description
-#: ../templates:19
-msgid ""
-"If this is not true, or if it's not what you want, please search that file "
-"looking for \"(require 'mailcrypt-init)\" resembling forms and fix it; then "
-"run \"dpkg-reconfigure mailcrypt\" if needed (recommended)."
-msgstr ""
-"Si cela n'est pas le cas, ou si ce n'est pas ce que vous désirez, veuillez "
-"rechercher la chaîne « (require mailcrypt-init) » dans ce fichier et la "
-"corriger. Ensuite, il est recommandé de lancer la commande « dpkg-"
-"reconfigure mailcrypt »."
+#~ msgid ""
+#~ "If this is not true, or if it's not what you want, please search that "
+#~ "file looking for \"(require 'mailcrypt-init)\" resembling forms and fix "
+#~ "it; then run \"dpkg-reconfigure mailcrypt\" if needed (recommended)."
+#~ msgstr ""
+#~ "Si cela n'est pas le cas, ou si ce n'est pas ce que vous désirez, "
+#~ "veuillez rechercher la chaîne « (require mailcrypt-init) » dans ce "
+#~ "fichier et la corriger. Ensuite, il est recommandé de lancer la commande "
+#~ "« dpkg-reconfigure mailcrypt »."

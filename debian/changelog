@@ -1,3 +1,27 @@
+mailcrypt (3.5.8+CVS.2005.04.29.1-11) unstable; urgency=low
+
+  * po/nl.po: New file; thanks to Bart Cornelis.  (Closes: #415520)
+
+  * install.in (do_install): State the log file location; thanks to Romain
+    Francoise.  (See: #408227)
+
+  * rules.in (build-package): Added dependency on the "clean" target.
+
+  * bug.script.in (FLAVORS), control (Depends), install.in, remove.in:
+    Added emacs22.  (Closes: #425206, #432144, #432393)
+
+  * config.in (configure|reconfigure): Do not check for custom
+    autoactivation code anymore.  Consequently remove
+    "mailcrypt/alreadydefault" debconf call.
+  * templates.in (mailcrypt/alreadydefault): Remove
+    "mailcrypt/alreadydefault" note.
+  * cs.po, de.po, es.po, fr.po, it.po, nl.po, templates.pot: Consequently
+    updated.  (Closes: #388927)
+
+  * po/pt.po:  New file; thanks to Jacobo Tarrio.  (Closes: #430992)
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Thu, 26 Jul 2007 18:49:01 +0200
+
 mailcrypt (3.5.8+CVS.2005.04.29.1-10) unstable; urgency=low
 
   * po/cs.po: New file; thanks to Martin Šín.  (Closes: #382926)

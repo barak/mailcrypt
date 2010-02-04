@@ -58,7 +58,7 @@ undo_install () {
 
 case "${FLAVOR}" in
     (emacs) : ;;
-    (emacs21|emacs-snapshot)
+    (emacs2[12]|emacs-snapshot)
     undo_install
     ;;
     (*) echo >&2 "remove/<:=${PACKAGE}:>:" \

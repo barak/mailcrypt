@@ -15,16 +15,6 @@ _Description: Should Mailcrypt be auto-loaded by default at your site?
  string "(require 'mailcrypt-init)" in their personal Emacs configuration
  file (e.g., "~/.emacs" or "~/.emacs.el") to load it.
 
-Template: mailcrypt/alreadydefault
-Type: note
-_Description: Mailcrypt seems to be already auto-loaded at your site.  Good.
- By inspection of the file "<:=$SSEL:>" Mailcrypt seems to be
- already auto-loaded by default at your site.
- .
- If this is not true, or if it's not what you want, please search that file
- looking for "(require 'mailcrypt-init)" resembling forms and fix it; then
- run "dpkg-reconfigure mailcrypt" if needed (recommended).
-
 <:
 # arch-tag: f0377964-4347-46dc-a310-3f371380b170
 #

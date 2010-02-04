@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: salve@debian.org\n"
-"POT-Creation-Date: 2006-06-09 23:06+0200\n"
+"POT-Creation-Date: 2007-07-26 17:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,13 +18,13 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../templates:4
+#: ../templates:1001
 msgid "Should Mailcrypt be auto-loaded by default at your site?"
 msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../templates:4
+#: ../templates:1001
 msgid ""
 "Mailcrypt will globally (i.e., for all users on this site) overload certain "
 "Emacs functions and key-bindings if you answer affirmatively to this "
@@ -33,7 +33,7 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../templates:4
+#: ../templates:1001
 msgid ""
 "This is generally a good thing, since Mailcrypt is a very useful package; "
 "however you may not want it to happen, and instead let single users at your "
@@ -42,32 +42,9 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../templates:4
+#: ../templates:1001
 msgid ""
 "If you answer negatively, people who desire to use it will have to put the "
 "string \"(require 'mailcrypt-init)\" in their personal Emacs configuration "
 "file (e.g., \"~/.emacs\" or \"~/.emacs.el\") to load it."
-msgstr ""
-
-#. Type: note
-#. Description
-#: ../templates:19
-msgid "Mailcrypt seems to be already auto-loaded at your site.  Good."
-msgstr ""
-
-#. Type: note
-#. Description
-#: ../templates:19
-msgid ""
-"By inspection of the file \"/etc/emacs/site-start.el\" Mailcrypt seems to be "
-"already auto-loaded by default at your site."
-msgstr ""
-
-#. Type: note
-#. Description
-#: ../templates:19
-msgid ""
-"If this is not true, or if it's not what you want, please search that file "
-"looking for \"(require 'mailcrypt-init)\" resembling forms and fix it; then "
-"run \"dpkg-reconfigure mailcrypt\" if needed (recommended)."
 msgstr ""
