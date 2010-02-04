@@ -1,7 +1,7 @@
 #include "variables"
 #! /bin/bash -e
 #
-# <% elisp %> emacs remove script for <:=${PACKAGE}:>
+# <% elisp %> Emacs remove script for <:=${PACKAGE}:>
 #
 <:=@COPYRIGHT:>//
 
@@ -68,10 +68,13 @@ esac
 
 exit 0
 <:
+# arch-tag: 02840558-59db-42e5-bc45-fe3cce8d379e
+#
 # local variables:
 # mode: shell-script
 # ispell-local-dictionary: "american"
 # ispell-check-comments: exclusive
 # end:
-# arch-tag: 02840558-59db-42e5-bc45-fe3cce8d379e
+#
+# LocalWords:  mailcrypt ELCLOG gz emacs emacsen nullglob
 :>//

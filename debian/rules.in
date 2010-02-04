@@ -21,7 +21,7 @@ STRIP := strip -R .note -R .comment
 <:# DO NOT include <% debian/rules %> :>//
 DFILES := debian/README debian/copyright \
 debian/config debian/postinst debian/prerm debian/postrm \
-debian/docbase debian/templates \
+debian/docbase debian/templates.merged \
 debian/bug.presubj debian/bug.script \
 debian/install debian/remove
 
@@ -38,7 +38,19 @@ debian/rules: debian/variables
 
 <:# Eperl is simply great: thanks, Ralf! :>//
 % :: %.in
-	eperl -I $(shell pwd)/debian/ -P -o $@ $<
+	eperl -d DEBIAN_DIR="$(shell pwd)/debian/" \
+		-I "$(shell pwd)/debian/" -P -o $@ $<
+
+.PHONY: updatepo
+updatepo: debian/po/updatepo
+
+debian/po/updatepo: debian/templates
+	umask 0022 && debconf-updatepo --verbose \
+		--podir=debian/po/
+	touch debian/po/updatepo
+
+debian/templates.merged: debian/po/updatepo
+	po2debconf --verbose debian/templates > $@
 
 build: $(DFILES)
 	$(checkdir)
@@ -53,6 +65,7 @@ build: $(DFILES)
 clean:
 	$(checkdir)
 	-rm -rf build core $(tmp) debian/{files*,substvars}
+	-rm -f debian/po/updatepo
 	-$(MAKE) distclean
 	-rm -f $(DFILES)
 	$(fixperms)
@@ -112,7 +125,8 @@ binary-indep: build
 
 <:# install Debian control files :>//
 	$(INSTDIR) $(tmp)/<:=${debian}:>
-	$(INSTDATA) debian/templates $(tmp)/<:=${debian}:>
+	$(INSTDATA) debian/templates.merged \
+		$(tmp)/<:=${debian}:>/templates
 	$(INSTSCRIPT) debian/{config,postinst,postrm,prerm} \
 		$(tmp)/<:=${debian}:>
 
@@ -139,12 +153,13 @@ build-package:
 source diff:
 	@echo >&2 'source and diff are obsolete - use dpkg-source -b'; false
 
+# arch-tag: 7f6799c7-dca1-4d84-8038-1ad9c2888751<:='-child':>
 <:
-# LocalWords:  Eperl Ralf
 # local variables:
 # mode: makefile
 # ispell-local-dictionary: "american"
 # ispell-check-comments: exclusive
 # end:
+#
+# LocalWords:  Eperl Ralf
 :>//
-# arch-tag: 7f6799c7-dca1-4d84-8038-1ad9c2888751<:='-child':>

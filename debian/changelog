@@ -1,3 +1,39 @@
+mailcrypt (3.5.8+CVS.2005.04.29.1-5) unstable; urgency=low
+
+  * control (Standard-Versions): Upgraded to 3.7.2.
+
+  * install.in (do_install): Be careful to add Elisp sources' directory to
+    `load-path' after the byte-compiled directory; thanks to Jim Van
+    Zandt.  (Closes: #352570)
+
+  * rules.in (fixperms): New variable.  The command used to canonicalize
+    the whole tree permissions.
+    (clean): Use "$(fixperms)" to canonicalize permissions after cleaning.
+
+  * rules.in (%): Cater for ePerl "*.in" sources in subdirectories of
+    "debian".
+
+  * rules.in (%): Declare ${DEBIAN_DIR}.
+  * variables: Use it, to include "COPYRIGHT" in ePerl auto-generated files
+    located in a "debian/" subdirectory.
+
+  * rules.in (checkdir, checkroot): Should not be implemented by means of
+    phony targets, otherwise targets which depend on them will never be
+    up-to-date.
+    (build, clean, binary-indep, binary-arch): Change accordingly.
+  
+  * control (Build-Depends-Indep): Added "po-debconf".
+  * templates: Renamed from template.in.  Adapted to po-debconf.
+  * po: New subdirectory.  Translations.
+  * po/POTFILES.in: New file.  Automatically managed by po-debconf.
+  * po/de.po, po/es.po, po/it.po, po/pt_BR.po: New files.  Localized
+    translations for templates, moved from templates.
+  * po/templates.pot: New file.  Automatically managed by po-debconf.
+  * rules.in (DFILES, updatepo, po/updatepo, templates.merged,
+    binary-indep): Cater for po-debconf.
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Sun,  4 Jun 2006 01:44:40 +0200
+
 mailcrypt (3.5.8+CVS.2005.04.29.1-4) unstable; urgency=low
 
   * control (Standard-Versions): Upgraded to 3.6.2.
@@ -395,6 +431,12 @@ Sun May 19 16:19:11 1996  Joe Reinhardt  <jmr@everest.radiology.uiowa.edu>
 	* mailcrypt-init.el: new file to setup hooks for mail and news
 
 <%
+# arch-tag: 8a68f787-7690-47c0-9f9f-c8eeb3b86972
+#
+# local variables:
+# ispell-local-dictionary: "american"
+# end:
+#
 # LocalWords:  mailcrypt CVS toc html texi Kraai distclean autom te Sep Troup
 # LocalWords:  Michlmayr postinst prerm docbase init Mew's dvi Indep mc gpg utf
 # LocalWords:  Gorka Olaizola Potort rmdir alreadydefault Timshel debian deps
@@ -402,8 +444,4 @@ Sun May 19 16:19:11 1996  Joe Reinhardt  <jmr@everest.radiology.uiowa.edu>
 # LocalWords:  contrib dpkg gencontrol preinst ext TeXInfo postrm emacsen dhelp
 # LocalWords:  Rmail autoload setversion URL Budney keyserver url nop elisp
 # LocalWords:  Gertzfield alist assoc
-# arch-tag: 8a68f787-7690-47c0-9f9f-c8eeb3b86972
-# local variables:
-# ispell-local-dictionary: "american"
-# end:
 %>

@@ -2,8 +2,8 @@ Source: mailcrypt
 Priority: optional
 Section: mail
 Maintainer: Davide G. M. Salvetti <salve@debian.org>
-Standards-Version: 3.6.2
-Build-Depends-Indep: eperl, texinfo, texi2html
+Standards-Version: 3.7.2
+Build-Depends-Indep: eperl, po-debconf, texinfo, texi2html
 
 Package: mailcrypt
 Architecture: all

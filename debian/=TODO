@@ -16,14 +16,16 @@
 * Miscellaneous stuff
 
 ** I18n and L10n
-*** TODO Use po-debconf.
+*** DONE Use po-debconf.
 
 
 
-LocalWords:  BTS TODO
 arch-tag: 6b9519fc-ed69-4f4c-8aba-b32b30c2157a
+
 local variables:
 mode: org
 fill-column: 78
 ispell-local-dictionary: "american"
 end:
+
+LocalWords:  BTS TODO po debconf

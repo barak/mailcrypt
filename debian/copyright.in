@@ -39,7 +39,7 @@ DEBIAN SPECIFIC CHANGES
 
 The Debian specific changes are free software
 
-  Copyright (C) 1997, 98, 99, 2000, 01, 02, 03, 04, 05
+  Copyright (C) 1997, 98, 99, 2000, 01, 02, 03, 04, 05, 06
   by Davide G. M. Salvetti
 
 and you can redistribute it and/or modify it under the terms of the GNU
@@ -56,11 +56,13 @@ A copy of the GNU General Public License is also available at
 You may also obtain it by writing to the Free Software Foundation, Inc., 51
 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 <:
-# LocalWords:  Mailcrypt Jin Choi LoPresti Budney
+# arch-tag: 93e24830-7374-49ac-afc2-22236497e636
+#
 # local variables:
 # mode: text
 # fill-column: 78
 # ispell-local-dictionary: "american"
 # end:
-# arch-tag: 93e24830-7374-49ac-afc2-22236497e636
+#
+# LocalWords:  Mailcrypt Jin Choi LoPresti Budney
 :>//

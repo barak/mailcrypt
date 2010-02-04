@@ -1,5 +1,5 @@
 ;; mailcrypt-init.el, perform mailcrypt initialization
-;; Copyright (C) 1998, 99, 2002, 05
+;; Copyright (C) 1998, 99, 2002, 05, 06
 ;; by Davide G. M. Salvetti <salve@debian.org>
 ;; Copyright (C) 1996 Joe Reinhardt <joe-reinhardt@uiowa.edu>
 
@@ -65,10 +65,13 @@
 (provide 'mailcrypt-init)
 
 ;;; End
-;; LocalWords:  mailcrypt init Autoloads README Rmail VM MH
+
+;; arch-tag: 6b98de11-0cd8-4289-90cd-5b1224e13581
+;;
 ;; local variables:
 ;; mode: emacs-lisp
 ;; ispell-local-dictionary: "american"
 ;; ispell-check-comments: exclusive
 ;; end:
-;; arch-tag: 6b98de11-0cd8-4289-90cd-5b1224e13581
+;;
+;; LocalWords:  mailcrypt init Autoloads README Rmail VM MH el

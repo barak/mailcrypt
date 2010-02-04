@@ -2,7 +2,7 @@
 #
 # rules for mailcrypt
 #
-# Copyright (C) 1997, 98, 99, 2000, 01, 02, 03, 04, 05
+# Copyright (C) 1997, 98, 99, 2000, 01, 02, 03, 04, 05, 06
 # by Davide G. M. Salvetti.
 #
 # This program is free software; you can redistribute it and/or modify it
@@ -37,7 +37,7 @@ STRIP := strip -R .note -R .comment
 
 DFILES := debian/README debian/copyright \
 debian/config debian/postinst debian/prerm debian/postrm \
-debian/docbase debian/templates \
+debian/docbase debian/templates.merged \
 debian/bug.presubj debian/bug.script \
 debian/install debian/remove
 
@@ -52,7 +52,19 @@ pre-build:
 debian/rules: debian/variables
 
 % :: %.in
-	eperl -I $(shell pwd)/debian/ -P -o $@ $<
+	eperl -d DEBIAN_DIR="$(shell pwd)/debian/" \
+		-I "$(shell pwd)/debian/" -P -o $@ $<
+
+.PHONY: updatepo
+updatepo: debian/po/updatepo
+
+debian/po/updatepo: debian/templates
+	umask 0022 && debconf-updatepo --verbose \
+		--podir=debian/po/
+	touch debian/po/updatepo
+
+debian/templates.merged: debian/po/updatepo
+	po2debconf --verbose debian/templates > $@
 
 build: $(DFILES)
 	$(checkdir)
@@ -66,6 +78,7 @@ build: $(DFILES)
 clean:
 	$(checkdir)
 	-rm -rf build core $(tmp) debian/{files*,substvars}
+	-rm -f debian/po/updatepo
 	-$(MAKE) distclean
 	-rm -f $(DFILES)
 	$(fixperms)
@@ -121,7 +134,8 @@ binary-indep: build
 	$(INSTSCRIPT) debian/bug.script $(tmp)//usr/share/bug/mailcrypt//script
 
 	$(INSTDIR) $(tmp)//DEBIAN/
-	$(INSTDATA) debian/templates $(tmp)//DEBIAN/
+	$(INSTDATA) debian/templates.merged \
+		$(tmp)//DEBIAN//templates
 	$(INSTSCRIPT) debian/{config,postinst,postrm,prerm} \
 		$(tmp)//DEBIAN/
 

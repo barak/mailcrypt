@@ -19,10 +19,11 @@ upstream developers, abort this bug reporting procedure now and follow
 the usual bug reporting upstream conventions of <:=${PACKAGE}:> (look in
 the <:=${PACKAGE}:> documentation directory "<:=${doc}:>").
 <:
+# arch-tag: 1e05717b-d456-4bd8-8e81-c45e9faf8b5a
+#
 # local variables:
 # mode: text
 # fill-column: 72
 # ispell-local-dictionary: "american"
 # end:
-# arch-tag: 1e05717b-d456-4bd8-8e81-c45e9faf8b5a
 :>//

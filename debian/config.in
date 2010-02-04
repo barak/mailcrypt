@@ -28,10 +28,11 @@ esac
 
 exit 0
 <:
+# arch-tag: 0c222277-b851-436c-912e-b5c8e4468867
+#
 # local variables:
 # mode: shell-script
 # ispell-local-dictionary: "american"
 # ispell-check-comments: exclusive
 # end:
-# arch-tag: 0c222277-b851-436c-912e-b5c8e4468867
 :>//

@@ -25,11 +25,13 @@ TeXInfo sources may be found in "<:=if($_="$doc/$PACKAGE.texi.gz")=~tr|/|/|s:>".
 
 -- Davide G. M. Salvetti <salve@debian.org>, <:=$_=gmtime:>.
 <:
-# LocalWords:  Mailcrypt mailcrypt init dpkg HTML TeXInfo
+# arch-tag: a9aeff50-cd75-470a-ac70-65b89b0abb04
+#
 # local variables:
 # mode: text
 # fill-column: 78
 # ispell-local-dictionary: "american"
 # end:
-# arch-tag: a9aeff50-cd75-470a-ac70-65b89b0abb04
+#
+# LocalWords:  Mailcrypt mailcrypt init dpkg HTML TeXInfo emacs
 :>//

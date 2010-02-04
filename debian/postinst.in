@@ -16,7 +16,7 @@ db_version 2.0
 
 case "${1}" in
     (abort-deconfigure|abort-remove|abort-upgrade|configure)
-    <:# emacs install :>//
+    <:# Emacs install :>//
     <:=${EINSTALL}:> <:=${PACKAGE}:>
     <:# register documentation with <% doc-base %> :>//
     <:=${DINSTALL}:> <:=if($_="${docbase}/${PACKAGE}")=~tr|/|/|s:>
@@ -30,10 +30,11 @@ esac
 
 exit 0
 <:
+# arch-tag: 3b9edfc5-752f-46b3-a095-3346d42ba686
+#
 # local variables:
 # mode: shell-script
 # ispell-local-dictionary: "american"
 # ispell-check-comments: exclusive
 # end:
-# arch-tag: 3b9edfc5-752f-46b3-a095-3346d42ba686
 :>//

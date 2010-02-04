@@ -1,7 +1,7 @@
 #include "variables"
 #! /bin/bash -e
 #
-# <% elisp %> emacs install script for <:=${PACKAGE}:>
+# <% elisp %> Emacs install script for <:=${PACKAGE}:>
 #
 <:=@COPYRIGHT:>//
 
@@ -42,12 +42,11 @@ do_install () {
     echo -e >><:=if($_="${sstartd}/${EPRIORITY}${PACKAGE}.el")
 	     =~s|emacs|\${FLAVOR}|:> \
 	"(if (fboundp 'debian-pkg-add-load-path-item)\n" \
-	"   (progn (debian-pkg-add-load-path-item \"<:=if($_=${lisp})
+	"    (debian-pkg-add-load-path-item \"<:=if($_=${lisp})
 		 =~s|emacs|\${FLAVOR}|:>\")\n" \
-	"          (debian-pkg-add-load-path-item \"<:=${lisp}:>\"))\n" \
-	" (progn (add-to-list 'load-path \"<:=if($_=${lisp})
-		 =~s|emacs|\${FLAVOR}|:>\" 'append)\n" \
-	"        (add-to-list 'load-path \"<:=${lisp}:>\" 'append)))"
+	"  (add-to-list 'load-path \"<:=if($_=${lisp})
+		 =~s|emacs|\${FLAVOR}|:>\" 'append))\n" \
+	"(add-to-list 'load-path \"<:=${lisp}:>\" 'append)))"
     if [ "${_db_default}" = "true" ]; then
 	echo -e >><:=if($_="${sstartd}/${EPRIORITY}${PACKAGE}.el")
 		    =~s|emacs|\${FLAVOR}|:> \
@@ -69,10 +68,13 @@ esac
 
 exit 0
 <:
+# arch-tag: 8f5878f2-a4b0-44a9-bb22-92f48baf39b3
+#
 # local variables:
 # mode: shell-script
 # ispell-local-dictionary: "american"
 # ispell-check-comments: exclusive
 # end:
-# arch-tag: 8f5878f2-a4b0-44a9-bb22-92f48baf39b3
+#
+# LocalWords:  debconf
 :>//

@@ -46,11 +46,13 @@ EOF
 done
 
 <:
-# LocalWords:  Emacsen Mailcrypt
+# arch-tag: dd9ae462-97f1-4931-b52a-141c3215354b
+#
 # local variables:
 # mode: shell-script
 # ispell-local-dictionary: "american"
 # ispell-check-comments: exclusive
 # end:
-# arch-tag: dd9ae462-97f1-4931-b52a-141c3215354b
+#
+# LocalWords:  Emacsen Mailcrypt
 :>//

@@ -1,5 +1,5 @@
 <:
-# Copyright (C) 1999, 2000, 01, 02, 03, 04, 05
+# Copyright (C) 1999, 2000, 01, 02, 03, 04, 05, 06
 # by Davide G. M. Salvetti.
 :>//
 <:$PACKAGE="mailcrypt":>//
@@ -72,12 +72,15 @@
 <:$bug="/usr/share/bug/$PACKAGE/":>//
 <:# <% misc %> :>//
 <:$GPL="/usr/share/common-licenses/GPL":>//
-<:open(COPYRIGHT,'COPYRIGHT');@COPYRIGHT=<COPYRIGHT>;close(COPYRIGHT):>//
+<:open(COPYRIGHT,"${DEBIAN_DIR}/COPYRIGHT");
+  @COPYRIGHT=<COPYRIGHT>;
+  close(COPYRIGHT):>//
 <:
+# arch-tag: b01c14c9-57be-47ff-abb7-de12aebfc520
+#
 # local variables:
 # mode: shell-script
 # ispell-local-dictionary: "american"
 # ispell-check-comments: exclusive
 # end:
-# arch-tag: b01c14c9-57be-47ff-abb7-de12aebfc520
 :>//

@@ -13,11 +13,11 @@ case "${1}" in
     <:=${IREMOVE}:> <:="${info}/${PACKAGE}.info.gz":>
     <:# deregister documentation with <% doc-base %> :>//
     <:=${DREMOVE}:> <:=${PACKAGE}:>
-    <:# emacs remove :>//
+    <:# Emacs remove :>//
     <:=${EREMOVE}:> <:=${PACKAGE}:>
     ;;
     (failed-upgrade)
-    <:# emacs install :>//
+    <:# Emacs install :>//
     <:=${EINSTALL}:> <:=${PACKAGE}:>
     <:# register documentation with <% doc-base %> :>//
     <:=${DINSTALL}:> <:=if($_="${docbase}/${PACKAGE}")=~tr|/|/|s:>
@@ -31,11 +31,13 @@ esac
 
 exit 0
 <:
-# LocalWords:  deregister
+# arch-tag: 06c80812-acc7-473e-8fd7-77a72bbcdb0c
+#
 # local variables:
 # mode: shell-script
 # ispell-local-dictionary: "american"
 # ispell-check-comments: exclusive
 # end:
-# arch-tag: 06c80812-acc7-473e-8fd7-77a72bbcdb0c
+#
+# LocalWords:  deregister
 :>//
