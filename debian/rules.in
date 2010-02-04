@@ -5,6 +5,9 @@
 #
 <:=@COPYRIGHT:>//
 
+checkdir=test -f debian/rules
+checkroot=test root = "$$(whoami)"
+
 tmp := $(shell pwd)/debian/tmp/
 
 SHELL := /bin/bash
@@ -36,7 +39,8 @@ debian/rules: debian/variables
 % :: %.in
 	eperl -P -o $@ $<
 
-build: checkdir $(DFILES)
+build: $(DFILES)
+	$(checkdir)
 	chmod a+x ./configure;	<:# next upstream release remove me :>//
 	./configure --infodir=<:=${info}:>
 	$(MAKE) MAKEINFO="makeinfo --verbose" \
@@ -45,7 +49,8 @@ build: checkdir $(DFILES)
 	touch build
 
 .PHONY: clean
-clean: checkdir
+clean:
+	$(checkdir)
 	-rm -rf build core $(tmp) debian/{files*,substvars}
 	-$(MAKE) distclean
 	-rm -f $(DFILES)
@@ -54,7 +59,9 @@ clean: checkdir
 binary: binary-arch binary-indep
 
 .PHONY: binary-indep
-binary-indep: checkdir checkroot build
+binary-indep: build
+	$(checkdir)
+	$(checkroot)
 	-rm -rf $(tmp)
 
 <:# install package :>//
@@ -119,16 +126,9 @@ binary-indep: checkdir checkroot build
 	dpkg --build $(tmp) ..
 
 .PHONY: binary-arch
-binary-arch: checkroot build
+binary-arch: build
 	$(checkdir)
-
-.PHONY: checkdir
-checkdir:
-	test -f debian/rules
-
-.PHONY: checkroot
-checkroot:
-	test root = "$$(whoami)"
+	$(checkroot)
 
 .PHONY: build-package
 build-package:

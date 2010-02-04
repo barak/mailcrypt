@@ -1,3 +1,13 @@
+mailcrypt (3.5.8+CVS.2005.04.29.1-3) unstable; urgency=medium
+
+  * Urgency medium: Fixes an important bug.
+  * install: Ensure that "<:=${lisp}:>/configure" is up-to-date WRT
+    "<:=${lisp}:>/configure.in", so that it does not need to be remade,
+    something which would depend on autoconf; many thanks to Daniel Kahn
+    Gillmor. (Closes: #328468)
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Thu, 22 Sep 2005 15:57:47 +0200
+
 mailcrypt (3.5.8+CVS.2005.04.29.1-2) unstable; urgency=medium
 
   * Urgency medium: Fixes a serious bug.

@@ -52,6 +52,9 @@
 	  . " --quiet":>//
 <:$IREMOVE="install-info --quiet --remove":>//
 <:$info="/usr/share/info/":>//
+<:# <% texmf %> :>//
+<:$texmf="/usr/share/texmf/":>//
+<:$MKTEXLSR="mktexlsr":>//
 <:# <% dictionaries-common %> :>//
 <:$dict="/usr/share/dict/":>//
 <:$winfo="/var/lib/dictionaries-common/wordlist/":>//

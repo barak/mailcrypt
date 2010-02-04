@@ -20,6 +20,8 @@ INSTDIR="${INSTALL} -m 755 -d"
 do_install () {
     echo >&2 -n "install/<:=${PACKAGE}:>: Setting up for ${FLAVOR}... "
     cd <:=${lisp}:>; umask 0022;
+    <:# ensure that "configure" is up-to-date WRT "configure.in" :>//
+    touch --reference configure --date "-1 second" configure.in
     ${INSTDIR} <:=if($_=${lisp})=~s|emacs|\${FLAVOR}|:>
     EMACS=${FLAVOR} ./configure \
 	--prefix=<:$_=${usr}; s|/+|/|g; print:> \

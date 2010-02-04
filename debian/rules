@@ -22,6 +22,9 @@
 # On Debian GNU/Linux System you can find a copy of the GNU General Public
 # License in "/usr/share/common-licenses/GPL".
 
+checkdir=test -f debian/rules
+checkroot=test root = "$$(whoami)"
+
 tmp := $(shell pwd)/debian/tmp/
 
 SHELL := /bin/bash
@@ -50,7 +53,8 @@ debian/rules: debian/variables
 % :: %.in
 	eperl -P -o $@ $<
 
-build: checkdir $(DFILES)
+build: $(DFILES)
+	$(checkdir)
 	chmod a+x ./configure;		./configure --infodir=/usr/share/info/
 	$(MAKE) MAKEINFO="makeinfo --verbose" \
 		TEXI2HTML="texi2html --Verbose" \
@@ -58,7 +62,8 @@ build: checkdir $(DFILES)
 	touch build
 
 .PHONY: clean
-clean: checkdir
+clean:
+	$(checkdir)
 	-rm -rf build core $(tmp) debian/{files*,substvars}
 	-$(MAKE) distclean
 	-rm -f $(DFILES)
@@ -67,7 +72,9 @@ clean: checkdir
 binary: binary-arch binary-indep
 
 .PHONY: binary-indep
-binary-indep: checkdir checkroot build
+binary-indep: build
+	$(checkdir)
+	$(checkroot)
 	-rm -rf $(tmp)
 
 	$(INSTDIR) $(tmp)//usr/share/emacs/site-lisp/mailcrypt/
@@ -127,16 +134,9 @@ binary-indep: checkdir checkroot build
 	dpkg --build $(tmp) ..
 
 .PHONY: binary-arch
-binary-arch: checkroot build
+binary-arch: build
 	$(checkdir)
-
-.PHONY: checkdir
-checkdir:
-	test -f debian/rules
-
-.PHONY: checkroot
-checkroot:
-	test root = "$$(whoami)"
+	$(checkroot)
 
 .PHONY: build-package
 build-package:
