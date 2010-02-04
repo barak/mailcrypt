@@ -1,5 +1,5 @@
 #include "variables"
-Document: <:=$PACKAGE:>
+Document: <:=${PACKAGE}:>
 Title: Mailcrypt: An Emacs interface to the GNU Privacy Guard and anonymous remailers.
 Author: Patrick J. LoPresti, Leonard R. Budney, Brian Warner
 Abstract: Mailcrypt is an Emacs Lisp package which provides a simple but
@@ -13,24 +13,24 @@ Abstract: Mailcrypt is an Emacs Lisp package which provides a simple but
  Although Mailcrypt may be used to process data in arbitrary Emacs buffers, it
  is most useful in conjunction with other Emacs packages for handling mail and
  news.  Mailcrypt has specialized support for Rmail, VM, MH-E, Mew, and Gnus.
-Section: <:=$MENUSEC:>
+Section: <:=${MENUSEC}:>
 
 Format: texinfo
-Files: <:=if($_="$doc/$PACKAGE.texi.gz")=~tr|/|/|s:>
+Files: <:=if($_="$doc/${PACKAGE}.texi.gz")=~tr|/|/|s:>
 
 Format: info
-Index: <:=if($_="$info/$PACKAGE.info.gz")=~tr|/|/|s:>
-Files: <:=if($_="$info/$PACKAGE.info*")=~tr|/|/|s:>
+Index: <:=if($_="${info}/${PACKAGE}.info.gz")=~tr|/|/|s:>
+Files: <:=if($_="${info}/${PACKAGE}.info*")=~tr|/|/|s:>
 
 Format: HTML
-Index: <:=if($_="$html/index.html")=~tr|/|/|s:>
-Files: <:=if($_="$html/*.html")=~tr|/|/|s:>
+Index: <:=if($_="${html}/index.html")=~tr|/|/|s:>
+Files: <:=if($_="${html}/*.html")=~tr|/|/|s:>
 <:
-# LocalWords:  mailcrypt remailers LoPresti Budney Rmail VM MH MENUSEC texinfo
-# LocalWords:  doc tr HTML html
-#
+# LocalWords:  texinfo HTML Mailcrypt LoPresti Budney Rmail VM MH
 # local variables:
 # mode: text
 # fill-column: 78
+# ispell-local-dictionary: "american"
 # end:
+# arch-tag: 4a60674c-df89-4d63-b0f8-1c92e37e7add
 :>//

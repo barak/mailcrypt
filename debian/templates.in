@@ -1,5 +1,5 @@
 #include "variables"
-Template: <:=$PACKAGE:>/default
+Template: <:=${PACKAGE}:>/default
 Type: boolean
 Default: true
 Description: Should Mailcrypt be auto-loaded by default at your site?
@@ -47,22 +47,22 @@ Description-es: ¿Debe cargarse Mailcrypt por defecto en su sistema?
  Si responde no los usuarios que quieran usarlo deberán poner la cadena
  "(require 'mailcrypt-init)" en su fichero ~/.emacs para cargar Mailcrypt.
 
-Template: <:=$PACKAGE:>/alreadydefault
+Template: <:=${PACKAGE}:>/alreadydefault
 Type: note
 Description: Mailcrypt seems to be already auto-loaded at your site.  Good.
- By inspection of the file "<:=$SSEL:>" Mailcrypt seems to be
+ By inspection of the file "<:=${SSEL}:>" Mailcrypt seems to be
  already auto-loaded by default at your site.
  .
  If this is not true, or if it's not what you want, please search that file
  looking for "(require 'mailcrypt-init)" resembling forms and fix it; then run
- "dpkg-reconfigure <:=$PACKAGE:>" if needed (recommended).
+ "dpkg-reconfigure <:=${PACKAGE}:>" if needed (recommended).
 Description-it: Mailcrypt sembra già automaticamente abilitato su questa macchina.  Bene.
- Controllando il file "<:=$SSEL:>", pare che Mailcrypt sia già automaticamente
+ Controllando il file "<:=${SSEL}:>", pare che Mailcrypt sia già automaticamente
  abilitato su questa macchina.
  .
  Se questo non è vero, o se non è quel che si desidera, si vadano a cercare in
  quel file Lisp form del tipo "(require 'mailcrypt-init)" e li si correggano;
- poi si faccia girare "dpkg-reconfigure <:=$PACKAGE:>" per configurare di
+ poi si faccia girare "dpkg-reconfigure <:=${PACKAGE}:>" per configurare di
  nuovo Mailcrypt.
 Description-de: Mailcrpyt scheint schon automatisch geladen zu werden. Gut.
  Nach Untersuchung der Datei "/etc/emacs/site-start.el" scheint es so, dass
@@ -81,7 +81,7 @@ Description-es: Parece que Mailcrypt ya está cargado en su sistema. Bien.
 
 <:
 # LocalWords:  mailcrypt init alreadydefault SSEL dpkg
-#
+# arch-tag: 8d29b17e-926e-4f69-b5db-7c5681bf5328
 # local variables:
 # mode: text
 # fill-column: 78

@@ -1,6 +1,6 @@
 #include "variables"
-The Debian Package mailcrypt
-----------------------------
+The Debian package <:=${PACKAGE}:>
+-------------------<:="-" x length (${PACKAGE}):>
 
 
 Loading Mailcrypt
@@ -23,13 +23,13 @@ Online documentation may be found in the info or HTML manual.
 TeXInfo sources may be found in "<:=if($_="$doc/$PACKAGE.texi.gz")=~tr|/|/|s:>".
 
 
-Davide G. M. Salvetti <salve@debian.org>, <:=$_=gmtime:>.
+-- Davide G. M. Salvetti <salve@debian.org>, <:=$_=gmtime:>.
 <:
-# LocalWords:  mailcrypt init dpkg HTML TeXInfo docsrc tr ui setq mc
-# LocalWords:  gmtime
-#
+# LocalWords:  Mailcrypt mailcrypt init dpkg HTML TeXInfo
 # local variables:
 # mode: text
 # fill-column: 78
+# ispell-local-dictionary: "american"
 # end:
+# arch-tag: a9aeff50-cd75-470a-ac70-65b89b0abb04
 :>//

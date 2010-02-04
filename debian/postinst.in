@@ -1,66 +1,39 @@
 #include "variables"
 #! /bin/bash -e
 #
-# postinst for <:=$PACKAGE:>
+# <% postinst %> script for <:=${PACKAGE}:>
 #
 <:=@COPYRIGHT:>//
 
 set -o posix
 
-source <:=$CONFMODULE:>
+<:
+# parse <% debconf %> database: do not remove,
+# even if no further use of it is made here
+:>//
+source <:=${CONFMODULE}:>
 db_version 2.0
 
-conf_autoload () {
-    db_get <:=$PACKAGE:>/default || true
-    if [ $RET = "true" ]; then umask 022;
-	cat <<-EOF ><:=$sstartd:>/<:=$EPRIORITY:><:=$PACKAGE:>.el
-		(require 'mailcrypt-init)
-	EOF
-	chmod 644 <:=$sstartd:>/<:=$EPRIORITY:><:=$PACKAGE:>.el
-    else
-	rm -f <:=$sstartd:>/<:=$EPRIORITY:><:=$PACKAGE:>.el
-    fi
-    return 0
-}
-
-case "$1" in
-    (abort-remove|abort-upgrade|configure)
-    <:# abort-remove in-favour ${3:newpkg} ${4:newver}
-      # (undo prerm remove in-favour $3 $4):>//
-    <:# abort-upgrade ${2:newver}
-      # (undo prerm upgrade $2):>//
-    <:# configure ${2:lastconfver}
-      # (or, if there wasn't an old version at all)
-      # configure ${2=""|"<unknow>"}
-      # (or, if dpkg version is very old)
-      # configure
-      # (dregistered files and conffiles have been installed):>//
-	<:# install byte compiled lisp:>//
-	<:=$EINSTALL:> <:=$PACKAGE:>
-	<:# install doc menu into doc dir:>//
-	<:=$DINSTALL:> <:="$docbase/$PACKAGE":>
-	<:# install info menu into info dir:>//
-	<:=$IINSTALL:> <:="$info/$PACKAGE.info.gz":>
-	<:# put or remove emacs startup file:>//
-	conf_autoload
+case "${1}" in
+    (abort-deconfigure|abort-remove|abort-upgrade|configure)
+    <:# emacs install :>//
+    <:=${EINSTALL}:> <:=${PACKAGE}:>
+    <:# register documentation with <% doc-base %> :>//
+    <:=${DINSTALL}:> <:=if($_="${docbase}/${PACKAGE}")=~tr|/|/|s:>
+    <:# install <% info %> menu into <% info %> directory :>//
+    <:=${IINSTALL}:> <:="${info}/${PACKAGE}.info.gz":>
     ;;
-    (abort-deconfigure)
-    <:# abort-deconfigure in-favour ${3:newpkg} ${4:newver} removing ${6:oldpkg} ${7:oldver}
-      # (undo prerm deconfigure in-favour $3 $4 removing $6 $7):>//
-	<:# put or remove emacs startup file:>//
-	conf_autoload
-    ;;
-    (*)
-	echo "${0##*/}: Called with unknown argument \`$1'." >&2
+    (*) echo >&2 "${0##*/}/<:=${PACKAGE}:>:" \
+	"Unknown argument: \"${1}\""
     ;;
 esac
 
-<:# to be sure debconf moves on:>//
-db_stop
-
 exit 0
 <:
-# local Variables:
+# local variables:
 # mode: shell-script
+# ispell-local-dictionary: "american"
+# ispell-check-comments: exclusive
 # end:
+# arch-tag: 3b9edfc5-752f-46b3-a095-3346d42ba686
 :>//

@@ -1,46 +1,33 @@
 #include "variables"
 #! /bin/bash -e
 #
-# postrm for <:=$PACKAGE:>
+# <% postrm %> script for <:=${PACKAGE}:>
 #
 <:=@COPYRIGHT:>//
 
 set -o posix
 
-case "$1" in
+case "${1}" in
     (abort-install|abort-upgrade|failed-upgrade|remove|upgrade)
-    <:# abort-install ${2:oldver}
-      # (if $2 conffiles were there, or, if there aren't any)
-      # abort-install
-      # (undo preinst install effects):>//
-    <:# abort-upgrade ${2:oldver}
-      # (undo preinst upgrade effects):>//
-    <:# failed-upgrade ${2:oldver}
-      # (fix old postrm  bugs):>//
-    <:# remove
-      # (dregistered files have been removed, clean up):>//
-    <:# upgrade ${2:newver}
-      # (old prerm upgrade and new preinst upgrade have been called, clean up):>//
-	:
+    :
     ;;
     (disappear|purge)
-    <:# disappear ${2:overwriter}
-      # (dregistered files and conffiles have been overwritten, clean up):>//
-    <:# purge
-      # (dregistered files and conffiles have been purged, clean up):>//
-	<:# purge package from debconf database:>//
-	if test -e <:=$CONFMODULE:>;
-	    then source <:=$CONFMODULE:>; db_version 2.0; db_purge
-	fi
+    <:# purge package from <% debconf %> database :>//
+    if test -e <:=${CONFMODULE}:>;
+	then source <:=${CONFMODULE}:>; db_version 2.0; db_purge
+    fi
     ;;
-    (*)
-	echo "${0##*/}: Called with unknown argument \`$1'." >&2
+    (*) echo >&2 "${0##*/}/<:=${PACKAGE}:>:" \
+	"Unknown argument: \"${1}\""
     ;;
 esac
 
 exit 0
 <:
-# local Variables:
+# local variables:
 # mode: shell-script
+# ispell-local-dictionary: "american"
+# ispell-check-comments: exclusive
 # end:
+# arch-tag: 6148eca7-0e7f-4362-9ae9-dc2eaa90740a
 :>//

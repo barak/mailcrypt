@@ -1,16 +1,16 @@
 #include "variables"
 #! /bin/bash -e
 #
-# config for <:=$PACKAGE:>
+# <% config %> script for <:=${PACKAGE}:>
 #
 <:=@COPYRIGHT:>//
 
 set -o posix
 
-source <:=$CONFMODULE:>
+source <:=${CONFMODULE}:>
 db_version 2.0
 
-case "$1" in
+case "${1}" in
     (configure|reconfigure)
 	if egrep "\brequire[[:space:]]+[^)]*'mailcrypt-init\b" \
 	    <:=$SSEL:> &>/dev/null; then
@@ -21,8 +21,8 @@ case "$1" in
 	fi
 	db_go || true
     ;;
-    (*)
-	echo "${0##*/}: Called with unknown argument \`$1'." >&2
+    (*) echo >&2 "${0##*/}/<:=${PACKAGE}:>:" \
+	"Unknown argument: \"${1}\""
     ;;
 esac
 
@@ -30,5 +30,8 @@ exit 0
 <:
 # local variables:
 # mode: shell-script
+# ispell-local-dictionary: "american"
+# ispell-check-comments: exclusive
 # end:
+# arch-tag: 0c222277-b851-436c-912e-b5c8e4468867
 :>//

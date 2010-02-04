@@ -1,67 +1,77 @@
 #include "variables"
 #! /bin/bash -e
 #
-# elisp remove for <:=$PACKAGE:>
+# <% elisp %> emacs remove script for <:=${PACKAGE}:>
 #
 <:=@COPYRIGHT:>//
 
 set -o posix; shopt -s nullglob
-
-FLAVOR=$1
 
 ### Historic cleanup code
 <:
   # Version 3.5.4-5, 3.5.5-1, 3.5.5-2, 3.5.5-3, 3.5.5-4, and 3.5.5-5 of
   # mailcrypt had a typo bug and failed to remove $ELCLOG.gz.
 
-  # The affected time window is from 1999-10-12 to 1999-12-12, when the emacs19
-  # Debian version was 19.34-21 while the emacs20 ones were 20.3-11--20.4-3.
+  # The affected time window is from 1999-10-12 to 1999-12-12, when the
+  # emacs19 Debian version was 19.34-21 while the emacs20 ones were
+  # 20.3-11--20.4-3.
 
-  # However, other emacsen may have been used as well, so our strategy is to
-  # remove $ELCLOG.gz and its parents, if empty, from every no more installed
-  # emacsen directory.
+  # However, other emacsen may have been used as well, so our strategy is
+  # to remove $ELCLOG.gz and its parents, if empty, from every no more
+  # installed emacsen directory.
 
-  # Of course package, files, and directories names are hardcoded here, as this
-  # is code that deals with old cruft, and should not change in the future with
-  # "variables" or "system.variables".
+  # Of course package, files, and directories names are hardcoded here, as
+  # this is code that deals with old cruft, and should not change in the
+  # future with "variables".
 :>//
 clean_old_cruft () {
-    rm -f /usr/share/emacs/$1/site-lisp/mailcrypt/CompilationLog.gz
-    test -d /usr/share/emacs/$1/site-lisp/mailcrypt/ \
+    rm -f /usr/share/emacs/${1}/site-lisp/mailcrypt/CompilationLog.gz
+    test -d /usr/share/emacs/${1}/site-lisp/mailcrypt/ \
 	&& rmdir --ignore-fail-on-non-empty --parents \
-	/usr/share/emacs/$1/site-lisp/mailcrypt/
+	/usr/share/emacs/${1}/site-lisp/mailcrypt/
 }
 <:
-  # Note that /usr/share/emacs/site-lisp/mailcrypt is _not_ enclosed in the
-  # following pattern, neither it should be.  Also note that the nullglob shell
-  # option should be enabled!
+  # Note that /usr/share/emacs/site-lisp/mailcrypt is _not_ enclosed in
+  # the following pattern, neither it should be.  Also note that the
+  # nullglob shell option should be enabled!
 :>//
 for i in /usr/share/emacs/*/site-lisp/mailcrypt/; do
     i=${i#/usr/share/emacs/}
     i=${i%/site-lisp/mailcrypt/}
-    test -e /usr/bin/emacs-$i || clean_old_cruft $i
+    test -e /usr/bin/emacs-${i} || clean_old_cruft ${i}
 done
 
-case "$FLAVOR" in
-    (emacs)
-	:
+FLAVOR=${1}
+
+undo_install () {
+    echo >&2 -n "remove/<:=${PACKAGE}:>: Removing for ${FLAVOR}... "
+    rm -f <:=if($_="${sstartd}/${EPRIORITY}${PACKAGE}.el")
+	    =~s|emacs|\${FLAVOR}|:>
+    rm -f <:=if($_=${lisp})=~s|emacs|\${FLAVOR}|:>/<:=${ELCLOG}:>{,.gz}
+    rm -f <:=if($_=${lisp})=~s|emacs|\${FLAVOR}|:>/*.elc
+    test -d <:=if($_=${lisp})=~s|emacs|\${FLAVOR}|:> && \
+	rmdir --ignore-fail-on-non-empty \
+	<:=if($_=${lisp})=~s|emacs|\${FLAVOR}|:>
+    echo >&2 "done."
+    return 0
+}
+
+case "${FLAVOR}" in
+    (emacs) : ;;
+    (emacs21|emacs-snapshot)
+    undo_install
     ;;
-    (emacs20|emacs21|emacs-snapshot)
-	echo -n "remove/<:=$PACKAGE:>: Removing for $FLAVOR... "
-	rm -f <:=if($_=$lisp)=~s|emacs|\$FLAVOR|:>/{*.elc,<:=$ELCLOG:>.gz}
-	test -d <:=if($_=$lisp)=~s|emacs|\$FLAVOR|:> && \
-	    rmdir --ignore-fail-on-non-empty \
-	    <:=if($_=$lisp)=~s|emacs|\$FLAVOR|:>
-	echo "done."
-    ;;
-    (*)
-	echo "remove/<:=$PACKAGE:>: Ignoring emacsen flavor $FLAVOR."
+    (*) echo >&2 "remove/<:=${PACKAGE}:>:" \
+	"Ignoring emacsen flavor: \"${FLAVOR}\""
     ;;
 esac
 
 exit 0
 <:
-# local Variables:
+# local variables:
 # mode: shell-script
+# ispell-local-dictionary: "american"
+# ispell-check-comments: exclusive
 # end:
+# arch-tag: 02840558-59db-42e5-bc45-fe3cce8d379e
 :>//

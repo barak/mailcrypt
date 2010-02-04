@@ -1,21 +1,72 @@
-<:# Copyright (C) 1999, 2000, 01, 02, 05 by Davide Giovanni Maria Salvetti.:>//
-<:# BEWARE: The file mailcrypt-init.el is not yet EPerled! :>//
+<:
+# Copyright (C) 1999, 2000, 01, 02, 03, 04, 05
+# by Davide G. M. Salvetti.
+:>//
 <:$PACKAGE="mailcrypt":>//
 <:# documentation :>//
-<:$DOCS="ANNOUNCE ChangeLog.1 NEWS ONEWS README README.gpg mailcrypt.texi texi2html.ext":>//
-<:# sources :>//
-<:$SOURCES="mailcrypt.el mc-toplev.el mc-pgp.el mc-remail.el mc-pgp5.el mc-gpg.el expect.el mc-setversion.el":>//
-<:# misc package variables :>//
-<:$HTMLS="*.html":>//
-<:$INFOS="$PACKAGE.info*":>//
+<:$DOCS="ANNOUNCE ChangeLog.1 NEWS ONEWS README README.gpg WARNINGS":>//
+<:$DOCSRCS="*.texi texi2html.ext":>//
+<:# miscellaneous package variables :>//
 <:$MENUSEC="Apps/Editors":>//
 <:$INFOSEC="Emacs":>//
 <:$INFOMENU="Mailcrypt":>//
 <:$INFODESC="Cryptographic interface for mail and news.":>//
 <:$EPRIORITY="50":>//
-#include "system.variables"
+<:# Debian packaging specific :>//
+<:$debian="/DEBIAN/":>//
+<:$etc="/etc/$PACKAGE/":>//
+<:$doc="/usr/share/doc/$PACKAGE/":>//
+<:$docsrc="$doc/src/":>//
+<:$examples="$doc/examples/":>//
+<:$html="$doc/HTML":>//
+<:$var="/var/lib/$PACKAGE/":>//
+<:# <% usr %> and friends :>//
+<:$usr="/usr/":>//
+<:$share="/usr/share/":>//
+<:$bin="/usr/bin/":>//
+<:$man="/usr/share/man/":>//
+<:$sbin="/usr/sbin/":>//
+<:# <% cron %> :>//
+<:$cron_d="/etc/cron.d/":>//
+<:$cron_daily="/etc/cron.daily/":>//
+<:$cron_weekly="/etc/cron.weekly/":>//
+<:$cron_monthly="/etc/cron.monthly/":>//
+<:# <% debconf %> :>//
+<:$CONFMODULE="/usr/share/debconf/confmodule":>//
+<:# <% docbase %> :>//
+<:$DINSTALL="test -x /usr/sbin/install-docs && install-docs --install":>//
+<:$DREMOVE="test -x /usr/sbin/install-docs && install-docs --remove":>//
+<:$docbase="/usr/share/doc-base/":>//
+<:# <% emacs %> :>//
+<:$ELCLOG="CompilationLog":>//
+<:$EINSTALL="/usr/lib/emacsen-common/emacs-package-install":>//
+<:$EREMOVE="/usr/lib/emacsen-common/emacs-package-remove":>//
+<:$SSEL="/etc/emacs/site-start.el":>//
+<:$sstartd="/etc/emacs/site-start.d/":>//
+<:$ecode="/usr/lib/emacsen-common/packages/":>//
+<:$lisp="/usr/share/emacs/site-lisp/$PACKAGE/":>//
+<:# <% info %> :>//
+<:$IINSTALL="install-info --section \"$INFOSEC\" \"$INFOSEC\""
+	  . " --menuentry=\"$INFOMENU\""
+	  . " --description=\"$INFODESC\""
+	  . " --quiet":>//
+<:$IREMOVE="install-info --quiet --remove":>//
+<:$info="/usr/share/info/":>//
+<:# <% dictionaries-common %> :>//
+<:$dict="/usr/share/dict/":>//
+<:$winfo="/var/lib/dictionaries-common/wordlist/":>//
+<:$WREBUILD="/usr/sbin/update-default-wordlist --rebuild":>//
+<:$WREMOVE="/usr/sbin/remove-default-wordlist $PACKAGE":>//
+<:# <% reportbug %> :>//
+<:$bug="/usr/share/bug/$PACKAGE/":>//
+<:# <% misc %> :>//
+<:$GPL="/usr/share/common-licenses/GPL":>//
+<:open(COPYRIGHT,'COPYRIGHT');@COPYRIGHT=<COPYRIGHT>;close(COPYRIGHT):>//
 <:
 # local variables:
 # mode: shell-script
+# ispell-local-dictionary: "american"
+# ispell-check-comments: exclusive
 # end:
+# arch-tag: b01c14c9-57be-47ff-abb7-de12aebfc520
 :>//

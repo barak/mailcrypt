@@ -1,5 +1,3 @@
-;-*-emacs-lisp-*-
-
 ;; mailcrypt-init.el, perform mailcrypt initialization
 ;; Copyright (C) 1998, 99, 2002, 05
 ;; by Davide G. M. Salvetti <salve@debian.org>
@@ -22,8 +20,6 @@
 ;; with this program; if not, write to the Free Software Foundation, Inc.,
 ;; 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 ;;}}}
-
-(provide 'mailcrypt-init)
 
 ;;; Configuration
 
@@ -63,12 +59,16 @@
 (add-hook 'mew-summary-mode-hook 'mc-install-read-mode)
 (add-hook 'mew-draft-mode-hook 'mc-install-write-mode)
 
-;; load path
-(setq load-path (cons (concat "/usr/share/"
-			      (symbol-name debian-emacs-flavor)
-			      "/site-lisp/mailcrypt") load-path))
-
 ;; GNU Privacy Guard is our default.
 (setq mc-default-scheme 'mc-scheme-gpg)
 
+(provide 'mailcrypt-init)
+
 ;;; End
+;; LocalWords:  mailcrypt init Autoloads README Rmail VM MH
+;; local variables:
+;; mode: emacs-lisp
+;; ispell-local-dictionary: "american"
+;; ispell-check-comments: exclusive
+;; end:
+;; arch-tag: 6b98de11-0cd8-4289-90cd-5b1224e13581

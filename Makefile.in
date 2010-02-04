@@ -16,12 +16,13 @@ lispdir = $(datadir)/emacs/site-lisp
 
 # Where to put the Info files
 infodir = @infodir@
-INFOFILES = mailcrypt.info mailcrypt.info-1 mailcrypt.info-2
+INFOFILES = mailcrypt.info*
 
 # Installation command
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_INFO = @INSTALL_INFO@
+MKINSTALLDIRS = $(srcdir)/mkinstalldirs
 
 # Various auxiliary programs
 MAKEINFO=makeinfo
@@ -74,7 +75,10 @@ all: $(OBJECTS)
 check: $(OBJECTS)
 	$(MAKE) -C tests check
 
-install: all installdirs install-info
+install: install-lisp install-info
+
+install-lisp: all
+	-$(MKINSTALLDIRS) $(lispdir)
 	for f in $(SOURCES); do \
 	  $(INSTALL_DATA) $(srcdir)/$$f $(lispdir); \
 	done;
@@ -82,17 +86,13 @@ install: all installdirs install-info
 	  $(INSTALL_DATA) $$f $(lispdir); \
 	done;
 
-# Make sure all installation directories actually exist
-# by making them if necessary.
-installdirs: mkinstalldirs
-	$(srcdir)/mkinstalldirs $(lispdir) $(infodir)
-
 # If your install-info doesn't know how to look inside the .info file for the
 # menu entry to add, try adding
 #   --entry="* Mailcrypt: (mailcrypt).       An Emacs/PGP interface"
 # to the arguments.
 
 install-info: info
+	-$(MKINSTALLDIRS) $(infodir)
 	cd $(srcdir) && for file in $(INFOFILES); do\
 	  $(INSTALL_DATA) $$file $(infodir)/$$file; \
 	done
@@ -124,7 +124,7 @@ mailcrypt.ps: mailcrypt.dvi
 html: mailcrypt_toc.html
 
 mailcrypt_toc.html: mailcrypt.texi
-	$(TEXI2HTML) --output=. -split_chapter $(srcdir)/mailcrypt.texi
+	$(TEXI2HTML) --output=htmls -split_chapter $(srcdir)/mailcrypt.texi
 
 TAGS: $(SOURCES)
 	cd $(srcdir) && etags $(SOURCES)
@@ -132,7 +132,7 @@ TAGS: $(SOURCES)
 clean:
 	rm -f $(OBJECTS)
 	-rm -f *.aux *.cp *.cps *.fn *.ky *.log *.pg *.toc *.tp *.vr
-	-rm -f *.html
+	-rm -rf htmls/
 	rm -f TAGS
 
 distclean: clean

@@ -1,7 +1,7 @@
 #include "variables"
 #! /usr/bin/make -f
 #
-# rules for <:=$PACKAGE:>
+# rules for <:=${PACKAGE}:>
 #
 <:=@COPYRIGHT:>//
 
@@ -12,15 +12,23 @@ INSTDIR := install -m 755 -d
 INSTPROG := install -m 755 -s
 INSTDATA := install -m 644
 INSTSCRIPT := install -m 755
+STRIP := strip -R .note -R .comment
 
-<:# DO NOT include debian/rules :>//
+<:# DO NOT include <% debian/rules %> :>//
 DFILES := debian/README debian/copyright \
-debian/config debian/preinst debian/postinst debian/prerm debian/postrm \
-debian/install debian/remove \
-debian/docbase debian/templates
+debian/config debian/postinst debian/prerm debian/postrm \
+debian/docbase debian/templates \
+debian/bug.presubj debian/bug.script \
+debian/install debian/remove
 
-debian/system.variables: /home/salve/.../Debian/Packages/system.variables
-	$(INSTDATA) $< $@
+SCRIPTS := configure install-sh
+SOURCES := *.in *.el load-path.hack
+<:# Hacks needed by configure. :>//
+MAKEFILEHACKS := tests/Makefile.in tests/remailer/Makefile.in
+
+.PHONY: pre-build
+pre-build:
+	autoconf || true
 
 debian/rules: debian/variables
 
@@ -28,81 +36,114 @@ debian/rules: debian/variables
 % :: %.in
 	eperl -P -o $@ $<
 
-build: $(DFILES)
-	$(checkdir)
-	test -e ./configure || autoconf
-	./configure
+build: checkdir $(DFILES)
+	chmod a+x ./configure;	<:# next upstream release remove me :>//
+	./configure --infodir=<:=${info}:>
 	$(MAKE) MAKEINFO="makeinfo --verbose" \
-		TEXI2HTML="texi2html -verbose" \
+		TEXI2HTML="texi2html --Verbose" \
 		info html
 	touch build
 
-clean:
-	$(checkdir)
-	-rm -rf build core $(tmp) debian/files* debian/substvars
-	-rm -f	$(DFILES)
+.PHONY: clean
+clean: checkdir
+	-rm -rf build core $(tmp) debian/{files*,substvars}
 	-$(MAKE) distclean
+	-rm -f $(DFILES)
 
-binary: binary-indep binary-arch
+.PHONY: binary
+binary: binary-arch binary-indep
 
-binary-arch: checkroot build
-	$(checkdir)
-
-binary-indep: checkroot build
-	$(checkdir)
+.PHONY: binary-indep
+binary-indep: checkdir checkroot build
 	-rm -rf $(tmp)
 
 <:# install package :>//
-	$(INSTDIR) $(tmp)/<:=$info:> $(tmp)/<:=$lisp:>
-	$(INSTDATA) <:=$SOURCES:> $(tmp)/<:=$lisp:>
-	$(INSTDATA) <:=$INFOS:> $(tmp)/<:=$info:>
-	gzip -9frv $(tmp)/<:=$info:>
+	$(INSTDIR) $(tmp)/<:=${lisp}:>
+	$(INSTDATA) debian/<:=${PACKAGE}:>-init.el $(tmp)/<:=${lisp}:>/../
+	$(INSTSCRIPT) $(SCRIPTS) $(tmp)/<:=${lisp}:>/
+	$(INSTDATA) $(SOURCES) $(tmp)/<:=${lisp}:>/
+	umask 0022; for i in $(MAKEFILEHACKS); do \
+		$(INSTDIR) $(tmp)/<:=${lisp}:>/$${i%/*}/; \
+		echo -e "clean distclean:\n\trm -f Makefile\n" \
+			> $(tmp)/<:=${lisp}:>/$${i}; \
+	done
+	$(INSTDIR) $(tmp)/<:=${info}:>
+	umask 0022; echo -e "\nFile: dir\tNode: Top\tTop\n" \
+		> $(tmp)/<:=${info}:>/dir
+	$(MAKE) INSTALL_INFO="/usr/sbin/install-info" \
+		install-info infodir=$(tmp)/<:=${info}:> \
+		&& rm $(tmp)/<:=${info}:>/dir{,.old}
+	gzip -9frv $(tmp)/<:=${info}:>
 
 <:# install Debian doc :>//
-	$(INSTDIR) $(tmp)/<:=$doc:> $(tmp)/<:=$html:>
-	$(INSTDATA) <:=$DOCS:> $(tmp)/<:=$doc:>
-	$(INSTDATA) debian/README $(tmp)/<:=$doc:>/README.Debian
-	$(INSTDATA) ChangeLog $(tmp)/<:=$doc:>
-	$(INSTDATA) debian/changelog $(tmp)/<:=$doc:>/changelog.Debian
-	gzip -9frv $(tmp)/<:=$doc:>
-	ln -sf ChangeLog.gz $(tmp)/<:=$doc:>/changelog.gz
-	$(INSTDATA) debian/copyright $(tmp)/<:=$doc:>
-	$(INSTDATA) <:=$HTMLS:> $(tmp)/<:=$html:>
-	ln -snf mailcrypt_toc.html $(tmp)/<:=$html:>/index.html
+	$(INSTDIR) $(tmp)/<:=${doc}:> $(tmp)/<:=${docsrc}:> \
+		$(tmp)/<:=${html}:>
+	$(INSTDATA) <:=${DOCS}:> $(tmp)/<:=$doc:>
+	$(INSTDATA) <:=${DOCSRCS}:> $(tmp)/<:=${docsrc}:>
+	$(INSTDATA) debian/README $(tmp)/<:=${doc}:>/README.Debian
+	$(INSTDATA) ChangeLog $(tmp)/<:=${doc}:>
+	$(INSTDATA) debian/changelog $(tmp)/<:=${doc}:>/changelog.Debian
+	gzip -9frv $(tmp)/<:=${doc}:>
+	ln -sf ChangeLog.gz $(tmp)/<:=${doc}:>/changelog.gz
+	$(INSTDATA) debian/copyright $(tmp)/<:=${doc}:>
+	$(INSTDATA) htmls/*.html $(tmp)/<:=${html}:>
+	ln -snf mailcrypt_toc.html $(tmp)/<:=${html}:>/index.html
 
 <:# install Debian system files :>//
-	$(INSTDIR) $(tmp)/<:=$ecode:>/{install,remove} $(tmp)/<:=$docbase:>
-	$(INSTDATA) debian/<:=$PACKAGE:>-init.el $(tmp)/<:=$lisp:>/../
-	$(INSTDATA) debian/docbase $(tmp)/<:=$docbase:>/<:=$PACKAGE:>
-	$(INSTSCRIPT) debian/install $(tmp)/<:=$ecode:>/install/<:=$PACKAGE:>
-	$(INSTSCRIPT) debian/remove $(tmp)/<:=$ecode:>/remove/<:=$PACKAGE:>
+	$(INSTDIR) $(tmp)/<:=${var}:>
+	$(INSTDIR) $(tmp)/<:=${ecode}:>/{install,remove}
+	$(INSTSCRIPT) debian/install \
+		$(tmp)/<:=${ecode}:>/install/<:=${PACKAGE}:>
+	$(INSTSCRIPT) debian/remove \
+		$(tmp)/<:=${ecode}:>/remove/<:=${PACKAGE}:>
+	$(INSTDIR) $(tmp)/<:=${docbase}:>
+	$(INSTDATA) debian/docbase $(tmp)/<:=${docbase}:>/<:=${PACKAGE}:>
+	$(INSTDIR) $(tmp)/<:=${bug}:>
+	$(INSTDATA) debian/bug.presubj $(tmp)/<:=${bug}:>/presubj
+	$(INSTSCRIPT) debian/bug.script $(tmp)/<:=${bug}:>/script
 
 <:# install Debian control files :>//
-	$(INSTDIR) $(tmp)/<:=$debian:>
-	$(INSTDATA) debian/templates $(tmp)/<:=$debian:>
-	$(INSTSCRIPT) debian/{config,preinst,postinst,prerm,postrm} $(tmp)/<:=$debian:>
+	$(INSTDIR) $(tmp)/<:=${debian}:>
+	$(INSTDATA) debian/templates $(tmp)/<:=${debian}:>
+	$(INSTSCRIPT) debian/{config,postinst,postrm,prerm} \
+		$(tmp)/<:=${debian}:>
 
 <:# standard stuff :>//
 	cd $(tmp) && md5sum \
-		$$(find ./ -path './DEBIAN' -prune -o -type f -printf "%P\n") \
-		| sort -k 2 -o $(tmp)/<:=$debian:>/md5sums
+		$$(find ./ -path './DEBIAN' -prune \
+		-o -type f -printf "%P\n") \
+		| sort -k 2 -o $(tmp)/<:=${debian}:>/md5sums
 	dpkg-gencontrol -isp
 	chown -R root.root $(tmp)
 	chmod -R go=rX $(tmp)
 	dpkg --build $(tmp) ..
 
-checkdir = test -f debian/rules
-
-checkroot:
+.PHONY: binary-arch
+binary-arch: checkroot build
 	$(checkdir)
+
+.PHONY: checkdir
+checkdir:
+	test -f debian/rules
+
+.PHONY: checkroot
+checkroot:
 	test root = "$$(whoami)"
 
+.PHONY: build-package
+build-package:
+	dpkg-buildpackage -rfakeroot -tc -i
+
+.PHONY: source diff
 source diff:
 	@echo >&2 'source and diff are obsolete - use dpkg-source -b'; false
 
-.PHONY: binary binary-arch binary-indep clean checkroot
 <:
+# LocalWords:  Eperl Ralf
 # local variables:
 # mode: makefile
+# ispell-local-dictionary: "american"
+# ispell-check-comments: exclusive
 # end:
 :>//
+# arch-tag: 7f6799c7-dca1-4d84-8038-1ad9c2888751<:='-child':>

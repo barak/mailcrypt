@@ -1,56 +1,40 @@
 #include "variables"
 #! /bin/bash -e
 #
-# prerm for <:=$PACKAGE:>
+# <% postinst %> script for <:=${PACKAGE}:>
 #
 <:=@COPYRIGHT:>//
 
 set -o posix
 
-source <:=$CONFMODULE:>
-db_version 2.0
-
-deconf_autoload () {
-    rm -f <:=$sstartd:>/<:=$EPRIORITY:><:=$PACKAGE:>.el
-    return 0
-}
-
-case "$1" in
-    (deconfigure)
-    <:# deconfigure in-favour ${3:newpkg} ${4:newver} removing ${6:oldpkg} ${7:oldver}:>//
-	<:# remove emacs startup file if present:>//
-	deconf_autoload
-    ;;
-    (remove|upgrade)
-    <:# remove
-      # (or, in case of conflict with newpkg)
-      # remove in-favour ${3:newpkg} ${4:newver}:>//
-    <:# upgrade ${2:newver}:>//
-	<:# remove emacs startup file if present:>//
-	deconf_autoload
-	<:# remove info menu from info dir:>//
-	<:=$IREMOVE:> <:=$PACKAGE:>
-	<:# remove doc menu from doc dir:>//
-	<:=$DREMOVE:> <:=$PACKAGE:>
-	<:# remove byte compiled elisp:>//
-	<:=$EREMOVE:> <:=$PACKAGE:>
-    ;;
+case "${1}" in
+    (deconfigure|remove|upgrade)
+    <:# remove <% info %> menu from <% info %> directory :>//
+    <:=${IREMOVE}:> <:="${info}/${PACKAGE}.info.gz":>
+    <:# deregister documentation with <% doc-base %> :>//
+    <:=${DREMOVE}:> <:=${PACKAGE}:>
+    <:# emacs remove :>//
+    <:=${EREMOVE}:> <:=${PACKAGE}:> ;;
     (failed-upgrade)
-    <:# failed-upgrade ${2:oldver}
-      # (fix old prerm from version $2 bugs here):>//
-	:
+    <:# emacs install :>//
+    <:=${EINSTALL}:> <:=${PACKAGE}:>
+    <:# register documentation with <% doc-base %> :>//
+    <:=${DINSTALL}:> <:=if($_="${docbase}/${PACKAGE}")=~tr|/|/|s:>
+    <:# install <% info %> menu into <% info %> directory :>//
+    <:=${IINSTALL}:> <:="${info}/${PACKAGE}.info.gz":>
     ;;
-    (*)
-	echo "${0##*/}: Called with unknown argument \`$1'." >&2
+    (*) echo >&2 "${0##*/}/<:=${PACKAGE}:>:" \
+	"Unknown argument: \"${1}\""
     ;;
 esac
 
-<:# to be sure debconf moves on:>//
-db_stop
-
 exit 0
 <:
-# local Variables:
+# LocalWords:  deregister
+# local variables:
 # mode: shell-script
+# ispell-local-dictionary: "american"
+# ispell-check-comments: exclusive
 # end:
+# arch-tag: 06c80812-acc7-473e-8fd7-77a72bbcdb0c
 :>//

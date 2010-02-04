@@ -1,7 +1,20 @@
+mailcrypt (3.5.8+CVS.2005.04.29.1-2) unstable; urgency=medium
+
+  * Urgency medium: Fixes a serious bug.
+  * General overhaul of the debian directory.
+  * bug.presubj, bug.script: New files.
+  * control (Depends): Added "make".
+  * install (do_install): Use "make".
+  * preinst: Deleted.
+  * rules.in (build): Ensure that "./configure" is executable; thanks to
+    Andreas Jochens.  (Closes: #328059)
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Wed, 14 Sep 2005 19:53:06 +0200
+
 mailcrypt (3.5.8+CVS.2005.04.29.1-1) unstable; urgency=medium
 
   * New CVS upstream source.
-  * Urgency high: Fixes a serious bug.
+  * Urgency medium: Fixes a serious bug.
   * ../Makefile.in (mailcrypt_toc.html): Added an option to "texi2html" in
     order to avoid a subdirectory for the generated HTML files; thanks to
     Matt Kraai.  (Closes: #323730)
@@ -133,7 +146,7 @@ mailcrypt (3.5.5-10) unstable; urgency=medium
 
 mailcrypt (3.5.5-9) unstable; urgency=low
 
-  * config: Reenabled "$1" detection case: debconf has been fixed
+  * config: Enabled $1" detection case again: debconf has been fixed
     in the meanwhile.
   * control (Section): non-US/mail.
   * control (Build-Depends): added texinfo, texi2html.
@@ -250,7 +263,7 @@ mailcrypt (3.5.4-3) unstable; urgency=low
 
 mailcrypt (3.5.4-2) unstable; urgency=low
 
-  * control: Sandards-Version: 3.0.0.
+  * control: Standards-Version: 3.0.0.
   * mailcrypt.dhelp: New file.
   * mailcrypt.menu: Updated accordingly.
   * postinst: Updated accordingly; dhelp support added.
@@ -269,9 +282,9 @@ mailcrypt (3.5.1-1) unstable; urgency=low
 
   * New upstream version. (Closes: #30741)
   * copyright: Updated.
-  * mailcrypt-init.el: Fixed rmail hooks.  Added autoload for
+  * mailcrypt-init.el: Fixed Rmail hooks.  Added autoload for
     mc-setversion. (Closes: #30740)
-  * rules: Added REAMDE.gpg to $DOCS.
+  * rules: Added README.gpg to $DOCS.
   * control: Mention GPG.
 
  -- Davide G. M. Salvetti <salve@debian.org>  Thu, 17 Dec 1998 20:49:03 +0100
@@ -362,4 +375,16 @@ Sun May 19 16:19:11 1996  Joe Reinhardt  <jmr@everest.radiology.uiowa.edu>
 
 	* mailcrypt-init.el: new file to setup hooks for mail and news
 
-
+<%
+# LocalWords:  mailcrypt CVS toc html texi Kraai distclean autom te Sep Troup
+# LocalWords:  Michlmayr postinst prerm docbase init Mew's dvi Indep mc gpg utf
+# LocalWords:  Gorka Olaizola Potort rmdir alreadydefault Timshel debian deps
+# LocalWords:  Joerg Rieger eperl config debconf texinfo README pgp gnupg isp
+# LocalWords:  contrib dpkg gencontrol preinst ext TeXInfo postrm emacsen dhelp
+# LocalWords:  Rmail autoload setversion URL Budney keyserver url nop elisp
+# LocalWords:  Gertzfield alist assoc
+# arch-tag: 8a68f787-7690-47c0-9f9f-c8eeb3b86972
+# local variables:
+# ispell-local-dictionary: "american"
+# end:
+%>

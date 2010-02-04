@@ -1,13 +1,13 @@
 Source: mailcrypt
-Section: mail
 Priority: optional
-Build-Depends-Indep: eperl, texinfo, texi2html
+Section: mail
 Maintainer: Davide G. M. Salvetti <salve@debian.org>
 Standards-Version: 3.6.1
+Build-Depends-Indep: eperl, texinfo, texi2html
 
 Package: mailcrypt
 Architecture: all
-Depends: debconf (>= 0.2.0), gnupg, emacs21 | emacs-snapshot
+Depends: debconf (>= 0.2.0), gnupg, emacs21 | emacs-snapshot, make
 Description: An Emacs interface to the GNU Privacy Guard
  Mailcrypt is an Emacs lisp package that provides a simple but
  powerful interface to cryptographic functions for mail and news.  With

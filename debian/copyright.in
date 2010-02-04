@@ -1,17 +1,11 @@
 #include "variables"
-This is Debian GNU/Linux prepackaged version of the Mailcrypt Emacs Lisp
-program, written by Jin Choi and Pat LoPresti.
+This is the Debian package <:=${PACKAGE}:>, maintained by
 
-The current release of this package was assembled by:
-		   Davide G. M. Salvetti <salve@debian.org>
-using sources obtained via http://mailcrypt.sourceforge.net:
-<411b53d4ce9f92102d994eb7a8f661ba mailcrypt_3.5.8.orig.tar.gz>.
+  Davide G. M. Salvetti <salve@debian.org>
 
-The current Mailcrypt upstream maintainer is:
-  Brian Warner <warner@lothar.com>.
+using sources obtained from
 
-The first Mailcrypt Debian package was assembled by:
-  Joe Reinhardt <joe-reinhardt@uiowa.edu>.
+  <URL:http://mailcrypt.sourceforge.net/>.
 
 
 COPYRIGHT
@@ -39,13 +33,34 @@ You should have received a copy of the GNU General Public License along with
 this program; if not, write to the Free Software Foundation, Inc., 51 Franklin
 St, Fifth Floor, Boston, MA 02110-1301, USA.
 
-On Debian GNU/Linux system you can find a copy of the GNU General Public
-License in "<:=$GPL:>".
+
+DEBIAN SPECIFIC CHANGES
+=======================
+
+The Debian specific changes are free software
+
+  Copyright (C) 1997, 98, 99, 00, 01, 02, 03, 04, 05
+  by Davide G. M. Salvetti
+
+and you can redistribute it and/or modify it under the terms of the GNU
+General Public License as published by the Free Software Foundation;
+either version 2 of the License, or (at your option) any later version.
+
+On Debian GNU/Linux System you can find a copy of the GNU General Public
+License in "<:=${GPL}:>".
+
+A copy of the GNU General Public License is also available at
+
+  <URL:http://www.gnu.org/copyleft/gpl.html>.
+
+You may also obtain it by writing to the Free Software Foundation, Inc., 51
+Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 <:
 # LocalWords:  Mailcrypt Jin Choi LoPresti Budney
-#
 # local variables:
 # mode: text
 # fill-column: 78
+# ispell-local-dictionary: "american"
 # end:
+# arch-tag: 93e24830-7374-49ac-afc2-22236497e636
 :>//
