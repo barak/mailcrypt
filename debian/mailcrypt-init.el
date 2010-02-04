@@ -70,6 +70,7 @@
 ;;
 ;; local variables:
 ;; mode: emacs-lisp
+;; coding: utf-8
 ;; ispell-local-dictionary: "american"
 ;; ispell-check-comments: exclusive
 ;; end:

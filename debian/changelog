@@ -1,3 +1,22 @@
+mailcrypt (3.5.8+CVS.2005.04.29.1-7) unstable; urgency=low
+
+  * control (Description): URL to upstream added.
+
+  * docbase.in (texinfo/Files): Typo fixed.
+
+  * templates (mailcrypt/default): Rephrased to avoid making assumptions
+    about interfaces in templates; also mention "~/.emacs.el"
+    as a possible Emacs init file.
+  * de.po, it.po, es.po, templates.pot: Updated accordingly.
+
+  * install.in (do_install): Typo fixed; thanks to Remi Vanicat.
+    (Closes: #371104)
+
+  * lintian.in: New file; <:=${ecode}:>/install/<:=${PACKAGE}:> is a
+    maintainer script.
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Wed,  7 Jun 2006 22:19:59 +0200
+
 mailcrypt (3.5.8+CVS.2005.04.29.1-6) unstable; urgency=low
 
   * templates (_Description): Typo fixed.
@@ -444,6 +463,8 @@ comment (0) UNRELEASED; urgency=low
   * arch-tag: 8a68f787-7690-47c0-9f9f-c8eeb3b86972
   *
   * local variables:
+  * mode: debian-changelog
+  * coding: utf-8
   * ispell-local-dictionary: "american"
   * end:
   *
@@ -457,4 +478,4 @@ comment (0) UNRELEASED; urgency=low
   * LocalWords:  indep DFILES updatepo cdebconf autoconf Kahn Gillmor presubj
   * LocalWords:  Jochens Makefile autom emacs Potortì
 
- -- Davide G. M. Salvetti <salve@debian.org>  Thu, 01 Jan 1970 00:00:00 +0000
+ -- Davide G. M. Salvetti <salve@debian.org>  Thu, 01 Jan 1970 00:00:01 +0000

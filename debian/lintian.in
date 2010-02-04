@@ -1,0 +1,17 @@
+#include "variables"
+# <% lintian %> override file for <:=${PACKAGE}:>
+
+# This is a maintainer script.
+mailcrypt binary: debconf-is-not-a-registry .<:$_
+	  ="${ecode}/install/${PACKAGE}"; s|/+|/|g; print:>
+
+<:
+# arch-tag: e4349b16-3bb5-44eb-bcd2-240031be2444
+#
+# local variables:
+# mode: fundamental
+# coding: utf-8
+# ispell-local-dictionary: "american"
+# ispell-check-comments: exclusive
+# end:
+:>//

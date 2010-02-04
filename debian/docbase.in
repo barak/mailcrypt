@@ -16,7 +16,7 @@ Abstract: Mailcrypt is an Emacs Lisp package which provides a simple but
 Section: <:=${MENUSEC}:>
 
 Format: texinfo
-Files: <:=if($_="$doc/${PACKAGE}.texi.gz")=~tr|/|/|s:>
+Files: <:=if($_="$docsrc/${PACKAGE}.texi.gz")=~tr|/|/|s:>
 
 Format: info
 Index: <:=if($_="${info}/${PACKAGE}.info.gz")=~tr|/|/|s:>
@@ -30,6 +30,7 @@ Files: <:=if($_="${html}/*.html")=~tr|/|/|s:>
 #
 # local variables:
 # mode: text
+# coding: utf-8
 # fill-column: 78
 # ispell-local-dictionary: "american"
 # end:

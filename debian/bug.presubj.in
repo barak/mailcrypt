@@ -23,6 +23,7 @@ the <:=${PACKAGE}:> documentation directory "<:=${doc}:>").
 #
 # local variables:
 # mode: text
+# coding: utf-8
 # fill-column: 72
 # ispell-local-dictionary: "american"
 # end:

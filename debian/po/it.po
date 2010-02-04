@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mailcrypt 3.5.8+CVS.2005.04.29.1-5\n"
 "Report-Msgid-Bugs-To: salve@debian.org\n"
-"POT-Creation-Date: 2006-06-06 14:20+0200\n"
-"PO-Revision-Date: 2006-06-06 14:23+0200\n"
+"POT-Creation-Date: 2006-06-07 22:40+0200\n"
+"PO-Revision-Date: 2006-06-07 22:42+0200\n"
 "Last-Translator: \"Davide G. M. Salvetti\" <salve@debian.org>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -29,7 +29,8 @@ msgstr "Abilitare automaticamente Mailcrypt su questa macchina?"
 #: ../templates:4
 msgid ""
 "Mailcrypt will globally (i.e., for all users on this site) overload certain "
-"Emacs functions and key-bindings if you answer yes to this question."
+"Emacs functions and key-bindings if you answer affirmatively to this "
+"question."
 msgstr ""
 "Se si risponde affermativamente, Mailcrypt sostituirà globalmente, cioè\n"
 "per tutti gli utenti di questa macchina, alcune funzioni e assegnamenti di\n"
@@ -51,22 +52,24 @@ msgstr ""
 #. Description
 #: ../templates:4
 msgid ""
-"If you answer no, people who desire to use it will have to put the string "
-"\"(require 'mailcrypt-init)\" in their \"~/.emacs\" to load it."
+"If you answer negatively, people who desire to use it will have to put the "
+"string \"(require 'mailcrypt-init)\" in their personal \"~/.emacs\" or \"~/."
+"emacs.el\" file to load it."
 msgstr ""
 "Se la risposta sarà negativa, gli utenti che ne vorranno far uso dovranno\n"
-"mettere manualmente la stringa \"(require 'mailcrypt-init)\" nel loro\n"
-"\"~/.emacs\" per abilitare Mailcrypt."
+"mettere manualmente la stringa \"(require 'mailcrypt-init)\" nel loro file\n"
+"di inizializzazione \"~/.emacs\" o \"~/.emacs.el\" per abilitare Mailcrypt."
 
 #. Type: note
 #. Description
-#: ../templates:17
+#: ../templates:19
 msgid "Mailcrypt seems to be already auto-loaded at your site.  Good."
-msgstr "Mailcrypt sembra già automaticamente abilitato su questa macchina.  Bene."
+msgstr ""
+"Mailcrypt sembra già automaticamente abilitato su questa macchina.  Bene."
 
 #. Type: note
 #. Description
-#: ../templates:17
+#: ../templates:19
 msgid ""
 "By inspection of the file \"/etc/emacs/site-start.el\" Mailcrypt seems to be "
 "already auto-loaded by default at your site."
@@ -76,7 +79,7 @@ msgstr ""
 
 #. Type: note
 #. Description
-#: ../templates:17
+#: ../templates:19
 msgid ""
 "If this is not true, or if it's not what you want, please search that file "
 "looking for \"(require 'mailcrypt-init)\" resembling forms and fix it; then "

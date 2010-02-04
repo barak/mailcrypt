@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mailcrypt 3.5.8+CVS.2005.04.29.1-5\n"
 "Report-Msgid-Bugs-To: salve@debian.org\n"
-"POT-Creation-Date: 2006-06-06 14:20+0200\n"
-"PO-Revision-Date: 2006-06-06 14:22+0200\n"
+"POT-Creation-Date: 2006-06-07 22:40+0200\n"
+"PO-Revision-Date: 2006-06-07 22:42+0200\n"
 "Last-Translator: Joerg Rieger <Joerg.Rieger@informatik.med.uni-giessen.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -27,11 +27,14 @@ msgstr "Soll Mailcrypt automatisch geladen werden?"
 #. Type: boolean
 #. Description
 #: ../templates:4
+#, fuzzy
 msgid ""
 "Mailcrypt will globally (i.e., for all users on this site) overload certain "
-"Emacs functions and key-bindings if you answer yes to this question."
+"Emacs functions and key-bindings if you answer affirmatively to this "
+"question."
 msgstr ""
-"Mailcrypt wird Global (z.B., für alle Ihre Benutzer) einige Emacs Funktionen\n"
+"Mailcrypt wird Global (z.B., für alle Ihre Benutzer) einige Emacs "
+"Funktionen\n"
 "und Tastenkürzel überschreiben, wenn Sie mit yes auf diese Frage antworten."
 
 #. Type: boolean
@@ -44,43 +47,50 @@ msgid ""
 msgstr ""
 "Generell ist das in Ordnung, denn Mailcrpyt ist ein sehr nützliches Paket;\n"
 "Jedoch möchten Sie vielleicht nicht das das passiert, statt dessen möchten\n"
-"Sie vielleicht, dass jeder einzelne Benutzer selbst entscheiden kann, ob das\n"
+"Sie vielleicht, dass jeder einzelne Benutzer selbst entscheiden kann, ob "
+"das\n"
 "Paket geladen werden soll oder nicht."
 
 #. Type: boolean
 #. Description
 #: ../templates:4
+#, fuzzy
 msgid ""
-"If you answer no, people who desire to use it will have to put the string "
-"\"(require 'mailcrypt-init)\" in their \"~/.emacs\" to load it."
+"If you answer negatively, people who desire to use it will have to put the "
+"string \"(require 'mailcrypt-init)\" in their personal \"~/.emacs\" or \"~/."
+"emacs.el\" file to load it."
 msgstr ""
 "Wenn Sie mit no antworten, müssen die Leute die das Paket benutzen möchten\n"
-"in ihre \"~/.emacs\" die folgende Option eintragen: \"(require 'mailcrypt-init)\"."
+"in ihre \"~/.emacs\" die folgende Option eintragen: \"(require 'mailcrypt-"
+"init)\"."
 
 #. Type: note
 #. Description
-#: ../templates:17
+#: ../templates:19
 msgid "Mailcrypt seems to be already auto-loaded at your site.  Good."
 msgstr "Mailcrpyt scheint schon automatisch geladen zu werden.  Gut."
 
 #. Type: note
 #. Description
-#: ../templates:17
+#: ../templates:19
 msgid ""
 "By inspection of the file \"/etc/emacs/site-start.el\" Mailcrypt seems to be "
 "already auto-loaded by default at your site."
 msgstr ""
-"Nach Untersuchung der Datei \"/etc/emacs/site-start.el\" scheint es so, dass\n"
+"Nach Untersuchung der Datei \"/etc/emacs/site-start.el\" scheint es so, "
+"dass\n"
 "bei Ihnen Mailcrypt schon automatisch geladen wird."
 
 #. Type: note
 #. Description
-#: ../templates:17
+#: ../templates:19
 msgid ""
 "If this is not true, or if it's not what you want, please search that file "
 "looking for \"(require 'mailcrypt-init)\" resembling forms and fix it; then "
 "run \"dpkg-reconfigure mailcrypt\" if needed (recommended)."
 msgstr ""
-"Wenn dies nicht stimmt, oder Sie dies nicht möchten, suchen Sie bitte in der\n"
-"Datei nach der Zeile \"(require 'mailcrypt-init)\" und berichtigen Sie diese;\n"
+"Wenn dies nicht stimmt, oder Sie dies nicht möchten, suchen Sie bitte in "
+"der\n"
+"Datei nach der Zeile \"(require 'mailcrypt-init)\" und berichtigen Sie "
+"diese;\n"
 "danach starten Sie \"dpkg-reconfigure mailcrypt\" falls nötig (empfohlen)."

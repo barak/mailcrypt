@@ -24,3 +24,5 @@ Description: An Emacs interface to the GNU Privacy Guard
  Currently XEmacs ships with its own Mailcrypt, so this package should
  only be used with GNU/Emacs.  (I.e., you don't need to install this
  package if your site uses only XEmacs.)
+ .
+ Homepage: http://mailcrypt.sourceforge.net/

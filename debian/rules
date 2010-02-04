@@ -37,7 +37,7 @@ STRIP := strip -R .note -R .comment
 
 DFILES := debian/README debian/copyright \
 debian/config debian/postinst debian/prerm debian/postrm \
-debian/docbase debian/templates.merged \
+debian/docbase debian/lintian debian/templates.merged \
 debian/bug.presubj debian/bug.script \
 debian/install debian/remove
 
@@ -63,7 +63,7 @@ debian/po/updatepo: debian/templates
 		--podir=debian/po/
 	touch debian/po/updatepo
 
-debian/templates.merged: debian/po/updatepo
+debian/templates.merged: debian/templates debian/po/updatepo
 	po2debconf --verbose debian/templates > $@
 
 build: $(DFILES)
@@ -132,6 +132,8 @@ binary-indep: build
 	$(INSTDIR) $(tmp)//usr/share/bug/mailcrypt/
 	$(INSTDATA) debian/bug.presubj $(tmp)//usr/share/bug/mailcrypt//presubj
 	$(INSTSCRIPT) debian/bug.script $(tmp)//usr/share/bug/mailcrypt//script
+	$(INSTDIR) $(tmp)//usr/share/lintian/overrides/
+	$(INSTDATA) debian/lintian $(tmp)//usr/share/lintian/overrides//mailcrypt
 
 	$(INSTDIR) $(tmp)//DEBIAN/
 	$(INSTDATA) debian/templates.merged \

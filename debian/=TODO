@@ -18,12 +18,14 @@
 ** I18n and L10n
 *** DONE Use po-debconf.
 
+** Lintian overrides.
 
 
 arch-tag: 6b9519fc-ed69-4f4c-8aba-b32b30c2157a
 
 local variables:
 mode: org
+coding: utf-8
 fill-column: 78
 ispell-local-dictionary: "american"
 end:

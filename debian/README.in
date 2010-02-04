@@ -29,6 +29,7 @@ TeXInfo sources may be found in "<:=if($_="$doc/$PACKAGE.texi.gz")=~tr|/|/|s:>".
 #
 # local variables:
 # mode: text
+# coding: utf-8
 # fill-column: 78
 # ispell-local-dictionary: "american"
 # end:

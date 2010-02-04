@@ -70,6 +70,8 @@
 <:$WREMOVE="/usr/sbin/remove-default-wordlist $PACKAGE":>//
 <:# <% reportbug %> :>//
 <:$bug="/usr/share/bug/$PACKAGE/":>//
+<:# <% lintian %> :>//
+<:$lintian="/usr/share/lintian/overrides/":>//
 <:# <% misc %> :>//
 <:$GPL="/usr/share/common-licenses/GPL":>//
 <:open(COPYRIGHT,"${DEBIAN_DIR}/COPYRIGHT");
@@ -80,6 +82,7 @@
 #
 # local variables:
 # mode: shell-script
+# coding: utf-8
 # ispell-local-dictionary: "american"
 # ispell-check-comments: exclusive
 # end:

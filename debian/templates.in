@@ -1,3 +1,4 @@
+#include "variables"
 Template: mailcrypt/default
 Type: boolean
 Default: true
@@ -17,11 +18,21 @@ _Description: Should Mailcrypt be auto-loaded by default at your site?
 Template: mailcrypt/alreadydefault
 Type: note
 _Description: Mailcrypt seems to be already auto-loaded at your site.  Good.
- By inspection of the file "/etc/emacs/site-start.el" Mailcrypt seems to be
+ By inspection of the file "<:=$SSEL:>" Mailcrypt seems to be
  already auto-loaded by default at your site.
  .
  If this is not true, or if it's not what you want, please search that file
  looking for "(require 'mailcrypt-init)" resembling forms and fix it; then
  run "dpkg-reconfigure mailcrypt" if needed (recommended).
 
-# arch-tag: 8d29b17e-926e-4f69-b5db-7c5681bf5328-child
+# arch-tag: 8d29b17e-926e-4f69-b5db-7c5681bf5328<:='-child':>
+<:
+# local variables:
+# mode: text
+# coding: utf-8
+# fill-column: 76
+# ispell-local-dictionary: "american"
+# end:
+#
+# LocalWords:  mailcrypt init alreadydefault dpkg boolean emacs
+:>//
