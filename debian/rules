@@ -24,6 +24,7 @@
 
 checkdir=test -f debian/rules
 checkroot=test root = "$$(whoami)"
+fixperms=chmod -R a+rX .
 
 tmp := $(shell pwd)/debian/tmp/
 
@@ -51,7 +52,7 @@ pre-build:
 debian/rules: debian/variables
 
 % :: %.in
-	eperl -P -o $@ $<
+	eperl -I $(shell pwd)/debian/ -P -o $@ $<
 
 build: $(DFILES)
 	$(checkdir)
@@ -67,6 +68,7 @@ clean:
 	-rm -rf build core $(tmp) debian/{files*,substvars}
 	-$(MAKE) distclean
 	-rm -f $(DFILES)
+	$(fixperms)
 
 .PHONY: binary
 binary: binary-arch binary-indep
@@ -107,7 +109,6 @@ binary-indep: build
 	$(INSTDATA) htmls/*.html $(tmp)//usr/share/doc/mailcrypt//HTML
 	ln -snf mailcrypt_toc.html $(tmp)//usr/share/doc/mailcrypt//HTML/index.html
 
-	$(INSTDIR) $(tmp)//var/lib/mailcrypt/
 	$(INSTDIR) $(tmp)//usr/lib/emacsen-common/packages//{install,remove}
 	$(INSTSCRIPT) debian/install \
 		$(tmp)//usr/lib/emacsen-common/packages//install/mailcrypt

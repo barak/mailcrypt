@@ -14,17 +14,18 @@ case "${1}" in
     <:# deregister documentation with <% doc-base %> :>//
     <:=${DREMOVE}:> <:=${PACKAGE}:>
     <:# emacs remove :>//
-    <:=${EREMOVE}:> <:=${PACKAGE}:> ;;
+    <:=${EREMOVE}:> <:=${PACKAGE}:>
+    ;;
     (failed-upgrade)
     <:# emacs install :>//
     <:=${EINSTALL}:> <:=${PACKAGE}:>
     <:# register documentation with <% doc-base %> :>//
     <:=${DINSTALL}:> <:=if($_="${docbase}/${PACKAGE}")=~tr|/|/|s:>
     <:# install <% info %> menu into <% info %> directory :>//
-    <:=${IINSTALL}:> <:="${info}/${PACKAGE}.info.gz":>
+    <:=IINSTALL ():> <:="${info}/${PACKAGE}.info.gz":>
     ;;
     (*) echo >&2 "${0##*/}/<:=${PACKAGE}:>:" \
-	"Unknown argument: \"${1}\""
+	"Unknown argument: \"${1}\"."
     ;;
 esac
 

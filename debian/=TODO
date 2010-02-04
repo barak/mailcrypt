@@ -1,0 +1,29 @@
+* Package bugs
+
+** Unreported bugs
+   These bugs should be reported via the BTS.
+*** DONE /var/lib/mailcrypt
+    Should not be installed.
+
+** Open bugs
+   These bugs should be checked to see if they still apply to the current
+   release.
+
+** Non bugs
+   These are not bugs, even if they might look like as if they were such.
+
+
+* Miscellaneous stuff
+
+** I18n and L10n
+*** TODO Use po-debconf.
+
+
+
+LocalWords:  BTS TODO
+arch-tag: 6b9519fc-ed69-4f4c-8aba-b32b30c2157a
+local variables:
+mode: org
+fill-column: 78
+ispell-local-dictionary: "american"
+end:

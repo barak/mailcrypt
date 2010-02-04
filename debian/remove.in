@@ -62,7 +62,7 @@ case "${FLAVOR}" in
     undo_install
     ;;
     (*) echo >&2 "remove/<:=${PACKAGE}:>:" \
-	"Ignoring emacsen flavor: \"${FLAVOR}\""
+	"Ignoring emacsen flavor: \"${FLAVOR}\"."
     ;;
 esac
 

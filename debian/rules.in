@@ -7,6 +7,7 @@
 
 checkdir=test -f debian/rules
 checkroot=test root = "$$(whoami)"
+fixperms=chmod -R a+rX .
 
 tmp := $(shell pwd)/debian/tmp/
 
@@ -37,7 +38,7 @@ debian/rules: debian/variables
 
 <:# Eperl is simply great: thanks, Ralf! :>//
 % :: %.in
-	eperl -P -o $@ $<
+	eperl -I $(shell pwd)/debian/ -P -o $@ $<
 
 build: $(DFILES)
 	$(checkdir)
@@ -54,6 +55,7 @@ clean:
 	-rm -rf build core $(tmp) debian/{files*,substvars}
 	-$(MAKE) distclean
 	-rm -f $(DFILES)
+	$(fixperms)
 
 .PHONY: binary
 binary: binary-arch binary-indep
@@ -97,7 +99,6 @@ binary-indep: build
 	ln -snf mailcrypt_toc.html $(tmp)/<:=${html}:>/index.html
 
 <:# install Debian system files :>//
-	$(INSTDIR) $(tmp)/<:=${var}:>
 	$(INSTDIR) $(tmp)/<:=${ecode}:>/{install,remove}
 	$(INSTSCRIPT) debian/install \
 		$(tmp)/<:=${ecode}:>/install/<:=${PACKAGE}:>

@@ -14,7 +14,7 @@ db_get <:=${PACKAGE}:>/default || true; _db_default=${RET}
 
 FLAVOR=${1}
 
-INSTALL="install -o root -g root"
+INSTALL="install -o root -g root -m 644"
 INSTDIR="${INSTALL} -m 755 -d"
 
 do_install () {
@@ -63,7 +63,7 @@ case "${FLAVOR}" in
     do_install ${FLAVOR}
     ;;
     (*) echo >&2 "install/<:=${PACKAGE}:>:" \
-	"Ignoring emacsen flavor: \"${FLAVOR}\""
+	"Ignoring emacsen flavor: \"${FLAVOR}\"."
     ;;
 esac
 

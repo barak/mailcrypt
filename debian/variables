@@ -46,15 +46,23 @@
 <:$ecode="/usr/lib/emacsen-common/packages/":>//
 <:$lisp="/usr/share/emacs/site-lisp/$PACKAGE/":>//
 <:# <% info %> :>//
-<:$IINSTALL="install-info --section \"$INFOSEC\" \"$INFOSEC\""
-	  . " --menuentry=\"$INFOMENU\""
-	  . " --description=\"$INFODESC\""
-	  . " --quiet":>//
+<:sub IINSTALL {
+    my (${section}, ${menu}, ${description}) = @_;
+
+    ${section} = ${INFOSEC} unless ${section};
+    ${menu} = ${INFOMENU} unless ${menu};
+    ${description} = ${INFODESC} unless ${description};
+
+    return "install-info --section \"${section}\" \"${section}\""
+	. " --menuentry=\"${menu}\""
+	. " --description=\"${description}\""
+	. " --quiet";
+}:>//
 <:$IREMOVE="install-info --quiet --remove":>//
 <:$info="/usr/share/info/":>//
 <:# <% texmf %> :>//
 <:$texmf="/usr/share/texmf/":>//
-<:$MKTEXLSR="mktexlsr":>//
+<:$MKTEXLSR="mktexlsr >/dev/null":>//
 <:# <% dictionaries-common %> :>//
 <:$dict="/usr/share/dict/":>//
 <:$winfo="/var/lib/dictionaries-common/wordlist/":>//

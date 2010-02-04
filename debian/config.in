@@ -22,7 +22,7 @@ case "${1}" in
 	db_go || true
     ;;
     (*) echo >&2 "${0##*/}/<:=${PACKAGE}:>:" \
-	"Unknown argument: \"${1}\""
+	"Unknown argument: \"${1}\"."
     ;;
 esac
 

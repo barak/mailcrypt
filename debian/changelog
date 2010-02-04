@@ -1,3 +1,12 @@
+mailcrypt (3.5.8+CVS.2005.04.29.1-4) unstable; urgency=low
+
+  * control (Standard-Versions): Upgraded to 3.6.2.
+    (Depends): Modified the dependency on "debconf" to "debconf |
+    debconf-2.0" in order to allow the transition to cdebconf.
+    (Closes: #332016)
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Mon, 10 Oct 2005 17:49:17 +0200
+
 mailcrypt (3.5.8+CVS.2005.04.29.1-3) unstable; urgency=medium
 
   * Urgency medium: Fixes an important bug.
