@@ -8,7 +8,7 @@ Homepage: http://mailcrypt.sourceforge.net/
  
 Package: mailcrypt
 Architecture: all
-Depends: debconf (>= 0.2.0) | debconf-2.0, gnupg, emacs22 | emacs21 | emacs-snapshot, make
+Depends: debconf (>= 0.2.0) | debconf-2.0, gnupg, emacs23 | emacs22 | emacs21 | emacs-snapshot, make
 Description: An Emacs interface to the GNU Privacy Guard
  Mailcrypt is an Emacs lisp package that provides a simple but
  powerful interface to cryptographic functions for mail and news.  With

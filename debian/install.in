@@ -61,7 +61,7 @@ EOF
 
 case "${FLAVOR}" in
     emacs) :;;
-    emacs2[12]|emacs-snapshot) do_install ${FLAVOR};;
+    emacs2[123]|emacs-snapshot) do_install ${FLAVOR};;
     *) echo >&2 "install/<:=${PACKAGE}:>:" \
 	"Ignoring emacsen flavor: \"${FLAVOR}\"."
 esac
