@@ -1,3 +1,10 @@
+mailcrypt (3.5.8+CVS.2005.04.29.1-6) unstable; urgency=low
+
+  * templates (_Description): Typo fixed.
+  * de.po, es.po, it.po, templates.pot: Updated accordingly.
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Tue,  6 Jun 2006 14:25:10 +0200
+
 mailcrypt (3.5.8+CVS.2005.04.29.1-5) unstable; urgency=low
 
   * control (Standard-Versions): Upgraded to 3.7.2.
@@ -430,18 +437,24 @@ Sun May 19 16:19:11 1996  Joe Reinhardt  <jmr@everest.radiology.uiowa.edu>
 
 	* mailcrypt-init.el: new file to setup hooks for mail and news
 
-<%
-# arch-tag: 8a68f787-7690-47c0-9f9f-c8eeb3b86972
-#
-# local variables:
-# ispell-local-dictionary: "american"
-# end:
-#
-# LocalWords:  mailcrypt CVS toc html texi Kraai distclean autom te Sep Troup
-# LocalWords:  Michlmayr postinst prerm docbase init Mew's dvi Indep mc gpg utf
-# LocalWords:  Gorka Olaizola Potort rmdir alreadydefault Timshel debian deps
-# LocalWords:  Joerg Rieger eperl config debconf texinfo README pgp gnupg isp
-# LocalWords:  contrib dpkg gencontrol preinst ext TeXInfo postrm emacsen dhelp
-# LocalWords:  Rmail autoload setversion URL Budney keyserver url nop elisp
-# LocalWords:  Gertzfield alist assoc
-%>
+comment (0) UNRELEASED; urgency=low
+
+  * This is not a changelog entry.
+
+  * arch-tag: 8a68f787-7690-47c0-9f9f-c8eeb3b86972
+  *
+  * local variables:
+  * ispell-local-dictionary: "american"
+  * end:
+  *
+  * LocalWords:  mailcrypt CVS toc html texi Kraai distclean Sep Troup postinst
+  * LocalWords:  Michlmayr prerm docbase init Mew's dvi Indep mc gpg utf Gorka
+  * LocalWords:  Olaizola rmdir alreadydefault Timshel debian deps Joerg Rieger
+  * LocalWords:  eperl config debconf texinfo README pgp gnupg isp contrib url
+  * LocalWords:  dpkg gencontrol preinst TeXInfo postrm emacsen dhelp Rmail po
+  * LocalWords:  autoload setversion Budney keyserver nop elisp Gertzfield te
+  * LocalWords:  alist Zandt fixperms canonicalize ePerl checkdir checkroot el
+  * LocalWords:  indep DFILES updatepo cdebconf autoconf Kahn Gillmor presubj
+  * LocalWords:  Jochens Makefile autom emacs Potortì
+
+ -- Davide G. M. Salvetti <salve@debian.org>  Thu, 01 Jan 1970 00:00:00 +0000

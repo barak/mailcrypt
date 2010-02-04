@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mailcrypt 3.5.8+CVS.2005.04.29.1-5\n"
 "Report-Msgid-Bugs-To: salve@debian.org\n"
-"POT-Creation-Date: 2006-06-04 00:43+0200\n"
-"PO-Revision-Date: 2006-06-04 00:53+0200\n"
+"POT-Creation-Date: 2006-06-06 14:20+0200\n"
+"PO-Revision-Date: 2006-06-06 14:23+0200\n"
 "Last-Translator: \"Davide G. M. Salvetti\" <salve@debian.org>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -62,14 +62,13 @@ msgstr ""
 #. Description
 #: ../templates:17
 msgid "Mailcrypt seems to be already auto-loaded at your site.  Good."
-msgstr ""
-"Mailcrypt sembra già automaticamente abilitato su questa macchina.  Bene."
+msgstr "Mailcrypt sembra già automaticamente abilitato su questa macchina.  Bene."
 
 #. Type: note
 #. Description
 #: ../templates:17
 msgid ""
-"By inspection of the file \"/etc/site-start.el\" Mailcrypt seems to be "
+"By inspection of the file \"/etc/emacs/site-start.el\" Mailcrypt seems to be "
 "already auto-loaded by default at your site."
 msgstr ""
 "Controllando il file \"/etc/emacs/site-start.el\", pare che Mailcrypt sia\n"
