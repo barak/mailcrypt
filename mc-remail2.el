@@ -151,7 +151,7 @@ instead.")
     (setq start (point))
 
     (setq ret
-          (apply 
+          (apply
            'call-process-region start end mc-mixminion-path
                                t ;; delete text that was sent
                                t ;; insert mixminion output in its place

@@ -88,8 +88,8 @@
 ;; * In VM, not replacing a message puts the message into its own VM buffer
 ;;   so you can reply to it, forward it, etc. Thanks to Pat Lopresti
 ;;   <patl@lcs.mit.edu> for the suggestion.
-;; * Abort edit mode in VM and RMAIL decrypt functions if no encrypted 
-;;   message was found. 
+;; * Abort edit mode in VM and RMAIL decrypt functions if no encrypted
+;;   message was found.
 ;; * Added version string.
 ;; * Applied some new patches from stig adding autoloads and minor additions.
 ;; * Made check for window-system generic, and only for emacs versions > 19.
@@ -123,7 +123,7 @@
 ;;    mc-process-region.  The function copies all data to a temporary
 ;;    buffer, and does the work there.  This way if you do an undo after
 ;;    an encryption or signing, your password is not visible on the
-;;    screen. 
+;;    screen.
 ;; 3) All process output goes to the *MailCrypt* buffer.  No longer use
 ;;    a separate buffer for decryption, encryption, verification, ...
 ;;    This allows the user to always look at the *MailCrypt* buffer to
@@ -150,9 +150,9 @@
 ;; * Load mail-extr.el to get mail-extract-address-components defined.
 ;; Thanks to Kevin Rodgers <kevin@traffic.den.mmc.com> for the following
 ;; improvements.
-;; * Quoted an unquoted lambda expression that prevented optimized 
+;; * Quoted an unquoted lambda expression that prevented optimized
 ;;   compilation under emacs 18.
-;; * Used `nconc' instead of `append' in various places to save on 
+;; * Used `nconc' instead of `append' in various places to save on
 ;;   garbage collection.
 ;; * Modified mc-split to run more efficiently.
 ;;}}}
@@ -170,7 +170,7 @@
 ;; * Temp display function does not barf on F-keys or mouse events.
 ;;     Thanks to Jonathan Stigelman <stig@key.amdahl.com>
 ;; * Lucid emacs menu support provided by William Perry <wmperry@indiana.edu>
-;; * Cited signed messages would interfere with signature 
+;; * Cited signed messages would interfere with signature
 ;;	verification; fixed.
 ;;}}}
 ;;{{{ Changes from 1.2:

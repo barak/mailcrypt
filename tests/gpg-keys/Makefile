@@ -7,7 +7,7 @@
 # To build the keyrings from source, use the "new-rings" target. This uses
 # a few python scripts to create the keyring, but the process requires some
 # manual intervention. After the manual steps are done, you should build
-# the "exported" target to contruct the 
+# the "exported" target to contruct the
 
 unpack: unpack-full-rings exported
 

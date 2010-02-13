@@ -25,7 +25,7 @@ class Maildir:
         self.files = []
         self.pollinterval = 10  # only used if we don't have DNotify
         self.running = 0
-        
+
     def start(self):
         """You must run start to receive any messages."""
         if self.running:
@@ -48,7 +48,7 @@ class Maildir:
         print "callback"
         self.poll()
         raise NotImplemented
-        
+
     def stop(self):
         if have_dnotify:
             self.dnotify.remove()
@@ -83,7 +83,7 @@ def test1():
     import signal
     while 1:
         signal.pause()
-    
+
 if __name__ == '__main__':
     test1()
-    
+

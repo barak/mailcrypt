@@ -21,6 +21,7 @@
 
 (require 'mailcrypt)
 
+;;;###autoload
 (defun mc-setversion (&optional version)
   "Reset path and argument information for the selected version of PGP.
 Possible values of VERSION are 2.6, 5.0, 6.5, and gpg."
@@ -37,15 +38,15 @@ Possible values of VERSION are 2.6, 5.0, 6.5, and gpg."
 	     (t nil))
 	    )
 	   (completion-ignore-case t))
-	(setq version 
-	      (completing-read 
+	(setq version
+	      (completing-read
 	       (format "Select PGP version (currently %s): " oldversion)
 	       '(
-		 ("2.6" 1) 
+		 ("2.6" 1)
 		 ("5.0" 2)
 		 ("gpg" 3)
 		 ("6.5" 4)
-		 ) nil 
+		 ) nil
 		   t   ; REQUIRE-MATCH
 		   nil ; INITIAL
 		   nil ; HIST

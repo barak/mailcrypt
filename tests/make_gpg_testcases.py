@@ -194,7 +194,7 @@ class TestCase:
         f = open(os.path.join(testcasedir, self.filename), "w")
         emit_alist(f, self.d)
         f.close()
-        
+
 
 class E_Case(TestCase):
     def __init__(self, filename, recip):
@@ -255,7 +255,7 @@ Usted tiene que mostrar esta evidencia escrita a un oficial de policía cuando
 éste lo solicite así como a otro conductor o dueño do propiedad después de un
 accidente vial.
 """
-    
+
 class SYM_Case(TestCase):
     def __init__(self, filename, passphrase):
         TestCase.__init__(self, filename)
@@ -302,12 +302,12 @@ trustmap = {
     'trusted': "MARGINAL",
     'untrusted': "UNDEFINED",
     }
-    
+
 if __name__ == "__main__":
     if not os.path.isdir(testcasedir):
         os.mkdir(testcasedir)
     make_cases()
-    
+
 
 # todo:
 #  hardcoded date in es()

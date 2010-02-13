@@ -246,7 +246,7 @@ this list.")
 	  (setq chains (cons (list remailer-name remailer) chains))))
     (goto-char (point-min))
     (if (re-search-forward "----------" nil t) ; Locate rankings at bottom
-	;; Read each word in the rankings section.  Each time we 
+	;; Read each word in the rankings section.  Each time we
 	;; hit a remailer we've identified, append it to the ranking
 	;; list.  Thus we sort remailers according to rank.
 	(while (re-search-forward "^\\([a-zA-Z0-9\\-]+\\) " nil t)
@@ -268,6 +268,7 @@ encryption."
 	    (mc-parse-levien-buffer)
 	  (bury-buffer)))))
 
+;;;###autoload
 (defun mc-reread-levien-file ()
   "Read the Levien format file specified in `mc-levien-file-name'.
 
@@ -364,7 +365,7 @@ a description of Levien file format."
      (concat "^" (regexp-quote mail-header-separator) "\n"))
     (forward-line -1)
     (cons (copy-marker (point-min)) (copy-marker (point)))))
-		
+
 (defun mc-find-colon-header (&optional insert)
   ;; Find the header with a "::" immediately after the
   ;; mail-header-separator.  Return region enclosing header.  Optional
@@ -469,7 +470,7 @@ a description of Levien file format."
 	       (t (error "Remailer %s is not type-1" addr)))))
       (mc-replace-field to-field to colon-header)
       (mc-nuke-field "Reply-to" main-header))))
-	
+
 ;;}}}
 ;;{{{ Misc. random
 
@@ -504,6 +505,7 @@ a description of Levien file format."
       (mc-reread-levien-file))
   (append mc-remailer-internal-chains mc-remailer-user-chains))
 
+;;;###autoload
 (defun mc-remailer-insert-pseudonym ()
   "Insert pseudonym as a From field in the hash-mark header.
 
@@ -615,7 +617,7 @@ be passed to this program for rewriting.")
     (while (and rest (member "mix" (mc-remailer-properties (car rest))))
       (setq last (car rest)
 	    rest (cdr rest)))
-    
+
     ;; If recipient is not a remailer, deal with hashmark and colon
     ;; headers and get rid of them.
     (if (mc-recipient-is-remailerp)
@@ -634,7 +636,7 @@ be passed to this program for rewriting.")
 	    (goto-char (car colon-header))
 	    (forward-line -1)
 	    (delete-region (point) (+ (cdr colon-header) 1)))))
-    
+
     ;; Expand aliases and get recipients.
     (and (featurep 'mailalias)
 	 (not (featurep 'mail-abbrevs))
@@ -644,9 +646,9 @@ be passed to this program for rewriting.")
 	  (mc-cleanup-recipient-headers
 	   (mapconcat 'cdr (mc-get-fields "To" main-header t) ", ")))
     (if newsgroups
-	(setq newsgroups 
+	(setq newsgroups
 	  (mc-cleanup-recipient-headers
-	   (cdr 
+	   (cdr
 	    (assoc "Newsgroups" newsgroups)))))
     ;; Mixmaster does not support posting...
 ;    (if newsgroups
@@ -767,11 +769,12 @@ be passed to this program for rewriting.")
     (goto-char (car header))
     (if (re-search-forward (concat "^" (regexp-quote field) ":")
 			  (cdr header) t)
-	
+
 	(progn
 	  (goto-char (match-beginning 0))
 	  (error "Cannot use a %s field." field)))))
 
+;;;###autoload
 (defun mc-remailer-encrypt-for-chain (&optional pause)
   "Encrypt message for a remailer chain, prompting for chain to use.
 
@@ -803,6 +806,7 @@ encryption."
 ;;}}}
 ;;{{{ Response block generation
 
+;;;###autoload
 (defun mc-remailer-insert-response-block (&optional arg)
   "Insert response block at point, prompting for chain to use.
 

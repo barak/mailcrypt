@@ -124,7 +124,7 @@ PGP ID.")
 			    (goto-char (point-min))
 			    (if (re-search-forward revoke-regexp nil t)
 				(setq result nil)
-			      (setq mc-pgp-key-cache 
+			      (setq mc-pgp-key-cache
 				    (cons (cons str result)
 					  mc-pgp-key-cache)))))))
 	    (if buffer (kill-buffer buffer))
@@ -193,7 +193,7 @@ PGP ID.")
 	(setq recipients (cons (cdr key) recipients)))
 
     (setq args (append args recipients))
-    
+
     (message "%s" msg)
     (setq result (mc-process-region start end passwd mc-pgp-path args
 				    'mc-pgp-generic-parser buffer))
@@ -435,7 +435,7 @@ PGP ID.")
 	      (progn
 		(if mc-pgp-display-snarf-output (mc-display-buffer buffer))
 		(setq tmpstr (buffer-substring-no-properties
-			      (match-beginning 1) 
+			      (match-beginning 1)
 			      (match-end 1)))
 		(if (equal tmpstr "No")
 		    0
@@ -574,6 +574,7 @@ element is a function to call with an ID as argument.  See the
 documentation for the function mc-pgp-fetch-key for a description of
 the ID.")
 
+;;;###autoload
 (defun mc-pgp-fetch-key (&optional id)
   "Attempt to fetch a key for addition to PGP keyring.  Interactively,
 prompt for string matching key to fetch.

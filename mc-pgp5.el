@@ -93,7 +93,7 @@ PGP ID.")
 		(set-buffer buffer)
 		(goto-char (point-min))
 
-		(while 
+		(while
 		    (and (null result)
 			 ;; first find a keyid line for a secret key
 			 (re-search-forward keyid-re nil t))
@@ -106,7 +106,7 @@ PGP ID.")
 		    (if (re-search-forward userid-re nil t)
 			(progn
 			  (save-restriction
-			    (setq result 
+			    (setq result
 				  (cons (buffer-substring-no-properties
 					 (match-beginning 1)
 					 (match-end 1))
@@ -116,7 +116,7 @@ PGP ID.")
 			    (goto-char (point-min))
 			    (if (re-search-forward revoke-re nil t)
 				(setq result nil)
-				(setq mc-pgp50-key-cache 
+				(setq mc-pgp50-key-cache
 				      (cons (cons str result)
 					    mc-pgp50-key-cache)))
 			    ))))))
@@ -138,8 +138,8 @@ PGP ID.")
     (cond ((not (eq result 0))
 	   (prog1
 	       nil
-	     (if (mc-message 
-		  "^Need a pass phrase to decrypt private key:$" 
+	     (if (mc-message
+		  "^Need a pass phrase to decrypt private key:$"
 		  (current-buffer))
 		 (mc-deactivate-passwd t)
 	       (mc-message mc-pgp50-error-re (current-buffer)
@@ -157,7 +157,7 @@ PGP ID.")
 	    (set-buffer oldbuf)
 	    (list t (cons start end)))))))
 
-(defun mc-pgp50-process-region 
+(defun mc-pgp50-process-region
   (beg end passwd program args parser &optional buffer)
   (let ((obuf (current-buffer))
 	(process-connection-type nil)
@@ -171,7 +171,7 @@ PGP ID.")
 	  (set-buffer obuf)
 	  (buffer-disable-undo mybuf)
 	  (setq proc
-		(apply 'start-process-shell-command "*PGP*" mybuf program 
+		(apply 'start-process-shell-command "*PGP*" mybuf program
 		       "2>&1" args))
 
 	  ;; Now hand the process to the parser, which returns the exit
@@ -230,56 +230,56 @@ PGP ID.")
 	    (process-send-region proc start end)
 	    (set-buffer newbuf)
 	    (process-send-eof proc)
-	    
+
 	    ;; Test output of the program, looking for
 	    ;; errors.
 	    (expect-cond
-	     
+
 	     ;; OPTION 1:  Great!  The data is now encrypted!
 	     ("-----END PGP MESSAGE-----"
-	      
+
 	      ;; Catch the exit status.
 	      (setq result (process-exit-status proc))
 	      (delete-process proc)
 	      (message "Encryption complete.")
-	      
+
 	      ;; Delete everything preceding the signed data.
 	      (goto-char (point-max))
-	      (re-search-backward 
+	      (re-search-backward
 	       "-----BEGIN PGP MESSAGE-----" nil t)
 	      (delete-region (point-min) (match-beginning 0))
 	      (setq rgn (point-min))
-	      
+
 	      ;; Convert out CR/NL -> NL
 	      (goto-char (point-min))
 	      (while (search-forward "\r\n" nil t)
 		(replace-match "\n"))
-	      
+
 	      ;; Delete everything after the signature.
 	      (goto-char (point-min))
 	      (re-search-forward
 	       "-----END PGP MESSAGE-----\n" nil t)
 	      (delete-region (match-end 0) (point-max))
-	      
+
 	      ;; Return the exit status, with the region
 	      ;; limits!
 	      (setq rgn (cons rgn (point-max)))
 	      (setq results (list result rgn)))
-	     
+
 	     ;; OPTION 2:  The passphrase is no good.
-	     ("Enter pass phrase:" 
+	     ("Enter pass phrase:"
 	      (interrupt-process proc)
 	      (delete-process proc)
 	      (mc-deactivate-passwd t)
 	      (setq results '("Incorrect passphrase." nil)))
-	     
-	     ;; OPTION 3:  There are keys missing.  Just bug out 
+
+	     ;; OPTION 3:  There are keys missing.  Just bug out
 	     ;; of the whole thing, for now.
 	     ("\nNo encryption keys found for:"
 	      (interrupt-process proc)
 	      (delete-process proc)
 	      (setq results '("One or more public keys are missing" nil)))
-	     
+
 	     ;; OPTION 3a:  There are bad keys in the keyring.  This is
 	     ;; an odd variant of 3, for example when using a key from
 	     ;; the "Cyber-Knights Termplar," which generates 8K keys.
@@ -287,17 +287,17 @@ PGP ID.")
 	      (interrupt-process proc)
 	      (delete-process proc)
 	      (setq results '("One or more public keys are missing" nil)))
-	     
+
 	     ;; OPTION 4:  No recipients specified.
 	     ("You must specify at least one recipient"
 	      (interrupt-process proc)
 	      (delete-process proc)
 	      (mc-deactivate-passwd t)
 	      (setq results '("No recipients specified" nil)))
-	     
+
 	     ;; OPTION 5:  The program exits.
 	     (exit
-	      (setq results (list 
+	      (setq results (list
 			     (process-exit-status proc) nil)))))
 	(set-buffer oldbuf))
       results)))
@@ -317,13 +317,13 @@ PGP ID.")
     (if mc-pgp50-alternate-keyring
 	(setq args (append args (list (format "+pubring=%s"
 					      mc-pgp50-alternate-keyring)))))
-    (if 
+    (if
 	(and (not (eq mc-pgp-always-sign 'never))
-	     (or 
-	      mc-pgp-always-sign 
-	      sign 
+	     (or
+	      mc-pgp-always-sign
+	      sign
 	      (y-or-n-p "Sign the message? ")))
-	     
+
 	(progn
 	  (setq mc-pgp-always-sign t)
 	  (setq key (mc-pgp50-lookup-key (or id mc-pgp50-user-id)))
@@ -346,15 +346,15 @@ PGP ID.")
 
     (if recipients
 	(setq args (append args
-			   (apply 'append (mapcar 
-					   '(lambda (x) (list 
-							 "-r" 
+			   (apply 'append (mapcar
+					   '(lambda (x) (list
+							 "-r"
 							 (concat "\"" x "\"")))
 					   recipients)))))
 
     (message "pgpe %s" (mapconcat 'identity args " "))
     (message "%s" msg)
-    (setq result (mc-pgp50-process-region 
+    (setq result (mc-pgp50-process-region
 		  start end passwd mc-pgp50-pgpe-path args
 		  'mc-pgp50-encrypt-parser buffer))
     (save-excursion
@@ -419,13 +419,13 @@ PGP ID.")
 	      ;; Check whether there was a good signature made.
 	      (goto-char (point-max))
 	      (if
-		  (re-search-backward 
+		  (re-search-backward
 		   "\\(Good signature made.*by\\)\\( key:\n\\(\n\\|.\\)*\\)"
 		   nil t)
 		  (progn
 		    (setq rgn (cons rgn (match-beginning 1)))
 		    (setq result
-			  (concat 
+			  (concat
 			   (buffer-substring-no-properties
 			    (match-beginning 1)
 			    (match-end 1))
@@ -444,15 +444,15 @@ PGP ID.")
 	      ;; Return the exit status, with the region
 	      ;; limits!
 	      (setq results (list result rgn)))
-			
+
 	     ;; OPTION 2:  Awww...bad passphrase!
-	     ("Enter pass phrase:" 
+	     ("Enter pass phrase:"
 	      (mc-deactivate-passwd t)
 	      (interrupt-process proc)
 	      (delete-process proc)
 
 	      ;; Return the bad news.
-	      (setq results 
+	      (setq results
 		    '("Incorrect passphrase or wrong key" nil)))
 
 	     ;; OPTION 3:  Not encrypted to us!
@@ -465,7 +465,7 @@ PGP ID.")
 
 	     ;; OPTION 4:  The program exits.
 	     (exit
-	      (setq results (list 
+	      (setq results (list
 			     (process-exit-status proc) nil)))))))
     results)))
 
@@ -585,7 +585,7 @@ PGP ID.")
 		;; Return the good news!
 		(setq results
 		      (list
-		       (concat 
+		       (concat
 			(buffer-substring-no-properties
 			 (match-beginning 1)
 			 (match-end 1))
@@ -605,13 +605,13 @@ PGP ID.")
 		;; Read the warning message
 		(goto-char (point-max))
 		(re-search-backward
-		 "\\(BAD signature made.*by\\).*\n.*\n\[ \t\]*\\(.*\\)\n" 
+		 "\\(BAD signature made.*by\\).*\n.*\n\[ \t\]*\\(.*\\)\n"
 		 nil t)
 
 		;; Return the bad news
 		(setq results
 		      (list
-		       (concat 
+		       (concat
 			(buffer-substring-no-properties
 			 (match-beginning 1)
 			 (match-end 1))
@@ -627,7 +627,7 @@ PGP ID.")
 		(delete-process proc)
 
 		;; Return the good news!
-		(setq results 
+		(setq results
 		      '("You don't have this person's public key!" nil)))
 
 	       ;; OPTION 2b:  The message is not signed w/PGP 5.0
@@ -637,21 +637,21 @@ PGP ID.")
 		(delete-process proc)
 
 		;; Return the good news!
-		(setq results 
+		(setq results
 		      '("Not a PGP 5.0 signed message!" nil)))
 
 	       ;; OPTION 3:  Awww...This isn't clearsigned, it's encrypted!
-	       ("Enter pass phrase:" 
+	       ("Enter pass phrase:"
 		(interrupt-process proc)
 		(delete-process proc)
 
 		;; Return the bad news.
-		(setq results 
+		(setq results
 		      '("Decrypt the message; that will verify it" nil)))
 
 	       ;; OPTION 4:  The program exits.
 	       (exit
-		(setq results (list 
+		(setq results (list
 			       (process-exit-status proc) nil)))))))
       results)))
 
@@ -687,7 +687,7 @@ PGP ID.")
 
 		;; Delete everything preceding the signed data.
 		(goto-char (point-max))
-		(re-search-backward 
+		(re-search-backward
 		 "-----BEGIN PGP SIGNED MESSAGE-----" nil t)
 		(delete-region (point-min) (match-beginning 0))
 		(setq rgn (point-min))
@@ -702,12 +702,12 @@ PGP ID.")
 		(re-search-forward
 		 "-----END PGP SIGNATURE-----\n" nil t)
 		(delete-region (match-end 0) (point-max))
-			 
+
 		;; Return the exit status, with the region
 		;; limits!
 		(setq rgn (cons rgn (point-max)))
 		(setq results (list result rgn)))
-			
+
 
 	       ;; OPTION 1.a:  The data is now signed, but is 8bit data.
 	       ("-----END PGP MESSAGE-----"
@@ -719,7 +719,7 @@ PGP ID.")
 
 		;; Delete everything preceding the signed data.
 		(goto-char (point-max))
-		(re-search-backward 
+		(re-search-backward
 		 "-----BEGIN PGP MESSAGE-----" nil t)
 		(delete-region (point-min) (match-beginning 0))
 		(setq rgn (point-min))
@@ -734,15 +734,15 @@ PGP ID.")
 		(re-search-forward
 		 "-----END PGP MESSAGE-----\n" nil t)
 		(delete-region (match-end 0) (point-max))
-			 
+
 		;; Return the exit status, with the region
 		;; limits!
 		(setq rgn (cons rgn (point-max)))
 		(setq results (list result rgn)))
-			
+
 
 	       ;; OPTION 2:  Awww...bad passphrase!
-	       ("Enter pass phrase:" 
+	       ("Enter pass phrase:"
 		(mc-deactivate-passwd t)
 		(interrupt-process proc)
 		(delete-process proc)
@@ -752,7 +752,7 @@ PGP ID.")
 
 	       ;; OPTION 3:  The program exits.
 	       (exit
-		(setq results (list 
+		(setq results (list
 			       (process-exit-status proc) nil)))))))
       results)))
 
@@ -853,7 +853,7 @@ PGP ID.")
   (let ((buffer (get-buffer-create mc-buffer-name)) tmpstr args tempfile)
     ;; a known bug in pgp5.0: "pgpk -a" doesn't read from stdin like it should.
     ;; workaround: write key to a tempfile, then feed tempfile to pgpk -a
-    (setq tempfile 
+    (setq tempfile
 	  (make-temp-name (expand-file-name "mailcrypt-pgp50-snarffile-"
 					    mc-temp-directory)))
     (write-region start end tempfile)
@@ -875,7 +875,7 @@ PGP ID.")
 	      (progn
 		(if mc-pgp50-display-snarf-output (mc-display-buffer buffer))
 		(setq tmpstr (buffer-substring-no-properties
-			      (match-beginning 1) 
+			      (match-beginning 1)
 			      (match-end 1)))
 		(if (equal tmpstr "No")
 		    0
@@ -978,9 +978,9 @@ when fetching keys.")
 		   (or (cdr id) (car id)) mc-pgp50-keyserver-address)
 	  (setq buf (generate-new-buffer " *mailcrypt temp*"))
 	  (setq connection
-		(open-network-stream 
-		 "*key fetch*" 
-		 buf 
+		(open-network-stream
+		 "*key fetch*"
+		 buf
 		 mc-pgp50-keyserver-address
 		 mc-pgp50-keyserver-port))
 	  (process-send-string
@@ -988,8 +988,8 @@ when fetching keys.")
 	   (concat "GET " (format mc-pgp50-keyserver-url-template
 				  (or (cdr id) (car id))) "\r\n"))
 	  (while (and (eq 'open (process-status connection))
-		      (accept-process-output 
-		       connection 
+		      (accept-process-output
+		       connection
 		       mc-pgp50-fetch-timeout)))
 	  (mc-pgp50-buffer-get-key buf))
       (if buf (kill-buffer buf))
@@ -1003,9 +1003,9 @@ when fetching keys.")
 		   (or (cdr id) (car id)) mc-pgp50-hkpserver-address)
 	  (setq buf (generate-new-buffer " *mailcrypt temp*"))
 	  (setq connection
-		(open-network-stream 
-		 "*key fetch*" 
-		 buf 
+		(open-network-stream
+		 "*key fetch*"
+		 buf
 		 mc-pgp50-hkpserver-address
 		 mc-pgp50-hkpserver-port))
 	  (process-send-string
@@ -1013,8 +1013,8 @@ when fetching keys.")
 	   (concat "GET " (format mc-pgp50-hkpserver-req-template
 				  (or (cdr id) (car id))) "\r\n\r\n"))
 	  (while (and (eq 'open (process-status connection))
-		      (accept-process-output 
-		       connection 
+		      (accept-process-output
+		       connection
 		       mc-pgp50-fetch-timeout)))
 	  (mc-pgp50-buffer-get-key buf))
       (if buf (kill-buffer buf))
@@ -1056,6 +1056,7 @@ element is a function to call with an ID as argument.  See the
 documentation for the function mc-pgp50-fetch-key for a description of
 the ID.")
 
+;;;###autoload
 (defun mc-pgp50-fetch-key (&optional id)
   "Attempt to fetch a key for addition to PGP keyring.  Interactively,
 prompt for string matching key to fetch.
@@ -1106,7 +1107,7 @@ request for the key."
 		  (setq args '("-f" "--verbose=0" "--batchmode=1"))
 		  (if mc-pgp50-alternate-keyring
 		      (setq args
-			    (append args (list (format 
+			    (append args (list (format
 						"--pubring=%s"
 						mc-pgp50-alternate-keyring)))))
 		  (setq proc

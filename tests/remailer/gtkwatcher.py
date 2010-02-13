@@ -31,7 +31,7 @@ class WatcherGUI:
         watcher.gui = self
 
         self.done = 0
-        
+
         xml = gtk.glade.XML('gtkwatcher.glade')
         self.xml = xml
 
@@ -54,7 +54,7 @@ class WatcherGUI:
         self.dst_sent_item.set_sensitive(0)
         self.dst_original_item = xml.get_widget("dst_original_item")
         self.dst_flush_item = xml.get_widget("dst_flush_item")
-        
+
         xml.signal_connect('do_dst_flush', self.do_dst_flush)
         xml.signal_connect('do_dst_original', self.do_dst_original)
 
@@ -65,7 +65,7 @@ class WatcherGUI:
         self.dst_model = gtk.ListStore(gobject.TYPE_STRING,
                                        gobject.TYPE_STRING,
                                        gobject.TYPE_PYOBJECT)
-        
+
         view = xml.get_widget('src_treeview')
         view.connect("button_press_event", self.do_src_popup)
         view.set_model(self.src_model)
@@ -76,7 +76,7 @@ class WatcherGUI:
         sel.set_mode(gtk.SELECTION_SINGLE)
         sel.connect("changed", self.do_src_select)
         self.src_sel = sel
-        
+
         view = xml.get_widget('dst_treeview')
         view.connect("button_press_event", self.do_dst_popup)
         view.set_model(self.dst_model)
@@ -87,7 +87,7 @@ class WatcherGUI:
         sel.set_mode(gtk.SELECTION_SINGLE)
         sel.connect("changed", self.do_dst_select)
         self.dst_sel = sel
-        
+
         self.srcwin = xml.get_widget('srcwin')
         self.dstwin = xml.get_widget('dstwin')
         #self.src_clist.connect('select-row', self.do_src_select)
@@ -103,7 +103,7 @@ class WatcherGUI:
         self.done = 1
         # mainquit asserts, because we aren't actually in a mainloop
         #gtk.mainquit()
-        
+
     def update_text(self, text, skipHeaders=0):
         buf = self.text.get_buffer()
         buf.set_text(text)
@@ -118,7 +118,7 @@ class WatcherGUI:
         mark = buf.create_mark("end", iter, 0)
         if skipHeaders:
             self.text.scroll_to_mark(mark, within_margin=0)
-        
+
     def do_src_select(self, sel):
         model, iter = sel.get_selected()
         if not iter:
@@ -202,7 +202,7 @@ class WatcherGUI:
         print "flush msgid", m.msgid
         self.watcher.flush(m.msgid)
         self.do_update()
-        
+
     def do_dst_original(self, menuitem):
         # which message? find the selection
         model, iter = self.dst_sel.get_selected()
@@ -214,7 +214,7 @@ class WatcherGUI:
             text = src_msg.data
             self.update_text(text, skipHeaders=0)
         #self.dst_sel.unselect_all()
-        
+
     def do_dst_select(self, sel):
         model, iter = sel.get_selected()
         if not iter:
@@ -334,5 +334,5 @@ def main():
     f = open("watcher.pickle", "w")
     cPickle.dump(w, f, 1)
     f.close()
-    
+
 if __name__ == '__main__': main()

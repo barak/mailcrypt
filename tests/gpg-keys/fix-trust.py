@@ -42,7 +42,7 @@ def make_trustdb(trust):
         stdin.write("%s:%d:\n" % (id, trust[id]))
     stdin.close()
 
-    
+
 users = ("owner1", "owner2", "other", "trusted", "untrusted", "unknown")
 
 # get keyids
@@ -60,7 +60,7 @@ trust = {
     }
 if id["unknown"]:
     trust[id["unknown"]] = 6 # u
-    
+
 make_trustdb(trust)
 os.system("gpg --homedir %s --check-sigs >/dev/null" % homedir)
 os.system("gpg --homedir %s --check-trustdb" % homedir)

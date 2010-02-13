@@ -15,7 +15,7 @@ check-gpg: gpg-testcases/E.e1r $(GPG_KEYS)
 onetest: gpg-testcases/E.e1r $(GPG_KEYS)
 	$(EMACS) -q --no-site-file -batch -l test-gpg.el -f run-one-test
 
-$(GPG_KEYS): 
+$(GPG_KEYS):
 	$(MAKE) -C gpg-keys unpack
 	touch $@
 

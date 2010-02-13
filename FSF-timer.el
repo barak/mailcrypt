@@ -44,18 +44,18 @@ It should normally be in the exec-directory.")
 (put 'timer-error 'error-conditions '(error timer-error))
 (put 'timer-error 'error-message "Timer error")
 
-(put 'timer-abnormal-termination 
-     'error-conditions 
+(put 'timer-abnormal-termination
+     'error-conditions
      '(error timer-error timer-abnormal-termination))
-(put 'timer-abnormal-termination 
-     'error-message 
+(put 'timer-abnormal-termination
+     'error-message
      "Timer exited abnormally--all events cancelled")
 
 (put 'timer-filter-error
      'error-conditions
      '(error timer-error timer-filter-error))
 (put 'timer-filter-error
-     'error-message 
+     'error-message
      "Error in timer process filter")
 
 
@@ -96,7 +96,7 @@ Relative times may be specified as a series of numbers followed by units:
   ;; Make TIME a string.
   (if (integerp time)
       (setq time (format "%d sec" time)))
-  (cond ((or (not timer-process) 
+  (cond ((or (not timer-process)
              (memq (process-status timer-process) '(exit signal nil)))
          (if timer-process (delete-process timer-process))
          (setq timer-process
@@ -118,7 +118,7 @@ Relative times may be specified as a series of numbers followed by units:
 (defun cancel-timer (elt)
   "Cancel a timer previously made with `run-at-time'.
 The argument should be a value previously returned by `run-at-time'.
-Cancelling the timer means that nothing special 
+Cancelling the timer means that nothing special
 will happen at the specified time."
   (setcar (cdr elt) nil)
   (setcar (cdr (cdr elt)) 'ignore))
@@ -142,13 +142,13 @@ will happen at the specified time."
 	      token (assoc (substring token (match-beginning 3) (match-end 3))
 			   timer-alist)
 	      timer-alist (delq token timer-alist))
-	(or timer-alist 
+	(or timer-alist
 	    timer-dont-exit
 	    (process-send-eof proc))
 	;; Update error message for this particular instance
 	(put 'timer-filter-error
 	     'error-message
-	     (format "%s for %s; couldn't set at \"%s\"" 
+	     (format "%s for %s; couldn't set at \"%s\""
 		     error (nth 2 token) do))
 	(signal 'timer-filter-error (list proc str)))))
     (or timer-alist timer-dont-exit (process-send-eof proc))))

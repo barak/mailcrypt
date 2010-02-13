@@ -30,7 +30,7 @@ class Message:
         self.data = data # contents of the mesage (inc headers)
     def __repr__(self):
         return "<Message #%s>" % self.msgid
-    
+
 class MessageWatcher:
     def __init__(self):
         self.msgs = {}
@@ -71,14 +71,14 @@ class MessageWatcher:
             del self.msgs[msgid]
         except KeyError:
             pass
-        
+
     def dump(self):
         print len(self.msgs)," msgids:"
         for m in self.msgs.values():
             print m.msgid, "%d bytes, file %s" % (len(m.data), m.name)
         print
-        
-    
+
+
 class DirWatcher(MaildirGtk, MessageWatcher):
     """This object watches a single maildir for incoming messages. It scans
     them for the MailcryptRemailerMessageId number, and stashes them in the
@@ -91,7 +91,7 @@ class DirWatcher(MaildirGtk, MessageWatcher):
         MaildirGtk.__init__(self, basedir)
 
     # we inherit start() and stop() from Maildir via MaildirGtk
-    
+
     def messageReceived(self, name):
         # name is relative to the directory being watched
         #print "messageReceived", self.basedir, name
@@ -100,11 +100,11 @@ class DirWatcher(MaildirGtk, MessageWatcher):
         fd = open(filename)
         self.parseMessage(filename, name, mtime, fd.readlines())
         fd.close()
-        
+
     def dump(self):
         print "dir:", self.basedir
         MessageWatcher.dump(self)
-        
+
 class NewsWatcher(MessageWatcher):
     def __init__(self, server, groups,
                  user=None, pw=None, port=None, tag=None):
@@ -120,7 +120,7 @@ class NewsWatcher(MessageWatcher):
         self.timeout = None
         self.pollInterval = 60
         self.debug = 0
-        
+
     def __repr__(self):
         return "<NewsWatcher %s:%s (%s)>" % (self.server, self.port,
                                              ",".join(self.groups))
@@ -128,7 +128,7 @@ class NewsWatcher(MessageWatcher):
         d = MessageWatcher.__getstate__(self)
         d['nntp'] = None # just in case
         return d
-    
+
     def start(self):
         port = self.port
         if not port:
@@ -143,7 +143,7 @@ class NewsWatcher(MessageWatcher):
                 if self.debug: print "last[%s]: %d" % (g, self.last[g])
         self.timeout = gtk.timeout_add(self.pollInterval*1000,
                                        self.doTimeout)
-    
+
     def stop(self):
         self.nntp.quit()
         self.nntp = None
@@ -154,7 +154,7 @@ class NewsWatcher(MessageWatcher):
     def doTimeout(self):
         self.poll()
         return gtk.TRUE # keep going
-        
+
     def poll(self):
         #print "polling", self
         for g in self.groups:
@@ -172,7 +172,7 @@ class NewsWatcher(MessageWatcher):
                         continue
                 self.parseMessage(name, name, time.time(), lines)
             self.last[g] = int(last)
-        
+
 class Watcher:
     def __init__(self):
         self.source = None
@@ -182,7 +182,7 @@ class Watcher:
         # something changed, somewhere. The message 'm' was added, but we don't
         # know where. Override this method.
         pass
-        
+
     def addSource(self, source):
         self.source = source
         self.watchers.append(source)
@@ -199,13 +199,13 @@ class Watcher:
     def stop(self):
         for w in self.watchers:
             w.stop()
-            
+
     def poll(self):
         # force a poll
         self.source.poll()
         for d in self.dests:
             d.poll()
-            
+
     def msgs(self):
         # return dict of sent messages, and list of received messages. msgid
         # is the key for both, and the Message is the value.
@@ -236,7 +236,7 @@ class Watcher:
             return None
         tx_time = self.source.msgs[msgid].time
         return tx_time
-        
+
     def received(self):
         """Return a list of tuples (dstmsg, latency), where latency is in
         seconds."""
@@ -257,8 +257,8 @@ class Watcher:
             d.deleteMessage(msgid)
     def flush(self, msgid):
         return self.abandon(msgid)
-    
-    
+
+
 def do_test(wclass):
     # watch two maildirs
     w = wclass()
@@ -290,7 +290,7 @@ def test2():
 
 if __name__ == '__main__':
     test2()
-    
+
 
 # TODO: make sure messages that are present at startup get counted too. For
 # Maildir, this means doing the scan in start instead of __init__. Must

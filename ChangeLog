@@ -25,7 +25,7 @@
 
 	* mailcrypt.texi: updated description for GPG keyfetching with the
 	new features.
-	
+
 2003-11-06  Kevin Bube  <kbube@users.sourceforge.net>
 
 	* mc-gpg.el: added a function for fetching keys by making use of
@@ -55,7 +55,7 @@
 
 2003-07-16  Brian Warner  <warner@lothar.com>
 
-	* tests/make_gpg_testcases.py (Latin1_CS_Case.make_plaintext): 
+	* tests/make_gpg_testcases.py (Latin1_CS_Case.make_plaintext):
 	clearsigned messages must always end with a newline. gpg will add
 	one if necessary. This caused the test case to fail.
 	* tests/gpg-testcases/CS.latin1.s1v: added newline to plaintext
@@ -151,7 +151,7 @@
 
 	* tests/remailer/gtkwatcher.glade
 	* tests/remailer/gtkwatcher.gladep: rewrite using glade-2
-	
+
 	* tests/remailer/gtkwatcher.py (WatcherGUI, GtkWatcher)
 	* tests/remailer/watcher.py (Watcher): rewrite: now uses gtk2, Maildir
 	class, DNotify if available (or 10-second poll if not).
@@ -386,7 +386,7 @@
 
 	* mailcrypt.texi (Hooking into Mew): added blurb about how to glue
 	into Mew, and why you might not want to.
-	
+
 	* tests/*: Added the start of a unit test framework. Currently only
 	tests GPG decryption. See README.dev for more details.
 	* mailcrypt.el (mc-message-sigstatus): Added function to emit status
@@ -529,7 +529,7 @@
 1999-11-19  Matthias Andree <mandree@dosis.uni-dortmund.de>
 
 	* mailcrypt.texi: Fixed bug which spread index over many pages.
-	
+
 1999-09-08  Brian Warner  <warner@lothar.com>
 
 	* mc-gpg.el: revamp decrypt and verify parsers to handle
@@ -708,7 +708,7 @@
 	return error information instead of erroring out. Change all
 	callers to deal with it. This fixes the "if we can't find gpg,
 	attempting to decrypt removes all text from the buffer" bug.
-	
+
 1999-01-09  Brian Warner  <warner@lothar.com>
 
 	* mc-gpg.el (mc-gpg-decrypt-parser): accomodate gnupg-0.9.1, which

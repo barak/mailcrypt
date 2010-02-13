@@ -3,8 +3,6 @@
 ;;                     Patrick LoPresti <patl@lcs.mit.edu>
 ;;               1998  Brian Warner <warner@lothar.com>
 
-;; $Id: mc-gpg.el,v 1.23 2003/11/02 18:44:58 kbube Exp $
-
 ;;{{{ Licensing
 ;; This file is intended to be used with GNU Emacs.
 
@@ -79,7 +77,7 @@ ask the user.")
 (defvar mc-gpg-comment
    (format "Processed by Mailcrypt %s <http://mailcrypt.sourceforge.net/>"
 	   mc-version)
-  "*Comment field to appear in ASCII armor output.  If nil, let GPG use its 
+  "*Comment field to appear in ASCII armor output.  If nil, let GPG use its
 default.")
 (defconst mc-gpg-msg-begin-line "^-----BEGIN PGP MESSAGE-----\r?$"
   "Text for start of GPG message delimiter.")
@@ -117,10 +115,10 @@ The value returned is the value of the last form in BODY."
   (if (and (boundp 'mc-gpg-debug-buffer) mc-gpg-debug-buffer)
       (print string mc-gpg-debug-buffer)))
 
-;; the insert parser will return '(t) and insert the whole of stdout if 
+;; the insert parser will return '(t) and insert the whole of stdout if
 ;; rc == 0, and will return '(nil rc stderr) if rc != 0
 (defun mc-gpg-insert-parser (stdoutbuf stderrbuf statusbuf rc parserdata)
-  (mc-gpg-debug-print 
+  (mc-gpg-debug-print
    (format "(mc-gpg-generic-parser stdoutbuf=%s stderrbuf=%s rc=%s"
 	   stdoutbuf stderrbuf rc))
   (if (= rc 0)
@@ -153,18 +151,18 @@ The value returned is the value of the last form in BODY."
 	(process-connection-type nil)
 	(shell-file-name "/bin/sh") ;; ??? force? need sh (not tcsh) for "2>"
 	; other local vars
-	mybuf 
+	mybuf
 	stderr-tempfilename stderr-buf
 	status-tempfilename status-buf
 	proc rc status parser-result
 	)
-    (mc-gpg-debug-print (format 
+    (mc-gpg-debug-print (format
        "(mc-gpg-process-region beg=%s end=%s passwd=%s program=%s args=%s parser=%s bufferdummy=%s)"
        beg end passwd program args parser bufferdummy))
-    (setq stderr-tempfilename 
+    (setq stderr-tempfilename
 	  (make-temp-name (expand-file-name "mailcrypt-gpg-stderr-"
 					    mc-temp-directory)))
-    (setq status-tempfilename 
+    (setq status-tempfilename
 	  (make-temp-name (expand-file-name "mailcrypt-gpg-status-"
 					    mc-temp-directory)))
     (unwind-protect
@@ -195,14 +193,14 @@ The value returned is the value of the last form in BODY."
 	  (if mc-gpg-extra-args
 	      (setq args (append mc-gpg-extra-args args)))
 
-	  (mc-gpg-debug-print (format "prog is %s, args are %s" 
-				      program 
-				      (mapconcat '(lambda (x) 
-						    (format "'%s'" x)) 
+	  (mc-gpg-debug-print (format "prog is %s, args are %s"
+				      program
+				      (mapconcat '(lambda (x)
+						    (format "'%s'" x))
 						 args " ")))
 
 	  (setq proc
-		(apply 'start-process-shell-command "*GPG*" mybuf 
+		(apply 'start-process-shell-command "*GPG*" mybuf
 		       program args))
 
 	  ;; send in passwd if necessary
@@ -263,8 +261,8 @@ The value returned is the value of the last form in BODY."
 
 	  ;; feed the parser
 	  (set-buffer mybuf)
-	  (setq parser-result (funcall parser 
-				       mybuf stderr-buf status-buf 
+	  (setq parser-result (funcall parser
+				       mybuf stderr-buf status-buf
 				       rc parserdata))
 	  (mc-gpg-debug-print (format " parser returned %s" parser-result))
 
@@ -345,20 +343,20 @@ GPG ID.")
 	    (unwind-protect
 		(progn
 		  (setq buffer (generate-new-buffer " *mailcrypt temp"))
-		  (setq args (list 
-			      "--with-colons" 
-			      "--no-greeting" "--batch" 
-			      "--list-secret-keys" str 
+		  (setq args (list
+			      "--with-colons"
+			      "--no-greeting" "--batch"
+			      "--list-secret-keys" str
 			      ))
 		  (if mc-gpg-alternate-keyring
-		      (setq args (append (list "--keyring" 
-					       mc-gpg-alternate-keyring) 
+		      (setq args (append (list "--keyring"
+					       mc-gpg-alternate-keyring)
 					 args)))
 		  (if mc-gpg-extra-args
 		      (setq args (append mc-gpg-extra-args args)))
-		  (mc-gpg-debug-print 
+		  (mc-gpg-debug-print
 		   (format "lookup: args are %s" args))
-		  (let ((coding-system-for-read 
+		  (let ((coding-system-for-read
 			 (if (and (fboundp 'coding-system-p)
 				  (coding-system-p 'utf-8))
 			     'utf-8 nil)))
@@ -391,11 +389,11 @@ GPG ID.")
 	(buffer (get-buffer-create mc-buffer-name))
 	(obuf (current-buffer))
 	action msg args key passwd result gpg-id)
-    (mc-gpg-debug-print (format 
+    (mc-gpg-debug-print (format
        "(mc-gpg-encrypt-region recipients=%s start=%s end=%s id=%s sign=%s)"
        recipients start end id sign))
-    
-    (setq args (list 
+
+    (setq args (list
 		"--batch" "--armor" "--textmode" "--always-trust"
 		(if recipients "--encrypt" "--store")
 		))
@@ -417,7 +415,7 @@ GPG ID.")
 		 (format "GPG passphrase for %s (%s): " (car key) (cdr key))))
 	  (setq args
 		(append (list "--local-user" (cdr key)
-			      "--sign" 
+			      "--sign"
 			      )
 			args))
 	  (setq msg (format "%s+signing as %s ..." action (car key)))
@@ -435,16 +433,16 @@ GPG ID.")
     ;; mc-gpg-lookup-key to have a way to look for public keys too.
     (if (and recipients mc-encrypt-for-me)
 	(setq recipients (cons (cdr (or key
-					(setq key (mc-gpg-lookup-key 
+					(setq key (mc-gpg-lookup-key
 						   mc-gpg-user-id 'encrypt)))
 				    ) recipients)))
 
     ; push(@args, map {qq<-r "$_">} @recipients) if @recipients; # roughly
     (if recipients
-	(setq args (append (apply 'append 
-				  (mapcar '(lambda (x) 
-					     (list "--recipient" 
-						   (concat "\"" x "\""))) 
+	(setq args (append (apply 'append
+				  (mapcar '(lambda (x)
+					     (list "--recipient"
+						   (concat "\"" x "\"")))
 					  recipients))
 			   args)))
 
@@ -592,12 +590,12 @@ GPG ID.")
 ;; this parser's return convention:
 ;;   '( (
 ;;       replacep ; consumed by process-region: decrypt was successful
-;;0      have-secret-key ; t: we are a recipient (TODO: stealth), 
+;;0      have-secret-key ; t: we are a recipient (TODO: stealth),
 ;;                         'symmetric : need passphrase
 ;;                         'signed : signed not encrypted
 ;;                         nil: not a recipient
 ;;1      passphrase-ok ; t was good, nil was bad, keyid: need pw for keyid
-;;2      signature: 
+;;2      signature:
 ;;        nil: no sig
 ;;        keyid-hex : don't have signature key
 ;;        '(keyid-string t trust date) : good signature on date with trust
@@ -649,7 +647,7 @@ GPG ID.")
     ;; sigid: who made the signature? (a name if possible, else hex keyid)
     ;; sigdate: date string of when the sig was made
     (goto-char (point-min))
-    (if (re-search-forward "^\\[GNUPG:\\] +\\(GOOD\\|BAD\\|ERR\\)SIG\\b" 
+    (if (re-search-forward "^\\[GNUPG:\\] +\\(GOOD\\|BAD\\|ERR\\)SIG\\b"
 			   nil t)
 	(progn
 	  (setq sigtype (match-string 1))
@@ -657,7 +655,7 @@ GPG ID.")
 	  (if (and (or (string= sigtype "GOOD") (string= sigtype "BAD"))
 		   (re-search-forward
 		    "^\\[GNUPG:\\] +\\(GOOD\\|BAD\\)SIG +\\(\\S +\\) +\\(.*\\)$" nil t))
-	      ;; match-string 2 is the hex keyid of the signator. 
+	      ;; match-string 2 is the hex keyid of the signator.
 	      ;; #3 is the name
 	      (setq sigid (match-string 3)))
 
@@ -667,7 +665,7 @@ GPG ID.")
 	  ;;  #3: hashalgo, #4: sigclass, #5: longtime, #6: rc
 	  ;;   (rc==4 for unknown algo, 9 for missing public key)
 	  ;; we only set sigtype if:
-	  ;;   (#1 is present), and 
+	  ;;   (#1 is present), and
 	  ;;   ((#6 is missing) or (#6 == 9))
 	  ;; the idea being to not fetch a key if we aren't going to be able
 	  ;; to use the algorithm it wants
@@ -685,35 +683,35 @@ GPG ID.")
 		     (string= errsig-rc "9"))
 		    (setq sigid sigid-temp))
 		))
-	  
+
 	  ;; for GOODSIG:
 	  ;;  VALIDSIG should be present, with <keyfingerprint> <date> <time>
 	  (goto-char (point-min))
 	  (if (and (string= sigtype "GOOD")
 		   (re-search-forward
-		    "^\\[GNUPG:\\] +SIG_ID +\\(\\S +\\) +\\(\\S +\\)\\b" 
+		    "^\\[GNUPG:\\] +SIG_ID +\\(\\S +\\) +\\(\\S +\\)\\b"
 		    nil t))
 	      (setq sigdate (match-string 2))
 	    ;; in gpg >= 0.9.7, a third field is a longtime value (seconds
 	    ;; since epoch)
 	    )
-	  
+
 	  ;; sigtrust: how trusted is the signing key?
 	  (goto-char (point-min))
 	  (if (re-search-forward "^\\[GNUPG:\\] +\\(TRUST_\\S +\\)$" nil t)
 	      (setq sigtrust (match-string 1)))
 	  ))
-        
+
     (list sigtype sigid sigdate sigtrust))
   )
 
-    
+
 ; this parser's job is to find the decrypted data if any is available. The
 ; code in -decrypt-region will worry about reporting other status information
 ; like signatures. PARSERDATA is non-nil if a passphrase was given to GPG.
 
 (defun mc-gpg-decrypt-parser (stdoutbuf stderrbuf statusbuf rc parserdata)
-  (let 
+  (let
       (
        decryptstatus ; DECRYPTION_(OKAY|FAILED)
        no-seckey ; NO_SECKEY
@@ -722,7 +720,7 @@ GPG ID.")
        symmetric ; NEED_PASSPHRASE_SYM
        badpass ; BAD_PASSPHRASE
        sigtype ; GOODSIG, BADSIG, ERRSIG
-       sigid ;; GOODSIG <keyid>  (note: not SIG_ID!), 
+       sigid ;; GOODSIG <keyid>  (note: not SIG_ID!),
              ;;; or ERRSIG <keyid> if ERRSIG-rc is 9 for missing pubkey
        sigdate ; VALIDSIG .. <date>
        sigtrust ; TRUST_(UNDEFINED|NEVER|MARGINAL|FULLY|ULTIMATE)
@@ -750,11 +748,11 @@ GPG ID.")
 	 "^\\[GNUPG:\\] +NO_SECKEY\\b"
 	 nil t)
 	(setq no-seckey t))
-    
+
     ;; keyid: the message is encrypted to one of our private keys and we
     ;; need a passphrase from the user. which one?
     (goto-char (point-min))
-    (if (re-search-forward "^\\[GNUPG:\\] +NEED_PASSPHRASE +\\(\\S +\\)" 
+    (if (re-search-forward "^\\[GNUPG:\\] +NEED_PASSPHRASE +\\(\\S +\\)"
 			   nil t)
 	(setq keyid (concat "0x" (match-string 1))))
 
@@ -764,7 +762,7 @@ GPG ID.")
 			   nil t)
 	(setq missing-passphrase t))
 
-    ;; symmetric: Set if the message is symmetrically encrypted. 
+    ;; symmetric: Set if the message is symmetrically encrypted.
     (goto-char (point-min))
     (if (re-search-forward
 	 "^\\[GNUPG:\\] +NEED_PASSPHRASE_SYM\\b"
@@ -774,7 +772,7 @@ GPG ID.")
     ;; badpass: GPG did not get a good passphrase. Either we didn't give one
     ;;  or we gave the wrong one.
     (goto-char (point-min))
-    (if (re-search-forward "^\\[GNUPG:\\] +BAD_PASSPHRASE\\b" 
+    (if (re-search-forward "^\\[GNUPG:\\] +BAD_PASSPHRASE\\b"
 			   nil t)
 	(setq badpass t))
 
@@ -788,7 +786,7 @@ GPG ID.")
     ;; begin second piece: stare at those variables and decide what happened.
     ;; refer to the "cases:" comment above for what we look for.
 
-    (mc-gpg-debug-print 
+    (mc-gpg-debug-print
      (format
       "decrypt-parser: decryptstatus=%s no-seckey=%s keyid=%s missing-passphrase=%s symmetric=%s badpass=%s sigtype=%s sigid=%s sigdate=%s sigtrust=%s rc=%s"
       decryptstatus no-seckey keyid missing-passphrase symmetric badpass sigtype sigid sigdate sigtrust rc))
@@ -822,12 +820,12 @@ GPG ID.")
 	(list t 'symmetric t nil))
        ))
 
-     ((or 
+     ((or
        (string= decryptstatus "FAILED")
        ;; couldn't decrypt: not to us, need pw, bad pw
-       (and (not decryptstatus) 
+       (and (not decryptstatus)
 	    (or keyid symmetric)
-	    (not (= rc 0)) 
+	    (not (= rc 0))
 	    (not (string= sigtype "ERR")))
        ;; or old gpg and we could have decrypted it (a passphrase was
        ;; requested), but the decrypt went bad (rc!=0 but not due to ERRSIG)
@@ -932,10 +930,10 @@ GPG ID.")
 	  (setq passwd
 		(if key
 		    (mc-activate-passwd (cdr key)
-					(format 
+					(format
 					 "GPG passphrase for %s (%s): "
 					 (car key) (cdr key)))
-		  (mc-activate-passwd 
+		  (mc-activate-passwd
 		   id "GPG passphrase for conventional decryption: ")))
 	  (if (string= passwd "")
 	      (progn
@@ -990,13 +988,13 @@ GPG ID.")
 	    ))
 	 ((nth 0 sig) ;; good signature
 	  (progn
-	    (mc-message-sigstatus (mc-gpg-format-sigline 
+	    (mc-message-sigstatus (mc-gpg-format-sigline
 				   t (nth 1 sig) (nth 2 sig) (nth 3 sig)))
 	    '(t . t)
 	    ))
 	 (t ;; bad signature
 	  (progn
-	    (mc-message-sigstatus (mc-gpg-format-sigline 
+	    (mc-message-sigstatus (mc-gpg-format-sigline
 				   nil (nth 1 sig) (nth 2 sig) (nth 3 sig))
 				  t ; get their attention
 				  )
@@ -1065,7 +1063,7 @@ GPG ID.")
 
 ; unknown key [CS.s4]:
 ;  rc == 2
-;  status: 
+;  status:
 ;   ERRSIG <longkeyid> <pubkeyalgo> <hashalgo> <sigclass> <longtime> <rc==9>
 ;   NO_PUBKEY <longkeyid>
 
@@ -1091,12 +1089,12 @@ GPG ID.")
       (setq sigtrust (nth 3 sigstuff))
       )
 
-    (mc-gpg-debug-print 
+    (mc-gpg-debug-print
      (format
       "decrypt-parser: sigtype=%s sigid=%s sigdate=%s sigtrust=%s"
       sigtype sigid sigdate sigtrust))
 
-    (if (and (not (= rc 0)) 
+    (if (and (not (= rc 0))
 	     (not sigtype))
 	(error "The message was corrupt."))
 
@@ -1126,9 +1124,9 @@ GPG ID.")
     (mc-gpg-debug-print (format "process-region returned %s" result))
     (setq result (car result))
 
-    (cond 
+    (cond
 
-     ((atom result) 
+     ((atom result)
       ;; need key
       (if (and
 	   (not no-fetch)
@@ -1200,7 +1198,7 @@ GPG ID.")
 ;;   armored secret keys via email, but if they do it will be reported as if
 ;;   it were a public key.
 
-;; return convention: 
+;; return convention:
 ;;  error with stderr if rc != 0
 ;;  '(count bad new old changed secretp)
 
@@ -1215,9 +1213,9 @@ GPG ID.")
 	    (progn
 	      (setq count (string-to-number (match-string 1)))
 	      (setq bad (string-to-number (match-string 2)))
-	      (setq new (+ (string-to-number (match-string 3)) 
+	      (setq new (+ (string-to-number (match-string 3))
 			   (string-to-number (match-string 11))))
-	      (setq old (+ (string-to-number (match-string 5)) 
+	      (setq old (+ (string-to-number (match-string 5))
 			   (string-to-number (match-string 12))))
 	      (setq changed (- count bad new old))
 	      (setq secretp (not (string= (match-string 10) "0")))
@@ -1295,16 +1293,16 @@ GPG ID.")
     (save-excursion
       (set-buffer statusbuf)
       (goto-char (point-min))
-      
+
       (mc-gpg-debug-print
        (format "(mc-gpg-fetch-key-parser (stdoutbuf=%s stderrbuf=%s statusbuf=%s rc=%s" stdoutbuf stderrbuf statusbuf rc))
-      
+
 
       (if (not (search-forward "[GNUPG:] IMPORT_RES" nil t))
 	  ;; no keys imported
 	  (with-current-buffer stderrbuf
 	    (setq result (list nil (buffer-string) nil)))
-	
+
 	;; return the names and ids of imported keys
 	(goto-char (point-min))
 	(while (re-search-forward
@@ -1319,14 +1317,15 @@ GPG ID.")
 	(setq result (list nil t tmp)))
       )))
 
+;;;###autoload
 (defun mc-gpg-fetch-key (&optional id)
   "Fetch a key using the gpg --recv-key method. With this method it is
 only possible to look for key ids!"
   (interactive)
-  
+
   (if (null id)
       (setq id (read-string "Key-ID: ")))
-  
+
   (let ((buffer (get-buffer-create mc-buffer-name))
 	args result)
     (setq args (list "--recv-keys" id))
@@ -1341,12 +1340,13 @@ only possible to look for key ids!"
       (error (car result)))
     ))
 
+;;;###autoload
 (defun mc-gpg-fetch-from-finger (id)
   "Fetch a key from a finger server. This function takes one argument of the
 form USER@HOST."
   (interactive "sFetch Key: ")
-  
-  
+
+
   (let (buf connection user host)
     (unwind-protect
 	(and (string-match "^\\(.+\\)@\\([^@]+\\)$" id)
