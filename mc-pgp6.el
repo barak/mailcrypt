@@ -569,6 +569,7 @@ element is a function to call with an ID as argument.  See the
 documentation for the function mc-pgp65-fetch-key for a description of
 the ID.")
 
+;;;###autoload
 (defun mc-pgp65-fetch-key (&optional id)
   "Attempt to fetch a key for addition to PGP keyring.  Interactively,
 prompt for string matching key to fetch.

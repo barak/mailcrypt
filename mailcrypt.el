@@ -151,6 +151,7 @@
     (setq minor-mode-alist
 	  (cons '(mc-write-mode mc-write-mode-string) minor-mode-alist)))
 
+;;;###autoload
 (defun mc-read-mode (&optional arg)
   "\nMinor mode for interfacing with cryptographic functions.
 \\<mc-read-mode-map>
@@ -188,10 +189,12 @@
       (easy-menu-add mc-write-mode-menu)
     (easy-menu-remove mc-write-mode-menu)))
 
+;;;###autoload
 (defun mc-install-read-mode ()
   (interactive)
   (mc-read-mode 1))
 
+;;;###autoload
 (defun mc-install-write-mode ()
   (interactive)
   (mc-write-mode 1))
@@ -557,6 +560,7 @@ Return the passphrase.  If PROMPT is nil, only return value if cached."
       (setq mc-passwd-cache (cons (cons id passwd) mc-passwd-cache)))
     passwd))
 
+;;;###autoload
 (defun mc-deactivate-passwd (&optional inhibit-message)
   "*Deactivate the passphrase cache."
   (interactive)

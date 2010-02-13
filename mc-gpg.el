@@ -1319,6 +1319,7 @@ GPG ID.")
 	(setq result (list nil t tmp)))
       )))
 
+;;;###autoload
 (defun mc-gpg-fetch-key (&optional id)
   "Fetch a key using the gpg --recv-key method. With this method it is
 only possible to look for key ids!"
@@ -1341,6 +1342,7 @@ only possible to look for key ids!"
       (error (car result)))
     ))
 
+;;;###autoload
 (defun mc-gpg-fetch-from-finger (id)
   "Fetch a key from a finger server. This function takes one argument of the
 form USER@HOST."

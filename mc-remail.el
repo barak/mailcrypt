@@ -268,6 +268,7 @@ encryption."
 	    (mc-parse-levien-buffer)
 	  (bury-buffer)))))
 
+;;;###autoload
 (defun mc-reread-levien-file ()
   "Read the Levien format file specified in `mc-levien-file-name'.
 
@@ -504,6 +505,7 @@ a description of Levien file format."
       (mc-reread-levien-file))
   (append mc-remailer-internal-chains mc-remailer-user-chains))
 
+;;;###autoload
 (defun mc-remailer-insert-pseudonym ()
   "Insert pseudonym as a From field in the hash-mark header.
 
@@ -772,6 +774,7 @@ be passed to this program for rewriting.")
 	  (goto-char (match-beginning 0))
 	  (error "Cannot use a %s field." field)))))
 
+;;;###autoload
 (defun mc-remailer-encrypt-for-chain (&optional pause)
   "Encrypt message for a remailer chain, prompting for chain to use.
 
@@ -803,6 +806,7 @@ encryption."
 ;;}}}
 ;;{{{ Response block generation
 
+;;;###autoload
 (defun mc-remailer-insert-response-block (&optional arg)
   "Insert response block at point, prompting for chain to use.
 
