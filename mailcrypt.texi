@@ -805,10 +805,12 @@ The lines that list remailers and their capabilities look like ones
 below. It is best to consuts remailer statistics page to determine
 the most reliable candidats for chaining.
 
-@lisp
+@example
+@verbatim
 $remailer{"frell"} = "..."
 $remailer{"starwars"} = "..."
-@end lisp
+@end verbatim
+@end example
 
 @item
 Add their PGP public keys to your keyring. You can for an armored
@@ -821,18 +823,18 @@ The list of remailers and their keys (as of 2007-03-01) can be found at
 @emph{key} has been saved to a file, the entries can be imported into
 separate public keyring with command:
 
-@list
+@example
 gpg --no-options --no-default-keyring \
     --keyring ~/.gnupg/pubring-remailer.gpg \
     --import *.key
-@end lisp
+@end example
 
 In order for gpg to use separate keyring, the new keyring file must be
 configured to @file{~/.gnupg/gpg.conf} by adding this line:
 
-@list
+@example
 keyring pubring-remailer.gpg
-@end lisp
+@end example
 
 @end enumerate
 
