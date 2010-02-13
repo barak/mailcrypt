@@ -3,8 +3,6 @@
 ;;                     Patrick LoPresti <patl@lcs.mit.edu>
 ;;               1998  Brian Warner <warner@lothar.com>
 
-;; $Id$
-
 ;;{{{ Licensing
 ;; This file is intended to be used with GNU Emacs.
 
