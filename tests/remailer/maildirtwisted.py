@@ -48,8 +48,8 @@ def test1():
     print "watching ddir/new/"
     app.run()
     print "done"
-    
+
 if __name__ == '__main__':
     test1()
-    
+
 

@@ -38,7 +38,7 @@ import popen2, commands, re, os, sys
 
 # messages signed by owner1 or owner2 should be accepted with TRUST_ULTIMATE,
 #  because we have secret keys for them
-# messages signed by other should have 
+# messages signed by other should have
 
 homedir = sys.argv[1]
 
@@ -90,7 +90,7 @@ def make_trustdb(trust):
         stdin.write("%s:%d:\n" % (id, trust[id]))
     stdin.close()
 
-    
+
 users = ("owner1", "owner2", "other", "unknown", "trusted", "untrusted")
 if 1:
     os.mkdir(homedir)

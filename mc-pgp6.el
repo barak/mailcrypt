@@ -116,9 +116,9 @@ PGP ID.")
 				(mc-message "\aError: Invalid keyring. UserID not found"))
 ;			      (message (format "%s" result))
 			      ))
-			    
+
 			    (if (not (null result))
-				(setq mc-pgp65-key-cache 
+				(setq mc-pgp65-key-cache
 				      (cons (cons str result)
 					    mc-pgp65-key-cache)))))))
 	    (if buffer (kill-buffer buffer))
@@ -187,7 +187,7 @@ PGP ID.")
 	(setq recipients (cons (cdr key) recipients)))
 
     (setq args (append args recipients))
-    
+
     (message "%s" msg)
     (setq result (mc-process-region start end passwd mc-pgp65-path args
 				    'mc-pgp65-generic-parser buffer))
@@ -430,7 +430,7 @@ PGP ID.")
 	      (progn
 		(if mc-pgp65-display-snarf-output (mc-display-buffer buffer))
 		(setq tmpstr (buffer-substring-no-properties
-			      (match-beginning 1) 
+			      (match-beginning 1)
 			      (match-end 1)))
 		(if (equal tmpstr "No")
 		    0

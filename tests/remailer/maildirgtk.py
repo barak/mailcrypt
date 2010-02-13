@@ -50,6 +50,6 @@ def test1():
         gtk.mainiteration() # this will block until there is something to do
     m.stop()
     print "done"
-    
+
 if __name__ == '__main__':
     test1()

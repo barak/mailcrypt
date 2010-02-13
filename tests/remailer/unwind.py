@@ -32,7 +32,7 @@ def unwind(recipient, message):
      recipient=rem2, encrypted=1  ->recurse BRANCH2
      recipient=rem2, anon-to=user, subject=test  BRANCH3, recurse
      recipient=user, message=plaintext  : BRANCH1, terminate
- 
+
     It throws an exception if anything about the message is incorrect:
      message doesn't start with ::\nEncrypted: PGP
      message isn't encrypted or is encrypted to the wrong key (not TO)
@@ -50,7 +50,7 @@ def unwind(recipient, message):
         print "-----"
 
     step = {}
-    
+
     # see if we should end the recursion now
     if not re.search(r'^rem\d@test.test', recipient):
         # BRANCH 1
@@ -85,12 +85,12 @@ def unwind(recipient, message):
         return [step] + unwind(recipient, plaintext)
 
     # BRANCH3
-    
+
     # message is now:
     #  ::\nAnon-To: remN@test.set (or dest@foo.com)\n\nmessage body
     # or
     #  ::\nAnon-To: dest@foo.com\n\n##\nSubject: subject\n\nmessage body
-    
+
     r = re.search(r'^Anon-To: (.*)$', message[1])
     if not r:
         print "Bad Message, no Anon-To"
@@ -101,7 +101,7 @@ def unwind(recipient, message):
 
     message = message[3:]
     # now: "message body", or "##\nSubject: sub\n\nmessage body"
-    
+
     if message[0] == '##':
         # there are ## headers included
         r = re.search(r'^Subject: (.*)$', message[1])
@@ -160,7 +160,7 @@ def test_chain(firsthop, crypttext, plaintext, recipient, chain, subject=None):
         #print i, results[i], expected_chain[i]
         insistEquals(results[i], expected_chain[i])
     print "TEST CASE PASSED"
-    
+
 
 
 def test1():
@@ -191,8 +191,8 @@ def main():
                recipient=recipient,
                chain=chain,
                subject=subject)
-    
-        
+
+
 if __name__ == '__main__':
     main()
 

@@ -29,7 +29,7 @@ class DNotify_Handler:
         # without siginfo_t, we must fire them all
         for watcher in self.watchers.values():
             watcher.callback()
-            
+
 class DNotify:
     DN_ACCESS = fcntl.DN_ACCESS  # a file in the directory was read
     DN_MODIFY = fcntl.DN_MODIFY  # a file was modified (write,truncate)
@@ -39,7 +39,7 @@ class DNotify:
     DN_ATTRIB = fcntl.DN_ATTRIB  # a file had attributes changed (chmod,chown)
 
     handler = [None]
-    
+
     def __init__(self, dirname, callback=None,
                  flags=[DN_MODIFY,DN_CREATE,DN_DELETE,DN_RENAME]):
 
@@ -96,8 +96,8 @@ def test_dnotify2():
     import time
     while 1:
         signal.pause()
-        
-    
+
+
 if __name__ == '__main__':
     test_dnotify2()
-    
+

@@ -63,7 +63,7 @@
 
 ;;{{{ Minor mode variables and functions
 
-(defvar mc-pgp-always-sign nil 
+(defvar mc-pgp-always-sign nil
   "*If t, always sign encrypted PGP messages, or never sign if 'never.")
 
 (defvar mc-read-mode nil
@@ -168,7 +168,7 @@
   (if mc-read-mode
       (easy-menu-add mc-read-mode-menu)
     (easy-menu-remove mc-read-mode-menu)))
-	
+
 (defun mc-write-mode (&optional arg)
   "\nMinor mode for interfacing with cryptographic functions.
 \\<mc-write-mode-map>
@@ -208,7 +208,7 @@
 
 ;;{{{ User variables.
 (defconst mc-version "3.5.8+")
-(defvar mc-temp-directory 
+(defvar mc-temp-directory
   (cond ((fboundp 'temp-directory) (temp-directory))
 	((boundp 'temporary-file-directory) temporary-file-directory)
 	("/tmp/"))
@@ -242,13 +242,13 @@ If 'never, always use a viewer instead of replacing.")
   "*List of hook functions to run immediately before signing.")
 (defvar mc-post-signature-hook nil
   "*List of hook functions to run immediately after signing.")
-(defvar mc-pre-encryption-hook nil 
+(defvar mc-pre-encryption-hook nil
   "*List of hook functions to run immediately before encrypting.")
-(defvar mc-post-encryption-hook nil 
+(defvar mc-post-encryption-hook nil
   "*List of hook functions to run after encrypting.")
-(defvar mc-pre-decryption-hook nil 
+(defvar mc-pre-decryption-hook nil
   "*List of hook functions to run immediately before decrypting.")
-(defvar mc-post-decryption-hook nil 
+(defvar mc-post-decryption-hook nil
   "*List of hook functions to run after decrypting.")
 
 (defconst mc-buffer-name "*MailCrypt*"
@@ -357,7 +357,7 @@ stripping initial and trailing whitespace."
 	  (setq end (string-match "[ \t\n]*\\'" str))
 	  (while (string-match regexp str beg)
 	    (setq retval
-		  (cons (substring str beg (match-beginning 0)) 
+		  (cons (substring str beg (match-beginning 0))
 			retval))
 	    (setq beg (match-end 0)))
 	  (if (not (= (length str) beg)) ; Not end
@@ -383,11 +383,11 @@ stripping initial and trailing whitespace."
 
 ;; In case I ever decide to do this right.
 ;; LRB - Thanks Pat! This helped a lot in updating mixmaster support.
-;; mc-field-name-regexp now catches precisely those email headers 
+;; mc-field-name-regexp now catches precisely those email headers
 ;; which are RFC-822 compliant.
-(defconst mc-field-name-regexp 
-  (concat 
-   "^\\([" 
+(defconst mc-field-name-regexp
+  (concat
+   "^\\(["
    (char-to-string 33) "-" (char-to-string 57)
    (char-to-string 59) "-" (char-to-string 126)
    "]*\\)"))
@@ -415,7 +415,7 @@ Optional arg NUKE, if non-nil, means eliminate all fields returned."
 	    (narrow-to-region (car bounds) (cdr bounds)))
 
 	(goto-char (point-max))
- 
+
 	(while (re-search-backward header-field-regexp nil 'move)
 	  (setq field-start (match-beginning 0))
 	  (setq field-end (match-end 0))
@@ -547,7 +547,7 @@ Return the passphrase.  If PROMPT is nil, only return value if cached."
 			      mc-passwd-timeout)))
 	   (if mc-timer (cancel-timer mc-timer))
 	   (setq mc-timer (if string-time
-			      (run-at-time string-time 
+			      (run-at-time string-time
 					   nil 'mc-deactivate-passwd)
 			    nil)))))
   (let ((cell (assoc id mc-passwd-cache))

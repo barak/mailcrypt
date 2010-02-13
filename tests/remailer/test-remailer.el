@@ -112,7 +112,7 @@
 
 (defun run-all-tests ()
   (let (cases)
-        
+
     (setq cases (append '("123") cases))
     (dolist (onecase cases)
       (mc-test-encrypt-remailer onecase))

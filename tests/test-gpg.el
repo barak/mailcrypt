@@ -46,7 +46,7 @@
       "unknown"
       )
     ))
-  
+
 ;; this one replaces the normal verion. mc-message-sigstatus-text should
 ;; be defined in the enclosing function.
 (defun mc-message-sigstatus (id &optional attention)
@@ -100,12 +100,12 @@
     (setq testcase (mc-test-load-testcase testcase-file))
 
 
-    (setq mc-test-passwd-alist 
-	  (list 
+    (setq mc-test-passwd-alist
+	  (list
 	   (cons (cdr (assoc 'encryption_id testcase))
 		 (cdr (assoc 'passphrase testcase))
 		 )))
-	 
+
     (set-buffer b)
     (erase-buffer)
     (insert (cdr (assoc 'crypttext testcase))) ; insert crypttext
@@ -152,7 +152,7 @@
     (if expected-plaintext
 	(if (not (equal expected-plaintext plaintext))
             (progn
-              
+
               (message
                "plaintext did not match: expected '%s', got '%s'"
                expected-plaintext plaintext)
@@ -192,7 +192,7 @@
 
 (defun run-all-tests ()
   (let (cases)
-        
+
     (setq cases (append cases '("E.e1r" "E.e2r" "E.e3" "E.e4")))
     (setq cases (append cases '("E.e1re3re4r" "E.latin1.e1r")))
     (setq cases (append cases '("ES.e1r.s1v" "ES.e1r.s2v" "ES.e1r.s3v"
