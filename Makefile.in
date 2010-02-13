@@ -16,7 +16,8 @@ lispdir = $(datadir)/emacs/site-lisp
 
 # Where to put the Info files
 infodir = @infodir@
-INFOFILES = mailcrypt.info mailcrypt.info-1 mailcrypt.info-2
+#INFOFILES = mailcrypt.info mailcrypt.info-1 mailcrypt.info-2
+INFOFILES = mailcrypt.info
 
 # Installation command
 INSTALL = @INSTALL@
