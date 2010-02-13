@@ -4,8 +4,9 @@ mailcrypt (3.5.8+CVS.2005.04.29.1-12.2) UNRELEASED; urgency=low
   * Describe import into GIT in debian/README.Debian
   * Merge ongoing minor mods from upstream CVS (text only, no code)
     - fixing problems in mailcrypt.texi that caused makeinfo to err out
+  * rev deb std
 
- -- Barak A. Pearlmutter <bap@debian.org>  Thu, 04 Feb 2010 15:16:44 +0000
+ -- Barak A. Pearlmutter <bap@debian.org>  Sat, 13 Feb 2010 21:55:54 +0000
 
 mailcrypt (3.5.8+CVS.2005.04.29.1-12.1) unstable; urgency=low
 
