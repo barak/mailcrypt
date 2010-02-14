@@ -14,16 +14,6 @@ case "${1}" in
 	exit 1
 esac
 
-<:# remove <% info %> menu from <% info %> directory :>//
-case "${1}" in failed-upgrade|remove|upgrade)
-	<:=${IREMOVE}:> <:="${info}/${PACKAGE}.info.gz":>
-esac
-
-<:# deregister documentation with <% doc-base %> :>//
-case "${1}" in failed-upgrade|remove|upgrade)
-	<:=${DREMOVE}:> <:=${PACKAGE}:>
-esac
-
 <:# Emacs remove :>//
 case "${1}" in deconfigure|failed-upgrade|remove|upgrade)
 	<:=${EREMOVE}:> <:=${PACKAGE}:>

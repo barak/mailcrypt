@@ -26,7 +26,7 @@ checkdir=test -f debian/rules
 checkroot=test root = "$$(whoami)"
 fixperms=chmod -R a+rX .
 
-tmp := $(shell pwd)/debian/tmp/
+tmp := $(shell pwd)/debian/tmp
 
 SHELL := /bin/bash
 INSTDIR := install -m 755 -d
@@ -68,7 +68,7 @@ debian/po/templates.pot: $(DCSOURCES)
 
 build: $(DFILES) debian/po/templates.pot
 	$(checkdir)
-	chmod a+x ./configure;		./configure --infodir=/usr/share/info/
+	chmod a+x ./configure;		./configure --infodir=/usr/share/info
 	$(MAKE) MAKEINFO="makeinfo --verbose" \
 		TEXI2HTML="texi2html --Verbose" \
 		info html
@@ -92,59 +92,55 @@ binary-indep: build
 	$(checkroot)
 	-rm -rf $(tmp)
 
-	$(INSTDIR) $(tmp)//usr/share/emacs/site-lisp/mailcrypt/
-	$(INSTDATA) debian/mailcrypt-init.el $(tmp)//usr/share/emacs/site-lisp/mailcrypt//../
-	$(INSTSCRIPT) $(SCRIPTS) $(tmp)//usr/share/emacs/site-lisp/mailcrypt//
-	$(INSTDATA) $(SOURCES) $(tmp)//usr/share/emacs/site-lisp/mailcrypt//
+	$(INSTDIR) $(tmp)/usr/share/emacs/site-lisp/mailcrypt
+	$(INSTDATA) debian/mailcrypt-init.el $(tmp)/usr/share/emacs/site-lisp/mailcrypt/../
+	$(INSTSCRIPT) $(SCRIPTS) $(tmp)/usr/share/emacs/site-lisp/mailcrypt/
+	$(INSTDATA) $(SOURCES) $(tmp)/usr/share/emacs/site-lisp/mailcrypt/
 	umask 0022; for i in $(MAKEFILEHACKS); do \
-		$(INSTDIR) $(tmp)//usr/share/emacs/site-lisp/mailcrypt//$${i%/*}/; \
+		$(INSTDIR) $(tmp)/usr/share/emacs/site-lisp/mailcrypt/$${i%/*}/; \
 		echo -e "clean distclean:\n\trm -f Makefile\n" \
-			> $(tmp)//usr/share/emacs/site-lisp/mailcrypt//$${i}; \
+			> $(tmp)/usr/share/emacs/site-lisp/mailcrypt/$${i}; \
 	done
-	$(INSTDIR) $(tmp)//usr/share/info/
-	umask 0022; echo -e "\nFile: dir\tNode: Top\tTop\n" \
-		> $(tmp)//usr/share/info//dir
-	$(MAKE) INSTALL_INFO="install-info" \
-		install-info infodir=$(tmp)//usr/share/info/
-	-rm $(tmp)//usr/share/info//dir{,.old}
-	gzip -9frv $(tmp)//usr/share/info/
+	$(MAKE) INSTALL_INFO="echo install-info" \
+		install-info infodir=$(tmp)/usr/share/info
+	gzip -9frv $(tmp)/usr/share/info
 
-	$(INSTDIR) $(tmp)//usr/share/doc/mailcrypt/ $(tmp)//usr/share/doc/mailcrypt//src/ \
-		$(tmp)//usr/share/doc/mailcrypt//HTML
-	$(INSTDATA) ANNOUNCE ChangeLog.1 NEWS ONEWS README README.gpg WARNINGS $(tmp)//usr/share/doc/mailcrypt/
-	$(INSTDATA) *.texi texi2html.ext $(tmp)//usr/share/doc/mailcrypt//src/
-	$(INSTDATA) debian/README $(tmp)//usr/share/doc/mailcrypt//README.Debian
-	$(INSTDATA) ChangeLog $(tmp)//usr/share/doc/mailcrypt/
-	$(INSTDATA) debian/changelog $(tmp)//usr/share/doc/mailcrypt//changelog.Debian
-	gzip -9frv $(tmp)//usr/share/doc/mailcrypt/
-	ln -sf ChangeLog.gz $(tmp)//usr/share/doc/mailcrypt//changelog.gz
-	$(INSTDATA) debian/copyright $(tmp)//usr/share/doc/mailcrypt/
-	$(INSTDATA) htmls/*.html $(tmp)//usr/share/doc/mailcrypt//HTML
-	ln -snf mailcrypt_toc.html $(tmp)//usr/share/doc/mailcrypt//HTML/index.html
+	$(INSTDIR) $(tmp)/usr/share/doc/mailcrypt
+	$(INSTDATA) ANNOUNCE ChangeLog.1 NEWS ONEWS README README.gpg WARNINGS $(tmp)/usr/share/doc/mailcrypt
+	$(INSTDATA) debian/README $(tmp)/usr/share/doc/mailcrypt/README.Debian
+	$(INSTDATA) ChangeLog $(tmp)/usr/share/doc/mailcrypt
+	$(INSTDATA) debian/changelog $(tmp)/usr/share/doc/mailcrypt/changelog.Debian
+	gzip -9frv $(tmp)/usr/share/doc/mailcrypt
+	ln -sf ChangeLog.gz $(tmp)/usr/share/doc/mailcrypt/changelog.gz
+	$(INSTDATA) debian/copyright $(tmp)/usr/share/doc/mailcrypt
+	$(INSTDIR) $(tmp)/usr/share/doc/mailcrypt/HTML
+	$(INSTDATA) htmls/*.html $(tmp)/usr/share/doc/mailcrypt/HTML
+	ln -snf mailcrypt_toc.html $(tmp)/usr/share/doc/mailcrypt/HTML/index.html
 
-	$(INSTDIR) $(tmp)//usr/lib/emacsen-common/packages//{install,remove}
+	$(INSTDIR) $(tmp)/usr/lib/emacsen-common/packages/install
+	$(INSTDIR) $(tmp)/usr/lib/emacsen-common/packages/remove
 	$(INSTSCRIPT) debian/install \
-		$(tmp)//usr/lib/emacsen-common/packages//install/mailcrypt
+		$(tmp)/usr/lib/emacsen-common/packages/install/mailcrypt
 	$(INSTSCRIPT) debian/remove \
-		$(tmp)//usr/lib/emacsen-common/packages//remove/mailcrypt
-	$(INSTDIR) $(tmp)//usr/share/doc-base/
-	$(INSTDATA) debian/docbase $(tmp)//usr/share/doc-base//mailcrypt
-	$(INSTDIR) $(tmp)//usr/share/bug/mailcrypt/
-	$(INSTDATA) debian/bug.presubj $(tmp)//usr/share/bug/mailcrypt//presubj
-	$(INSTSCRIPT) debian/bug.script $(tmp)//usr/share/bug/mailcrypt//script
-	$(INSTDIR) $(tmp)//usr/share/lintian/overrides/
-	$(INSTDATA) debian/lintian $(tmp)//usr/share/lintian/overrides//mailcrypt
+		$(tmp)/usr/lib/emacsen-common/packages/remove/mailcrypt
+	$(INSTDIR) $(tmp)/usr/share/doc-base
+	$(INSTDATA) debian/docbase $(tmp)/usr/share/doc-base/mailcrypt
+	$(INSTDIR) $(tmp)/usr/share/bug/mailcrypt
+	$(INSTDATA) debian/bug.presubj $(tmp)/usr/share/bug/mailcrypt/presubj
+	$(INSTSCRIPT) debian/bug.script $(tmp)/usr/share/bug/mailcrypt/script
+	$(INSTDIR) $(tmp)/usr/share/lintian/overrides
+	$(INSTDATA) debian/lintian $(tmp)/usr/share/lintian/overrides/mailcrypt
 
-	$(INSTDIR) $(tmp)//DEBIAN/
+	$(INSTDIR) $(tmp)/DEBIAN
 	$(INSTDATA) debian/templates.dcobj \
-		$(tmp)//DEBIAN//templates
+		$(tmp)/DEBIAN/templates
 	$(INSTSCRIPT) debian/{config,postinst,postrm,prerm} \
-		$(tmp)//DEBIAN/
+		$(tmp)/DEBIAN
 
 	cd $(tmp) && md5sum \
 		$$(find ./ -path './DEBIAN' -prune \
 		-o -type f -printf "%P\n") \
-		| sort -k 2 -o $(tmp)//DEBIAN//md5sums
+		| sort -k 2 -o $(tmp)/DEBIAN/md5sums
 	dpkg-gencontrol -isp
 	chown -R root.root $(tmp)
 	chmod -R go=rX $(tmp)

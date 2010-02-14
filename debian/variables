@@ -14,10 +14,10 @@
 <:$INFODESC="Cryptographic interface for mail and news.":>//
 <:$EPRIORITY="50":>//
 <:# Debian packaging specific :>//
-<:$debian="/DEBIAN/":>//
+<:$debian="/DEBIAN":>//
 <:$etc="/etc/$PACKAGE/":>//
-<:$doc="/usr/share/doc/$PACKAGE/":>//
-<:$docsrc="$doc/src/":>//
+<:$doc="/usr/share/doc/$PACKAGE":>//
+<:$docsrc="$doc/src":>//
 <:$examples="$doc/examples/":>//
 <:$html="$doc/HTML":>//
 <:$var="/var/lib/$PACKAGE/":>//
@@ -37,7 +37,7 @@
 <:# <% docbase %> :>//
 <:$DINSTALL="type install-docs &>/dev/null && install-docs --install":>//
 <:$DREMOVE="type install-docs &>/dev/null && install-docs --remove":>//
-<:$docbase="/usr/share/doc-base/":>//
+<:$docbase="/usr/share/doc-base":>//
 <:# <% emacs %> :>//
 <:$ELCLOG="CompilationLog":>//
 <:$EINSTALL="test -x /usr/lib/emacsen-common/emacs-package-install"
@@ -46,8 +46,8 @@
 . " && /usr/lib/emacsen-common/emacs-package-remove":>//
 <:$SSEL="/etc/emacs/site-start.el":>//
 <:$sstartd="/etc/emacs/site-start.d/":>//
-<:$ecode="/usr/lib/emacsen-common/packages/":>//
-<:$lisp="/usr/share/emacs/site-lisp/$PACKAGE/":>//
+<:$ecode="/usr/lib/emacsen-common/packages":>//
+<:$lisp="/usr/share/emacs/site-lisp/$PACKAGE":>//
 <:# <% info %> :>//
 <:sub IINSTALL {
     my (${section}, ${menu}, ${description}) = @_;
@@ -62,7 +62,7 @@
 	. " --quiet";
 }:>//
 <:$IREMOVE="install-info --quiet --remove":>//
-<:$info="/usr/share/info/":>//
+<:$info="/usr/share/info":>//
 <:# <% texmf %> :>//
 <:$texmf="/usr/share/texmf/":>//
 <:$MKTEXLSR="kpsewhich --version &>/dev/null"
@@ -74,9 +74,9 @@
 <:$WREBUILD="/usr/sbin/update-default-wordlist --rebuild":>//
 <:$WREMOVE="/usr/sbin/remove-default-wordlist $PACKAGE":>//
 <:# <% reportbug %> :>//
-<:$bug="/usr/share/bug/$PACKAGE/":>//
+<:$bug="/usr/share/bug/$PACKAGE":>//
 <:# <% lintian %> :>//
-<:$lintian="/usr/share/lintian/overrides/":>//
+<:$lintian="/usr/share/lintian/overrides":>//
 <:# <% misc %> :>//
 <:$GPL="/usr/share/common-licenses/GPL":>//
 <:open(COPYRIGHT,"${DEBIAN_DIR}/COPYRIGHT");

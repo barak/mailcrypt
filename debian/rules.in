@@ -9,7 +9,7 @@ checkdir=test -f debian/rules
 checkroot=test root = "$$(whoami)"
 fixperms=chmod -R a+rX .
 
-tmp := $(shell pwd)/debian/tmp/
+tmp := $(shell pwd)/debian/tmp
 
 SHELL := /bin/bash
 INSTDIR := install -m 755 -d
@@ -67,7 +67,7 @@ clean: debian/po/templates.pot
 	$(checkdir)
 	-rm -rf build core $(tmp) debian/{files*,substvars}
 	-rm -f debian/po/updatepo
-	-$(MAKE) distclean
+	[ ! -f Makefile ] || $(MAKE) distclean
 	-rm -f $(DFILES)
 	$(fixperms)
 
@@ -81,63 +81,59 @@ binary-indep: build
 	-rm -rf $(tmp)
 
 <:# install package :>//
-	$(INSTDIR) $(tmp)/<:=${lisp}:>
-	$(INSTDATA) debian/<:=${PACKAGE}:>-init.el $(tmp)/<:=${lisp}:>/../
-	$(INSTSCRIPT) $(SCRIPTS) $(tmp)/<:=${lisp}:>/
-	$(INSTDATA) $(SOURCES) $(tmp)/<:=${lisp}:>/
+	$(INSTDIR) $(tmp)<:=${lisp}:>
+	$(INSTDATA) debian/<:=${PACKAGE}:>-init.el $(tmp)<:=${lisp}:>/../
+	$(INSTSCRIPT) $(SCRIPTS) $(tmp)<:=${lisp}:>/
+	$(INSTDATA) $(SOURCES) $(tmp)<:=${lisp}:>/
 	umask 0022; for i in $(MAKEFILEHACKS); do \
-		$(INSTDIR) $(tmp)/<:=${lisp}:>/$${i%/*}/; \
+		$(INSTDIR) $(tmp)<:=${lisp}:>/$${i%/*}/; \
 		echo -e "clean distclean:\n\trm -f Makefile\n" \
-			> $(tmp)/<:=${lisp}:>/$${i}; \
+			> $(tmp)<:=${lisp}:>/$${i}; \
 	done
-	$(INSTDIR) $(tmp)/<:=${info}:>
-	umask 0022; echo -e "\nFile: dir\tNode: Top\tTop\n" \
-		> $(tmp)/<:=${info}:>/dir
-	$(MAKE) INSTALL_INFO="/usr/sbin/install-info" \
-		install-info infodir=$(tmp)/<:=${info}:> \
-		&& rm $(tmp)/<:=${info}:>/dir{,.old}
-	gzip -9frv $(tmp)/<:=${info}:>
+	$(MAKE) INSTALL_INFO="echo install-info" \
+		install-info infodir=$(tmp)<:=${info}:>
+	gzip -9frv $(tmp)<:=${info}:>
 
 <:# install Debian doc :>//
-	$(INSTDIR) $(tmp)/<:=${doc}:> $(tmp)/<:=${docsrc}:> \
-		$(tmp)/<:=${html}:>
-	$(INSTDATA) <:=${DOCS}:> $(tmp)/<:=$doc:>
-	$(INSTDATA) <:=${DOCSRCS}:> $(tmp)/<:=${docsrc}:>
-	$(INSTDATA) debian/README $(tmp)/<:=${doc}:>/README.Debian
-	$(INSTDATA) ChangeLog $(tmp)/<:=${doc}:>
-	$(INSTDATA) debian/changelog $(tmp)/<:=${doc}:>/changelog.Debian
-	gzip -9frv $(tmp)/<:=${doc}:>
-	ln -sf ChangeLog.gz $(tmp)/<:=${doc}:>/changelog.gz
-	$(INSTDATA) debian/copyright $(tmp)/<:=${doc}:>
-	$(INSTDATA) htmls/*.html $(tmp)/<:=${html}:>
-	ln -snf mailcrypt_toc.html $(tmp)/<:=${html}:>/index.html
+	$(INSTDIR) $(tmp)<:=${doc}:>
+	$(INSTDATA) <:=${DOCS}:> $(tmp)<:=${doc}:>
+	$(INSTDATA) debian/README $(tmp)<:=${doc}:>/README.Debian
+	$(INSTDATA) ChangeLog $(tmp)<:=${doc}:>
+	$(INSTDATA) debian/changelog $(tmp)<:=${doc}:>/changelog.Debian
+	gzip -9frv $(tmp)<:=${doc}:>
+	ln -sf ChangeLog.gz $(tmp)<:=${doc}:>/changelog.gz
+	$(INSTDATA) debian/copyright $(tmp)<:=${doc}:>
+	$(INSTDIR) $(tmp)<:=${html}:>
+	$(INSTDATA) htmls/*.html $(tmp)<:=${html}:>
+	ln -snf mailcrypt_toc.html $(tmp)<:=${html}:>/index.html
 
 <:# install Debian system files :>//
-	$(INSTDIR) $(tmp)/<:=${ecode}:>/{install,remove}
+	$(INSTDIR) $(tmp)<:=${ecode}:>/install
+	$(INSTDIR) $(tmp)<:=${ecode}:>/remove
 	$(INSTSCRIPT) debian/install \
-		$(tmp)/<:=${ecode}:>/install/<:=${PACKAGE}:>
+		$(tmp)<:=${ecode}:>/install/<:=${PACKAGE}:>
 	$(INSTSCRIPT) debian/remove \
-		$(tmp)/<:=${ecode}:>/remove/<:=${PACKAGE}:>
-	$(INSTDIR) $(tmp)/<:=${docbase}:>
-	$(INSTDATA) debian/docbase $(tmp)/<:=${docbase}:>/<:=${PACKAGE}:>
-	$(INSTDIR) $(tmp)/<:=${bug}:>
-	$(INSTDATA) debian/bug.presubj $(tmp)/<:=${bug}:>/presubj
-	$(INSTSCRIPT) debian/bug.script $(tmp)/<:=${bug}:>/script
-	$(INSTDIR) $(tmp)/<:=${lintian}:>
-	$(INSTDATA) debian/lintian $(tmp)/<:=${lintian}:>/<:=${PACKAGE}:>
+		$(tmp)<:=${ecode}:>/remove/<:=${PACKAGE}:>
+	$(INSTDIR) $(tmp)<:=${docbase}:>
+	$(INSTDATA) debian/docbase $(tmp)<:=${docbase}:>/<:=${PACKAGE}:>
+	$(INSTDIR) $(tmp)<:=${bug}:>
+	$(INSTDATA) debian/bug.presubj $(tmp)<:=${bug}:>/presubj
+	$(INSTSCRIPT) debian/bug.script $(tmp)<:=${bug}:>/script
+	$(INSTDIR) $(tmp)<:=${lintian}:>
+	$(INSTDATA) debian/lintian $(tmp)<:=${lintian}:>/<:=${PACKAGE}:>
 
 <:# install Debian control files :>//
-	$(INSTDIR) $(tmp)/<:=${debian}:>
+	$(INSTDIR) $(tmp)<:=${debian}:>
 	$(INSTDATA) debian/templates.dcobj \
-		$(tmp)/<:=${debian}:>/templates
+		$(tmp)<:=${debian}:>/templates
 	$(INSTSCRIPT) debian/{config,postinst,postrm,prerm} \
-		$(tmp)/<:=${debian}:>
+		$(tmp)<:=${debian}:>
 
 <:# standard stuff :>//
 	cd $(tmp) && md5sum \
 		$$(find ./ -path './DEBIAN' -prune \
 		-o -type f -printf "%P\n") \
-		| sort -k 2 -o $(tmp)/<:=${debian}:>/md5sums
+		| sort -k 2 -o $(tmp)<:=${debian}:>/md5sums
 	dpkg-gencontrol -isp
 	chown -R root.root $(tmp)
 	chmod -R go=rX $(tmp)

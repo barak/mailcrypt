@@ -15,9 +15,6 @@ Abstract: Mailcrypt is an Emacs Lisp package which provides a simple but
  news.  Mailcrypt has specialized support for Rmail, VM, MH-E, Mew, and Gnus.
 Section: <:=${DOCSEC}:>
 
-Format: texinfo
-Files: <:=if($_="$docsrc/${PACKAGE}.texi.gz")=~tr|/|/|s:>
-
 Format: info
 Index: <:=if($_="${info}/${PACKAGE}.info.gz")=~tr|/|/|s:>
 Files: <:=if($_="${info}/${PACKAGE}.info*")=~tr|/|/|s:>

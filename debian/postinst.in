@@ -21,16 +21,6 @@ case "${1}" in
 	exit 1
 esac
 
-<:# install <% info %> menu into <% info %> directory :>//
-case "${1}" in abort-remove|abort-upgrade|configure)
-	<:=IINSTALL ():> <:="${info}/${PACKAGE}.info.gz":>
-esac
-
-<:# register documentation with <% doc-base %> :>//
-case "${1}" in abort-remove|abort-upgrade|configure)
-    <:=${DINSTALL}:> <:=if($_="${docbase}/${PACKAGE}")=~tr|/|/|s:>
-esac
-
 <:# Emacs install :>//
 case "${1}" in abort-deconfigure|abort-remove|abort-upgrade|configure)
     <:=${EINSTALL}:> <:=${PACKAGE}:>
