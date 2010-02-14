@@ -55,5 +55,5 @@ msgid ""
 msgstr ""
 "Jos et valitse tätä vaihtoehtoa, paketin käyttö vaatii, että "
 "henkilökohtaiseen Emacs-asetustiedostoon (esim. ”~/.emacs” tai ”~/.emacs."
-"el”) lisätään rivi ”(require 'mailcrypt-init')”."
+"el”) lisätään rivi ”(require 'mailcrypt-init)”."
 
