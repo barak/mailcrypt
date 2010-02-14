@@ -1,18 +1,19 @@
-mailcrypt (3.5.8+CVS.2010.02.13-0.1) UNRELEASED; urgency=low
+mailcrypt (3.5.8+CVS.2010.02.14-0.1) UNRELEASED; urgency=low
 
   * Emacs23 patch from Toni Schmidbauer <toni@stderror.at> (closes: #545892)
   * Describe import into GIT in debian/README.Debian
-  * Merge ongoing minor mods from upstream CVS (text only, no code)
-    - fixing problems in mailcrypt.texi that caused makeinfo to err out
-  * rev deb std
-  * Merge upstream CVS
-    - adds autoloads comments, addressing
+  * Merge ongoing changes in upstream CVS
+    - upstream merge of our patch fixing makeinfo error (mailcrypt.texi)
+    - fixes build error with recent .texi tools (Makefile.in) addressing
+      http://sourceforge.net/tracker/?func=detail&aid=2778193&group_id=397&atid=100397
+    - remove gratuitous differences with latest upstream Makefile.in
+    - adds autoloads comments (*.el) addressing
       http://sourceforge.net/tracker/?func=detail&aid=1080283&group_id=397&atid=100397
       and allowing (in principle) auto-generation of Debian emacsen autoloads
-    - upstream merge of texinfo patch
+  * rev deb std
   * Debconf translation:
     - Finnish (Esko Arajärvi).  Closes: #549709
-  * Deal with a bunch of lintian and build issues
+  * Address lintian and build issues
     - Do not include *.texi in binary package or register it with doc-base
     - Add dependency on recent-enough dpkg or install-info
     - Stop calling install-docs in installation scripts
@@ -20,9 +21,9 @@ mailcrypt (3.5.8+CVS.2010.02.13-0.1) UNRELEASED; urgency=low
     - Stop calling install-info in debian/rules (!)
     - Regenerate debian/rules from debian/rules.in
     - Get rid of ...//... in debian/rules as it bugs me (and is error prone)
-    - flush lintian warning about ignored make distclean error
+    - Flush lintian warning about ignored make distclean error
 
- -- Barak A. Pearlmutter <bap@debian.org>  Sun, 14 Feb 2010 20:46:38 +0000
+ -- Barak A. Pearlmutter <bap@debian.org>  Sun, 14 Feb 2010 22:09:18 +0000
 
 mailcrypt (3.5.8+CVS.2005.04.29.1-12.1) unstable; urgency=low
 
