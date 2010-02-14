@@ -10,8 +10,10 @@ mailcrypt (3.5.8+CVS.2010.02.13-0.1) UNRELEASED; urgency=low
       http://sourceforge.net/tracker/?func=detail&aid=1080283&group_id=397&atid=100397
       and allowing (in principle) auto-generation of Debian emacsen autoloads
     - upstream merge of texinfo patch
+  * Debconf translation:
+    - Finnish (Esko Arajärvi).  Closes: #549709
 
- -- Barak A. Pearlmutter <bap@debian.org>  Sat, 13 Feb 2010 21:55:54 +0000
+ -- Barak A. Pearlmutter <bap@debian.org>  Sun, 14 Feb 2010 16:30:21 +0000
 
 mailcrypt (3.5.8+CVS.2005.04.29.1-12.1) unstable; urgency=low
 
