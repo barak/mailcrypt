@@ -87,6 +87,11 @@ install-lisp: all
 	  $(INSTALL_DATA) $$f $(lispdir); \
 	done;
 
+# Make sure all installation directories actually exist
+# by making them if necessary.
+installdirs: mkinstalldirs
+	$(srcdir)/mkinstalldirs $(lispdir) $(infodir)
+
 # If your install-info doesn't know how to look inside the .info file for the
 # menu entry to add, try adding
 #   --entry="* Mailcrypt: (mailcrypt).       An Emacs/PGP interface"
@@ -125,7 +130,7 @@ mailcrypt.ps: mailcrypt.dvi
 html: mailcrypt_toc.html
 
 mailcrypt_toc.html: mailcrypt.texi
-	$(TEXI2HTML) --output=htmls -split_chapter $(srcdir)/mailcrypt.texi
+	$(TEXI2HTML) --output=htmls --split_chapter $(srcdir)/mailcrypt.texi
 
 TAGS: $(SOURCES)
 	cd $(srcdir) && etags $(SOURCES)
@@ -133,14 +138,15 @@ TAGS: $(SOURCES)
 clean:
 	rm -f $(OBJECTS)
 	-rm -f *.aux *.cp *.cps *.fn *.ky *.log *.pg *.toc *.tp *.vr
+	-rm -f *.html
 	-rm -rf htmls/
 	rm -f TAGS
 
 distclean: clean
 	-rm -f *~ *.tar.gz
-	-rm -f Makefile tests/Makefile tests/remailer/Makefile
+	-rm -f Makefile config.status config.cache config.log timer.el
+	-rm -f tests/Makefile tests/remailer/Makefile
 	-rm -rf autom4te.cache
-	-rm -f config.status config.cache config.log timer.el
 	-rm -f *.info* *.dvi
 
 ${srcdir}/configure: configure.in
