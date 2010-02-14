@@ -12,8 +12,17 @@ mailcrypt (3.5.8+CVS.2010.02.13-0.1) UNRELEASED; urgency=low
     - upstream merge of texinfo patch
   * Debconf translation:
     - Finnish (Esko Arajärvi).  Closes: #549709
+  * Deal with a bunch of lintian and build issues
+    - Do not include *.texi in binary package or register it with doc-base
+    - Add dependency on recent-enough dpkg or install-info
+    - Stop calling install-docs in installation scripts
+    - Stop calling install-info in installation scripts
+    - Stop calling install-info in debian/rules (!)
+    - Regenerate debian/rules from debian/rules.in
+    - Get rid of ...//... in debian/rules as it bugs me (and is error prone)
+    - flush lintian warning about ignored make distclean error
 
- -- Barak A. Pearlmutter <bap@debian.org>  Sun, 14 Feb 2010 16:30:21 +0000
+ -- Barak A. Pearlmutter <bap@debian.org>  Sun, 14 Feb 2010 20:46:38 +0000
 
 mailcrypt (3.5.8+CVS.2005.04.29.1-12.1) unstable; urgency=low
 
