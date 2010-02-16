@@ -1,7 +1,6 @@
 mailcrypt (3.5.8+CVS.2010.02.14-0.1) UNRELEASED; urgency=low
 
-  * Emacs23 patch from Toni Schmidbauer <toni@stderror.at> (closes: #545892)
-  * Describe import into GIT in debian/README.Debian
+  * Non-maintainer upload.
   * Merge ongoing changes in upstream CVS
     - upstream merge of our patch fixing makeinfo error (mailcrypt.texi)
     - fixes build error with recent .texi tools (Makefile.in) addressing
@@ -10,7 +9,8 @@ mailcrypt (3.5.8+CVS.2010.02.14-0.1) UNRELEASED; urgency=low
     - adds autoloads comments (*.el) addressing
       http://sourceforge.net/tracker/?func=detail&aid=1080283&group_id=397&atid=100397
       and allowing (in principle) auto-generation of Debian emacsen autoloads
-  * rev deb std
+  * Emacs23 patch from Toni Schmidbauer <toni@stderror.at> (closes: #545892)
+  * Describe import into GIT in debian/README.Debian
   * Debconf translation:
     - Finnish (Esko Arajärvi).  Closes: #549709
   * Address lintian and build issues
@@ -22,6 +22,7 @@ mailcrypt (3.5.8+CVS.2010.02.14-0.1) UNRELEASED; urgency=low
     - Regenerate debian/rules from debian/rules.in
     - Get rid of ...//... in debian/rules as it bugs me (and is error prone)
     - Flush lintian warning about ignored make distclean error
+    - rev deb std
 
  -- Barak A. Pearlmutter <bap@debian.org>  Sun, 14 Feb 2010 22:09:18 +0000
 
