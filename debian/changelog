@@ -13,6 +13,7 @@ mailcrypt (3.5.8+CVS.2010.02.14-0.1) UNRELEASED; urgency=low
     - Patch from Toni Schmidbauer <toni@stderror.at> (closes: #545892)
     - Switch rmail-convert-file to rmail-convert-file-maybe (mc-toplevel.el)
     - Fix test for Emacs >= 20.3 (debian/mailcrypt-init.el)
+  * Insert missing quote in mc-scheme-pgp{50,65} to fix mc-*-verify-signature
   * Describe import into GIT in debian/README.Debian
   * Debconf translation:
     - Finnish (Esko Arajärvi).  Closes: #549709
@@ -27,7 +28,7 @@ mailcrypt (3.5.8+CVS.2010.02.14-0.1) UNRELEASED; urgency=low
     - Flush lintian warning about ignored make distclean error
     - rev deb std
 
- -- Barak A. Pearlmutter <bap@debian.org>  Wed, 17 Feb 2010 03:20:14 +0000
+ -- Barak A. Pearlmutter <bap@debian.org>  Wed, 17 Feb 2010 21:05:15 +0000
 
 mailcrypt (3.5.8+CVS.2005.04.29.1-12.1) unstable; urgency=low
 
