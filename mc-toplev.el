@@ -604,9 +604,9 @@ Exact behavior depends on current major mode."
 (defun mc-rmail-decrypt-message ()
   "*Decrypt the contents of this message"
   (interactive)
+  (if (not (equal mode-name "RMAIL"))
+      (error "mc-rmail-decrypt-message called in a non-RMAIL buffer"))
   (let (decryption-result)
-    (if (not (equal mode-name "RMAIL"))
-        (error "mc-rmail-decrypt-message called in a non-RMAIL buffer"))
     (unwind-protect
         (progn
           (rmail-edit-current-message)
