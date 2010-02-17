@@ -32,9 +32,10 @@
 (add-hook 'mail-mode-hook 'mc-install-write-mode)
 
 ;; Rmail hooks
-(if (and (boundp 'emacs-version)
-	 (>= emacs-major-version 20)
-	 (>= emacs-minor-version 3))
+(if (and (boundp 'emacs-version)	; check for >= 20.3
+	 (or (> emacs-major-version 20)
+	     (and (>= emacs-major-version 20)
+		  (>= emacs-minor-version 3))))
     (add-hook 'rmail-show-message-hook 'mc-install-read-mode)
   (add-hook 'rmail-mode-hook 'mc-install-read-mode))
 (add-hook 'rmail-summary-mode-hook 'mc-install-read-mode)
