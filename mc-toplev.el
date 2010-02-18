@@ -617,7 +617,13 @@ Exact behavior depends on current major mode."
                       (or mc-always-replace
                           (y-or-n-p
                            "Replace encrypted message with decrypted? ")))
-                 (rmail-cease-edit)
+		 ;; This horrible "let x" hack works around a bug in
+		 ;; rmail/mbox rmail-cease-edit which sets
+		 ;; rmail-buffer to nil, which makes rmail-set-label
+		 ;; err out: "Wrong type argument: stringp, nil"
+		 (let ((x rmail-buffer))
+		   (rmail-cease-edit)
+		   (setq rmail-buffer x))
                  (rmail-kill-label "edited")
                  (rmail-add-label "decrypted")
                  (if (cdr decryption-result)
