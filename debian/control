@@ -5,6 +5,8 @@ Maintainer: Davide G. M. Salvetti <salve@debian.org>
 Standards-Version: 3.8.4
 Build-Depends-Indep: eperl, po-debconf, texinfo, texi2html, dpkg (>= 1.15.4) | install-info
 Homepage: http://mailcrypt.sourceforge.net/
+Vcs-Git: git://git.debian.org/git/collab-maint/bbdb.git
+Vcs-Browser: http://git.debian.org/?p=collab-maint/bbdb.git
  
 Package: mailcrypt
 Architecture: all
