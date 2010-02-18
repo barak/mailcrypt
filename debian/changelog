@@ -1,6 +1,7 @@
-mailcrypt (3.5.8+CVS.2010.02.14-0.1) UNRELEASED; urgency=low
+mailcrypt (3.5.8+CVS.2010.02.14-0.1) unstable; urgency=low
 
   * Non-maintainer upload.
+    - repo with changes in debian/control Vcs field
   * Merge ongoing changes in upstream CVS
     - upstream merge of our patch fixing makeinfo error (mailcrypt.texi)
     - fixes build error with recent .texi tools (Makefile.in) addressing
