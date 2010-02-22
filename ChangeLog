@@ -1,4 +1,22 @@
-2007-03-01  Jari Aalto  <jari aalto A T cante net>
+2010-02-22  Jari Aalto  <jari.aalto@cante.net>
+
+	* mc-toplev.el (mc-rmail-decrypt-message): preserve `rmail-buffer'
+	during call to `rmail-cease-edit' with let-statement. Patch thanks
+	to Barak A. Pearlmutter" <barak@cs.nuim.ie>.
+	http://github.com/barak/mailcrypt/commit/d2c046cd100dbdfd427e0f31eec1fd39fc5a0da6
+
+2010-02-13  Jari Aalto  <jari.aalto@cante.net>
+
+	* all files: clean up EOL whitespaces.
+
+	* mc-toplev.el, mc-remail.el, mc-pgp.el, mc-pgp5.el, mc-pgp6.el,
+	mailcrypt.el: Add ###autoload statements. Closes bug
+	https://sourceforge.net/tracker/?func=detail&aid=1080283&group_id=397&atid=100397
+
+	* mc-toplev.el: remove EOL whitespace and adjust few ending
+	parens (lisp style)
+
+2007-03-01  Jari Aalto  <jari.aalto@cante.net>
 
         * mailcrypt.texi (Remailer Quick Start): Removed non-existing
         URLs: noisebox.remailer.org, mixmaster.shinn.net, anon.efga.org.
