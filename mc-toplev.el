@@ -617,12 +617,23 @@ Exact behavior depends on current major mode."
                       (or mc-always-replace
                           (y-or-n-p
                            "Replace encrypted message with decrypted? ")))
-		 ;; This "let" works around a bug in
-		 ;; rmail/mbox rmail-cease-edit which sets
-		 ;; rmail-buffer to nil, which makes rmail-set-label
-		 ;; err out: "Wrong type argument: stringp, nil"
-		 (let ((rmail-buffer rmail-buffer))
-		   (rmail-cease-edit))
+		 ;; This "let" works around a bug in GNU Emacs 23.1
+		 ;; rmail/mbox rmail-cease-edit nulling the buffer
+		 ;; local value of rmail-buffer, so rmail-set-label
+		 ;; fails with "Wrong type argument: stringp, nil".
+		 ;; See Emacs bug report 5594,
+		 ;; http://debbugs.gnu.org/db/55/5594.html
+		 (let ((rmail-buffer--saved rmail-buffer))
+		   (rmail-cease-edit)
+		   (unless rmail-buffer
+		     (message "Workaround rmail-case-edit nulling buffer local rmail-buffer")
+		     (when (or (> emacs-major-version 23)
+			       (and (= emacs-major-version 23)
+				    (> emacs-minor-version 1)))
+		       (warning "Should not occur in GNU Emacs >23.1, but you are using %s.%s"
+				emacs-major-version
+				emacs-minor-version))
+		     (setq rmail-buffer rmail-buffer--saved)))
                  (rmail-kill-label "edited")
                  (rmail-add-label "decrypted")
                  (if (cdr decryption-result)
