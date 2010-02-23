@@ -1,3 +1,12 @@
+mailcrypt (3.5.8+CVS.2010.02.23-0.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Fix VCS fields (debian/changelog)
+  * New upstream version
+    - fix for emacs 23.1 rmail-cease-edit nulling buffer-local rmail-buffer
+
+ -- Barak A. Pearlmutter <bap@debian.org>  Tue, 23 Feb 2010 16:11:12 +0000
+
 mailcrypt (3.5.8+CVS.2010.02.14-0.1) unstable; urgency=low
 
   * Non-maintainer upload.
