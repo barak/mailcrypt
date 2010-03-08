@@ -1,3 +1,11 @@
+mailcrypt (3.5.8+CVS.2010.03.08-0.1) UNRELEASED; urgency=low
+
+  * Debian packaging tweaks
+  * New upstream version
+    - merge in bug fixes that were pushed upstream
+
+ -- Barak A. Pearlmutter <bap@debian.org>  Mon, 08 Mar 2010 18:15:29 +0000
+
 mailcrypt (3.5.8+CVS.2010.02.23-0.1) unstable; urgency=low
 
   * Non-maintainer upload.
