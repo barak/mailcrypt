@@ -7,24 +7,26 @@ Build-Depends-Indep: eperl, po-debconf, texinfo, texi2html, dpkg (>= 1.15.4) | i
 Homepage: http://mailcrypt.sourceforge.net/
 Vcs-Git: git://git.debian.org/git/collab-maint/mailcrypt.git
 Vcs-Browser: http://git.debian.org/?p=collab-maint/mailcrypt.git
- 
+Vcs-Browser-Cvs: http://mailcrypt.cvs.sourceforge.net/viewvc/mailcrypt/mailcrypt/
+Vcs-Cvs: :ext:@mailcrypt.cvs.sourceforge.net:/cvsroot/mailcrypt
+
 Package: mailcrypt
 Architecture: all
 Depends: debconf (>= 0.2.0) | debconf-2.0, gnupg, emacs23 | emacs22 | emacs21 | emacs-snapshot, make, dpkg (>= 1.15.4) | install-info
-Description: An Emacs interface to the GNU Privacy Guard
+Description: An Emacs interface to GPG and PGP
  Mailcrypt is an Emacs lisp package that provides a simple but
- powerful interface to cryptographic functions for mail and news.  With
- Mailcrypt, encryption becomes a seamlessly integrated part of your mail
- and news handling environment.  Mailcrypt can automatically fetch
- public keys to encode, decode, and verify messages, and can be configured
- to automate mailing through anonymous remailers.
+ powerful interface to cryptographic functions for mail and news.
+ With Mailcrypt, encryption becomes a seamlessly integrated part of
+ mail and news handling.  Mailcrypt can automatically fetch public
+ keys to encode, decode, and verify messages; can be configured to
+ automate mailing through anonymous remailers; and can interface to
+ both GPG (the GNU Privacy Guard) and PGP.
  .
  Although Mailcrypt may be used to process data in arbitrary Emacs
- buffers, it is most useful in conjunction with other Emacs packages for
- handling mail and news.  Mailcrypt has specialized support for Rmail,
- VM, MH-E, Mew, and Gnus.
+ buffers, it is most useful in conjunction with other Emacs packages
+ for handling mail and news.  Mailcrypt has specialized support for
+ Rmail, VM, MH-E, Mew, and Gnus.
  .
- Currently XEmacs ships with its own Mailcrypt, so this package should
- only be used with GNU/Emacs.  (I.e., you don't need to install this
- package if your site uses only XEmacs.)
-
+ XEmacs ships with its own version of Mailcrypt, so this package
+ should only be used with GNU Emacs.  (I.e., you don't need to install
+ this package if you only use XEmacs.)
