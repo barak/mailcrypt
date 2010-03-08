@@ -646,7 +646,9 @@ Exact behavior depends on current major mode."
                    (goto-char (point-min))
                    (insert "From Mailcrypt-" mc-version " "
                            (current-time-string) "\n")
-                   (rmail-convert-file)
+		   (if (fboundp 'rmail-convert-file-maybe)
+		       (rmail-convert-file-maybe)
+		     (rmail-convert-file))
                    (rmail-mode)
                    (use-local-map (copy-keymap (current-local-map)))
                    (local-set-key "q" 'mc-rmail-view-quit)
