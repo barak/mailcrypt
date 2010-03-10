@@ -1,4 +1,4 @@
-mailcrypt (3.5.8+CVS.2010.03.08-0.1) UNRELEASED; urgency=low
+mailcrypt (3.5.8+CVS.2010.03.08-0.1) unstable; urgency=low
 
   * Debian packaging tweaks
   * New upstream version
