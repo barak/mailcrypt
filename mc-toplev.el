@@ -626,7 +626,7 @@ Exact behavior depends on current major mode."
 		 (let ((rmail-buffer--saved rmail-buffer))
 		   (rmail-cease-edit)
 		   (unless rmail-buffer
-		     (message "Workaround rmail-case-edit nulling buffer local rmail-buffer")
+		     (message "Workaround rmail-cease-edit nulling buffer local rmail-buffer")
 		     (when (or (> emacs-major-version 23)
 			       (and (= emacs-major-version 23)
 				    (> emacs-minor-version 1)))
