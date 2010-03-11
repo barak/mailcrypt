@@ -1,4 +1,4 @@
-;; mailcrypt.el v3.5.6, mail encryption with PGP
+;; mailcrypt.el v3.5.9, mail encryption with PGP
 ;; Copyright (C) 1995  Jin Choi <jin@atype.com>
 ;;                     Patrick LoPresti <patl@lcs.mit.edu>
 ;;           (C) 1998  Len Budney <lbudney@pobox.com>
@@ -207,7 +207,7 @@
 ;;}}}
 
 ;;{{{ User variables.
-(defconst mc-version "3.5.8+")
+(defconst mc-version "3.5.9")
 (defvar mc-temp-directory
   (cond ((fboundp 'temp-directory) (temp-directory))
 	((boundp 'temporary-file-directory) temporary-file-directory)

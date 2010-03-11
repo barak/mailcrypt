@@ -1,4 +1,4 @@
-Noteworthy changes in Mailcrypt version 3.6.0(?):
+Noteworthy changes in Mailcrypt version 3.5.9:
 
  * GPG stdout buffer is now put into multibyte mode even when emacs is using
    unibyte mode in general (such as under 'standard-display-european'). This
@@ -19,6 +19,7 @@ Noteworthy changes in Mailcrypt version 3.6.0(?):
 
  * Added support for the Wanderlust MUA mode.
 
+ * Support GNU Emacs 23.
 
 Noteworthy changes in Mailcrypt version 3.5.8:
 

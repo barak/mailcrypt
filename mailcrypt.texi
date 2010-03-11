@@ -22,7 +22,7 @@
 @syncodeindex fn cp
 
 @set TITLE Mailcrypt
-@set VERSION 3.5.8.1
+@set VERSION 3.5.9
 @set UPDATED 2010-02-14
 
 @ifinfo
