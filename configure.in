@@ -62,7 +62,6 @@ fi
 
 AC_CONFIG_FILES([Makefile
                  tests/Makefile
-                 tests/gpg-keys/Makefile
                  tests/remailer/Makefile])
 
 AC_OUTPUT
