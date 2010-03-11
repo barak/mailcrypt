@@ -18,21 +18,21 @@
 
 2007-03-01  Jari Aalto  <jari.aalto@cante.net>
 
-        * mailcrypt.texi (Remailer Quick Start): Removed non-existing
-        URLs: noisebox.remailer.org, mixmaster.shinn.net, anon.efga.org.
-        Added new instructions where to get the rmailer list (rlist).
-        Added instructions how to import remailer keys to separate gpg
-        pubring and how to configure gpg to use it. Removed non-existing
-        www.obscura.com and pointed URL to correct Mixmaster FAQ location.
-        (Remailer Tips): Removed non-exiting URLs www.chez.com and
-        anon.efga.org. Rmeoved `@c' commaent lines that explained how to
-        use separate gpgp keyrings. The instructions were added above.
-        (Online Resources): Added notes to links that no longer exist.
-        Removed non-exiting links: web.mit.edu. Updated links:
-        rtfm.mit.edu/pub/usenet/alt.security.pgp/ => www.faqs.org.
-        Updated homepages: Patrick J. LoPresti, Brian LaMacchia, Lance
-        Cottrell, Raph Levien Updated links to "Communications Decency
-        Act" etc.
+	* mailcrypt.texi (Remailer Quick Start): Removed non-existing
+	URLs: noisebox.remailer.org, mixmaster.shinn.net, anon.efga.org.
+	Added new instructions where to get the rmailer list (rlist).
+	Added instructions how to import remailer keys to separate gpg
+	pubring and how to configure gpg to use it. Removed non-existing
+	www.obscura.com and pointed URL to correct Mixmaster FAQ location.
+	(Remailer Tips): Removed non-exiting URLs www.chez.com and
+	anon.efga.org. Rmeoved `@c' commaent lines that explained how to
+	use separate gpgp keyrings. The instructions were added above.
+	(Online Resources): Added notes to links that no longer exist.
+	Removed non-exiting links: web.mit.edu. Updated links:
+	rtfm.mit.edu/pub/usenet/alt.security.pgp/ => www.faqs.org.
+	Updated homepages: Patrick J. LoPresti, Brian LaMacchia, Lance
+	Cottrell, Raph Levien Updated links to "Communications Decency
+	Act" etc.
 
 2004-11-08  Brian Warner  <warner@lothar.com>
 
@@ -151,7 +151,7 @@
 	* tests/remailer/gtkwatcher.glade
 	* tests/remailer/gtkwatcher.py: add popup menus for message actions
 	(WatcherGUI.do_update): show send time in local timezone, not GMT
-        add send time to Received Messages popup
+	add send time to Received Messages popup
 
 	* tests/remailer/watcher.py: add ability to flush old messages,
 	abandon them, query for age of outstanding ones. Make all msgids
@@ -667,7 +667,7 @@
 1999-03-12  Gregory Neil Shapiro  <gshapiro@sendmail.org>
 
 	* mc-pgp5.el (mc-pgp50-sign-parser): Deactivate the
-	  password if mc-passwd-timeout is set to nil.
+	password if mc-passwd-timeout is set to nil.
 
 1999-03-05  Brian Warner <warner@lothar.com>
 
