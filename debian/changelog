@@ -1,3 +1,11 @@
+mailcrypt (3.5.8+CVS.2010.03.08-1) UNRELEASED; urgency=low
+
+  * Support uscan
+  * Make Barak A. Pearlmutter comaintainer dejure instead of just defacto
+    - only practical difference: bug reports via CC + QA, and lower integration hassle
+
+ -- Barak A. Pearlmutter <bap@debian.org>  Thu, 11 Mar 2010 13:51:58 +0000
+
 mailcrypt (3.5.8+CVS.2010.03.08-0.1) unstable; urgency=low
 
   * Debian packaging tweaks
