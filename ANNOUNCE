@@ -1,4 +1,4 @@
-  Mailcrypt 3.5.8 is Available for Download
+  Mailcrypt 3.5.9 is Available for Download
 
 
   1.  Introduction
@@ -11,12 +11,26 @@
 
   2.  Features
 
-  2.1. New in this Release
+  2.1. New in Release 3.5.8
 
   This is mainly a bugfix release. Anonymous remailer support was updated to
   match modern remailers, and the GPG passphrase code was changed to cache
   by keyid instead of name, which will help folks who use multiple keys with
   the same name but different passphrases.
+
+  2.1.1 New in Release 3.5.9
+
+  This is mainly a maintenance release.
+
+  Support for GNU Emacs 23.
+
+  Misc updates and bug fixes.
+
+  Improvements in remailer support.
+
+  Support for PGP 6.5.
+
+  Support for the Wanderlust MUA mode.
 
 
   2.2.	Stable Features for PGP 5.0 and GnuPG
@@ -57,7 +71,7 @@
 
   3.  Downloading Mailcrypt
 
-  The Official Mailcrypt version 3.5.8 can be downloaded at:
+  The Official Mailcrypt version 3.5.9 can be downloaded at:
 
   <http://mailcrypt.sourceforge.net>
 
@@ -74,3 +88,4 @@
   Share and Enjoy!
 	- Brian Warner <warner-mailcrypt@lothar.com>
 	- Len Budney <lbudney@pobox.com>
+	- Barak A. Pearlmutter <bap@debian.org> (for 3.5.9)
