@@ -1,11 +1,20 @@
-Imported upstream CVS repo into git as follows:
+Upstream cvs repo available at:
 
-  git cvsimport -v -k -u -a mailcrypt -d :pserver:anonymous@mailcrypt.cvs.sourceforge.net:/cvsroot/mailcrypt
+    :ext:@mailcrypt.cvs.sourceforge.net:/cvsroot/mailcrypt
+    http://mailcrypt.cvs.sourceforge.net/viewvc/mailcrypt/mailcrypt/
 
-can track upstream cvs by re-invoking.
+Pulled upstream tarballs & debian patch files into git, mirrored:
 
-Pulled upstream tarballs & debian patch files into git.
+    git://git.debian.org/git/collab-maint/mailcrypt.git
+    git://github.com/barak/mailcrypt.git
 
-Making repo available at git://github.com/barak/mailcrypt.git
+Tracking upstream cvs in git branch by fetching from
 
- -- Barak A. Pearlmutter <bap@debian.org>, Thu,  4 Feb 2010 14:21:41 +0000
+    git://github.com/emacsmirror/mailcrypt.git
+
+Can also directly import/track upstream cvs repo into git using:
+
+  git cvsimport -v -k -u -a mailcrypt \
+	-d :pserver:anonymous@mailcrypt.cvs.sourceforge.net:/cvsroot/mailcrypt
+
+ -- Barak A. Pearlmutter <bap@debian.org>, Sun, 21 Mar 2010 13:43:29 +0000
