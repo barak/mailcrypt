@@ -1,7 +1,11 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(mailcrypt.el)
+AC_PREREQ(2.64)
+AC_INIT([mailcrypt], [3.5.9], [http://mailcrypt.sourceforge.net/bugs.html])
+AC_CONFIG_SRCDIR([mailcrypt.el])
 
-AC_PROG_INSTALL()
+# Checks for programs.
+AC_PROG_LN_S
+AC_PROG_INSTALL
 
 AC_PATH_PROG(INSTALL_INFO, install-info)
 if test "$INSTALL_INFO x" = " x"
@@ -13,7 +17,7 @@ AC_SUBST(INSTALL_INFO)
 AC_PATH_PROG(BASENAME, basename)
 if test "$BASENAME x" = " x"
 then
-  AC_MSG_ERROR(Cannot find program "basename" on your patch.
+  AC_MSG_ERROR(Cannot find program "basename" on your path.
 Hint: Try setting BASENAME environment variable or fixing your PATH.)
 fi
 
@@ -56,4 +60,8 @@ else
   AC_SUBST(EXTRA_OBJS)
 fi
 
-AC_OUTPUT(Makefile tests/Makefile tests/remailer/Makefile)
+AC_CONFIG_FILES([Makefile
+                 tests/Makefile
+                 tests/remailer/Makefile])
+
+AC_OUTPUT
