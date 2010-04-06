@@ -5,7 +5,7 @@ mailcrypt (3.5.9-2) unstable; urgency=low
   * regenerate actual configure script (not included upstream)
   * elaborate source locations in debian/README.Debian,
   * standardise repo info in debian/control
-  * Switch to dpkg-source 3.0 (git) format
+  * Switch to dpkg-source 3.0 (quilt) format
 
  -- Barak A. Pearlmutter <bap@debian.org>  Thu, 25 Mar 2010 18:56:38 +0000
 
