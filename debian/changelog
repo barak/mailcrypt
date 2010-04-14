@@ -1,3 +1,11 @@
+mailcrypt (3.5.9-3) unstable; urgency=low
+
+  * Merge upstream changes
+  * Make build work without emacs (closes: 577380)
+  * Perform updates deferred until upstream release
+
+ -- Barak A. Pearlmutter <bap@debian.org>  Wed, 14 Apr 2010 12:57:48 +0100
+
 mailcrypt (3.5.9-2) unstable; urgency=low
 
   * Merge upstream changes
