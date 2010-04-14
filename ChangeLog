@@ -1,3 +1,8 @@
+2010-04-14  Barak A. Pearlmutter  <barak@cs.nuim.ie>
+
+	* configure.in: minor updates, and make emacs-not-found error out
+	as intended.
+
 2010-02-22  Jari Aalto  <jari.aalto@cante.net>
 
 	* mc-toplev.el (mc-rmail-decrypt-message): preserve `rmail-buffer'
