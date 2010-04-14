@@ -17,8 +17,8 @@ AC_SUBST(INSTALL_INFO)
 AC_PATH_PROG(BASENAME, basename)
 if test "$BASENAME x" = " x"
 then
-  AC_MSG_ERROR(Cannot find program "basename" on your path.
-Hint: Try setting BASENAME environment variable or fixing your PATH.)
+  AC_MSG_ERROR(Cannot find program "basename" on PATH.
+Hint: Try setting BASENAME environment variable or fixing PATH.)
 fi
 
 if test -n "$EMACS" && test "$EMACS" = "t"
@@ -26,9 +26,12 @@ then
     unset EMACS
 fi
 
-AC_CHECK_PROGS(EMACS, emacs xemacs,dnl
-  AC_MSG_ERROR('Cannot find emacs in your path.
-Hint: Try setting EMACS environment variable or fixing your PATH.'))
+AC_CHECK_PROGS(EMACS, emacs xemacs)
+if test "$EMACS x" = " x"
+then
+  AC_MSG_ERROR('Cannot find emacs or xemacs on PATH.
+Hint: Try setting EMACS environment variable or fixing PATH.')
+fi
 
 RESULT=`$BASENAME $EMACS`
 if test "$RESULT" = xemacs
