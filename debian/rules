@@ -68,7 +68,7 @@ debian/po/templates.pot: $(DCSOURCES)
 
 build: $(DFILES) debian/po/templates.pot
 	$(checkdir)
-	chmod a+x ./configure;		./configure --infodir=/usr/share/info
+	chmod a+x ./configure;		./configure --infodir=/usr/share/info EMACS=echo
 	$(MAKE) MAKEINFO="makeinfo --verbose" \
 		TEXI2HTML="texi2html --Verbose" \
 		info html

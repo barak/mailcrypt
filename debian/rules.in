@@ -56,7 +56,7 @@ debian/po/templates.pot: $(DCSOURCES)
 build: $(DFILES) debian/po/templates.pot
 	$(checkdir)
 	chmod a+x ./configure;	<:# next upstream release remove me :>//
-	./configure --infodir=<:=${info}:>
+	./configure --infodir=<:=${info}:> EMACS=echo
 	$(MAKE) MAKEINFO="makeinfo --verbose" \
 		TEXI2HTML="texi2html --Verbose" \
 		info html
