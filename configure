@@ -1866,8 +1866,8 @@ fi
 
 if test "$BASENAME x" = " x"
 then
-  as_fn_error "Cannot find program \"basename\" on your path.
-Hint: Try setting BASENAME environment variable or fixing your PATH." "$LINENO" 5
+  as_fn_error "Cannot find program \"basename\" on PATH.
+Hint: Try setting BASENAME environment variable or fixing PATH." "$LINENO" 5
 fi
 
 if test -n "$EMACS" && test "$EMACS" = "t"
@@ -1916,9 +1916,12 @@ fi
 
   test -n "$EMACS" && break
 done
-test -n "$EMACS" || EMACS="  as_fn_error "'Cannot find emacs in your path.
-Hint: Try setting EMACS environment variable or fixing your PATH.'" "$LINENO" 5"
 
+if test "$EMACS x" = " x"
+then
+  as_fn_error "'Cannot find emacs or xemacs on PATH.
+Hint: Try setting EMACS environment variable or fixing PATH.'" "$LINENO" 5
+fi
 
 RESULT=`$BASENAME $EMACS`
 if test "$RESULT" = xemacs
