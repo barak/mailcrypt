@@ -12,7 +12,7 @@ Vcs-Browser: http://git.debian.org/?p=collab-maint/mailcrypt.git
 Package: mailcrypt
 Architecture: all
 Depends: debconf (>= 0.2.0) | debconf-2.0, gnupg, emacs23 | emacs22 | emacs21 | emacs-snapshot, make, dpkg (>= 1.15.4) | install-info
-Description: An Emacs interface to GPG and PGP
+Description: Emacs interface to GPG and PGP
  Mailcrypt is an Emacs lisp package that provides a simple but
  powerful interface to cryptographic functions for mail and news.
  With Mailcrypt, encryption becomes a seamlessly integrated part of
