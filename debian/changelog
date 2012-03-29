@@ -1,3 +1,13 @@
+mailcrypt (3.5.9-5) unstable; urgency=low
+
+  * Acknowledge and merge translation-related NMU.  Thanks Christian Perrier!
+  * Bump standards version
+  * Silence lintian tag description-synopsis-starts-with-article
+  * Single-debian-patch source option (closes: #643211)
+  * Silence lintian tag maintainer-script-without-set-e
+
+ -- Barak A. Pearlmutter <bap@debian.org>  Thu, 29 Mar 2012 23:12:12 +0100
+
 mailcrypt (3.5.9-4.1) unstable; urgency=low
 
   * Non-maintainer upload.
