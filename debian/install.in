@@ -1,10 +1,11 @@
 #include "variables"
-#! /bin/bash -e
+#! /bin/bash
 #
 # <% elisp %> Emacs install script for <:=${PACKAGE}:>
 #
 <:=@COPYRIGHT:>//
 
+set -e
 set -o posix
 
 <:# parse debconf database :>//

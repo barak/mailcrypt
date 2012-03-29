@@ -1,10 +1,11 @@
 #include "variables"
-#! /bin/bash -e
+#! /bin/bash
 #
 # <% elisp %> Emacs remove script for <:=${PACKAGE}:>
 #
 <:=@COPYRIGHT:>//
 
+set -e
 set -o posix; shopt -s nullglob
 
 ### Historic cleanup code

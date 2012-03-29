@@ -1,10 +1,11 @@
 #include "variables"
-#! /bin/bash -e
+#! /bin/bash
 #
 # <% postrm %> script for <:=${PACKAGE}:>
 #
 <:=@COPYRIGHT:>//
 
+set -e
 set -o posix
 
 case "${1}" in
