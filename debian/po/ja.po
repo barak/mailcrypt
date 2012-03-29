@@ -10,6 +10,7 @@ msgstr ""
 "PO-Revision-Date: 2010-11-29 09:34+0900\n"
 "Last-Translator: Nobuhiro Iwamatsu <iwamatsu@debian.org>\n"
 "Language-Team: Japanese <debian-japanese@lists.debian.org>\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -18,30 +19,51 @@ msgstr ""
 #. Description
 #: ../templates:1001
 msgid "Should Mailcrypt be auto-loaded by default at your site?"
-msgstr "デフォルトで Mailcrypt を、あなたのサイトで自動的に実行するようにしますか?"
+msgstr ""
+"デフォルトで Mailcrypt を、あなたのサイトで自動的に実行するようにしますか?"
 
 # globally: システム全体
 #. Type: boolean
 #. Description
 #: ../templates:1001
-msgid "Mailcrypt will globally (i.e., for all users on this site) overload certain Emacs functions and key-bindings if you answer affirmatively to this question."
-msgstr "あなたがこの質問に「はい」と答えた場合、Mailcrypt はいくつかの Emacs 機能とキーバインドをシステム全体 (すなわち、このサイトの全ユーザ用に) にオーバーロードします。"
+msgid ""
+"Mailcrypt will globally (i.e., for all users on this site) overload certain "
+"Emacs functions and key-bindings if you answer affirmatively to this "
+"question."
+msgstr ""
+"あなたがこの質問に「はい」と答えた場合、Mailcrypt はいくつかの Emacs 機能と"
+"キーバインドをシステム全体 (すなわち、このサイトの全ユーザ用に) にオーバー"
+"ロードします。"
 
 #. Type: boolean
 #. Description
 #: ../templates:1001
-msgid "This is generally a good thing, since Mailcrypt is a very useful package; however you may not want it to happen, and instead let single users at your site decide by themselves if they should load this package."
-msgstr "Mailcrypt は非常に役に立つパッケージなので、ほとんどの場合これが推奨されます。そうでない場合は、あなたのサイトのユーザ一人ひとりにこのパッケージをロードするか決めさせることもできます。"
+msgid ""
+"This is generally a good thing, since Mailcrypt is a very useful package; "
+"however you may not want it to happen, and instead let single users at your "
+"site decide by themselves if they should load this package."
+msgstr ""
+"Mailcrypt は非常に役に立つパッケージなので、ほとんどの場合これが推奨されま"
+"す。そうでない場合は、あなたのサイトのユーザ一人ひとりにこのパッケージをロー"
+"ドするか決めさせることもできます。"
 
 #. Type: boolean
 #. Description
 #: ../templates:1001
-msgid "If you answer negatively, people who desire to use it will have to put the string \"(require 'mailcrypt-init)\" in their personal Emacs configuration file (e.g., \"~/.emacs\" or \"~/.emacs.el\") to load it."
-msgstr "あなたが「いいえ」と答えた場合、それを使いたいユーザはロードするために文字列 \"(require 'mailcrypt-init')\" を個人用の Emacs 設定ファイル (例: \"~/.emacs\" または \"~/.emacs.el\") に入れる必要があります。"
+msgid ""
+"If you answer negatively, people who desire to use it will have to put the "
+"string \"(require 'mailcrypt-init)\" in their personal Emacs configuration "
+"file (e.g., \"~/.emacs\" or \"~/.emacs.el\") to load it."
+msgstr ""
+"あなたが「いいえ」と答えた場合、それを使いたいユーザはロードするために文字列 "
+"\"(require 'mailcrypt-init')\" を個人用の Emacs 設定ファイル (例: \"~/.emacs"
+"\" または \"~/.emacs.el\") に入れる必要があります。"
 
-#. Type: boolean
-#. Description
-#: ../proofgeneral.templates:2001
-msgid "If you don't choose this option, users will need to activate it from their personal settings for Emacs or XEmacs, or start it explicitly with the 'proofgeneral' command."
-msgstr "このオプションを選ばない場合、ユーザは Emacs あるいは XEmacs の個人設定の中で有効にする、あるいは、あるいは 'proofgeneral' コマンドを使って明示的に起動する必要があります。"
-
+#~ msgid ""
+#~ "If you don't choose this option, users will need to activate it from "
+#~ "their personal settings for Emacs or XEmacs, or start it explicitly with "
+#~ "the 'proofgeneral' command."
+#~ msgstr ""
+#~ "このオプションを選ばない場合、ユーザは Emacs あるいは XEmacs の個人設定の"
+#~ "中で有効にする、あるいは、あるいは 'proofgeneral' コマンドを使って明示的に"
+#~ "起動する必要があります。"

@@ -1,27 +1,26 @@
-# Copyright (C) 2009
+# Danish translation mailcrypt.
+# Copyright (C) 2011 mailcrypt & nedenstående oversættere.
 # This file is distributed under the same license as the mailcrypt package.
+# Joe Hansen (joedalton2@yahoo.dk), 2011.
 #
-# Esko Arajärvi <edu@iki.fi>, 2009.
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: mailcrypt\n"
 "Report-Msgid-Bugs-To: salve@debian.org\n"
 "POT-Creation-Date: 2007-07-26 17:33+0200\n"
-"PO-Revision-Date: 2009-10-05 21:35+0300\n"
-"Last-Translator: Esko Arajärvi <edu@iki.fi>\n"
-"Language-Team: Finnish <debian-l10n-finnish@lists.debian.org>\n"
-"Language: fi\n"
+"PO-Revision-Date: 2011-07-10 12:42+0000\n"
+"Last-Translator: Joe Hansen <joedalton2@yahoo.dk>\n"
+"Language-Team: Danish <debian-l10n-danish@lists.debian.org>\n"
+"Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.0\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. Type: boolean
 #. Description
 #: ../templates:1001
 msgid "Should Mailcrypt be auto-loaded by default at your site?"
-msgstr "Tulisiko Mailcrypt ladata automaattisesti?"
+msgstr "Skal Mailcrypt som standard automatisk indlæses på din side?"
 
 #. Type: boolean
 #. Description
@@ -31,8 +30,8 @@ msgid ""
 "Emacs functions and key-bindings if you answer affirmatively to this "
 "question."
 msgstr ""
-"Mailcrypt peittää tiettyjä Emacs-toimintoja ja -näppäinkomentoja "
-"järjestelmänlaajuisesti, jos valitset tämän vaihtoehdon."
+"Mailcrypt vil globalt (dvs. for alle brugere på denne side) indlæse bestemte "
+"Emacs-funktioner og tastaturgenveje, hvis du svarer bekræftende på dette."
 
 #. Type: boolean
 #. Description
@@ -42,9 +41,9 @@ msgid ""
 "however you may not want it to happen, and instead let single users at your "
 "site decide by themselves if they should load this package."
 msgstr ""
-"Tämä on yleensä hyvä asia, koska Mailcrypt on hyödyllinen paketti. "
-"Vaihtoehtoisesti voit antaa yksittäisten käyttäjien itse valita ottavatko he "
-"tämän paketin käyttöön."
+"Dette er generelt en god ting, da Mailcrypt er en meget brugbar pakke; men "
+"du vil måske ikke ønske dette og i stedet for lade hver enkelt bruger på din "
+"side selv beslutte, om denne pakke skal indlæses."
 
 #. Type: boolean
 #. Description
@@ -54,6 +53,6 @@ msgid ""
 "string \"(require 'mailcrypt-init)\" in their personal Emacs configuration "
 "file (e.g., \"~/.emacs\" or \"~/.emacs.el\") to load it."
 msgstr ""
-"Jos et valitse tätä vaihtoehtoa, paketin käyttö vaatii, että "
-"henkilökohtaiseen Emacs-asetustiedostoon (esim. ”~/.emacs” tai ”~/.emacs."
-"el”) lisätään rivi ”(require 'mailcrypt-init)”."
+"Hvis du svarer benægtende, vil folk som ønsker at bruge pakken skulle "
+"indsætte strengen »(require 'mailcrypt-init)« i deres personlige Emacs-"
+"konfigurationsfil (f.eks. »~/.emacs« eller »~/.emacs.el« for at indlæse den."
