@@ -59,7 +59,7 @@ undo_install () {
 
 case "${FLAVOR}" in
     emacs) :;;
-    emacs2[123]|emacs-snapshot) undo_install;;
+    emacs2[1234]|emacs-snapshot) undo_install;;
     *) echo >&2 "remove/<:=${PACKAGE}:>:" \
 	"Ignoring emacsen flavor: \"${FLAVOR}\"."
 esac
