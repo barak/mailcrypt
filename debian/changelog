@@ -1,3 +1,9 @@
+mailcrypt (3.5.9-6) unstable; urgency=low
+
+  * Allow emacs24 (closes: #679944, #685179)
+
+ -- Barak A. Pearlmutter <bap@debian.org>  Sat, 10 Nov 2012 10:22:49 +0000
+
 mailcrypt (3.5.9-5) unstable; urgency=low
 
   * Acknowledge and merge translation-related NMU.  Thanks Christian Perrier!
