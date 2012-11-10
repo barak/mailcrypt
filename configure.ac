@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_PREREQ(2.64)
-AC_INIT([mailcrypt], [3.5.9], [http://mailcrypt.sourceforge.net/bugs.html])
+AC_PREREQ([2.69])
+AC_INIT([mailcrypt],[3.5.9],[http://mailcrypt.sourceforge.net/bugs.html])
 AC_CONFIG_SRCDIR([mailcrypt.el])
 
 # Checks for programs.
