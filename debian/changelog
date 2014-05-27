@@ -1,3 +1,13 @@
+mailcrypt (3.5.9-7) unstable; urgency=medium
+
+  * autoupdate configure.in and rename to configure.ac
+  * autoreconf, refresh configure
+  * bump standards version
+  * canonical packaging repo urls
+  * translation by Adriano Rafael Gomes <adrianorg@gmail.com> (closes: #693382)
+
+ -- Barak A. Pearlmutter <bap@debian.org>  Tue, 27 May 2014 23:18:12 +0100
+
 mailcrypt (3.5.9-6) unstable; urgency=low
 
   * Allow emacs24 (closes: #679944, #685179)
