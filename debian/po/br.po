@@ -1,0 +1,62 @@
+# Debconf translations for mailcrypt.
+# Copyright (C) 2012 THE mailcrypt'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the mailcrypt package.
+# Adriano Rafael Gomes <adrianorg@gmail.com>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: mailcrypt 3.5.9-6\n"
+"Report-Msgid-Bugs-To: salve@debian.org\n"
+"POT-Creation-Date: 2007-07-26 17:33+0200\n"
+"PO-Revision-Date: 2012-11-15 20:09-0200\n"
+"Last-Translator: Adriano Rafael Gomes <adrianorg@gmail.com>\n"
+"Language-Team: Brazilian Portuguese <debian-l10n-portuguese@lists.debian."
+"org>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: boolean
+#. Description
+#: ../templates:1001
+msgid "Should Mailcrypt be auto-loaded by default at your site?"
+msgstr "O Mailcrypt deve ser carregado automaticamente por padrão em seu site?"
+
+#. Type: boolean
+#. Description
+#: ../templates:1001
+msgid ""
+"Mailcrypt will globally (i.e., for all users on this site) overload certain "
+"Emacs functions and key-bindings if you answer affirmatively to this "
+"question."
+msgstr ""
+"O Mailcrypt sobrecarregará globalmente (ou seja, para todos os usuários "
+"deste site) certas funções e atalhos de teclado do Emacs se você responder "
+"afirmativamente a essa questão."
+
+#. Type: boolean
+#. Description
+#: ../templates:1001
+msgid ""
+"This is generally a good thing, since Mailcrypt is a very useful package; "
+"however you may not want it to happen, and instead let single users at your "
+"site decide by themselves if they should load this package."
+msgstr ""
+"Isso geralmente é uma coisa boa, uma vez que o Mailcrypt é um pacote muito "
+"útil; entretanto, você pode querer que isso não aconteça e, ao invés disso, "
+"deixar que os usuários individualmente em seu site decidam por si próprios "
+"se eles deveriam carregar esse pacote."
+
+#. Type: boolean
+#. Description
+#: ../templates:1001
+msgid ""
+"If you answer negatively, people who desire to use it will have to put the "
+"string \"(require 'mailcrypt-init)\" in their personal Emacs configuration "
+"file (e.g., \"~/.emacs\" or \"~/.emacs.el\") to load it."
+msgstr ""
+"Se você responder negativamente, as pessoas que desejarem usá-lo terão que "
+"colocar a string \"(require 'mailcrypt-init)\" em seus arquivos pessoais de "
+"configuração do Emacs (por exemplo, \"~/.emacs\" ou \"~/.emacs.el\") para "
+"carregá-lo."
