@@ -3,7 +3,7 @@ Priority: optional
 Section: mail
 Maintainer: Davide G. M. Salvetti <salve@debian.org>
 Uploaders: Barak A. Pearlmutter <bap@debian.org>
-Standards-Version: 3.9.3
+Standards-Version: 3.9.5
 Build-Depends-Indep: eperl, po-debconf, texinfo, texi2html, dpkg (>= 1.15.4) | install-info
 Homepage: http://mailcrypt.sourceforge.net/
 Vcs-Git: git://git.debian.org/git/collab-maint/mailcrypt.git
