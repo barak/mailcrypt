@@ -6,8 +6,8 @@ Uploaders: Barak A. Pearlmutter <bap@debian.org>
 Standards-Version: 3.9.5
 Build-Depends-Indep: eperl, po-debconf, texinfo, texi2html, dpkg (>= 1.15.4) | install-info
 Homepage: http://mailcrypt.sourceforge.net/
-Vcs-Git: git://git.debian.org/git/collab-maint/mailcrypt.git
-Vcs-Browser: http://git.debian.org/?p=collab-maint/mailcrypt.git
+Vcs-Git: git://anonscm.debian.org/collab-maint/mailcrypt.git
+Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/mailcrypt.git
 
 Package: mailcrypt
 Architecture: all
