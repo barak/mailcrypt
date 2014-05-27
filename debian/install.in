@@ -22,8 +22,8 @@ do_install () {
     echo >&2 -n "install/<:=${PACKAGE}:>: Setting up for ${FLAVOR}" \
     "(log file: <:=if($_=${lisp})=~s|emacs|\${FLAVOR}|:>/<:=${ELCLOG}:>)... "
     cd <:=${lisp}:>; umask 0022;
-    <:# ensure that "configure" is up-to-date WRT "configure.in" :>//
-    touch --reference configure --date "-1 second" configure.in
+    <:# ensure that "configure" is up-to-date WRT "configure.ac" :>//
+    touch --reference configure --date "-1 second" configure.ac
     ${INSTDIR} <:=if($_=${lisp})=~s|emacs|\${FLAVOR}|:>
     EMACS=${FLAVOR} ./configure \
 	--prefix=<:$_=${usr}; s|/+|/|g; print:> \

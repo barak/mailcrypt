@@ -56,7 +56,7 @@ TESTFILES_REMAILER = tests/remailer/Makefile.in tests/remailer/rings.txt \
 	tests/remailer/unwind.py
 
 DISTFILES = $(SOURCES) ANNOUNCE COPYING ChangeLog ChangeLog.1 INSTALL	     \
-	LCD-entry Makefile.in NEWS ONEWS README configure configure.in	     \
+	LCD-entry Makefile.in NEWS ONEWS README configure configure.ac	     \
 	install-sh load-path.hack mailcrypt.texi mkinstalldirs texi2html.ext \
 	FSF-timer.el $(INFOFILES) mailcrypt.dvi README.gpg $(TESTFILES_GPG)  \
 	$(TESTFILES_REMAILER)
@@ -149,7 +149,7 @@ distclean: clean
 	-rm -rf autom4te.cache
 	-rm -f *.info* *.dvi
 
-${srcdir}/configure: configure.in
+${srcdir}/configure: configure.ac
 	cd ${srcdir} && autoconf
 
 Makefile: Makefile.in config.status
