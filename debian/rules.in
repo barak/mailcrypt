@@ -92,7 +92,7 @@ binary-indep: build
 	done
 	$(MAKE) INSTALL_INFO="echo install-info" \
 		install-info infodir=$(tmp)<:=${info}:>
-	gzip -9frv $(tmp)<:=${info}:>
+	gzip -9nfrv $(tmp)<:=${info}:>
 
 <:# install Debian doc :>//
 	$(INSTDIR) $(tmp)<:=${doc}:>
@@ -100,7 +100,7 @@ binary-indep: build
 	$(INSTDATA) debian/README $(tmp)<:=${doc}:>/README.Debian
 	$(INSTDATA) ChangeLog $(tmp)<:=${doc}:>
 	$(INSTDATA) debian/changelog $(tmp)<:=${doc}:>/changelog.Debian
-	gzip -9frv $(tmp)<:=${doc}:>
+	gzip -9nfrv $(tmp)<:=${doc}:>
 	ln -sf ChangeLog.gz $(tmp)<:=${doc}:>/changelog.gz
 	$(INSTDATA) debian/copyright $(tmp)<:=${doc}:>
 	$(INSTDIR) $(tmp)<:=${html}:>

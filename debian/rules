@@ -103,14 +103,14 @@ binary-indep: build
 	done
 	$(MAKE) INSTALL_INFO="echo install-info" \
 		install-info infodir=$(tmp)/usr/share/info
-	gzip -9frv $(tmp)/usr/share/info
+	gzip -9nfrv $(tmp)/usr/share/info
 
 	$(INSTDIR) $(tmp)/usr/share/doc/mailcrypt
 	$(INSTDATA) ANNOUNCE ChangeLog.1 NEWS ONEWS README README.gpg WARNINGS $(tmp)/usr/share/doc/mailcrypt
 	$(INSTDATA) debian/README $(tmp)/usr/share/doc/mailcrypt/README.Debian
 	$(INSTDATA) ChangeLog $(tmp)/usr/share/doc/mailcrypt
 	$(INSTDATA) debian/changelog $(tmp)/usr/share/doc/mailcrypt/changelog.Debian
-	gzip -9frv $(tmp)/usr/share/doc/mailcrypt
+	gzip -9nfrv $(tmp)/usr/share/doc/mailcrypt
 	ln -sf ChangeLog.gz $(tmp)/usr/share/doc/mailcrypt/changelog.gz
 	$(INSTDATA) debian/copyright $(tmp)/usr/share/doc/mailcrypt
 	$(INSTDIR) $(tmp)/usr/share/doc/mailcrypt/HTML
