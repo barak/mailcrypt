@@ -37,11 +37,11 @@ VPATH = @srcdir@
 
 SOURCES = @EXTRA_SRCS@ \
 	mailcrypt.el mc-toplev.el mc-pgp.el mc-remail.el \
-	mc-pgp5.el mc-pgp6.el mc-gpg.el expect.el mc-setversion.el
+	mc-pgp5.el mc-pgp6.el mc-gpg.el mc-setversion.el
 
 OBJECTS = @EXTRA_OBJS@ \
 	mailcrypt.elc mc-toplev.elc mc-pgp.elc mc-remail.elc \
-	mc-pgp5.elc mc-pgp6.elc mc-gpg.elc expect.elc mc-setversion.elc
+	mc-pgp5.elc mc-pgp6.elc mc-gpg.elc mc-setversion.elc
 
 GPG_TESTCASES = $(foreach f,CS.s1v CS.s3v E.e1r E.e3 ES.e1r.s1v ES.e1r.s3v \
 		  ES.e3.s1v S.s1v S.s3v CS.s2v CS.s4 E.e2r E.e4 ES.e1r.s2v \
