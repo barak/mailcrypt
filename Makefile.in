@@ -58,7 +58,7 @@ TESTFILES_REMAILER = tests/remailer/Makefile.in tests/remailer/rings.txt \
 DISTFILES = $(SOURCES) ANNOUNCE COPYING ChangeLog ChangeLog.1 INSTALL	     \
 	LCD-entry Makefile.in NEWS ONEWS README configure configure.ac	     \
 	install-sh load-path.hack mailcrypt.texi mkinstalldirs texi2html.ext \
-	FSF-timer.el $(INFOFILES) mailcrypt.dvi README.gpg $(TESTFILES_GPG)  \
+	$(INFOFILES) mailcrypt.dvi README.gpg $(TESTFILES_GPG)  \
 	$(TESTFILES_REMAILER)
 
 SHELL = /bin/sh
@@ -114,9 +114,6 @@ info: $(INFOFILES)
 $(INFOFILES): mailcrypt.texi
 	$(MAKEINFO) $(srcdir)/mailcrypt.texi
 
-timer.el: FSF-timer.el
-	cp FSF-timer.el timer.el
-
 dvi: mailcrypt.dvi
 
 mailcrypt.dvi: mailcrypt.texi
@@ -144,7 +141,7 @@ clean:
 
 distclean: clean
 	-rm -f *~ *.tar.gz
-	-rm -f Makefile config.status config.cache config.log timer.el
+	-rm -f Makefile config.status config.cache config.log
 	-rm -f tests/Makefile tests/remailer/Makefile
 	-rm -rf autom4te.cache
 	-rm -f *.info* *.dvi
