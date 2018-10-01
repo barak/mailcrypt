@@ -1,3 +1,9 @@
+mailcrypt (3.5.9-9) UNRELEASED; urgency=medium
+
+  * d/changelog: Remove trailing whitespaces
+
+ -- Ondřej Nový <onovy@debian.org>  Mon, 01 Oct 2018 10:10:29 +0200
+
 mailcrypt (3.5.9-8) unstable; urgency=medium
 
   * make build reproducible using patch from Chris Lamb, (closes: #777506)
@@ -165,7 +171,7 @@ mailcrypt (3.5.8+CVS.2005.04.29.1-11) unstable; urgency=low
 
   * po/nl.po: New file; thanks to Bart Cornelis.  (Closes: #415520)
   * po/pt.po:  New file; thanks to Jacobo Tarrio.  (Closes: #430992)
-  
+
   * rules.in (build-package): Added dependency on the "clean" target.
 
   * bug.script.in (FLAVORS), control (Depends), install.in, remove.in:
@@ -287,7 +293,7 @@ mailcrypt (3.5.8+CVS.2005.04.29.1-5) unstable; urgency=low
     phony targets, otherwise targets which depend on them will never be
     up-to-date.
     (build, clean, binary-indep, binary-arch): Change accordingly.
-  
+
   * control (Build-Depends-Indep): Added "po-debconf".
   * templates: Renamed from template.in.  Adapted to po-debconf.
   * po: New subdirectory.  Translations.
@@ -358,7 +364,7 @@ mailcrypt (3.5.8-2) unstable; urgency=high
     (Closes: #234954, #117204)
   * control (Depends): Removed emacs20; thanks to Martin Michlmayr.
     (Closes: #232769)
-  
+
  -- Davide G. M. Salvetti <salve@debian.org>  Sat, 28 Feb 2004 12:11:35 +0100
 
 mailcrypt (3.5.8-1) unstable; urgency=medium
@@ -381,7 +387,7 @@ mailcrypt (3.5.7-1) unstable; urgency=medium
     (Author): Added Brian Warner.
   * mailcrypt-init.el: Added Mew's hooks.
   * rules (clean): Do not remove mailcrypt.info* and mailcrypt.dvi any more.
-  
+
  -- Davide G. M. Salvetti <salve@debian.org>  Sun,  1 Sep 2002 17:25:24 +0200
 
 mailcrypt (3.5.6.20010925-2) unstable; urgency=high
