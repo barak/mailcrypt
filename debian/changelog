@@ -1,6 +1,7 @@
 mailcrypt (3.5.9-9) UNRELEASED; urgency=medium
 
   * d/changelog: Remove trailing whitespaces
+  * d/watch: Use https protocol
 
  -- Ondřej Nový <onovy@debian.org>  Mon, 01 Oct 2018 10:10:29 +0200
 
