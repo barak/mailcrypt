@@ -9,8 +9,9 @@ mailcrypt (3.5.9-9) unstable; urgency=medium
   * Move source package lintian overrides to debian/source.
   * Set upstream metadata fields: Bug-Submit (from ./configure), Name (from ./configure).
   * Update watch file format version to 4.
+  * Bump policy
 
- -- Barak A. Pearlmutter <bap@debian.org>  Tue, 04 May 2021 16:21:00 +0100
+ -- Barak A. Pearlmutter <bap@debian.org>  Tue, 04 May 2021 16:23:51 +0100
 
 mailcrypt (3.5.9-8) unstable; urgency=medium
 
