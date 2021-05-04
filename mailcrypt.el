@@ -1,10 +1,12 @@
-;; mailcrypt.el v3.5.9, mail encryption with PGP
+;;; mailcrypt.el --- Mail encryption with PGP
+
 ;; Copyright (C) 1995  Jin Choi <jin@atype.com>
 ;;                     Patrick LoPresti <patl@lcs.mit.edu>
 ;;           (C) 1998  Len Budney <lbudney@pobox.com>
 ;;           (C) 2001  Brian Warner <warner@lothar.com>
 ;; Any comments or suggestions welcome.
 ;; Inspired by pgp.el, by Gray Watson <gray@antaire.com>.
+;; Version: v3.5.9
 
 ;;{{{ Licensing
 ;; This file is intended to be used with GNU Emacs.
